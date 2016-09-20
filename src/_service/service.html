@@ -1,0 +1,43 @@
+<div layout="column" layout-align="start stretch"
+     style="
+         margin-left: 10%;
+         margin-right: 10%;
+         margin-top: 30px;
+         ">
+    <div layout="row">
+        <div class="service-icon head-icon" flex="none"></div>
+        <div layout="column" layout-align="center start" flex="none"
+        style="margin-left: 10px;">
+            <div class="md-headline">{{service.title}}</div>
+            <div class="md-subhead">{{service.time}}</div>
+            <div class="md-subhead">{{service.cost}}</div>
+        </div>
+        <div flex></div>
+        <div layout="column" layout-align="center center" flex="none"
+             class="md-title cursor-pointer" ng-click="showHotel();">
+            <div layout="column" layout-align="center stretch"
+                style=" width: 100px;
+                height: 55px;">
+                <img flex ng-src="{{hotel.image}}"/>
+            </div>
+            <span style="margin-top: 5px;">{{hotel.title}}</span>
+        </div>
+    </div>
+
+    <md-content style="margin-top: 20px;">
+        {{service.description}}
+    </md-content>
+
+    <div class="md-title">
+        <span>Местоположение:</span>
+        <span style="color:red;">не указано</span>
+        <md-button>Указать</md-button>
+    </div>
+
+    <div style="width:100%; height:400px;">
+        <map-dir ng-if="service" hotel="hotel" map-id="'map_service_'+serviceId"></map-dir>
+    </div>
+
+
+</div>
+

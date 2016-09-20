@@ -1,0 +1,27 @@
+<div class="b-header">
+    <!--{% if IS_LEFT_BAR %}
+    {% do class.append(widget + '_left-bar') %}
+    {% endif %}-->
+    <a href="/" class="b-header__logo">
+        <img src="static/img/logo2.svg" alt="" class="b-header__logo-image"/>
+    </a>
+
+    <ul class="b-header__menu">
+
+        <li class="b-header__menu-item">
+            <a href="" class="b-header__menu-link">О проекте</a>
+        </li>
+        <li class="b-header__menu-item">
+            <a href="#registration" class="b-header__menu-link">Зарегестрироваться</a>
+        </li>
+        <li class="b-header__menu-item">
+            <a href="" ng-click="setPath('/login/')" class="b-header__menu-link">Войти</a>
+        </li>
+        <li class="b-header__menu-item">
+            <a href="" ng-click="setPath('/infobox/')" class="b-header__menu-link">Техническая поддержка</a>
+        </li>
+
+    </ul>
+
+    <a class="b-header__logout" href="" ng-show="loggedIn" ng-click="logout()">Выход</a>
+</div>

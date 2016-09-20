@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="57px" height="60px" viewBox="0 0 57 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.2 (29753) - http://www.bohemiancoding.com/sketch -->
+    <title>Page 1</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(1.000000, 0.000000)" stroke="#020302">
+            <path d="M0.4707,60.0058 L2.9417,53.1008 C3.9477,50.2918 6.7707,48.3948 9.9507,48.3948 L23.3247,48.3948 L23.3247,46.9428 L23.3247,41.1378 C13.6207,39.7388 7.7427,28.7978 7.7427,19.3678 C7.7427,8.9468 16.8127,0.4998 27.9997,0.4998 C39.1867,0.4998 48.2577,8.9468 48.2577,19.3678 C48.2577,28.7978 42.3797,39.7388 32.6747,41.1378 L32.6747,46.9428 L32.6747,48.3948 L46.0477,48.3948 C49.2277,48.3948 52.0517,50.2918 53.0567,53.1008 L55.5247,59.9978" id="Stroke-1"></path>
+            <path d="M20.209,26.6245 C20.209,30.6325 23.697,33.8815 28,33.8815 C32.302,33.8815 35.792,30.6325 35.792,26.6245" id="Stroke-3" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M18.6509,48.395 C18.6509,53.206 22.8369,57.103 27.9999,57.103 C33.1639,57.103 37.3499,53.206 37.3499,48.395" id="Stroke-5"></path>
+        </g>
+    </g>
+</svg>

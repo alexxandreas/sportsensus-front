@@ -1,0 +1,65 @@
+
+<div class="l-login">
+    <h3>Вход в систему</h3>
+    <div class="table table_full">
+        <form ng-submit="login()" role="form">
+            <div class="table__row">
+                <div class="table__column l-login__head-column">
+                    Логин
+                </div>
+                <div class="table__column l-login__column">
+                    <input type="text" class="l-login__input" name="login" placeholder="yourlogin" ng-model="vm.login"/>
+                </div>
+            </div>
+            <div class="table__row">
+                <div class="table__column l-login__head-column">
+                    Пароль
+                </div>
+                <div class="table__column l-login__column">
+                    <input type="password" class="l-login__input" name="password" placeholder="••••••••••" ng-model="vm.password"/>
+                </div>
+            </div>
+            <div class="table__row">
+                <div class="table__column l-login__head-column">
+
+                </div>
+                <div class="table__column l-login__column">
+                    <input type="checkbox" class="l-login__checkbox" id="storage"/>
+                    <label class="l-login__checkbox-label" for="storage">Запомнить меня</label>
+                </div>
+            </div>
+            <div class="table__row">
+                <div class="table__column l-login__head-column">
+
+                </div>
+                <div class="table__column l-login__column">
+                    <button type="submit" class="l-login__button">
+                        Войти
+                    </button>
+                    <img ng-if="vm.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                    <a href="">Забыли пароль?</a>
+                </div>
+            </div>
+            <div class="table__row" ng-show="vm.error">
+                <div class="table__column l-login__head-column">
+
+                </div>
+                <div class="table__column l-login__column" style="color:red;">
+                    {{vm.error}}
+                </div>
+
+            </div>
+        </form>
+        <!--{% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}-->
+    </div>
+</div>
+
+}

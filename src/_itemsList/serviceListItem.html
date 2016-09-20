@@ -1,0 +1,27 @@
+
+
+<md-card>
+    <md-card-title>
+        <md-card-title-text>
+            <span class="md-headline">{{service.title}}</span>
+            <span class="md-subhead">{{service.cost ? service.cost + ' ₽упий' : 'Бесплатно'}}</span>
+        </md-card-title-text>
+        <!-- <md-card-title-media>
+             <div class="md-media-sm card-media"
+                  style="background-image: url('{{hotel.image}}');
+                 background-size: contain;"></div>
+         </md-card-title-media>-->
+
+    </md-card-title>
+
+    <md-card-content ng-if="!compact">
+        {{service.description}}
+    </md-card-content>
+
+    <md-card-actions layout="row" layout-align="end center">
+        <md-button ng-click="showService(service)">Смотреть</md-button>
+        <md-button ng-click="editService(service)">Редактировать</md-button>
+    </md-card-actions>
+
+</md-card>
+

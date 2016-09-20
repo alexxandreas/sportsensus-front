@@ -1,0 +1,29 @@
+<div class="l-board__body-box" data-id="sport">
+    <h1 class="l-board__header">
+        <!--<img src="/static/img/l-board/sport.png" />-->
+        <!--Виды спорта-->
+        {{parameters.sport.name}}
+    </h1>
+
+
+    <div class="l-board__body-box-list" ng-repeat="collection in parameters.sport.lists">
+        <h3>
+
+            <input type="checkbox" name="{{collection.id+'!'}}" id="{{collection.id}}"
+                   ng-model="collection.selected"
+            >
+            <label for="{{collection.id}}">{{collection.name}}</label>
+        </h3>
+        <ul ng-show="collection.lists[1].lists">
+            <li ng-repeat="item in collection.lists[1].lists">
+                <!--ng-click="selectCheckbox(collection, item)"-->
+                <input type="checkbox" name="{{collection.id}}" id="{{collection.id+'_'+item.id}}"
+                       ng-model="item.selected"
+                       ng-disabled="!collection.selected"
+                       >
+                <label for="{{collection.id+'_'+item.id}}">{{item.name}}</label>
+            </li>
+        </ul>
+    </div>
+
+</div>

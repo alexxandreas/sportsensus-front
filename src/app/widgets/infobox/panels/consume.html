@@ -1,0 +1,27 @@
+<div class="l-board__body-box" data-id="consume">
+
+    <h1 class="l-board__header">
+        <!--<img src="/static/img/l-board/potreb-pov.png" />-->
+        <!--Потребительское поведение-->
+        {{parameters.consume.name}}
+    </h1>
+
+
+    <div class="l-board__body-box-list" ng-repeat="collection in getAllSubchildren(parameters && parameters.consume)">
+        <h3>
+            <!--<img ng-show="collection.img" ng-src="{{collection.img}}">-->
+            {{collection.name}}
+        </h3>
+        <ul>
+            <!--ng-click="selectCheckbox(collection, item)"-->
+            <li ng-repeat="item in collection.lists">
+                <input type="checkbox" name="{{collection.id}}" id="{{collection.id+'_'+item.id}}"
+                       ng-model="item.selected"
+                       >
+                <label for="{{collection.id+'_'+item.id}}">{{item.name}}</label>
+            </li>
+        </ul>
+    </div>
+
+</div>
+

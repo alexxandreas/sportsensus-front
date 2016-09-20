@@ -1,0 +1,65 @@
+<ul>
+    <li data-id="audience" class="l-board__menu-section">
+        <div class="l-board__menu-section-name">
+            <img src="/static/img/icons/audience.png">
+            Болельщик
+        </div>
+        <ul>
+
+            <li data-id="demography" class="l-board__menu-button"
+                ng-repeat="item in audienceMenu"
+                ng-class="{'l-board__menu-button_active': item == activeMenuItem}"
+                ng-click="setActiveMenuItem(item)">
+                {{item.text}}
+            </li>
+            <!--
+            <li data-id="demography" class="l-board__menu-button">
+                Социальная демография
+            </li>
+
+            <li data-id="consume" class="l-board__menu-button">
+                Потребительское поведение
+            </li>
+
+            <li data-id="regions" class="l-board__menu-button">
+                География
+            </li>-->
+        </ul>
+    </li>
+
+    <li data-id="sportinfo" class="l-board__menu-section">
+        <div class="l-board__menu-section-name">
+            <img src="/static/img/icons/sportinfo.png">
+            Виды спорта
+        </div>
+        <ul>
+            <li data-id="demography" class="l-board__menu-button"
+                ng-repeat="item in sportinfoMenu"
+                ng-class="{'l-board__menu-button_active': item == activeMenuItem}"
+                ng-click="setActiveMenuItem(item)">
+                {{item.text}}
+            </li>
+
+            <!--<li data-id="sport" class="l-board__menu-button">
+                Спорт
+            </li>
+
+            <li data-id="interest" class="l-board__menu-button">
+                Степень интереса
+            </li>
+
+            <li data-id="rooting" class="l-board__menu-button">
+                Сила боления
+            </li>
+
+            <li data-id="involve" class="l-board__menu-button">
+                Причастность к видам спорта
+            </li>
+
+            <li data-id="image" class="l-board__menu-button">
+                Восприятие видов спорта
+            </li>-->
+        </ul>
+    </li>
+
+</ul>

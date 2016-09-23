@@ -2281,7 +2281,7 @@ angular
                 //sports[item.legend[0]][item.legend[1]] += item.count;
                 // sports[item.legend[0]].data[item.legend[1]].count += item.count;
                 var sportId = item.legend[legendIndexes['sport']];
-                var imageId = item.legend[legendIndexes['sportimage']];
+                var imageId = item.legend[legendIndexes['image']];
                 sports[sportId].data[imageId].count += item.count;
             }, this);
 

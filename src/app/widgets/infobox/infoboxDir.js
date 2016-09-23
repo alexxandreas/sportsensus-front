@@ -51,7 +51,8 @@
                         id:'sport',
                         text:'Спорт'
                     },{
-                        id:'interest',
+                        //id:'interest',
+                        id:'interestGraph',
                         text:'Степень интереса'
                     },{
                         id:'rooting',
@@ -60,27 +61,30 @@
                         id:'involve',
                         text:'Причастность к видам спорта'
                     },{
-                        id:'image',
+                        id:'imageGraph',
                         text:'Восприятие видов спорта'
                     }];
+
+                    $scope.pages = {};
+                    ['imageGraph'].forEach(function(page){
+                        $scope.pages[page] = {id:page};
+                    });
+                    
 
 
                     ParamsSrv.getParams().then(function(params){
                         $scope.parameters = params;
                     });
-                    
-                    /*$scope.demography = ParamsSrv.getDemography();
-                    $scope.consume = ParamsSrv.getConsume();
-                    $scope.sport = ParamsSrv.getSport();
-                    $scope.interest = ParamsSrv.getInterest();
-                    $scope.rooting = ParamsSrv.getRooting();
-                    $scope.involve = ParamsSrv.getInvolve();
-                    $scope.image = ParamsSrv.getImage();*/
-                    
+
+
+                    $scope.activePage = null;
                     $scope.activeMenuItem = null;
                     $scope.setActiveMenuItem = function(item){
                         $scope.activeMenuItem = item;
+                        $scope.activePage = item;
                     };
+                    
+                    
                     
                     // возвращает все наборы параметров, включая вложенные в виде линейной структуры
                     $scope.getAllSubchildren = function(item){
@@ -100,20 +104,24 @@
                     };
 
                     $scope.checkButtonClick = function(){
-                        $scope;
+                        if ($scope.activeMenuItem && $scope.activeMenuItem.id == 'image'){
+                            $scope.activePage = $scope.pages.imageGraph;
+                            
+                        }
+                       
                         var a = 10;
                     };
 
                     
                     $scope.$on('ApiSrv.countError', function(){
-                        $scope.audienceCountText = 'Болельщики: НЕДОСТАТОЧНО ДАННЫХ';
+                        $scope.audienceCountText = 'Болельщики: ошибка загрузки';
                     });
 
                     $scope.$on('ApiSrv.countLoaded', function(event, result){
                         if (result.is_valid_count)
-                            $scope.audienceCountText = 'Болельщики: ' + result.audience_count;
+                            $scope.audienceCountText = 'Болельщики: ' + result.audience_count.toLocaleString();
                         else
-                            $scope.audienceCountText = 'Болельщики: НЕДОСТАТОЧНО ДАННЫХ ' + result.audience_count;
+                            $scope.audienceCountText = 'Болельщики: недостаточно данных';// + ' ' + result.audience_count.toLocaleString();
                     });
                     
                     // снимает выделение с соседний radio

@@ -1,9 +1,9 @@
 angular
 	.module('SportsensusApp', [
-		//'ngMaterial',
+		'ngMaterial',
 		'ngRoute',
 		'ngCookies',
-		'Views'
+		'Views' 
 	])
 	// .config(function($mdThemingProvider) {
 	// 	$mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
@@ -323,6 +323,38 @@ angular
             return d.promise;
         }
 
+        function getImageGraph(audience, sportimage){
+            var d = $q.defer();
+            var data = prepareRequestData("info_sportimage", {sid: sid, audience:audience, sportimage:sportimage});
+            $http.post(url, data).then(function(response){
+                if (!response.data.result || !response.data.result.graph){
+                    d.reject(response);
+                }else {
+                    d.resolve(response.data.result.graph);
+                }
+            }, function(response){
+                d.reject(response);
+            });
+            return d.promise;
+        }
+
+        function getInterestGraph(audience, sportinterest){
+            var d = $q.defer();
+            var data = prepareRequestData("info_sportinterest", {sid: sid, audience:audience, sportinterest:sportinterest});
+            $http.post(url, data).then(function(response){
+                if (!response.data.result || !response.data.result.graph){
+                    d.reject(response);
+                }else {
+                    d.resolve(response.data.result.graph);
+                }
+            }, function(response){
+                d.reject(response);
+            });
+            return d.promise;
+        }
+
+
+
         var me = {
             getUser: getUser,
             auth: auth,
@@ -330,6 +362,8 @@ angular
             logout: logout,
             //getEnums: getEnums
             getCount: getCount,
+            getImageGraph: getImageGraph,
+            getInterestGraph: getInterestGraph,
             getTranslations: getTranslations
         };
 
@@ -425,38 +459,11 @@ angular
 
         function prepareParams() {
 
-            // var a = [
-            //     'FootballClubsKnown', // - футбольные клубы
-            //     'HockeyClubsKnown', // - хоккейные команды
-            //     'BasketballClubsKnown', // - баскетбольные команды
-            //     'CarKnown', // - соревнования автоспорта
-            //
-            //     'MobileProvider', // - мобильные операторы
-            //     'TvCableProvider', // - операторы кабельного тв
-            //     'TvSputnicProvider', // - операторы спутникого тв
-            //     'GasStationPeriod', // - АЗС
-            //     'GamingPlatform' // - игровые платформы
-            // ];
-
-            /*function getItem(items, id){
-                var finded;
-                items.some(function(item){
-                    if (item.id == id){
-                        finded = item;
-                        return true;
-                    }
-                });
-                if (!finded) return;
-                var selected = finded.items.filter(function(item){return item.selected;}).map(function(item){return item.id;});
-                return selected.length ? selected : undefined;
-            }*/
-
-
             function getElement(id){
                 function isNumber(n) {
                     return !isNaN(parseFloat(n)) && isFinite(n);
                 }
-                function recFillTranslations(item){
+                /*function recFillTranslations(item){ // TODO убрать, когда будет переделан формат выдачи
                     if (!(item.lists instanceof Array)) return;
                     if (item.lists.every(function(subitem){return isNumber(subitem);})){
                         item.lists = item.lists.map(function(subitem){
@@ -470,8 +477,7 @@ angular
                             recFillTranslations(subitem);
                         })
                     }
-
-                }
+                }*/
                 
                 function recFind(items){
                     var finded;
@@ -488,27 +494,45 @@ angular
                 
                 var item = recFind(translations.pages);
                 if (!item) return;
-                recFillTranslations(item);
+                //recFillTranslations(item); // TODO убрать, когда будет переделан формат выдачи
                 return item;
                 
                 // translations.translates = {}
             }
 
-            //getItem(parameters.demography, 'age')
             ['demography','consume','regions','sport','interest','rooting','involve','image'].forEach(function(type){
                 parameters[type] = getElement(type);
             });
-            
 
-            //$rootScope.$watchGroup([parameters.demography,parameters.consume,parameters.regions], refreshCount);
-            //$rootScope.$watchCollection(parameters.demography, refreshCount);
+            // TODO убрать! хардкодим числовые ключи для спортов
+            var allSports = {
+                "football":1, 
+                "hockey":2, 
+                "basketball":3, 
+                "car":4, 
+                "figskating":5, 
+                "biathlon":6, 
+                "boxing":7, 
+                "tennis":8
+            };
+            var colorGenerator = d3.scale.category10();
+            parameters.sport.lists.forEach(function(item){
+                item.key = allSports[item.id];
+                item.chartColor = colorGenerator(allSports[item.id]);
+            });
+            
+            parameters.interest.lists.forEach(function(item){
+                item.chartColor = colorGenerator(item.id);
+            });
+
+            
             $rootScope.$watch(function(){return [parameters.demography,parameters.consume,parameters.regions]}, refreshCount, true);
 
             function refreshCount(newValue, oldValue){
-                var audience = getAudience();
+                var audience = getSelectedAudience();
                 ApiSrv.getCount(audience);
             }
-
+ 
            
             //getAudience();
 
@@ -1322,36 +1346,39 @@ angular
 
         }
 
-        function getAudience(){
 
-            function getParamsRec(item){
-                if (item.lists.every(function(subitem){return !subitem.lists; })){ // терминальный лист (age)
-                    var selectedA = item.lists.filter(function(subitem){return subitem.selected; })
-                        .map(function(subitem){return subitem.id});
-                    if (selectedA.length){
-                        return selectedA.length ? selectedA : undefined;
-                    }
-                } else {
-                    var res = {};
-                    item.lists.forEach(function(subitem){
-                        var subitemList = getParamsRec(subitem);
-                        if (subitemList){
-                            res[subitem.id] = subitemList;
-                        } //else res[subitem.id] = []; //  TODO comment this line
-                    });
-                    return Object.keys(res).length ? res : undefined;
+        function getSelectedParamsRec(item){
+            if (item.lists.every(function(subitem){return !subitem.lists; })){ // терминальный лист (age, clubs)
+                var selectedA = item.lists.filter(function(subitem){return subitem.selected; })
+                    .map(function(subitem){return subitem.id});
+                if (selectedA.length){
+                    return selectedA.length ? selectedA : undefined;
                 }
+            } else {
+                var res = {};
+                item.lists.forEach(function(subitem){
+                    var subitemList = getSelectedParamsRec(subitem);
+                    if (subitemList){
+                        res[subitem.id] = subitemList;
+                    } //else res[subitem.id] = []; //  TODO comment this line
+                });
+                if (item.interested) // хардкодим для спорта
+                    res.interested = true;
+                return Object.keys(res).length ? res : undefined;
             }
+        }
 
-            var demography = getParamsRec(parameters.demography);
-            var consume = getParamsRec(parameters.consume);
+        function getSelectedParams(itemName){
+            return getSelectedParamsRec(parameters[itemName]);
+        }
 
-
+        function getSelectedAudience(){
             return {
-                demography:demography,
-                consume:consume
-                //regions:regions
+                demography: getSelectedParams('demography'),
+                regions: getSelectedParams('regions'),
+                consume: getSelectedParams('consume')
             };
+            
             var demography = {
                     age:[],
                     gender:[],
@@ -1423,6 +1450,25 @@ angular
                 fedregion:[]
             }
         }
+        
+        // function getSelectedSports(){
+        //     return getSelectedParamsRec(parameters.sport);
+        // }
+        //
+        // function getSelectedInterest(){
+        //     // return {
+        //     //     sport: getSelectedParamsRec(parameters.sport),
+        //     //     interest: getSelectedParamsRec(parameters.interest)
+        //     // }
+        //     return getSelectedParamsRec(parameters.interest);
+        // }
+        //
+        // function getSelectedInterest(){
+        //
+        // }
+
+
+
 
         function getParams(){
             return padamsDefer.promise;
@@ -1431,14 +1477,19 @@ angular
 
         var me = {
             getParams: getParams,
+            getSelectedParams: getSelectedParams,
+            getSelectedAudience: getSelectedAudience
+            //getSelectedAudience: getSelectedAudience,
+            //getSelectedSports: getSelectedSports,
+            
 
-            getDemography: function(){return parameters.demography;},
-            getConsume: function(){return parameters.consume;},
-            getSport: function(){return parameters.sport;},
-            getInterest: function(){return parameters.interest;},
-            getRooting: function(){return parameters.rooting;},
-            getInvolve: function(){return parameters.involve;},
-            getImage: function(){return parameters.image;}
+            // getDemography: function(){return parameters.demography;},
+            // getConsume: function(){return parameters.consume;},
+            // getSport: function(){return parameters.sport;},
+            // getInterest: function(){return parameters.interest;},
+            // getRooting: function(){return parameters.rooting;},
+            // getInvolve: function(){return parameters.involve;},
+            // getImage: function(){return parameters.image;}
         };
 
 
@@ -1484,7 +1535,38 @@ angular
                     ApiSrv
                 ) {
                     $scope.loggedIn = false;
+                    
+                    $scope.menu = [{
+                            'name': 'О проекте',
+                            visible: function(){return !$scope.loggedIn;}
+                        }, {
+                            'name': 'Зарегистрироваться',
+                            visible: function(){return !$scope.loggedIn;}
+                        },{
+                            'name': 'Войти',
+                            visible: function(){return !$scope.loggedIn;},
+                            onClick: function(){$scope.setPath('/login/');}
+                        },{
+                            'name': 'Техническая поддержка',
+                            visible: function(){return !$scope.loggedIn;},
+                            onClick: function(){$scope.setPath('/infobox/');}
+                        },
+                        {
+                            'name': 'Получить информацию',
+                            visible: function(){return $scope.loggedIn;}
+                        },{
+                            'name': 'Проанализировать',
+                            visible: function(){return $scope.loggedIn;}
+                        },{
+                            'name': 'Спланировать',
+                            visible: function(){return $scope.loggedIn;}
+                        },{
+                            'name': 'Оценить',
+                            visible: function(){return $scope.loggedIn;}
+                        }
+                    ];
 
+                    
                     $scope.$watch( function () { return ApiSrv.getUser().sid; }, function (sid) {
                         $scope.loggedIn = !!sid;
                     }, true);
@@ -1595,7 +1677,8 @@ angular
                         id:'sport',
                         text:'Спорт'
                     },{
-                        id:'interest',
+                        //id:'interest',
+                        id:'interestGraph',
                         text:'Степень интереса'
                     },{
                         id:'rooting',
@@ -1604,27 +1687,30 @@ angular
                         id:'involve',
                         text:'Причастность к видам спорта'
                     },{
-                        id:'image',
+                        id:'imageGraph',
                         text:'Восприятие видов спорта'
                     }];
+
+                    $scope.pages = {};
+                    ['imageGraph'].forEach(function(page){
+                        $scope.pages[page] = {id:page};
+                    });
+                    
 
 
                     ParamsSrv.getParams().then(function(params){
                         $scope.parameters = params;
                     });
-                    
-                    /*$scope.demography = ParamsSrv.getDemography();
-                    $scope.consume = ParamsSrv.getConsume();
-                    $scope.sport = ParamsSrv.getSport();
-                    $scope.interest = ParamsSrv.getInterest();
-                    $scope.rooting = ParamsSrv.getRooting();
-                    $scope.involve = ParamsSrv.getInvolve();
-                    $scope.image = ParamsSrv.getImage();*/
-                    
+
+
+                    $scope.activePage = null;
                     $scope.activeMenuItem = null;
                     $scope.setActiveMenuItem = function(item){
                         $scope.activeMenuItem = item;
+                        $scope.activePage = item;
                     };
+                    
+                    
                     
                     // возвращает все наборы параметров, включая вложенные в виде линейной структуры
                     $scope.getAllSubchildren = function(item){
@@ -1644,20 +1730,24 @@ angular
                     };
 
                     $scope.checkButtonClick = function(){
-                        $scope;
+                        if ($scope.activeMenuItem && $scope.activeMenuItem.id == 'image'){
+                            $scope.activePage = $scope.pages.imageGraph;
+                            
+                        }
+                       
                         var a = 10;
                     };
 
                     
                     $scope.$on('ApiSrv.countError', function(){
-                        $scope.audienceCountText = 'Болельщики: НЕДОСТАТОЧНО ДАННЫХ';
+                        $scope.audienceCountText = 'Болельщики: ошибка загрузки';
                     });
 
                     $scope.$on('ApiSrv.countLoaded', function(event, result){
                         if (result.is_valid_count)
-                            $scope.audienceCountText = 'Болельщики: ' + result.audience_count;
+                            $scope.audienceCountText = 'Болельщики: ' + result.audience_count.toLocaleString();
                         else
-                            $scope.audienceCountText = 'Болельщики: НЕДОСТАТОЧНО ДАННЫХ ' + result.audience_count;
+                            $scope.audienceCountText = 'Болельщики: недостаточно данных';// + ' ' + result.audience_count.toLocaleString();
                     });
                     
                     // снимает выделение с соседний radio
@@ -1879,4 +1969,654 @@ angular
                 }]
         };
     }
+}());
+(function () {
+    "use strict";
+    /**
+     * @desc
+     * @example
+     */
+    angular.module('SportsensusApp')
+        .directive('legendDir', legendDir);
+
+    legendDir.$inject = [
+        '$rootScope'
+    ];
+
+    function legendDir(
+        $rootScope
+    )    {
+        return {
+            restrict: 'E',
+            scope: {
+                legend: '='
+            },
+            templateUrl: '/views/widgets/charts/legend/legend.html',
+            link: function ($scope, $el, attrs) {},
+
+            controller: [
+                '$scope',
+                '$routeParams',
+                '$location',
+                '$window',
+                'ApiSrv',
+                function(
+                    $scope
+                ){
+                    // $scope.legend = [{
+                    //     name: 'text1',
+                    //     color: "#ffcc00"
+                    // },{
+                    //     name: 'text2',
+                    //     color: "#66ff33"
+                    // },{
+                    //     name: 'text3',
+                    //     color: "#cc33ff"
+                    // }];
+                    
+                    $scope.itemClick = function(item){
+                        item.selected = !item.selected;
+                    }
+                }]
+        };
+    }
+}());
+(function () {
+    "use strict";
+    /**
+     * @desc
+     * @example
+     */
+    angular.module('SportsensusApp')
+        .directive('radarDir', radarDir);
+
+    radarDir.$inject = [
+        '$rootScope'
+    ];
+
+    function radarDir(
+        $rootScope
+    )    {
+        return {
+            restrict: 'E',
+            scope: {
+                chart: '='
+            },
+            templateUrl: '/views/widgets/charts/radar/radar.html',
+            link: function ($scope, $el, attrs) {
+                $scope.el = $el;
+                $scope.$watch('chart', $scope.redrawChart);
+            },
+
+            controller: [
+                '$scope',
+                function(
+                    $scope
+                ){
+
+                    
+                    $scope.redrawChart = function(){
+                        if (!$scope.chart || !$scope.chart.data || !$scope.chart.options) {
+                            $scope.el.empty();
+                            return;
+                        }
+
+                        var margin = {top: 50, right: 120, bottom: 100, left: 120};
+                        var width = 700 - margin.left - margin.right;
+                        var height = 700 - margin.top - margin.bottom;
+
+                        
+                        var options = {
+                            w: width,
+                            h: height,
+                            margin: margin
+                        };
+                        options = angular.extend({},$scope.chart.options, options);
+                        
+                        RadarChart($scope.el[0], $scope.chart.data, options);
+                    }
+                    
+                }]
+        };
+    }
+}());
+(function () {
+    "use strict";
+    /**
+     * @desc
+     * @example
+     */
+    angular.module('SportsensusApp')
+        .directive('stackedBarDir', stackedBarDir);
+
+    stackedBarDir.$inject = [
+        '$rootScope'
+    ];
+
+    function stackedBarDir(
+        $rootScope
+    )    {
+        return {
+            restrict: 'E',
+            scope: {
+                chart: '='
+            },
+            templateUrl: '/views/widgets/charts/stackedBar/stackedBar.html',
+            link: function ($scope, $el, attrs) {
+                $scope.el = $el;
+                $scope.$watch('chart', $scope.redrawChart);
+            },
+
+            controller: [
+                '$scope',
+                function(
+                    $scope
+                ){
+
+
+                    $scope.redrawChart = function(){
+                        if (!$scope.chart || !$scope.chart.data || !$scope.chart.options) {
+                            $scope.el.empty();
+                            return;
+                        }
+
+                        var chartData = $scope.chart.data;
+                        var chartOptions = $scope.chart.options;
+                        // var chartData = {
+                        //     labels: ["Не интересен", "Интересен"],
+                        //     //labels: ["", ""],
+                        //     datasets: [
+                        //         {
+                        //             //label: "Совершенно неинтересен",
+                        //             label: ["Совершенно неинтересен", "Скорее неинтересен"],
+                        //             fillColor: ["#FF6384", "#FFCE56"],
+                        //             data: [60, 80]
+                        //         },
+                        //         {
+                        //             //label: "Скорее неинтересен",
+                        //             label: ["Скорее интересен", "Очень интересен"],
+                        //             fillColor: ["#37E9ED","#4BC0C0"],
+                        //             data: [56, 31]
+                        //         }
+                        //     ]
+                        // };
+                        //var ctx = document.getElementById("myChart1").getContext("2d");
+                        var ctx = $scope.el.find('canvas')[0].getContext("2d");
+                        var myBar = new Chart(ctx).StackedBar(chartData, {
+                            showLabels: false,
+                            showTooltips: true,
+                            stacked: true,
+                            //customTooltips:customTooltips,
+                            tooltipHideZero: true
+                            //barStrokeWidth: 40
+                            //barValueSpacing: 40
+                        });
+
+                        function customTooltips(tooltip) {
+                            //var tooltipEl = $('#chartjs-tooltip');
+                            var tooltipEl = angular.element(document.querySelector( '#chartjs-tooltip' ));
+
+                            if (!tooltip) {
+                                tooltipEl.css({ opacity: 0});
+                                //tooltipEl.style.opacity = 0;
+                                return;
+                            }
+
+                            tooltipEl.removeClass('above below');
+                            tooltipEl.addClass(tooltip.yAlign);
+
+                            // split out the label and value and make your own tooltip here
+                            //var parts = tooltip.text.split(":");
+                            //var innerHtml = '<span>' + parts[0].trim() + '</span> : <span><b>' + parts[1].trim() + '</b></span>';
+                            var innerHtml = '12345';
+                            tooltipEl.html(innerHtml);
+
+                            tooltipEl.css({
+                                opacity: 1,
+                                left: tooltip.chart.canvas.offsetLeft + tooltip.x + 'px',
+                                top: tooltip.chart.canvas.offsetTop + tooltip.y + 'px',
+                                fontFamily: tooltip.fontFamily,
+                                fontSize: tooltip.fontSize,
+                                fontStyle: tooltip.fontStyle
+                            });
+                        }
+
+                    }
+
+                }]
+        };
+    }
+}());
+(function () {
+    "use strict";
+    /**
+     * @desc
+     */
+    angular.module('SportsensusApp')
+        .controller('imageGraphCrtl', imageGraphCrtl);
+
+    imageGraphCrtl.$inject = [
+        '$scope',
+        'ParamsSrv',
+        'ApiSrv'
+    ];
+
+    function imageGraphCrtl(
+        $scope,
+        ParamsSrv,
+        ApiSrv
+    ) {
+        ParamsSrv.getParams().then(function (params) {
+            $scope.parameters = params;
+            requestGraph();
+        });
+
+
+        function requestGraph() {
+            var audience = ParamsSrv.getSelectedAudience();
+            var sports = {};
+            $scope.parameters.sport.lists.forEach(function (list) {
+                sports[list.id] = {interested: true}
+            });
+            var images = $scope.parameters.image.lists.map(function (list) {
+                return list.id;
+            });
+            var sportimage = { // все спорты и все интересы
+                sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
+                image: images // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
+            };
+            ApiSrv.getImageGraph(audience, sportimage).then(function (graphData) {
+                $scope.prepareData(graphData);
+                $scope.prepareLegend();
+            }, function () {
+            });
+        }
+
+        $scope.legend = [];
+        $scope.prepareLegend = function () {
+            var selected = false;
+            var legend = $scope.parameters.sport.lists.map(function (list) {
+                selected = selected || list.interested;
+                return {
+                    id: list.id,
+                    name: list.name,
+                    color: list.chartColor,
+                    selected: list.interested
+                };
+            });
+            if (!selected) legend.forEach(function(item){item.selected = true;});
+            $scope.legend = legend;
+            $scope.$watch('legend', $scope.updateGraph, true);
+        };
+
+        $scope.prepareData = function (data) {
+
+            var images = {};
+            $scope.parameters.image.lists.forEach(function (list) {
+                images[list.id] = {
+                    id: list.id,
+                    name: list.name,
+                    count: 0
+                }
+            });
+
+
+            var sports = {};
+            $scope.parameters.sport.lists.forEach(function (list) {
+                sports[list.key] = angular.merge({
+                    data: angular.merge({}, images)
+                }, list);
+            });
+
+            var legendIndexes = {};
+            data.legends.forEach(function(item, index){
+                legendIndexes[item.name] = index;
+            });
+            data.data.forEach(function (item) {
+                // item.count
+                // item.legend[0] - спорт
+                // item.legend[1] - восприятие
+                //sports[item.legend[0]] = sports[item.legend[0]] || [];
+                //sports[item.legend[0]][item.legend[1]] = sports[item.legend[0]][item.legend[1]] || 0;
+                //sports[item.legend[0]][item.legend[1]] += item.count;
+                // sports[item.legend[0]].data[item.legend[1]].count += item.count;
+                var sportId = item.legend[legendIndexes['sport']];
+                var imageId = item.legend[legendIndexes['sportimage']];
+                sports[sportId].data[imageId].count += item.count;
+            }, this);
+
+
+            $scope.sportDatas = {};
+
+            Object.keys(sports).forEach(function (sportId) { // цикл по спортам
+                var sport = sports[sportId];
+                var maxValue = 0;
+                var axisData = [];
+                Object.keys(sport.data).forEach(function (imageId) { // цикл по восприятиям
+                    var value = sport.data[imageId].count / 1000 / 1000;
+                    value = Math.round(value * 10) / 10;
+                    axisData.push({axis: images[imageId].name, value: value});
+                    maxValue = Math.max(maxValue, value);
+                }, this);
+                //graph.push(axisData);
+                //localColors.push(sport.chartColor);
+
+                var sportData = {
+                    axisData: axisData,
+                    maxValue: maxValue
+                };
+                $scope.sportDatas[sport.id] = sportData;
+            }, this);
+
+        };
+
+        $scope.updateGraph = function () {
+            var chartData = [];
+            var localColors = [];
+            var maxValue = 0;
+            $scope.legend.forEach(function (item) {
+                if (!item.selected) return;
+                chartData.push($scope.sportDatas[item.id].axisData);
+                localColors.push(item.color);
+                maxValue = Math.max(maxValue, $scope.sportDatas[item.id].maxValue);
+            });
+
+            // округляем до 5 в большую сторону
+            maxValue = Math.ceil(maxValue / 5) * 5;
+
+            var radarChartOptions = {
+                //w: width,
+                //h: height,
+                //margin: margin,
+                maxValue: maxValue,
+                levels: 5,
+                wrapWidth: 100,
+                labelFactor: 1.32,
+                roundStrokes: true,
+                //color: color
+                color: function (i) {
+                    return localColors[i];
+                }
+            };
+
+            if (chartData && chartData.length)
+                $scope.chart = {data: chartData, options: radarChartOptions};
+            else $scope.chart = null;
+        };
+
+    }
+
+}());
+
+(function () {
+    "use strict";
+    /**
+     * @desc
+     */
+    angular.module('SportsensusApp')
+        .controller('interestGraphCrtl', interestGraphCrtl);
+
+    interestGraphCrtl.$inject = [
+        '$scope',
+        'ParamsSrv',
+        'ApiSrv'
+    ];
+
+    function interestGraphCrtl(
+        $scope,
+        ParamsSrv,
+        ApiSrv
+    ) {
+        ParamsSrv.getParams().then(function (params) {
+            $scope.parameters = params;
+            requestGraph();
+        });
+
+        $scope.showCharts = false;
+
+        function requestGraph() {
+            var audience = ParamsSrv.getSelectedAudience();
+            var sports = {};
+            $scope.parameters.sport.lists.forEach(function (list) {
+                sports[list.id] = {interested: true}
+            });
+            var interests = $scope.parameters.interest.lists.map(function (list) {
+                return list.id;
+            });
+            var sportinterest = { // все спорты и все интересы
+                sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
+                interest: interests // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
+            };
+            ApiSrv.getInterestGraph(audience, sportinterest).then(function (graphData) {
+                $scope.prepareData(graphData);
+                $scope.prepareLegends();
+            }, function () {
+            });
+        }
+
+        $scope.legend = [];
+        $scope.prepareLegends = function () {
+            var selected = false;
+            var sportLegend = $scope.parameters.sport.lists.map(function (list) {
+                selected = selected || list.interested;
+                return {
+                    id: list.id,
+                    key: list.key,
+                    name: list.name,
+                    color: '#555555',//list.chartColor,
+                    selected: list.interested
+                };
+            });
+            if (!selected) sportLegend.forEach(function(item){item.selected = true;});
+
+            var interestLegend = $scope.parameters.interest.lists.map(function (list) {
+                selected = selected || list.selected;
+                return {
+                    id: list.id,
+                    name: list.name,
+                    color: list.chartColor,
+                    selected: list.selected
+                };
+            }).reverse();
+            if (!selected) interestLegend.forEach(function(item){item.selected = true;});
+
+            $scope.sportLegend = sportLegend;
+            $scope.$watch('sportLegend', $scope.updateGraph, true);
+
+            $scope.interestLegend = interestLegend;
+            $scope.$watch('interestLegend', $scope.updateGraph, true);
+
+
+        };
+
+        $scope.prepareData = function (data) {
+
+            var interests = {};
+            $scope.parameters.interest.lists.forEach(function (list) {
+                interests[list.id] = {
+                    id: list.id,
+                    name: list.name,
+                    count: 0
+                }
+            });
+
+
+            var sports = {};
+            $scope.parameters.sport.lists.forEach(function (list) {
+                sports[list.key] = angular.merge({
+                    data: angular.merge({}, interests)
+                }, list);
+            });
+
+
+            var legendIndexes = {};
+            data.legends.forEach(function(item, index){
+                legendIndexes[item.name] = index;
+            });
+
+            data.data.forEach(function (item) {
+                // item.count
+                // item.legend[0] - спорт
+                // item.legend[1] - восприятие
+                //sports[item.legend[0]] = sports[item.legend[0]] || [];
+                //sports[item.legend[0]][item.legend[1]] = sports[item.legend[0]][item.legend[1]] || 0;
+                //sports[item.legend[0]][item.legend[1]] += item.count;
+                // sports[item.legend[0]].data[item.legend[1]].count += item.count;
+                var sportId = item.legend[legendIndexes['sport']];
+                var interestId = item.legend[legendIndexes['sportinterest']];
+                sports[sportId].data[interestId].count += item.count;
+            }, this);
+
+
+
+
+            Object.keys(sports).forEach(function (sportId) { // цикл по спортам
+                var sport = sports[sportId];
+                //var maxValue = 0;
+                //var axisData = [];
+                Object.keys(sport.data).forEach(function (imageId) { // цикл по восприятиям
+                    var value = sport.data[imageId].count / 1000 / 1000;
+                    value = Math.round(value * 10) / 10;
+                    sport.data[imageId].count = value;
+
+                    //value = Math.round(value * 10) / 10;
+                    //axisData.push({axis: images[imageId].name, value: value});
+                    //maxValue = Math.max(maxValue, value);
+                }, this);
+                //graph.push(axisData);
+                //localColors.push(sport.chartColor);
+
+                // var sportData = {
+                //     axisData: axisData,
+                //     maxValue: maxValue
+                // };
+                // $scope.sportDatas[sport.id] = sportData;
+            }, this);
+
+            $scope.sportDatas = sports;
+
+        };
+
+        $scope.updateGraph = function () {
+
+            var useBars = true;
+            var showInterest = false;
+            var showNotInterest = false;
+            var interests = [];
+            var interestsO = {};
+            $scope.interestLegend.forEach(function(interest){
+                if (!interest.selected) return;
+                interests.push(interest);
+                interestsO[interest.id] = interest;
+                if (interest.id == 3) useBars = false;
+                if (interest.id < 3) showInterest = true;
+                if (interest.id > 3) showNotInterest = true;
+            });
+
+
+
+            var sports = [];
+            $scope.sportLegend.forEach(function(sport){
+                if (!sport.selected) return;
+                //sports.push(sport);
+                var chartData = {labels:[],datasets:[]};
+                //useBars = true;
+                if (useBars){
+                    var twoCols = showInterest && showNotInterest;
+                    var interestDs = { label:[], fillColor:[], data:[] };
+                    var notInterestDs = { label:[], fillColor:[], data:[] };
+
+                    [[interestsO[5],interestDs],[interestsO[1],interestDs],
+                     [interestsO[4],notInterestDs],[interestsO[2],notInterestDs]].forEach(function(item){
+                        if(item[0]){
+                            item[1].label.push(item[0].name);
+                            item[1].fillColor.push(item[0].color);
+                            item[1].data.push($scope.sportDatas[sport.key].data[item[0].id].count);
+                        } else if (twoCols){
+                            item[1].label.push('');
+                            item[1].fillColor.push('');
+                            item[1].data.push(0);
+                        }
+                    });
+
+                    chartData.labels.push('');
+                    if (twoCols) chartData.labels.push('');
+
+                    //chartData.datasets.push(interestDs);
+                    //chartData.datasets.push(notInterestDs);
+
+                    if (interestDs.label.length) {
+                        //chartData.labels.push('');
+                        chartData.datasets.push(interestDs)
+                    }
+                    if (notInterestDs.label.length) {
+                        //chartData.labels.push('');
+                        chartData.datasets.push(notInterestDs)
+                    }
+                } else { // not use bars
+                    var dataDs = { label:[], fillColor:[], data:[] };
+                    var emptyDs = { label:[], fillColor:[], data:[] };
+
+                    interests.forEach(function(interest){
+                        dataDs.label.push(interest.name);
+                        dataDs.fillColor.push(interest.color);
+                        dataDs.data.push($scope.sportDatas[sport.key].data[interest.id].count);
+
+                        emptyDs.label.push(interest.name);
+                        emptyDs.fillColor.push(interest.color);
+                        emptyDs.data.push(0);
+
+                        chartData.labels.push('');
+                    });
+
+                    chartData.datasets.push(dataDs);
+                    chartData.datasets.push(emptyDs);
+                }
+
+                sports.push({
+                    sport:sport,
+                    chartData:{data:chartData, options:{}}
+                })
+            });
+
+            $scope.showCharts = sports.length && interests.length;
+            $scope.charts = sports;
+
+/*
+            var chartData = [];
+            var localColors = [];
+            var maxValue = 0;
+            $scope.legend.forEach(function (item) {
+                if (!item.selected) return;
+                chartData.push($scope.sportDatas[item.id].axisData);
+                localColors.push(item.color);
+                maxValue = Math.max(maxValue, $scope.sportDatas[item.id].maxValue);
+            });
+
+            // округляем до 5 в большую сторону
+            maxValue = Math.ceil(maxValue / 5) * 5;
+
+            var radarChartOptions = {
+                //w: width,
+                //h: height,
+                //margin: margin,
+                maxValue: maxValue,
+                levels: 5,
+                wrapWidth: 100,
+                labelFactor: 1.32,
+                roundStrokes: true,
+                //color: color
+                color: function (i) {
+                    return localColors[i];
+                }
+            };
+
+            if (chartData && chartData.length)
+                $scope.chart = {data: chartData, options: radarChartOptions};
+            else $scope.chart = null;
+            */
+        };
+
+    }
+
 }());

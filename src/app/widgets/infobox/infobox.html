@@ -1,4 +1,5 @@
-
+<div>
+    <header-dir></header-dir>
 <div class="l-board">
    <!-- <script>
         window.trl = {
@@ -13,6 +14,7 @@
         }
         };
     </script>-->
+
 
 
     <div class="l-board__chek-button">
@@ -31,9 +33,10 @@
             &lt;!&ndash;{% include 'l-board/l-board__view.html' %}&ndash;&gt;
             <div ></div>
         </div>-->
-        <div ng-if="activeMenuItem" class="l-board__body" ng-include="'/views/widgets/infobox/panels/'+activeMenuItem.id+'.html'">
+        <div ng-if="activePage" class="l-board__body" ng-include="'/views/widgets/infobox/panels/'+activePage.id+'.html'">
         </div>
     </form>
 
     <div class="l-board__express"></div>
+</div>
 </div>

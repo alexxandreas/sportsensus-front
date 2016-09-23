@@ -1,18 +1,27 @@
 <div class="l-board__body-box" data-id="rooting">
 
     <h1 class="l-board__header">
+        {{parameters.rooting.name}}
+    </h1>
+
+    <div class="l-board__body-box-list" >
+        <ul>
+            <li ng-repeat="collection in parameters.rooting.lists">
+                <input type="checkbox" name="{{collection.id}}" id="{{collection.id}}"
+                       ng-model="collection.selected"
+                       ng-click="selectCheckbox(collection, item)">
+                <label for="{{collection.id}}">{{collection.name}}</label>
+            </li>
+        </ul>
+    </div>
+
+    <!--<h1 class="l-board__header">
         <img src="/static/img/icons/rooting.png">
         Сила боления
     </h1>
 
-
     <div class="l-board__body-box-list" ng-repeat="collection in parameters.rooting">
         <h3>
-            <!--<img ng-show="collection.img" ng-src="{{collection.img}}">
-            {{collection.text}}-->
-            <!--<input type="checkbox" name="sport[]" value="1" id="sport_1">
-            <label for="sport_1">Спонтанное знание</label>-->
-            <!--ng-click="selectCheckbox(collection, item)"-->
             <input type="checkbox" name="{{collection.id+'!'}}" id="{{collection.id}}"
                    ng-model="collection.selected"
                    >
@@ -27,7 +36,7 @@
                 <label for="{{collection.id+'_'+item.id}}">{{item.text}}</label>
             </li>
         </ul>
-    </div>
+    </div>-->
 
 
 

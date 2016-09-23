@@ -10,7 +10,7 @@
         <h3>
 
             <input type="checkbox" name="{{collection.id+'!'}}" id="{{collection.id}}"
-                   ng-model="collection.selected"
+                   ng-model="collection.interested"
             >
             <label for="{{collection.id}}">{{collection.name}}</label>
         </h3>
@@ -19,7 +19,7 @@
                 <!--ng-click="selectCheckbox(collection, item)"-->
                 <input type="checkbox" name="{{collection.id}}" id="{{collection.id+'_'+item.id}}"
                        ng-model="item.selected"
-                       ng-disabled="!collection.selected"
+                       ng-disabled="!collection.interested"
                        >
                 <label for="{{collection.id+'_'+item.id}}">{{item.name}}</label>
             </li>

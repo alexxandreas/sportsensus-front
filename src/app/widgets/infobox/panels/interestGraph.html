@@ -1,0 +1,24 @@
+<div class="infobox-panel" ng-controller="interestGraphCrtl"
+     layout="column" layout-align="start start">
+
+    <h1 class="infobox-panel-header" layout="row" layout-align="start center">
+        Степень интереса
+    </h1>
+
+    <div layout="column" layout-align="start start">
+        <div layout="row" layout-align="start start" layout-wrap>
+            <legend-dir legend="interestLegend" ></legend-dir>
+            <legend-dir legend="sportLegend" ></legend-dir>
+
+        </div>
+        <div layout="row" layout-align="start start" layout-wrap ng-if="showCharts">
+            <!--<radar-dir chart="chart"></radar-dir>-->
+            <div ng-repeat="chart in charts"
+            layout="column" layout-align="start center"
+            style="margin: 10px;">
+                <div class="bar-chart-caption">{{chart.sport.name}}</div>
+                <stacked-bar-dir chart="chart.chartData"></stacked-bar-dir>
+            </div>
+        </div>
+    </div>
+</div>

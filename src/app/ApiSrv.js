@@ -267,6 +267,38 @@
             return d.promise;
         }
 
+        function getImageGraph(audience, sportimage){
+            var d = $q.defer();
+            var data = prepareRequestData("info_sportimage", {sid: sid, audience:audience, sportimage:sportimage});
+            $http.post(url, data).then(function(response){
+                if (!response.data.result || !response.data.result.graph){
+                    d.reject(response);
+                }else {
+                    d.resolve(response.data.result.graph);
+                }
+            }, function(response){
+                d.reject(response);
+            });
+            return d.promise;
+        }
+
+        function getInterestGraph(audience, sportinterest){
+            var d = $q.defer();
+            var data = prepareRequestData("info_sportinterest", {sid: sid, audience:audience, sportinterest:sportinterest});
+            $http.post(url, data).then(function(response){
+                if (!response.data.result || !response.data.result.graph){
+                    d.reject(response);
+                }else {
+                    d.resolve(response.data.result.graph);
+                }
+            }, function(response){
+                d.reject(response);
+            });
+            return d.promise;
+        }
+
+
+
         var me = {
             getUser: getUser,
             auth: auth,
@@ -274,6 +306,8 @@
             logout: logout,
             //getEnums: getEnums
             getCount: getCount,
+            getImageGraph: getImageGraph,
+            getInterestGraph: getInterestGraph,
             getTranslations: getTranslations
         };
 

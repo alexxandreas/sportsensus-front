@@ -1,9 +1,9 @@
 angular
 	.module('SportsensusApp', [
-		//'ngMaterial',
+		'ngMaterial',
 		'ngRoute',
 		'ngCookies',
-		'Views'
+		'Views' 
 	])
 	// .config(function($mdThemingProvider) {
 	// 	$mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();

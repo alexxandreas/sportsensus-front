@@ -64,38 +64,11 @@
 
         function prepareParams() {
 
-            // var a = [
-            //     'FootballClubsKnown', // - футбольные клубы
-            //     'HockeyClubsKnown', // - хоккейные команды
-            //     'BasketballClubsKnown', // - баскетбольные команды
-            //     'CarKnown', // - соревнования автоспорта
-            //
-            //     'MobileProvider', // - мобильные операторы
-            //     'TvCableProvider', // - операторы кабельного тв
-            //     'TvSputnicProvider', // - операторы спутникого тв
-            //     'GasStationPeriod', // - АЗС
-            //     'GamingPlatform' // - игровые платформы
-            // ];
-
-            /*function getItem(items, id){
-                var finded;
-                items.some(function(item){
-                    if (item.id == id){
-                        finded = item;
-                        return true;
-                    }
-                });
-                if (!finded) return;
-                var selected = finded.items.filter(function(item){return item.selected;}).map(function(item){return item.id;});
-                return selected.length ? selected : undefined;
-            }*/
-
-
             function getElement(id){
                 function isNumber(n) {
                     return !isNaN(parseFloat(n)) && isFinite(n);
                 }
-                function recFillTranslations(item){
+                /*function recFillTranslations(item){ // TODO убрать, когда будет переделан формат выдачи
                     if (!(item.lists instanceof Array)) return;
                     if (item.lists.every(function(subitem){return isNumber(subitem);})){
                         item.lists = item.lists.map(function(subitem){
@@ -109,8 +82,7 @@
                             recFillTranslations(subitem);
                         })
                     }
-
-                }
+                }*/
                 
                 function recFind(items){
                     var finded;
@@ -127,27 +99,45 @@
                 
                 var item = recFind(translations.pages);
                 if (!item) return;
-                recFillTranslations(item);
+                //recFillTranslations(item); // TODO убрать, когда будет переделан формат выдачи
                 return item;
                 
                 // translations.translates = {}
             }
 
-            //getItem(parameters.demography, 'age')
             ['demography','consume','regions','sport','interest','rooting','involve','image'].forEach(function(type){
                 parameters[type] = getElement(type);
             });
-            
 
-            //$rootScope.$watchGroup([parameters.demography,parameters.consume,parameters.regions], refreshCount);
-            //$rootScope.$watchCollection(parameters.demography, refreshCount);
+            // TODO убрать! хардкодим числовые ключи для спортов
+            var allSports = {
+                "football":1, 
+                "hockey":2, 
+                "basketball":3, 
+                "car":4, 
+                "figskating":5, 
+                "biathlon":6, 
+                "boxing":7, 
+                "tennis":8
+            };
+            var colorGenerator = d3.scale.category10();
+            parameters.sport.lists.forEach(function(item){
+                item.key = allSports[item.id];
+                item.chartColor = colorGenerator(allSports[item.id]);
+            });
+            
+            parameters.interest.lists.forEach(function(item){
+                item.chartColor = colorGenerator(item.id);
+            });
+
+            
             $rootScope.$watch(function(){return [parameters.demography,parameters.consume,parameters.regions]}, refreshCount, true);
 
             function refreshCount(newValue, oldValue){
-                var audience = getAudience();
+                var audience = getSelectedAudience();
                 ApiSrv.getCount(audience);
             }
-
+ 
            
             //getAudience();
 
@@ -961,36 +951,39 @@
 
         }
 
-        function getAudience(){
 
-            function getParamsRec(item){
-                if (item.lists.every(function(subitem){return !subitem.lists; })){ // терминальный лист (age)
-                    var selectedA = item.lists.filter(function(subitem){return subitem.selected; })
-                        .map(function(subitem){return subitem.id});
-                    if (selectedA.length){
-                        return selectedA.length ? selectedA : undefined;
-                    }
-                } else {
-                    var res = {};
-                    item.lists.forEach(function(subitem){
-                        var subitemList = getParamsRec(subitem);
-                        if (subitemList){
-                            res[subitem.id] = subitemList;
-                        } //else res[subitem.id] = []; //  TODO comment this line
-                    });
-                    return Object.keys(res).length ? res : undefined;
+        function getSelectedParamsRec(item){
+            if (item.lists.every(function(subitem){return !subitem.lists; })){ // терминальный лист (age, clubs)
+                var selectedA = item.lists.filter(function(subitem){return subitem.selected; })
+                    .map(function(subitem){return subitem.id});
+                if (selectedA.length){
+                    return selectedA.length ? selectedA : undefined;
                 }
+            } else {
+                var res = {};
+                item.lists.forEach(function(subitem){
+                    var subitemList = getSelectedParamsRec(subitem);
+                    if (subitemList){
+                        res[subitem.id] = subitemList;
+                    } //else res[subitem.id] = []; //  TODO comment this line
+                });
+                if (item.interested) // хардкодим для спорта
+                    res.interested = true;
+                return Object.keys(res).length ? res : undefined;
             }
+        }
 
-            var demography = getParamsRec(parameters.demography);
-            var consume = getParamsRec(parameters.consume);
+        function getSelectedParams(itemName){
+            return getSelectedParamsRec(parameters[itemName]);
+        }
 
-
+        function getSelectedAudience(){
             return {
-                demography:demography,
-                consume:consume
-                //regions:regions
+                demography: getSelectedParams('demography'),
+                regions: getSelectedParams('regions'),
+                consume: getSelectedParams('consume')
             };
+            
             var demography = {
                     age:[],
                     gender:[],
@@ -1062,6 +1055,25 @@
                 fedregion:[]
             }
         }
+        
+        // function getSelectedSports(){
+        //     return getSelectedParamsRec(parameters.sport);
+        // }
+        //
+        // function getSelectedInterest(){
+        //     // return {
+        //     //     sport: getSelectedParamsRec(parameters.sport),
+        //     //     interest: getSelectedParamsRec(parameters.interest)
+        //     // }
+        //     return getSelectedParamsRec(parameters.interest);
+        // }
+        //
+        // function getSelectedInterest(){
+        //
+        // }
+
+
+
 
         function getParams(){
             return padamsDefer.promise;
@@ -1070,14 +1082,19 @@
 
         var me = {
             getParams: getParams,
+            getSelectedParams: getSelectedParams,
+            getSelectedAudience: getSelectedAudience
+            //getSelectedAudience: getSelectedAudience,
+            //getSelectedSports: getSelectedSports,
+            
 
-            getDemography: function(){return parameters.demography;},
-            getConsume: function(){return parameters.consume;},
-            getSport: function(){return parameters.sport;},
-            getInterest: function(){return parameters.interest;},
-            getRooting: function(){return parameters.rooting;},
-            getInvolve: function(){return parameters.involve;},
-            getImage: function(){return parameters.image;}
+            // getDemography: function(){return parameters.demography;},
+            // getConsume: function(){return parameters.consume;},
+            // getSport: function(){return parameters.sport;},
+            // getInterest: function(){return parameters.interest;},
+            // getRooting: function(){return parameters.rooting;},
+            // getInvolve: function(){return parameters.involve;},
+            // getImage: function(){return parameters.image;}
         };
 
 

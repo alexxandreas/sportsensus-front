@@ -6,7 +6,7 @@ var runSequence = require('run-sequence');
 var del = require('del');
 
 var appJs = ['../src/app/**/_*.js','../src/app/**/*.js']; // not include config.js 
-var appCss = ['../src/app/**/*.less'];
+var appCss = ['../src/app/**/_*.less', '../src/app/**/*.less'];
 var appViews = ['../src/app/**/*.html']; // not include index.html 
 
 //var watchStatic_ = ['../src/**/*.{html,scss,less,css,svg}'];
@@ -23,15 +23,20 @@ var distRelease = '../dist/release/';
 var libJs = [
 	//'../libs/leaflet/dist/leaflet-src.js',
 	'../libs/angular/angular.js',
-	//'../libs/angular-animate/angular-animate.js',
-	//'../libs/angular-aria/angular-aria.js',
-	//'../libs/angular-material/angular-material.js',
+	'../libs/angular-animate/angular-animate.js',
+	'../libs/angular-aria/angular-aria.js',
+	'../libs/angular-material/angular-material.js',
 	'../libs/angular-route/angular-route.js',
-	'../libs/angular-cookies/angular-cookies.js'
+	'../libs/angular-cookies/angular-cookies.js',
+	'../libs/d3-3.5.6.min.js',
+	'../libs/radarChart.js',
+	'../libs/Chart.1.1.1.js',
+	'../libs/Chart.StackedBar.js'
+	
 
 ];
 var libCss = [
-	//'../libs/angular-material/angular-material.css'
+	'../libs/angular-material/angular-material.css'
 ];
 
 

@@ -1,58 +1,18 @@
 <div class="l-board__body-box" data-id="interest">
 
-    <div class="l-board__body-box-list" ng-repeat="collection in parameters.interest">
-        <h3>
-            <img ng-show="collection.img" ng-src="{{collection.img}}">
-            {{collection.text}}
-        </h3>
+    <h1 class="l-board__header">
+        {{parameters.interest.name}}
+    </h1>
+
+    <div class="l-board__body-box-list" >
         <ul>
-            <li ng-repeat="item in collection.items">
-                <input type="checkbox" name="{{collection.id}}" id="{{collection.id+'_'+item.id}}"
-                       ng-model="item.selected"
+            <li ng-repeat="collection in parameters.interest.lists">
+                <input type="checkbox" name="{{collection.id}}" id="{{collection.id}}"
+                       ng-model="collection.selected"
                        ng-click="selectCheckbox(collection, item)">
-                <label for="{{collection.id+'_'+item.id}}">{{item.text}}</label>
+                <label for="{{collection.id}}">{{collection.name}}</label>
             </li>
         </ul>
     </div>
 
-    <!--
-    <div class="l-board__body-box-list">
-        <h3>
-            <img src="/static/img/icons/interest.png">
-            Степень интереса
-        </h3>
-
-
-        <ul>
-            <li>
-                <input type="checkbox" name="interest[]" value="1" id="interest_1">
-                <label for="interest_1">совершенно неинтересен</label>
-            </li>
-
-
-            <li>
-                <input type="checkbox" name="interest[]" value="2" id="interest_2">
-                <label for="interest_2">скорее неинтересен</label>
-            </li>
-
-
-            <li>
-                <input type="checkbox" name="interest[]" value="3" id="interest_3">
-                <label for="interest_3">ни то, ни другое</label>
-            </li>
-
-
-            <li>
-                <input type="checkbox" name="interest[]" value="4" id="interest_4">
-                <label for="interest_4">скорее интересен</label>
-            </li>
-
-
-            <li>
-                <input type="checkbox" name="interest[]" value="5" id="interest_5">
-                <label for="interest_5">очень интересен</label>
-            </li>
-        </ul>
-    </div>
--->
 </div>

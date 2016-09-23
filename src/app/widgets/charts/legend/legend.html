@@ -1,0 +1,20 @@
+<div style="
+    display: block;
+    vertical-align: top
+    "
+    class="chart-legend">
+
+    <div  class="legend-item no-outline no-select"
+         ng-repeat="item in legend"
+         layout="row" layout-align="start center"
+         ng-class="{active: item.selected}"
+         ng-click="itemClick(item)"
+    >
+        <div flex="none" class="legend-item-color"
+        ng-style="{'background-color': item.selected ? item.color : 'none'}"></div>
+        <div class="legend-item-text">{{item.name}}</div>
+    </div>
+
+</div>
+
+

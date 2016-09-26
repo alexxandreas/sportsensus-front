@@ -66,7 +66,7 @@
                     }];
 
                     $scope.pages = {};
-                    ['imageGraph'].forEach(function(page){
+                    ['imageGraph','allGraphs'].forEach(function(page){
                         $scope.pages[page] = {id:page};
                     });
                     
@@ -104,10 +104,11 @@
                     };
 
                     $scope.checkButtonClick = function(){
-                        if ($scope.activeMenuItem && $scope.activeMenuItem.id == 'image'){
-                            $scope.activePage = $scope.pages.imageGraph;
-                            
-                        }
+                        //if ($scope.activeMenuItem && $scope.activeMenuItem.id == 'image'){
+                            // $scope.activePage = $scope.pages.imageGraph;
+                            $scope.activePage = $scope.pages.allGraphs;
+
+                        //}
                        
                         var a = 10;
                     };

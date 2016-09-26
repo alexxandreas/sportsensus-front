@@ -24,7 +24,7 @@
                 $scope.el = $el;
                 $scope.$watch('chart', $scope.redrawChart);
             },
-
+            replace: true,
             controller: [
                 '$scope',
                 function(
@@ -33,13 +33,19 @@
 
 
                     $scope.redrawChart = function(){
+                        //$scope.el.empty();
+                        if ($scope.chartObj){
+                            $scope.chartObj.clear();
+                            $scope.chartObj.destroy();
+                            //delete $scope.chartObj;
+                        }
                         if (!$scope.chart || !$scope.chart.data || !$scope.chart.options) {
-                            $scope.el.empty();
+                            //$scope.el.empty();
                             return;
                         }
 
                         var chartData = $scope.chart.data;
-                        var chartOptions = $scope.chart.options;
+                        var chartOptions = $scope.chart.options || {};
                         // var chartData = {
                         //     labels: ["Не интересен", "Интересен"],
                         //     //labels: ["", ""],
@@ -60,15 +66,17 @@
                         // };
                         //var ctx = document.getElementById("myChart1").getContext("2d");
                         var ctx = $scope.el.find('canvas')[0].getContext("2d");
-                        var myBar = new Chart(ctx).StackedBar(chartData, {
+                        $scope.chartObj = new Chart(ctx).StackedBar(chartData, angular.extend({
                             showLabels: false,
                             showTooltips: true,
                             stacked: true,
                             //customTooltips:customTooltips,
-                            tooltipHideZero: true
+                            tooltipHideZero: true,
+                            maintainAspectRatio: false,
+                            responsive: true
                             //barStrokeWidth: 40
                             //barValueSpacing: 40
-                        });
+                        }, chartOptions));
 
                         function customTooltips(tooltip) {
                             //var tooltipEl = $('#chartjs-tooltip');

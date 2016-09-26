@@ -297,6 +297,22 @@
             return d.promise;
         }
 
+        function getInvolveGraph(audience, involve){
+            var d = $q.defer();
+            var data = prepareRequestData("info_fan_involvment", {sid: sid, audience:audience, involve:involve});
+            $http.post(url, data).then(function(response){
+                if (!response.data.result || !response.data.result.graph){
+                    d.reject(response);
+                }else {
+                    d.resolve(response.data.result.graph);
+                }
+            }, function(response){
+                d.reject(response);
+            });
+            return d.promise;
+        }
+
+
 
 
         var me = {
@@ -308,6 +324,7 @@
             getCount: getCount,
             getImageGraph: getImageGraph,
             getInterestGraph: getInterestGraph,
+            getInvolveGraph: getInvolveGraph,
             getTranslations: getTranslations
         };
 

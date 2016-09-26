@@ -125,8 +125,10 @@
                 item.key = allSports[item.id];
                 item.chartColor = colorGenerator(allSports[item.id]);
             });
-            
             parameters.interest.lists.forEach(function(item){
+                item.chartColor = colorGenerator(item.id);
+            });
+            parameters.involve.lists.forEach(function(item){
                 item.chartColor = colorGenerator(item.id);
             });
 

@@ -8,20 +8,25 @@
 
     imageGraphCrtl.$inject = [
         '$scope',
+        '$controller',
         'ParamsSrv',
         'ApiSrv'
     ];
 
     function imageGraphCrtl(
         $scope,
+        $controller,
         ParamsSrv,
         ApiSrv
     ) {
+
+        $controller('baseGraphCtrl', {$scope: $scope});
+        
         ParamsSrv.getParams().then(function (params) {
             $scope.parameters = params;
+            $scope.prepareLegends();
             requestGraph();
         });
-
 
         function requestGraph() {
             var audience = ParamsSrv.getSelectedAudience();
@@ -38,30 +43,35 @@
             };
             ApiSrv.getImageGraph(audience, sportimage).then(function (graphData) {
                 $scope.prepareData(graphData);
-                $scope.prepareLegend();
+                $scope.updateGraph();
             }, function () {
             });
         }
 
-        $scope.legend = [];
-        $scope.prepareLegend = function () {
-            var selected = false;
-            var legend = $scope.parameters.sport.lists.map(function (list) {
-                selected = selected || list.interested;
-                return {
-                    id: list.id,
-                    name: list.name,
-                    color: list.chartColor,
-                    selected: list.interested
-                };
-            });
-            if (!selected) legend.forEach(function(item){item.selected = true;});
-            $scope.legend = legend;
-            $scope.$watch('legend', $scope.updateGraph, true);
+        $scope.prepareLegends = function () {
+            $scope.sportLegend = $scope.getSportLegend();
+            $scope.$watch('sportLegend', $scope.updateGraph, true);
         };
 
-        $scope.prepareData = function (data) {
 
+        // $scope.legend = [];
+        // $scope.prepareLegend = function () {
+        //     var selected = false;
+        //     var legend = $scope.parameters.sport.lists.map(function (list) {
+        //         selected = selected || list.interested;
+        //         return {
+        //             id: list.id,
+        //             name: list.name,
+        //             color: list.chartColor,
+        //             selected: list.interested
+        //         };
+        //     });
+        //     if (!selected) legend.forEach(function(item){item.selected = true;});
+        //     $scope.legend = legend;
+        //     $scope.$watch('legend', $scope.updateGraph, true);
+        // };
+
+        $scope.prepareData = function (data) {
             var images = {};
             $scope.parameters.image.lists.forEach(function (list) {
                 images[list.id] = {
@@ -70,7 +80,6 @@
                     count: 0
                 }
             });
-
 
             var sports = {};
             $scope.parameters.sport.lists.forEach(function (list) {
@@ -84,13 +93,6 @@
                 legendIndexes[item.name] = index;
             });
             data.data.forEach(function (item) {
-                // item.count
-                // item.legend[0] - спорт
-                // item.legend[1] - восприятие
-                //sports[item.legend[0]] = sports[item.legend[0]] || [];
-                //sports[item.legend[0]][item.legend[1]] = sports[item.legend[0]][item.legend[1]] || 0;
-                //sports[item.legend[0]][item.legend[1]] += item.count;
-                // sports[item.legend[0]].data[item.legend[1]].count += item.count;
                 var sportId = item.legend[legendIndexes['sport']];
                 var imageId = item.legend[legendIndexes['image']];
                 sports[sportId].data[imageId].count += item.count;
@@ -122,10 +124,12 @@
         };
 
         $scope.updateGraph = function () {
+            if (!$scope.sportDatas) return;
+            
             var chartData = [];
             var localColors = [];
             var maxValue = 0;
-            $scope.legend.forEach(function (item) {
+            $scope.sportLegend.forEach(function (item) {
                 if (!item.selected) return;
                 chartData.push($scope.sportDatas[item.id].axisData);
                 localColors.push(item.color);

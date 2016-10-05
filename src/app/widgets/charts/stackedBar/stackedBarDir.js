@@ -65,15 +65,26 @@
                         //     ]
                         // };
                         //var ctx = document.getElementById("myChart1").getContext("2d");
+                        var barWidth = 30;
+                        var barValueSpacing = 5;
+                        
                         var ctx = $scope.el.find('canvas')[0].getContext("2d");
                         $scope.chartObj = new Chart(ctx).StackedBar(chartData, angular.extend({
                             showLabels: false,
                             showTooltips: true,
                             stacked: true,
+                            barWidth: 30,
+                            barHeight: 100,
+                            padding: 20,
+                            barValueSpacing: 20,
+                            //scaleLabel: "<%=value%>M",
+                            scaleLabel: function(obj){
+                                return obj.value > 1000*1000 ? obj.value/1000/1000+'M' : obj.value > 1000 ? obj.value/1000+'K' : obj.value;
+                            },
                             //customTooltips:customTooltips,
                             tooltipHideZero: true,
-                            maintainAspectRatio: false,
-                            responsive: true
+                            maintainAspectRatio: false
+                            //responsive: true
                             //barStrokeWidth: 40
                             //barValueSpacing: 40
                         }, chartOptions));

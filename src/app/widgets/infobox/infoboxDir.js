@@ -51,22 +51,24 @@
                         id:'sport',
                         text:'Спорт'
                     },{
-                        //id:'interest',
-                        id:'interestGraph',
+                        id:'interest/interest',
+                        // id:'interest/interestGraph',
                         text:'Степень интереса'
                     },{
-                        id:'rooting',
+                        id:'rooting/rooting',
+                        // id:'rooting/rootingGraph',
                         text:'Сила боления'
                     },{
-                        id:'involve',
+                        id:'involve/involve',
                         text:'Причастность к видам спорта'
                     },{
-                        id:'imageGraph',
+                        id:'image/image',
+                        // id:'image/imageGraph',
                         text:'Восприятие видов спорта'
                     }];
 
                     $scope.pages = {};
-                    ['imageGraph','allGraphs'].forEach(function(page){
+                    ['image/imageGraph','allGraphs', 'expressSport/expressSport','expressAudience/expressAudience'].forEach(function(page){
                         $scope.pages[page] = {id:page};
                     });
                     
@@ -83,6 +85,17 @@
                         $scope.activeMenuItem = item;
                         $scope.activePage = item;
                     };
+
+                    
+
+                    // $scope.$watch('activePage', function(page){
+                    //     if (page && page.id == 'demography')
+                    //        $scope.checkButtonText = 'Экспресс результат';
+                    //     else if (page && page.id == 'sport')
+                    //         $scope.checkButtonText = 'Экспресс результат';
+                    //     else
+                    //         $scope.checkButtonText = 'Показать результат';
+                    // });
                     
                     
                     
@@ -98,20 +111,12 @@
                         return finalItems;
                     };
 
-                    $scope.pathClick = function(){
-                        $scope;
-                        var a = 10;
-                    };
+                    // $scope.pathClick = function(){
+                    //     $scope;
+                    //     var a = 10;
+                    // };
 
-                    $scope.checkButtonClick = function(){
-                        //if ($scope.activeMenuItem && $scope.activeMenuItem.id == 'image'){
-                            // $scope.activePage = $scope.pages.imageGraph;
-                            $scope.activePage = $scope.pages.allGraphs;
 
-                        //}
-                       
-                        var a = 10;
-                    };
 
                     
                     $scope.$on('ApiSrv.countError', function(){
@@ -124,6 +129,54 @@
                         else
                             $scope.audienceCountText = 'Болельщики: недостаточно данных';// + ' ' + result.audience_count.toLocaleString();
                     });
+
+
+                    $scope.$on('ParamsSrv.paramsChanged', function(event, type, newValue, oldValue){
+                        var demography = ParamsSrv.getSelectedParams('demography');
+                        var consume = ParamsSrv.getSelectedParams('consume');
+                        var regions = ParamsSrv.getSelectedParams('regions');
+                        var audienceSelected = !!(demography || regions || consume);
+
+                        var sport = ParamsSrv.getSelectedParams('sport');
+                        var interest = ParamsSrv.getSelectedParams('interest');
+                        var rooting = ParamsSrv.getSelectedParams('rooting');
+                        var involve = ParamsSrv.getSelectedParams('involve');
+                        var image = ParamsSrv.getSelectedParams('image');
+                        var sportSelected = !!sport;
+
+                        var filtersSelected = !!(interest || rooting || involve || image);
+
+                        if (audienceSelected && !sportSelected && !filtersSelected){
+                            $scope.checkButtonText = 'Экспресс результат';
+                            $scope.checkButtonPage = 'expressAudience/expressAudience';
+                        } else if (sportSelected && !audienceSelected && !filtersSelected){
+                            $scope.checkButtonText = 'Экспресс результат';
+                            $scope.checkButtonPage = 'expressSport/expressSport';
+                        } else {
+                            $scope.checkButtonText = 'Показать результат';
+                            $scope.checkButtonPage = 'allGraphs';
+                        }
+                    });
+
+                    $scope.checkButtonText = '';
+                    $scope.checkButtonPage = null;
+                    $scope.checkButtonClick = function(){
+                        //if ($scope.activeMenuItem && $scope.activeMenuItem.id == 'image'){
+                        // $scope.activePage = $scope.pages.imageGraph;
+                        //$scope.activePage = $scope.pages.allGraphs;
+
+                        //}
+                        // if ($scope.activeMenuItem && $scope.activeMenuItem.id == 'demography'){
+                        //     $scope.activePage = $scope.pages['expressAudience/expressAudience'];
+                        // } else if ($scope.activeMenuItem && $scope.activeMenuItem.id == 'sport'){
+                        //     $scope.activePage = $scope.pages['expressSport/expressSport'];
+                        // } else {
+                        //     $scope.activePage = $scope.pages.allGraphs;
+                        // }
+                        $scope.activePage = $scope.pages[$scope.checkButtonPage];
+
+                        //var a = 10;
+                    };
                     
                     // снимает выделение с соседний radio
                     $scope.selectCheckbox = function(collection, item){

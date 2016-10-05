@@ -23,7 +23,7 @@
 
     /**
      * events:
-     * ParamsSrv.highlightItem
+     * ParamsSrv.paramsChanged type newValue oldValue. type in ['demography','consume','regions','sport','interest','rooting','involve','image']
      */
     function ParamsSrv(
         $rootScope,
@@ -107,6 +107,13 @@
 
             ['demography','consume','regions','sport','interest','rooting','involve','image'].forEach(function(type){
                 parameters[type] = getElement(type);
+                $rootScope.$watch(function(){return parameters[type]; }, function(newValue, oldValue){
+                    $rootScope.$broadcast('ParamsSrv.paramsChanged', type, newValue, oldValue);
+
+                    if (['demography','consume','regions'].indexOf(type) >= 0){
+                        ApiSrv.getCount(getSelectedAudience());
+                    }
+                }, true);
             });
 
             // TODO убрать! хардкодим числовые ключи для спортов
@@ -132,10 +139,30 @@
                 item.chartColor = colorGenerator(item.id);
             });
 
-            
-            $rootScope.$watch(function(){return [parameters.demography,parameters.consume,parameters.regions]}, refreshCount, true);
 
-            function refreshCount(newValue, oldValue){
+
+            $rootScope.$watch(function(){return [
+                parameters.demography,
+                parameters.consume,
+                parameters.regions
+            ]}, audienceChanged, true);
+
+            function audienceChanged(){
+                var audience = getSelectedAudience();
+                ApiSrv.getCount(audience);
+            }
+
+            [].forEach(function(param){
+
+            });
+
+            $rootScope.$watch(function(){return [
+                parameters.demography,
+                parameters.consume,
+                parameters.regions
+            ]}, audienceChanged, true);
+
+            function audienceChanged(){
                 var audience = getSelectedAudience();
                 ApiSrv.getCount(audience);
             }
@@ -960,15 +987,19 @@
                     .map(function(subitem){return subitem.id});
                 if (selectedA.length){
                     return selectedA.length ? selectedA : undefined;
+                    // return (selectedA.length && item.selected !== false && item.interested !== false) ? selectedA : undefined;
                 }
             } else {
                 var res = {};
-                item.lists.forEach(function(subitem){
-                    var subitemList = getSelectedParamsRec(subitem);
-                    if (subitemList){
-                        res[subitem.id] = subitemList;
-                    } //else res[subitem.id] = []; //  TODO comment this line
-                });
+                // проходим по дочерним, только если текущий не отмечен, как выбранный
+                if (item.selected !== false && item.interested !== false) {
+                    item.lists.forEach(function (subitem) {
+                        var subitemList = getSelectedParamsRec(subitem);
+                        if (subitemList) {
+                            res[subitem.id] = subitemList;
+                        } //else res[subitem.id] = []; //  TODO comment this line
+                    });
+                }
                 if (item.interested) // хардкодим для спорта
                     res.interested = true;
                 return Object.keys(res).length ? res : undefined;

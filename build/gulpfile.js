@@ -29,10 +29,30 @@ var libJs = [
 	'../libs/angular-route/angular-route.js',
 	'../libs/angular-cookies/angular-cookies.js',
 	'../libs/d3-3.5.6.min.js',
-	'../libs/radarChart.js',
 	'../libs/Chart.1.1.1.js',
-	'../libs/Chart.StackedBar.js'
 	
+	// '../libs/html2canvas/dist/html2canvas.js',
+	// '../libs/html2canvas/dist/html2canvas.svg.js',
+	//'../libs/html2canvas.0.4.1.js',
+	// '../libs/jspdf/dist/jspdf.debug.js',
+	'../libs/jspdf/dist/jspdf.min.js',
+
+	// '../libs/canvg/dist/canvg.bundle.js'
+	'../libs/canvg/rgbcolor.js',
+	'../libs/canvg/StackBlur.js',
+	'../libs/canvg/canvg.js',
+
+	// '../libs/html2canvas/src/Core.js',
+	// '../libs/html2canvas/src/Font.js',
+	// '../libs/html2canvas/src/Generate.js',
+	// '../libs/html2canvas/src/Queue.js',
+	// '../libs/html2canvas/src/Parse.js',
+	// '../libs/html2canvas/src/Preload.js',
+	// '../libs/html2canvas/src/Renderer.js',
+	// '../libs/html2canvas/src/Support.js',
+	// '../libs/html2canvas/src/Util.js',
+	// '../libs/html2canvas/src/renderers/Canvas.js'
+
 
 ];
 var libCss = [

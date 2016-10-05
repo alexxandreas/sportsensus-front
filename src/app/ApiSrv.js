@@ -312,6 +312,43 @@
             return d.promise;
         }
 
+        function getExpressSport(audience, sport, clubs){
+            var d = $q.defer();
+            var data = prepareRequestData("info_express_sport", {
+                sid: sid,
+                audience: audience,
+                sport: sport,
+                clubs: clubs
+            });
+            $http.post(url, data).then(function(response){
+                if (!response.data.result){
+                    d.reject(response);
+                }else {
+                    d.resolve(response.data.result);
+                }
+            }, function(response){
+                d.reject(response);
+            });
+            return d.promise;
+        }
+
+        function getExpressAudience(audience){
+            var d = $q.defer();
+            var data = prepareRequestData("info_express_audience", {
+                sid: sid,
+                audience: audience
+            });
+            $http.post(url, data).then(function(response){
+                if (!response.data.result){
+                    d.reject(response);
+                }else {
+                    d.resolve(response.data.result);
+                }
+            }, function(response){
+                d.reject(response);
+            });
+            return d.promise;
+        }
 
 
 
@@ -320,12 +357,15 @@
             auth: auth,
             checkSession: checkSession,
             logout: logout,
+            getTranslations: getTranslations,
             //getEnums: getEnums
             getCount: getCount,
             getImageGraph: getImageGraph,
             getInterestGraph: getInterestGraph,
             getInvolveGraph: getInvolveGraph,
-            getTranslations: getTranslations
+            
+            getExpressSport: getExpressSport,
+            getExpressAudience: getExpressAudience
         };
 
 

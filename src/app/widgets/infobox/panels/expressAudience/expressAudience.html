@@ -1,0 +1,31 @@
+<div class="infobox-panel" ng-controller="expressAudienceCtrl"
+     layout="column" layout-align="start stretch"
+     save-as-pdf-dir>
+
+    <h1 class="infobox-panel-header" layout="row" layout-align="start center">
+        Экспресс-результат по аудитории
+    </h1>
+
+   <!-- <div layout="column" layout-align="start stretch" >
+        <div ng-repeat="sport in sportLegend">
+
+            <div class="infobox-panel-header2 infobox-panel-header2-checkbox no-outline no-select"
+                 layout="row" layout-align="start center"
+                 ng-click="checkSport(sport)">
+                <div flex="none" class="checkbox-color"
+                     ng-style="{'background-color': sport.selected ? sport.color : 'none'}"></div>
+                <div class="legend-item-text">{{sport.name}}</div>
+            </div>
+
+            <div ng-if="sport.selected">
+                <legend-dir legend="sport.clubs" columns-count="2"></legend-dir>
+            </div>
+
+            <div ng-if="sport.selected" style="margin: 30px;">
+                тут графики
+            </div>
+        </div>
+    </div>-->
+
+    <download-dir></download-dir>
+</div>

@@ -403,8 +403,10 @@ th {
   -ms-user-select: none;
   /* Internet Explorer/Edge */
   user-select: none;
-  /* Non-prefixed version, currently
-                                  not supported by any browser */
+  /* Non-prefixed version, currently                                 not supported by any browser */
+}
+.pointer {
+  cursor: pointer;
 }
 
 @font-face {
@@ -1292,6 +1294,20 @@ div > svg > circle:nth-child(5n) {
   margin-right: 20px;
 }
 
+.download-panel {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 12px;
+  color: white;
+}
+.download-panel .download-button {
+  margin: 3px;
+  padding: 5px;
+  background-color: #555555;
+  cursor: pointer;
+}
+
 .chart-legend .legend-item {
   cursor: pointer;
   font-size: 13px;
@@ -1299,7 +1315,6 @@ div > svg > circle:nth-child(5n) {
   margin: 5px;
 }
 .chart-legend .legend-item .legend-item-color {
-  display: inline-block;
   width: 15px;
   height: 15px;
   margin-right: 8px;
@@ -1307,10 +1322,6 @@ div > svg > circle:nth-child(5n) {
   border-color: gray;
   border-width: 1px;
   border-style: solid;
-  vertical-align: middle;
-}
-.chart-legend .legend-item .legend-item-text {
-  display: inline-block;
 }
 
 .infobox-panel {
@@ -1318,11 +1329,29 @@ div > svg > circle:nth-child(5n) {
   border-top: 5px solid #ccace3;
   background: #fff;
   box-shadow: 0 3px 5px 1px rgba(0, 0, 0, 0.3);
+  position: relative;
 }
 .infobox-panel .infobox-panel-header {
   width: 100%;
   font-weight: 300;
   font-size: 30px;
+}
+.infobox-panel .infobox-panel-header2 {
+  width: 100%;
+  font-weight: 300;
+  font-size: 26px;
+}
+.infobox-panel .infobox-panel-header2-checkbox {
+  cursor: pointer;
+}
+.infobox-panel .infobox-panel-header2-checkbox .checkbox-color {
+  width: 15px;
+  height: 15px;
+  margin-right: 8px;
+  border-radius: 2px;
+  border-color: gray;
+  border-width: 1px;
+  border-style: solid;
 }
 .bar-chart-caption {
   font-size: 17px;

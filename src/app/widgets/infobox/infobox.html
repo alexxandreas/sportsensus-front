@@ -19,8 +19,8 @@
 
     <div class="l-board__chek-button">
         <!--<span class="l-board__chek-button-text">Найдено болельщиков - 1 901 297</span>-->
-        <span class="l-board__chek-button-text">{{audienceCountText}}</span>
-        <span class="l-board__chek-button-inner" ng-click="checkButtonClick()">Показать результат</span>
+        <span class="l-board__chek-button-text"  >{{audienceCountText}}</span>
+        <span class="l-board__chek-button-inner" ng-show="checkButtonText" ng-click="checkButtonClick()">{{checkButtonText}}</span>
     </div>
 
     <div class="l-board__menu" ng-include="'/views/widgets/infobox/infoboxMenu.html'">
@@ -28,12 +28,12 @@
 
 
 
-    <form >
+    <form  >
        <!-- <div class="l-board__body">
             &lt;!&ndash;{% include 'l-board/l-board__view.html' %}&ndash;&gt;
             <div ></div>
         </div>-->
-        <div ng-if="activePage" class="l-board__body" ng-include="'/views/widgets/infobox/panels/'+activePage.id+'.html'">
+        <div ng-if="activePage"  class="l-board__body" ng-include="'/views/widgets/infobox/panels/'+activePage.id+'.html'">
         </div>
     </form>
 

@@ -1,19 +1,20 @@
-<div style="
-    display: block;
-    vertical-align: top
-    "
+<div
+     layout="row" layout-align="start start" layout-wrap
     class="chart-legend">
 
-    <div  class="legend-item no-outline no-select"
-         ng-repeat="item in legend"
-         layout="row" layout-align="start center"
-         ng-class="{active: item.selected}"
-         ng-click="itemClick(item)"
-    >
-        <div flex="none" class="legend-item-color"
-        ng-style="{'background-color': item.selected ? item.color : 'none'}"></div>
-        <div class="legend-item-text">{{item.name}}</div>
+    <div layout="column" layout-align="start start"
+        ng-repeat="items in legends">
+        <div  class="legend-item no-outline no-select"
+              ng-repeat="item in items"
+              layout="row" layout-align="start center"
+              ng-class="{active: item.selected}"
+              ng-click="itemClick(item)">
+            <div flex="none" class="legend-item-color"
+                 ng-style="{'background-color': item.selected ? item.color : 'none'}"></div>
+            <div class="legend-item-text">{{item.name}}</div>
+        </div>
     </div>
+
 
 </div>
 

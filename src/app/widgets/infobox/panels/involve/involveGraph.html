@@ -1,0 +1,31 @@
+<div class="infobox-panel" ng-controller="involveGraphCrtl"
+     layout="column" layout-align="start start"
+     save-as-pdf-dir>
+
+    <h1 class="infobox-panel-header" layout="row" layout-align="start center">
+        Причастность к видам спорта
+    </h1>
+
+    <div layout="column" layout-align="start stretch" >
+        <div layout="row" layout-align="start start" layout-wrap>
+            <legend-dir legend="involveLegend" ></legend-dir>
+            <legend-dir legend="sportLegend" columns-count="2"></legend-dir>
+
+        </div>
+        <div layout="row" layout-align="start start" layout-wrap ng-if="showCharts">
+            <!--<radar-dir chart="chart"></radar-dir>-->
+            <div ng-repeat="chart in charts"
+                 layout="column" layout-align="start start"
+                 style="margin: 10px;">
+                <div class="bar-chart-caption" layout="row" layout-align="center center">{{chart.sport.name}}</div>
+                <stacked-bar-dir chart="chart.chartData" ></stacked-bar-dir>
+            </div>
+        </div>
+        <div ng-if="combineChart && showCharts" style="margin: 10px; ">
+            <stacked-bar-dir chart="combineChart" ></stacked-bar-dir>
+        </div>
+    </div>
+
+    <download-dir></download-dir>
+
+</div>

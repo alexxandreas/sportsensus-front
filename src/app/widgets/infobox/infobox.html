@@ -1,6 +1,6 @@
 <div>
     <header-dir></header-dir>
-<div class="l-board">
+<div class="l-board infobox">
    <!-- <script>
         window.trl = {
             trl: {{ data.translates|tojson }},
@@ -19,12 +19,17 @@
 
     <div class="l-board__chek-button">
         <!--<span class="l-board__chek-button-text">Найдено болельщиков - 1 901 297</span>-->
-        <span class="l-board__chek-button-text"  >{{audienceCountText}}</span>
-        <span class="l-board__chek-button-inner" ng-show="checkButtonText" ng-click="checkButtonClick()">{{checkButtonText}}</span>
+        <span class="audience-count-text no-select" >{{audienceCount == null ? '' : (audienceCount != 0 ? 'Болельщики: ' + audienceCount.toLocaleString() : 'Болельщики: недостаточно данных')}}</span>
+        <span class="check-button no-outline no-select"
+              ng-class="{'disabled': !audienceCount}"
+              ng-show="checkButtonText"
+              ng-click="audienceCount ? checkButtonClick() : null"
+        >{{checkButtonText}}</span>
     </div>
 
     <div class="l-board__menu" ng-include="'/views/widgets/infobox/infoboxMenu.html'">
     </div>
+
 
 
 

@@ -47,23 +47,28 @@
                         text:'География'
                     }];
                     
+                    function isSportSelected(){return $scope.sportSelected}
                     $scope.sportinfoMenu = [{
                         id:'sport',
                         text:'Спорт'
                     },{
                         id:'interest/interest',
                         // id:'interest/interestGraph',
+                        enabled: isSportSelected,
                         text:'Степень интереса'
                     },{
                         id:'rooting/rooting',
                         // id:'rooting/rootingGraph',
+                        enabled: isSportSelected,
                         text:'Сила боления'
                     },{
                         id:'involve/involve',
+                        enabled: isSportSelected,
                         text:'Причастность к видам спорта'
                     },{
                         id:'image/image',
                         // id:'image/imageGraph',
+                        enabled: isSportSelected,
                         text:'Восприятие видов спорта'
                     }];
 
@@ -86,7 +91,9 @@
                         $scope.activePage = item;
                     };
 
-                    
+                    $scope.sportSelected = false; // показывает, выбран ли какой-либо вид спорта
+
+
 
                     // $scope.$watch('activePage', function(page){
                     //     if (page && page.id == 'demography')
@@ -120,36 +127,34 @@
 
                     
                     $scope.$on('ApiSrv.countError', function(){
-                        $scope.audienceCountText = 'Болельщики: ошибка загрузки';
+                        $scope.audienceCount = 0;
+                        //$scope.audienceCountText = 'Болельщики: ошибка загрузки';
                     });
 
                     $scope.$on('ApiSrv.countLoaded', function(event, result){
                         if (result.is_valid_count)
-                            $scope.audienceCountText = 'Болельщики: ' + result.audience_count.toLocaleString();
+                            $scope.audienceCount = result.audience_count;
                         else
-                            $scope.audienceCountText = 'Болельщики: недостаточно данных';// + ' ' + result.audience_count.toLocaleString();
+                            $scope.audienceCount = 0;
+                            //$scope.audienceCountText = 'Болельщики: недостаточно данных';// + ' ' + result.audience_count.toLocaleString();
+                        //  if (result.is_valid_count)
+                        //     $scope.audienceCountText = 'Болельщики: ' + result.audience_count.toLocaleString();
+                        // else
+                        //     $scope.audienceCountText = 'Болельщики: недостаточно данных';// + ' ' + result.audience_count.toLocaleString();
                     });
 
 
-                    $scope.$on('ParamsSrv.paramsChanged', function(event, type, newValue, oldValue){
-                        var demography = ParamsSrv.getSelectedParams('demography');
-                        var consume = ParamsSrv.getSelectedParams('consume');
-                        var regions = ParamsSrv.getSelectedParams('regions');
-                        var audienceSelected = !!(demography || regions || consume);
+                    $scope.$on('ParamsSrv.paramsChanged', function(event, type, selected, oldValue){
 
-                        var sport = ParamsSrv.getSelectedParams('sport');
-                        var interest = ParamsSrv.getSelectedParams('interest');
-                        var rooting = ParamsSrv.getSelectedParams('rooting');
-                        var involve = ParamsSrv.getSelectedParams('involve');
-                        var image = ParamsSrv.getSelectedParams('image');
-                        var sportSelected = !!sport;
+                        var selected = ParamsSrv.getSelectedParams();
+                        var audienceSelected = !!(selected.demography || selected.regions || selected.consume);
+                        $scope.sportSelected = !!selected.sport;
+                        var filtersSelected = !!(selected.interest || selected.rooting || selected.involve || selected.image);
 
-                        var filtersSelected = !!(interest || rooting || involve || image);
-
-                        if (audienceSelected && !sportSelected && !filtersSelected){
+                        if (audienceSelected && !$scope.sportSelected && !filtersSelected){
                             $scope.checkButtonText = 'Экспресс результат';
                             $scope.checkButtonPage = 'expressAudience/expressAudience';
-                        } else if (sportSelected && !audienceSelected && !filtersSelected){
+                        } else if ($scope.sportSelected && !audienceSelected && !filtersSelected){
                             $scope.checkButtonText = 'Экспресс результат';
                             $scope.checkButtonPage = 'expressSport/expressSport';
                         } else {
@@ -161,21 +166,7 @@
                     $scope.checkButtonText = '';
                     $scope.checkButtonPage = null;
                     $scope.checkButtonClick = function(){
-                        //if ($scope.activeMenuItem && $scope.activeMenuItem.id == 'image'){
-                        // $scope.activePage = $scope.pages.imageGraph;
-                        //$scope.activePage = $scope.pages.allGraphs;
-
-                        //}
-                        // if ($scope.activeMenuItem && $scope.activeMenuItem.id == 'demography'){
-                        //     $scope.activePage = $scope.pages['expressAudience/expressAudience'];
-                        // } else if ($scope.activeMenuItem && $scope.activeMenuItem.id == 'sport'){
-                        //     $scope.activePage = $scope.pages['expressSport/expressSport'];
-                        // } else {
-                        //     $scope.activePage = $scope.pages.allGraphs;
-                        // }
                         $scope.activePage = $scope.pages[$scope.checkButtonPage];
-
-                        //var a = 10;
                     };
                     
                     // снимает выделение с соседний radio

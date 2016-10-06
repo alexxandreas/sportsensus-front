@@ -667,6 +667,39 @@ th {
   color: #fff;
 }
 
+.infobox .left-menu .left-menu-item {
+  line-height: 35px;
+  padding-left: 80px;
+  cursor: pointer;
+  outline: none;
+}
+.infobox .left-menu .left-menu-item.active,
+.infobox .left-menu .left-menu-item:hover {
+  background: #d7ece8;
+}
+.infobox .left-menu .left-menu-item.disabled {
+  background: none !important;
+  cursor: default !important;
+  color: gray !important;
+}
+.infobox .audience-count-text {
+  color: #68b729;
+}
+.infobox .check-button {
+  display: inline-block;
+  cursor: pointer;
+  margin-left: 10px;
+  padding: 0 20px;
+  height: 50px;
+  font-weight: bold;
+  border-radius: 50px;
+  border: 2px solid #86d5cf;
+  background: #fff;
+}
+.infobox .check-button.disabled {
+  color: gray !important;
+}
+
 .l-board:after {
   display: block;
   content: '';
@@ -779,20 +812,21 @@ div > svg > circle:nth-child(5n) {
   box-shadow: 0 -4px 10px -4px rgba(0, 0, 0, 0.6);
   background: #fff;
 }
-.l-board__chek-button-text {
-  color: #68b729;
+/*.l-board__chek-button-text{
+    color: #68b729;
 }
-.l-board__chek-button-inner {
-  display: inline-block;
-  cursor: pointer;
-  margin-left: 10px;
-  padding: 0 20px;
-  height: 50px;
-  font-weight: bold;
-  border-radius: 50px;
-  border: 2px solid #86d5cf;
-  background: #fff;
-}
+
+.l-board__chek-button-inner{
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 0 20px;
+    height: 50px;
+    font-weight: bold;
+    border-radius: 50px;
+    border: 2px solid #86d5cf;
+    background: #fff;
+}*/
 .l-board__menu {
   position: fixed;
   top: 78px;
@@ -824,16 +858,17 @@ div > svg > circle:nth-child(5n) {
   vertical-align: middle;
   margin-right: 18px;
 }
-.l-board__menu-button {
-  line-height: 35px;
-  padding-left: 80px;
-  cursor: pointer;
-  outline: none;
-}
-.l-board__menu-button_active,
-.l-board__menu-button:hover {
-  background: #d7ece8;
-}
+/*.l-board__menu-button{
+    line-height: 35px;
+    padding-left: 80px;
+    cursor: pointer;
+    outline:none;
+
+    &_active,
+    &:hover{
+        background: #d7ece8;
+    }
+}*/
 .l-board__express,
 .l-board__body {
   margin-left: 345px;

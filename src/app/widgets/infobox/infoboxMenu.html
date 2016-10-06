@@ -4,11 +4,12 @@
             <img src="/static/img/icons/audience.png">
             Болельщик
         </div>
-        <ul>
+        <ul class="left-menu">
 
-            <li data-id="demography" class="l-board__menu-button"
+            <li data-id="demography"
                 ng-repeat="item in audienceMenu"
-                ng-class="{'l-board__menu-button_active': item == activeMenuItem}"
+                class="left-menu-item"
+                ng-class="{'active': item == activeMenuItem}"
                 ng-click="setActiveMenuItem(item)">
                 {{item.text}}
             </li>
@@ -31,12 +32,14 @@
         <div class="l-board__menu-section-name">
             <img src="/static/img/icons/sportinfo.png">
             Виды спорта
-        </div>
-        <ul>
-            <li data-id="demography" class="l-board__menu-button"
+        </div> <!--ng-click="setActiveMenuItem(item)"-->
+        <ul class="left-menu">
+            <li data-id="demography"
                 ng-repeat="item in sportinfoMenu"
-                ng-class="{'l-board__menu-button_active': item == activeMenuItem}"
-                ng-click="setActiveMenuItem(item)">
+                class="left-menu-item"
+                ng-class="{'active': item == activeMenuItem, 'disabled':item.enabled && !item.enabled()}"
+                ng-click="!item.enabled || item.enabled() ? setActiveMenuItem(item) : null"
+                >
                 {{item.text}}
             </li>
 

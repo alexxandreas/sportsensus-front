@@ -201,6 +201,7 @@
                         //}
                     })
                 } else {
+                    if(!legendMapping[legend.name]) return;
                     legendsO[legend.name] = legendMapping[legend.name].lists.filter(function(list){
                         var id = list.id;
                         return legend.values[id];

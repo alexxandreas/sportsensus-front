@@ -1,23 +1,26 @@
-<div layout="column" layout-align="start stretch"
+<div layout="row" layout-align="start stretch"
     class="download-panel">
     <div class="download-button no-outline no-select"
-         layout="column" layout-align="start stretch"
+         layout="row" layout-align="start center"
+         flex="30"
          ng-click="save()">
-        <div class="download-save"></div>
-        <div layout="row" layout-align="center start">Сохранить</div>
+        <div class="download-icon download-save"></div>
+        <div layout="row" layout-align="center start" class="download-text">Сохранить</div>
     </div>
 
     <div class="download-button no-outline no-select"
-         layout="column" layout-align="start stretch"
+         layout="row" layout-align="start center"
+         flex="30"
          ng-click="print()">
-        <div class="download-print"></div>
-        <div layout="row" layout-align="center start">Распечатать</div>
+        <div class="download-icon download-print"></div>
+        <div layout="row" layout-align="center start" class="download-text">Распечатать</div>
     </div>
 
     <div class="download-button no-outline no-select"
-         layout="column" layout-align="start stretch"
+         layout="row" layout-align="start center"
+         flex="30"
          ng-click="send()">
-        <div class="download-send"></div>
-        <div layout="row" layout-align="center start">Отправить на почту</div>
+        <div class="download-icon download-send"></div>
+        <div layout="row" layout-align="center start" class="download-text">Отправить на почту</div>
     </div>
 </div>

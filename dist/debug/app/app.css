@@ -388,6 +388,14 @@ th {
 }
 
 
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+  display: none !important;
+}
 .no-outline {
   outline: none;
 }
@@ -442,49 +450,33 @@ th {
   src: url('static/fonts/NOKIAPURETEXTMEDIUM.TTF');
 }
 
-.b-header {
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  z-index: 2;
-  height: 78px;
-  line-height: 78px;
-  padding: 0 30px;
-  background: #fff;
+.chartjs-tooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 3px;
+  border-radius: 3px;
+  -webkit-transition: all .1s ease;
+  transition: all .1s ease;
+  pointer-events: none;
+  -webkit-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
 }
-.b-header__logout {
-  float: right;
+.chartjs-tooltip .line {
+  color: white;
+  font-size: 13px;
+  padding: 2px;
 }
-.b-header__logo {
-  float: left;
-}
-.b-header__logo-image {
+.chartjs-tooltip .line .color {
   vertical-align: middle;
-}
-.b-header__menu {
-  float: left;
-  margin: 0 0 0 100px;
-  padding: 0;
-  list-style-type: none;
-}
-.b-header__menu-item {
-  float: left;
-  margin-right: 40px;
-}
-.b-header__menu-item:last-child {
-  margin-right: 0;
-}
-.b-header__menu-link {
-  padding-bottom: 2px;
-  font-size: 16px;
-  font-family: NOKIAPUREHEADLINE_BOLD;
-  text-decoration: none;
-  color: #000;
-  border-bottom: 3px solid transparent;
-}
-.b-header__menu-link:hover {
-  border-bottom-color: #9fd9db;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-right: 8px;
+  border-radius: 2px;
+  border-color: gray;
+  border-width: 1px;
+  border-style: solid;
 }
 
 /*@import "../../../static/fonts/style.css";      */
@@ -665,6 +657,51 @@ th {
   line-height: 50px;
   border: 1px solid;
   color: #fff;
+}
+
+.b-header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  height: 78px;
+  line-height: 78px;
+  padding: 0 30px;
+  background: #fff;
+}
+.b-header__logout {
+  float: right;
+}
+.b-header__logo {
+  float: left;
+}
+.b-header__logo-image {
+  vertical-align: middle;
+}
+.b-header__menu {
+  float: left;
+  margin: 0 0 0 100px;
+  padding: 0;
+  list-style-type: none;
+}
+.b-header__menu-item {
+  float: left;
+  margin-right: 40px;
+}
+.b-header__menu-item:last-child {
+  margin-right: 0;
+}
+.b-header__menu-link {
+  padding-bottom: 2px;
+  font-size: 16px;
+  font-family: NOKIAPUREHEADLINE_BOLD;
+  text-decoration: none;
+  color: #000;
+  border-bottom: 3px solid transparent;
+}
+.b-header__menu-link:hover {
+  border-bottom-color: #9fd9db;
 }
 
 .infobox .left-menu .left-menu-item {
@@ -1330,24 +1367,56 @@ div > svg > circle:nth-child(5n) {
 }
 
 .download-panel {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  font-size: 12px;
   color: white;
 }
 .download-panel .download-button {
-  margin: 3px;
+  margin: 6px;
   padding: 5px;
-  background-color: #555555;
+  background-color: #3b4451;
   cursor: pointer;
 }
+.download-panel .download-button .download-icon {
+  width: 25px;
+  height: 25px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-right: 5px;
+}
+.download-panel .download-button .download-save {
+  background-image: url("../static/static/img/download.png");
+}
+.download-panel .download-button .download-print {
+  background-image: url("../static/static/img/printer.png");
+}
+.download-panel .download-button .download-send {
+  background-image: url("../static/static/img/mail.png");
+}
+.download-panel .download-button .download-text {
+  font-size: 14px;
+}
 
+.chart-legend {
+  /*
+  .sublegend.ng-hide {
+    height: 0;
+    opacity: 0;
+  }
+  .sublegend.ng-hide-add, .sublegend.ng-hide-remove {
+    transition: all linear 0.5s;
+  }*/
+}
 .chart-legend .legend-item {
-  cursor: pointer;
   font-size: 13px;
   font-weight: bold;
   margin: 5px;
+}
+.chart-legend .legend-item.disabled {
+  color: #aaa;
+  cursor: default !important;
+}
+.chart-legend .legend-item.selectable {
+  cursor: pointer;
 }
 .chart-legend .legend-item .legend-item-color {
   width: 15px;
@@ -1358,23 +1427,47 @@ div > svg > circle:nth-child(5n) {
   border-width: 1px;
   border-style: solid;
 }
+.chart-legend .sublegend {
+  margin-left: 15px;
+}
+
+.chart-map {
+  position: relative;
+  width: 800px;
+}
+.chart-map path {
+  fill: #EBF1F3;
+  stroke: #D4D8DA;
+}
+.chart-map .marker-wrapper {
+  position: absolute;
+  pointer-events: none;
+}
 
 .infobox-panel {
-  padding: 25px 20px 120px 20px;
+  padding: 15px 20px 120px 20px;
   border-top: 5px solid #ccace3;
   background: #fff;
   box-shadow: 0 3px 5px 1px rgba(0, 0, 0, 0.3);
   position: relative;
+  margin-bottom: 40px;
 }
 .infobox-panel .infobox-panel-header {
   width: 100%;
   font-weight: 300;
   font-size: 30px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .infobox-panel .infobox-panel-header2 {
-  width: 100%;
   font-weight: 300;
-  font-size: 26px;
+  font-size: 23px;
+  margin: 8px 0;
+}
+.infobox-panel .infobox-panel-header3 {
+  font-weight: 300;
+  font-size: 19px;
+  margin: 8px 0;
 }
 .infobox-panel .infobox-panel-header2-checkbox {
   cursor: pointer;
@@ -1404,4 +1497,180 @@ div > svg > circle:nth-child(5n) {
   pointer-events: none;
   -webkit-transform: translate(-50%, 0);
   transform: translate(-50%, 0);
+}
+
+.map-marker {
+  background-repeat: no-repeat;
+}
+.map-marker.blue {
+  background-image: url("../static/static/img/map-marker-blue.png");
+}
+.map-marker.green {
+  background-image: url("../static/static/img/map-marker-green.png");
+}
+.map-marker .map-marker-bg {
+  position: relative;
+  border-radius: 200px;
+  height: 110px;
+  width: 110px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  top: 16px;
+}
+.map-marker .map-marker-bg.blue {
+  background-color: #2972DB;
+}
+.map-marker .map-marker-bg.green {
+  background-color: #4CB7AE;
+}
+.map-marker .map-marker-ring {
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  position: absolute;
+  height: 97px;
+  width: 97px;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 200px;
+  z-index: 6;
+}
+.map-marker .map-marker-progress-wrapper {
+  overflow: hidden;
+  position: absolute;
+  border-radius: 200px;
+  height: 105px;
+  width: 105px;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  background-color: inherit;
+  /* margin-top: 30px; */
+}
+.map-marker .map-marker-progress-wrapper .map-marker-progress-mask {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  z-index: 5;
+  margin: 5px;
+  border-radius: 100%;
+  color: white;
+}
+.map-marker .map-marker-progress-wrapper .map-marker-progress-mask.blue {
+  background-color: #2972DB;
+}
+.map-marker .map-marker-progress-wrapper .map-marker-progress-mask.green {
+  background-color: #4CB7AE;
+}
+.map-marker .map-marker-progress-wrapper .map-marker-progress {
+  position: absolute;
+  top: -9999px;
+  bottom: -9999px;
+  left: -9999px;
+  right: -9999px;
+  margin: auto;
+  background-color: inherit;
+  width: 250px;
+  height: 250px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  /*.map-marker-progress-mask {
+        width: 50%;
+        height: 100%;
+        position: absolute;
+        background: inherit;
+        //opacity: 1; !* 0: > 50%, 1: < 50% *!
+        z-index: 300;
+        //animation: opa 5s steps(1, end) infinite;
+      }*/
+}
+.map-marker .map-marker-progress-wrapper .map-marker-progress * {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.map-marker .map-marker-progress-wrapper .map-marker-progress .map-marker-canvas {
+  width: 105px;
+  height: 105px;
+}
+.map-marker .map-marker-progress-wrapper .map-marker-progress .map-marker-progress,
+.map-marker .map-marker-progress-wrapper .map-marker-progress .map-marker-progress * {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.map-marker .map-marker-progress-wrapper .map-marker-progress .map-marker-progress-pie {
+  width: 50%;
+  height: 100%;
+  transform-origin: 100% 50%;
+  position: absolute;
+  background: white;
+  border: 5px solid #000000;
+}
+.map-marker .map-marker-progress-wrapper .map-marker-progress .map-marker-progress-spinner {
+  border-radius: 100% 0 0 100% / 50% 0 0 50%;
+  z-index: 1;
+  border-right: none;
+}
+.map-marker .map-marker-progress-wrapper .map-marker-progress .map-marker-progress-filler {
+  border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+  left: 50%;
+  z-index: 3;
+  border-left: none;
+}
+.map-marker .map-marker-progress-wrapper .map-marker-progress .map-marker-progress-mask-l {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  background: inherit;
+  z-index: 4;
+}
+.map-marker .map-marker-progress-wrapper .map-marker-progress .map-marker-progress-mask-r {
+  right: 0;
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  background: inherit;
+  z-index: 2;
+}
+
+.express-sport .walk-icon {
+  background-image: url("../static/static/img/walk.png");
+  background-repeat: no-repeat;
+  width: 64px;
+  height: 53px;
+  background-position: center;
+  margin: 10px;
+}
+.express-sport .watch-icon {
+  background-image: url("../static/static/img/watch.png");
+  background-repeat: no-repeat;
+  width: 64px;
+  height: 53px;
+  background-position: center;
+  margin: 10px;
+}
+
+.parameter-widget {
+  margin-right: 30px;
+}
+.parameter-widget .widget-header {
+  font-size: 19px;
+}
+.parameter-widget .widget-text {
+  margin-top: 4px;
+  font-size: 25px;
+  color: #4ac0b6;
+}
+.parameter-widget .widget-footer {
+  font-size: 13px;
+  color: #4ac0b6;
 }

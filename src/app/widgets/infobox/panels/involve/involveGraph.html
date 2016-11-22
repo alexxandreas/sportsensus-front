@@ -1,15 +1,19 @@
 <div class="infobox-panel" ng-controller="involveGraphCrtl"
-     layout="column" layout-align="start start"
+     layout="column" layout-align="start stretch"
      save-as-pdf-dir>
 
-    <h1 class="infobox-panel-header" layout="row" layout-align="start center">
-        Причастность к видам спорта
-    </h1>
+    <div layout="row" layout-align="space-between center"
+    style="margin: 5px 0;">
+        <h1 class="infobox-panel-header" layout="row" layout-align="start center">
+            Причастность к видам спорта
+        </h1>
+        <download-dir title="Причастность к видам спорта"></download-dir>
+    </div>
 
     <div layout="column" layout-align="start stretch" >
         <div layout="row" layout-align="start start" layout-wrap>
-            <legend-dir legend="involveLegend" ></legend-dir>
-            <legend-dir legend="sportLegend" columns-count="2"></legend-dir>
+            <legend-dir legend="involveLegend" selectable="true" ></legend-dir>
+            <legend-dir legend="sportLegend" selectable="true" columns-count="2"></legend-dir>
 
         </div>
         <div layout="row" layout-align="start start" layout-wrap ng-if="showCharts">
@@ -26,6 +30,6 @@
         </div>
     </div>
 
-    <download-dir></download-dir>
+
 
 </div>

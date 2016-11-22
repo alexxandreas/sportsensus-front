@@ -1,16 +1,28 @@
-<div class="l-board__body-box l-board__region" data-id="regions">
+<div class="infobox-panel"
+    layout="column" layout-align="start stretch">
 
-    <h1 class="l-board__header" style="width: auto; position: absolute">
-        <img src="/static/img/l-board/region.png" />
+    <!--class="l-board__body-box l-board__region" data-id="regions"-->
+    <!--<h1 class="l-board__header" style="width: auto; position: absolute">
+        &lt;!&ndash;<img src="/static/img/l-board/region.png" />&ndash;&gt;
+        География
+    </h1>-->
+    <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
         География
     </h1>
 
-    <div class="l-board__map" ng-include="'/views/widgets/infobox/map.html'">
-        <!--{% include 'map.svg' %}-->
-    </div>
+    <!--<div class="l-board__map" ng-include="'/views/widgets/infobox/map_.html'">-->
+    <!--</div>-->
 
 
-    <div class="l-board__body-box-list" style="display: inline-flex; width: auto; max-width: none;">
+
+    <map-dir regions="parameters.region.lists" style="width:100%;"
+             highlighted-color="'#bfebff'" selected-color="'#A4DEF4'"></map-dir>
+
+    <legend-dir legend="parameters.region.lists" columns-count="4"
+                selectable="true" highlightable="true"
+                highlighted-color="'#bfebff'" selected-color="'#A4DEF4'"></legend-dir>
+
+   <!-- <div class="l-board__body-box-list" style="display: inline-flex; width: auto; max-width: none;">
         <div class="pull-left">
             <input type="checkbox" name="regions[region][]" value="15" id="regions_15">
             <label for="regions_15">Москва</label>
@@ -148,4 +160,5 @@
             <label for="regions_26">Республика Крым</label>
         </div>
     </div>
+    -->
 </div>

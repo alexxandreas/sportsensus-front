@@ -58,7 +58,13 @@
 		totalLabel: 'Total',
 
 		//Boolean - Hide labels with value set to 0
-		tooltipHideZero: false
+		tooltipHideZero: false/*,
+
+		// ширина столбца
+		barWidth: 30,
+		
+		// максимальная высота столбца
+		barHeight: 100*/
 	};
 
 	Chart.Type.extend({
@@ -179,7 +185,8 @@
 					//Add 0 as value if !isNumber (e.g. empty values are useful when 0 values should be hidden in tooltip)
 					datasetObject.bars.push(new this.BarClass({
 						value : dataPoint,
-						label : data.labels[index],
+						//label : data.labels[index],
+						label : dataset.label instanceof Array ? dataset.label[datasetObject.bars.length] : dataset.label,
 						//datasetLabel: dataset.label,
 						datasetLabel: dataset.label instanceof Array ? dataset.label[datasetObject.bars.length] : dataset.label,
 						strokeColor : dataset.strokeColor,
@@ -231,7 +238,71 @@
 
 			this.render();
 		},
-		showTooltip : function(ChartElements, forceRedraw){
+		showTooltip: function(activeBars){
+			if(this.options.customTooltips){
+				this.options.customTooltips(false);
+			}
+			if (!activeBars || !activeBars.length) return;
+			// get dataset
+			/*var dataArray, dataIndex;
+			 for (var i = this.datasets.length - 1; i >= 0; i--) {
+			 dataArray = this.datasets[i].points || this.datasets[i].bars || this.datasets[i].segments;
+			 dataIndex = dataArray.indexOf(activeBars[0]);
+			 if (dataIndex !== -1){
+			 break;
+			 }
+			 }*/
+			var tooltipLabels = [];
+
+			var pos = {x: 0, y:Number.MAX_VALUE};
+			//var x=0;
+			//var y=0;
+			activeBars.forEach(function (bar){
+				if (!bar.value) return;
+				//var right = bar.left - (bar.left - bar.x);
+				pos.x = Math.max(pos.x, bar.x);
+				pos.y = Math.min(pos.y, bar.y);
+
+				// var obj = {bar:bar};
+				// var dataArray, dataIndex;
+				// for (var i = this.datasets.length - 1; i >= 0; i--) {
+				// 	dataArray = this.datasets[i].points || this.datasets[i].bars || this.datasets[i].segments;
+				// 	dataIndex = dataArray.indexOf(activeBars[0]);
+				// 	if (dataIndex !== -1){
+				// 		//break;
+				// 		obj.dataset = this.datasets[i];
+				// 		obj.yLabel = this.scale.yLabels[i];
+				// 	}
+				// }
+				tooltipLabels.push(helpers.template(this.options.multiTooltipTemplate, bar));
+				//tooltipLabels.push(bar.label + ': ' + bar.value);
+			}, this);
+			//tooltipLabels.push(helpers.template(this.options.multiTooltipTemplate, element));
+			if (!tooltipLabels.length) return;
+			//var tooltipPosition = Element.tooltipPosition();
+			new Chart.Tooltip({
+				x: pos.x,
+				y: pos.y,
+				//x: Math.round(tooltipPosition.x),
+				//y: Math.round(tooltipPosition.y),
+				labels: tooltipLabels,
+				xPadding: this.options.tooltipXPadding,
+				yPadding: this.options.tooltipYPadding,
+				fillColor: this.options.tooltipFillColor,
+				textColor: this.options.tooltipFontColor,
+				fontFamily: this.options.tooltipFontFamily,
+				fontStyle: this.options.tooltipFontStyle,
+				fontSize: this.options.tooltipFontSize,
+				caretHeight: this.options.tooltipCaretSize,
+				cornerRadius: this.options.tooltipCornerRadius,
+				text: '',//template(this.options.tooltipTemplate, Element),
+				chart: this.chart,
+				custom: this.options.customTooltips
+			}).draw();
+
+
+		},
+		showTooltip_old : function(ChartElements, forceRedraw){
 			// Only redraw the chart if we've actually changed what we're hovering on.
 			if (typeof this.activeElements === 'undefined') this.activeElements = [];
 

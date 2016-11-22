@@ -9,12 +9,14 @@
 
     saveAsPdfDir.$inject = [
         '$rootScope',
-        '$q'
+        '$q',
+        '$timeout'
     ];
 
     function saveAsPdfDir(
         $rootScope,
-        $q
+        $q,
+        $timeout
     )    {
         //var el;
 
@@ -73,11 +75,19 @@
 
                 // Removing the name space as IE throws an error
                 xml = xml.replace(/xmlns=\"http:\/\/www\.w3\.org\/2000\/svg\"/, '');
-                canvg(canvas, xml);
-                
-                var svgE = angular.element(svg);
-                var canvasE = angular.element(canvas);
-                svgE.replaceWith(canvasE);
+                try {
+					/*canvg(canvas, xml);
+					var svgE = angular.element(svg);
+					var canvasE = angular.element(canvas);
+                    svgE.replaceWith(canvasE);*/
+
+					var svgE = angular.element(svg);
+					var canvasE = angular.element(canvas);
+					svgE.after(canvasE);
+					canvg(canvas, xml);
+					svgE.remove();
+
+                } catch(err){}
                 resolve({
                     svg: svgE,
                     canvas: canvasE
@@ -89,54 +99,41 @@
         
 
         function saveAsPdf(element) {
-            // SVG рисуем отдельно от всего остального, потому что они портят текст...
-            //var element = el;
+            return $q(function(resolve, reject) {
+                // SVG рисуем отдельно от всего остального, потому что они портят текст...
+                var elements = element.find('svg');
 
-            var elements = element.find('svg');
-
-            var promises = Array.prototype.map.call(elements,function (item) {
-                return svg2canvas2(item);
-                /*return $q(function(resolve, reject){
-                    html2canvas(item, {
-                        logging:true,
-                        allowTaint: true
-                    }).then(function(canvas){
-                        var svgE = angular.element(item);
-                        var canvasE = angular.element(canvas);
-                        svgE.replaceWith(canvasE);
-                        resolve({
-                            svg: svgE,
-                            canvas: canvasE
-                        })
-                    });
-                });*/
-            });
-
-
-            $q.all(promises).then(function(elements){
-                render(elements);
-            }, function(err){});
-
-
-            function render(elements){
-                html2canvas(element[0], {
-                    useCORS: true,
-                    allowTaint: true
-                }).then(function (canvas) {
-                    elements.forEach(function(element){
-                        element.canvas.replaceWith(element.svg);
-                    });
-
-                    var imgData = canvas.toDataURL('image/png');
-                    // 'a4': [595.28, 841.89],
-                    var doc = new jsPDF('p', 'pt', 'a4', true);
-                    
-                    var scale = Math.min((595.28 - 20)/canvas.width, (841.89-20)/canvas.height);
-                    // doc.addImage(imgData, 'PNG', 10, 10, canvas.width, canvas.height);
-                    doc.addImage(imgData, 'PNG', 10, 10, canvas.width*scale, canvas.height*scale);
-                    doc.save('sample-file.pdf');
+                var promises = Array.prototype.map.call(elements, function (item) {
+                    return svg2canvas2(item);
                 });
-            }
+
+                $q.all(promises).then(function (elements) {
+                    render(elements);
+                }, reject);
+
+
+                function render(elements) {
+                    html2canvas(element[0], {
+                        useCORS: true,
+                        allowTaint: true
+                    }).then(function (canvas) {
+                        elements.forEach(function (element) {
+                            element.canvas.replaceWith(element.svg);
+                        });
+
+                        var imgData = canvas.toDataURL('image/png');
+                        // 'a4': [595.28, 841.89],
+                        var doc = new jsPDF('p', 'pt', 'a4', true);
+
+                        var scale = Math.min((595.28 - 20) / canvas.width, (841.89 - 20) / canvas.height);
+                        // doc.addImage(imgData, 'PNG', 10, 10, canvas.width, canvas.height);
+                        doc.addImage(imgData, 'PNG', 10, 10, canvas.width * scale, canvas.height * scale);
+
+                        resolve(doc);
+                        //doc.save('sample-file.pdf');
+                    }, reject);
+                }
+            });
         }
 
         return {
@@ -145,7 +142,43 @@
                 //el = $el;
 
                 // $scope.saveAsPdf = saveAsPdf;
-                $scope.saveAsPdf = function(){return saveAsPdf($el);};
+                $scope.savePdf = function(options){
+                    $scope.$broadcast('printStart');
+                    $timeout(function() {
+                        saveAsPdf($el).then(function (doc) {
+                                doc.save(options && options.filename ? options.filename + '.pdf' : 'sportsensus-report.pdf');
+                            }, function () {
+                                alert('Ошибка записи в PDF');
+                            })
+                            .finally(function () {
+                                $scope.$broadcast('printEnd');
+                            });
+                    },50);
+                };
+                $scope.sendPdf = function(options){
+                    $scope.$broadcast('printStart');
+                    $timeout(function() {
+                        saveAsPdf($el).then(function (doc) {
+                                //doc.save(options && options.filename || 'sportsensus-report.pdf');
+                            }, function () {
+                                alert('Ошибка записи в PDF');
+                            })
+                            .finally(function () {
+                                $scope.$broadcast('printEnd');
+                            });
+                    },50)
+                };
+                $scope.printPdf = function(options){
+                    $scope.$broadcast('printStart');
+                    $timeout(function() {
+                        saveAsPdf($el).then(function(doc){
+                                doc.autoPrint();
+                                //doc.output('dataurlnewwindow');
+                                window.open(doc.output('bloburl'), '_blank');
+                            }, function(){alert('Ошибка записи в PDF');})
+                            .finally(function(){$scope.$broadcast('printEnd');});
+                    },50);
+                };
             }
         };
     }

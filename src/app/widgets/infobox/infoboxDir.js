@@ -40,7 +40,7 @@
                         id:'demography',
                         text:'Социальная демография'
                     },{
-                        id:'consume',
+                        id:'consume/consume',
                         text:'Потребительское поведение'
                     },{
                         id:'regions',
@@ -81,6 +81,8 @@
 
                     ParamsSrv.getParams().then(function(params){
                         $scope.parameters = params;
+                        
+                        //$scope.regionsLegend = {};
                     });
 
 
@@ -93,7 +95,7 @@
 
                     $scope.sportSelected = false; // показывает, выбран ли какой-либо вид спорта
 
-
+                    $scope.setActiveMenuItem($scope.audienceMenu[0]);
 
                     // $scope.$watch('activePage', function(page){
                     //     if (page && page.id == 'demography')
@@ -106,17 +108,7 @@
                     
                     
                     
-                    // возвращает все наборы параметров, включая вложенные в виде линейной структуры
-                    $scope.getAllSubchildren = function(item){
-                        if (!item) return;
-                        var finalItems = [];
-                        if (!item.lists || item.lists.every(function(subitem){ return !subitem.lists; }))
-                            finalItems.push(item);
-                        else item.lists.forEach(function(subitem){
-                            finalItems = finalItems.concat($scope.getAllSubchildren(subitem));
-                        });
-                        return finalItems;
-                    };
+                    
 
                     // $scope.pathClick = function(){
                     //     $scope;
@@ -151,11 +143,11 @@
                         $scope.sportSelected = !!selected.sport;
                         var filtersSelected = !!(selected.interest || selected.rooting || selected.involve || selected.image);
 
-                        if (audienceSelected && !$scope.sportSelected && !filtersSelected){
-                            $scope.checkButtonText = 'Экспресс результат';
+                        if (audienceSelected && !$scope.sportSelected){ //} && !filtersSelected){
+                            $scope.checkButtonText = 'Экспресс-результат';
                             $scope.checkButtonPage = 'expressAudience/expressAudience';
                         } else if ($scope.sportSelected && !audienceSelected && !filtersSelected){
-                            $scope.checkButtonText = 'Экспресс результат';
+                            $scope.checkButtonText = 'Экспресс-результат';
                             $scope.checkButtonPage = 'expressSport/expressSport';
                         } else {
                             $scope.checkButtonText = 'Показать результат';

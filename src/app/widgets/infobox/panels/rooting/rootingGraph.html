@@ -2,11 +2,18 @@
      layout="column" layout-align="start stretch"
      save-as-pdf-dir>
 
-    <h1 class="infobox-panel-header" layout="row" layout-align="start center">
-        Сила боления
-    </h1>
+    <div layout="row" layout-align="space-between center"
+         style="margin: 5px 0;">
+        <h1 class="infobox-panel-header" layout="row" layout-align="start center">
+            Сила боления
+        </h1>
+        <download-dir title="Сила боления"></download-dir>
+    </div>
+
 
     <div layout="column" layout-align="start stretch" >
+        <legend-dir legend="rootingLegend" selectable="true" columns-count="1"></legend-dir>
+
         <div ng-repeat="sport in sportLegend">
 
             <div class="infobox-panel-header2 infobox-panel-header2-checkbox no-outline no-select"
@@ -18,16 +25,41 @@
             </div>
 
             <div ng-if="sport.selected">
-                <legend-dir legend="sport.clubs" columns-count="2"></legend-dir>
+                <legend-dir legend="sport.clubs" selectable="true" columns-count="2"></legend-dir>
             </div>
 
-            <div ng-if="sport.selected" style="margin: 30px;">
-                тут графики
+            <!--<div ng-if="sport.selected && dataBySport[sport.id]" style="margin: 30px;">-->
+                <!--<div layout="column" layout-align="start start"-->
+                    <!--ng-show="dataBySport[sport.id].rootingCharts.length">-->
+                    <!--<div layout="column" layout-align="start start"-->
+                         <!--ng-repeat="rooting in dataBySport[sport.id].rootingCharts">-->
+                        <!--{{rooting.name}}-->
+                        <!--<horisontal-bar-dir chart="rooting.chart" ></horisontal-bar-dir>-->
+                    <!--</div>-->
+
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+    </div>
+
+
+    <div layout="column" layout-align="start start">
+        <div layout="column" layout-align="start start"
+             ng-repeat="rooting in rootingCharts">
+            {{rooting.name}}
+            <horisontal-bar-dir chart="rooting.chart" ></horisontal-bar-dir>
+            <div layout="row" layout-align="start start" layout-wrap>
+                <div layout="column" layout-align="start start"
+                     ng-repeat="chart in rooting.subItems"
+                style="margin: 10px;">
+                   <!-- {{chart.name}}-->
+                    <doughnut-dir chart="chart.chart"></doughnut-dir>
+                </div>
             </div>
         </div>
     </div>
 
-    <download-dir></download-dir>
+
 
    <!-- <div layout="column" layout-align="start stretch" >
         <div layout="row" layout-align="start start" layout-wrap>

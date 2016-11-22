@@ -1,0 +1,17 @@
+<div class="chart-map" >
+    <!--layout="column" layout-align="start stretch"-->
+    <!--width="100%"-->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 40 1000 540" width="100%" height="100%" ng-if="svgRegions" >
+        <path ng-repeat="item in svgRegions" class="no-outline"
+              ng-click="regionClick(item, $event)"
+              ng-mouseenter="highlightRegion(item)"
+              ng-mouseleave="unhighlightRegion(item)"
+              ng-style="getRegionClasses(item).styles"
+                fill="#EAF1F4" fill-rule="evenodd"
+              ng-attr-d="{{item.path}}" clip-rule="evenodd" region-id="{{item.id}}"></path>
+    </svg>
+    <div class="marker-wrapper" ng-show="markerVisible"
+        ng-style="{'left':markerLeft+'px', 'top':markerTop+'px'}">
+        <map-marker-dir region="{{markerData.name}}" count="{{markerData.count}}" color="green" progress="{{markerData.percent}}" header="{{markerData.header}}"></map-marker-dir>
+    </div>
+</div>

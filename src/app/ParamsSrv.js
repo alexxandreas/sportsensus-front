@@ -23,7 +23,7 @@
 
     /**
      * events:
-     * ParamsSrv.paramsChanged type newValue oldValue. type in ['demography','consume','regions','sport','interest','rooting','involve','image']
+     * ParamsSrv.paramsChanged type newValue oldValue. type in ['demography','consume','regions','region','sport','interest','rooting','involve','image','career]
      */
     function ParamsSrv(
         $rootScope,
@@ -35,7 +35,9 @@
 
         var padamsDefer = $q.defer();
 
-        var parametersNames = ['demography','consume','regions','sport','interest','rooting','involve','image'];
+        var parametersNames = ['demography','consume','regions','region','sport','interest','rooting','involve',
+            'image','watch','walk','tvhome', 'tvcable','electronics','electronics_exist','gasoften','career',
+            'decision', 'timeusage', 'time_week', 'visit_time', 'net','gamingplatform', 'gamingtime'];
         var parameters = {}; // все параметры
         var selected = {}; // выбранные параметры
 
@@ -52,12 +54,15 @@
         var translations = null; // {pages, translates}
         ApiSrv.getTranslations().then(function(data){
             translations = data;
+            //extendTranslations();
             prepareParams();
             setParamsWatchers();
             padamsDefer.resolve(parameters);
         }, function(){
             padamsDefer.reject();
         });
+
+
 
         // подписка на изменение параметров, для перезапроса count
         function setParamsWatchers(){
@@ -66,30 +71,36 @@
 
         function prepareParams() {
 
-            function getElement(id){
-                function isNumber(n) {
-                    return !isNaN(parseFloat(n)) && isFinite(n);
-                }
-                /*function recFillTranslations(item){ // TODO убрать, когда будет переделан формат выдачи
-                    if (!(item.lists instanceof Array)) return;
-                    if (item.lists.every(function(subitem){return isNumber(subitem);})){
-                        item.lists = item.lists.map(function(subitem){
-                            return {
-                                id: subitem,
-                                name: translations.translates[item.id + '_' + subitem]
-                            }
-                        })
-                    } else {
-                        item.lists.forEach(function(subitem){
-                            recFillTranslations(subitem);
-                        })
+            function isNumber(n) {
+                return !isNaN(parseFloat(n)) && isFinite(n);
+            }
+
+           /* (function update(items){
+                items.forEach(function(item){
+                    //items.some(function(item){
+                    //if (item.id && item.id == id){
+                    var id;
+                    if (item.key)
+                        id = item.key;
+                    if (item.id && !isNumber(item.id)){
+                        item.key = item.id;
+                        if (id !== undefined)
+                            item.id = id;
+                        else
+                            delete item.id;
                     }
-                }*/
-                
+                    if (item.lists instanceof Array){
+                        update(item.lists);
+                    }
+                });
+            })(translations.pages);*/
+
+            function getElement(key){
                 function recFind(items){
                     var finded;
                     items.some(function(item){
-                        if (item.id && item.id == id){
+                        //if (item.id && item.id == id){
+                        if (item.key && item.key == key){
                             finded = item;
                         } else if (item.lists instanceof Array){
                             finded = recFind(item.lists);
@@ -121,49 +132,51 @@
             });
 
             // TODO убрать! хардкодим числовые ключи для спортов
-            var allSports = {
-                "football":1, 
-                "hockey":2, 
-                "basketball":3, 
-                "car":4, 
-                "figskating":5, 
-                "biathlon":6, 
-                "boxing":7, 
-                "tennis":8
-            };
-            var colorGenerator = d3.scale.category10();
+            // var allSports = {
+            //     "football":1,
+            //     "hockey":2,
+            //     "basketball":3,
+            //     "car":4,
+            //     "figskating":5,
+            //     "biathlon":6,
+            //     "boxing":7,
+            //     "tennis":8
+            // };
+            // parameters.sport.lists.forEach(function(item){
+            //     item.key = allSports[item.id];
+            // });
+
+            
+            // проставляем спортам клубы
             parameters.sport.lists.forEach(function(item){
-                item.key = allSports[item.id];
-                item.chartColor = colorGenerator(allSports[item.id]);
-            });
-            parameters.interest.lists.forEach(function(item){
-                item.chartColor = colorGenerator(item.id);
-            });
-            parameters.involve.lists.forEach(function(item){
-                item.chartColor = colorGenerator(item.id);
+                var clubsObj = item.lists.filter(function(child){return child.key == 'clubs';});
+                if (clubsObj.length && clubsObj[0].lists && clubsObj[0].lists.length) 
+                    item.clubs = clubsObj[0].lists;
+                else item.clubs = [];
             });
 
 
-
-
-            // $rootScope.$watch(function(){return [
-            //     parameters.demography,
-            //     parameters.consume,
-            //     parameters.regions
-            // ]}, audienceChanged, true);
-            //
-            // function audienceChanged(){
-            //     var audience = getSelectedAudience();
-            //     ApiSrv.getCount(audience);
-            // }
- 
-           
+            var colorGenerator = d3.scale.category10();
+            parametersNames.forEach(function(type){
+            //['sport','interest','involve','watch','walk'].forEach(function(type){
+                parameters[type].lists.forEach(function(item){
+                    var id = item.id;
+                    id = Number.parseInt(id) % 10;
+                    if(!Number.isNaN(id)) {
+                        item.chartColor = colorGenerator(id);
+                        //console.log(id + ' ' + typeof(id) + ' ' + item.chartColor);
+                    }
+                });
+            });
+            parameters.region.lists.forEach(function(item){
+                item.chartColor = '#777777';
+            })
 
         }
 
 
         function getSelectedParamsRec(item){
-            if (item.lists.every(function(subitem){return !subitem.lists; })){ // терминальный лист (age, clubs)
+            if (item.lists && item.lists.some(function(subitem){return !subitem.lists; })){ // терминальный лист (age, clubs)
                 var selectedA = item.lists.filter(function(subitem){return subitem.selected; })
                     .map(function(subitem){return subitem.id});
                 if (selectedA.length){
@@ -173,10 +186,11 @@
                 var res = {};
                 // проходим по дочерним, только если текущий не отмечен, как выбранный
                 if (item.selected !== false && item.interested !== false) {
-                    item.lists.forEach(function (subitem) {
+                    /*item.lists && */item.lists.forEach(function (subitem) {
+                        if (!subitem.key) return;
                         var subitemList = getSelectedParamsRec(subitem);
                         if (subitemList) {
-                            res[subitem.id] = subitemList;
+                            res[subitem.key] = subitemList;
                         } //else res[subitem.id] = []; //  TODO comment this line
                     });
                 }
@@ -201,82 +215,15 @@
             //     regions: getSelectedParams('regions'),
             //     consume: getSelectedParams('consume')
             // };
+            var regions = selected['regions'];
             return {
                 demography: selected['demography'],
-                regions: selected['regions'],
+                // regions: selected['regions'],
+                regions: regions,// ? {region:regions} : undefined,
                 consume: selected['consume']
             };
 
-            var demography = {
-                    age:[],
-                    gender:[],
-                    familysize:[],
-                    children:[],
-                    income:[],
-                    career:[],
-                    family:[]
-            };
-            var consume = {
-                    gaming: {
-                        gamingtime:[],
-                        gamingplatform:[]
-                    },
-                    mobile: {
-                        mobileprovider:[],
-                        mobilenet:[]
-                    },
-                    electronics: {
-                        electronics_exist:[],
-                        decision:[],
-                        buy_time: {
-                            smart:[],
-                            tablet:[],
-                            laptop:[],
-                            computer:[]
-                        }
-                    },
-                    tv: {
-                        tvhome:[],
-                        tvcable:[],
-                        tvsputnic:[]
-                    },
-                    car: {
-                        carexist:[],
-                        gasyear:[],
-                        gasoften:[],
-                        bus:[],
-                        oil:[]
-                    },
-                    money: {
-                        services_now:[],
-                        services_desicion:[],
-                        realestate:[],
-                        insurance:[],
-                        insurance_decision:[]
-                    },
-                    antivirus:[],
-                    timeusage: {
-                        time_week: {
-                            net:[],
-                            book:[],
-                            sport:[],
-                            hobby:[],
-                            shops:[],
-                            sport_events:[]
-                        },
-                        visit:[],
-                        visit_time: {
-                            centre:[],
-                            cinema:[],
-                            fitness:[],
-                            yoga:[]
-                        }
-                    }
-            };
-            var regions = {
-                region:[],
-                fedregion:[]
-            }
+            
         }
 
         // function getSelectedSports(){
@@ -296,7 +243,64 @@
         // }
 
 
+        function getSelectedDemographyCaption(){
+            var demography =parameters.demography;
+            var results = [];
+            demography.lists.forEach(function(list){
+                var selected = list.lists.filter(function(sublist){
+                   return sublist.selected;
+                }).map(function(sublist){
+                    return sublist.name;
+                }).join(', ');
+                if (selected)
+                    results.push({
+                        name: list.name,
+                        data: selected
+                    });
+            });
 
+            var result = results.map(function(obj){
+                return obj.name + ': ' + obj.data;
+            }).join('<br>');
+            if (result)
+                result = 'Профиль болельщика: <br>' + result;
+            return result;
+        }
+
+
+        function getSelectedSportCaption(includeEmptySports){
+            var sport = parameters.sport;
+            var results = [];
+            sport.lists.forEach(function(list){
+                //var interestedObj = list.lists.filter(function(child){return child.id == 'clubs';});
+                if (!list.interested) return;
+                //var clubsObj = list.lists.filter(function(child){return child.id == 'clubs';});
+
+                var selected = list.clubs.length && list.clubs.filter(function(sublist){
+                //var selected = clubsObj.length && clubsObj[0].lists.filter(function(sublist){
+                    return sublist.selected;
+                }).map(function(sublist){
+                    return sublist.name;
+                }).join(', ');
+                if (selected)
+                    results.push({
+                        name: list.name,
+                        data: selected
+                    });
+                else if (includeEmptySports){
+                    results.push({
+                        name: list.name
+                    });
+                }
+            });
+
+            var result = results.map(function(obj){
+                return obj.name + (obj.data ? ': ' + obj.data : '');
+            }).join('<br>');
+            if (result)
+                result = 'Профиль спорта: <br>' + result;
+            return result;
+        }
 
         function getParams(){
             return padamsDefer.promise;
@@ -306,7 +310,11 @@
         var me = {
             getParams: getParams,
             getSelectedParams: getSelectedParams,
-            getSelectedAudience: getSelectedAudience
+            getSelectedAudience: getSelectedAudience,
+
+            getSelectedDemographyCaption: getSelectedDemographyCaption,
+            getSelectedSportCaption: getSelectedSportCaption
+
             //getSelectedAudience: getSelectedAudience,
             //getSelectedSports: getSelectedSports,
             

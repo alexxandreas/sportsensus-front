@@ -1,10 +1,21 @@
-<div class="l-board__body-box" data-id="interest">
+<div class="infobox-panel"
+     layout="column" layout-align="start stretch">
+<!--<div class="l-board__body-box" data-id="interest">-->
 
-    <h1 class="l-board__header">
+    <!--<h1 class="l-board__header">
+        {{parameters.interest.name}}
+    </h1>-->
+
+    <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
         {{parameters.interest.name}}
     </h1>
 
-    <div class="l-board__body-box-list" >
+    <legend-dir legend="parameters.interest.lists" columns-count="1"
+                selectable="true" highlightable="false"
+                highlighted-color="'#bfebff'" selected-color="'#777777'"
+                ></legend-dir>
+
+    <!--<div class="l-board__body-box-list" >
         <ul>
             <li ng-repeat="collection in parameters.interest.lists">
                 <input type="checkbox" name="{{collection.id}}" id="{{collection.id}}"
@@ -13,6 +24,6 @@
                 <label for="{{collection.id}}">{{collection.name}}</label>
             </li>
         </ul>
-    </div>
+    </div>-->
 
 </div>

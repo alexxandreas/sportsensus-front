@@ -65,6 +65,9 @@
                         },{
                             'name': 'Оценить',
                             visible: function(){return $scope.loggedIn;}
+                        },{
+                            'name': 'Личный кабинет',
+                            visible: function(){return $scope.loggedIn;}
                         }
                     ];
 

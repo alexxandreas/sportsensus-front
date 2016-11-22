@@ -1,0 +1,57 @@
+<div class="infobox-panel" ng-controller="consumeCtrl"
+     layout="column" layout-align="start stretch">
+<!--<div class="l-board__body-box" data-id="consume">-->
+
+    <!--<h1 class="l-board__header">
+        &lt;!&ndash;<img src="/static/img/l-board/potreb-pov.png" />&ndash;&gt;
+        &lt;!&ndash;Потребительское поведение&ndash;&gt;
+        {{parameters.consume.name}}
+    </h1>-->
+    <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
+        {{parameters.consume.name}}
+    </h1>
+
+    <div layout="column" layout-align="start stretch"
+        ng-repeat="block in blocks"
+        style="margin-bottom: 40px;">
+        <div class="infobox-panel-header2" >
+            {{block.name}}
+        </div>
+
+        <div layout="row" layout-align="start start" layout-wrap>
+            <div ng-repeat="list in block.lists"
+                 layout="column" layout-align="start start" flex="30"
+                 style="margin: 5px;"
+                ng-show="list.visibleFn ? list.visibleFn() : true">
+                <div class="infobox-panel-header3" ng-show="list.name" >
+                    {{list.name}}
+                </div>
+                <legend-dir legend="list.lists" columns-count="1"
+                            selectable="true" highlightable="false"
+                            highlighted-color="'#bfebff'" selected-color="'#777777'"
+                ></legend-dir>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!--<div layout="row" layout-align="start start" layout-wrap>
+
+        <div ng-repeat="collection in getAllSubchildren(parameters && parameters.consume)"
+             layout="column" layout-align="start start" flex="30"
+             style="margin: 5px;">
+            <div class="infobox-panel-header3" >
+                {{collection.name}}
+            </div>
+            <legend-dir legend="collection.lists" columns-count="1"
+                        selectable="true" highlightable="false"
+                        highlighted-color="'#bfebff'" selected-color="'#777777'"
+            ></legend-dir>
+        </div>
+    </div>-->
+</div>
+

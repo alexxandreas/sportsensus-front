@@ -32,7 +32,7 @@
             var audience = ParamsSrv.getSelectedAudience();
             var sports = {};
             $scope.parameters.sport.lists.forEach(function (list) {
-                sports[list.id] = {interested: true}
+                sports[list.key] = {interested: true}
             });
             var images = $scope.parameters.image.lists.map(function (list) {
                 return list.id;
@@ -68,7 +68,7 @@
 
             var sports = {};
             $scope.parameters.sport.lists.forEach(function (list) {
-                sports[list.key] = angular.merge({
+                sports[list.id] = angular.merge({
                     data: angular.merge({}, images)
                 }, list);
             });
@@ -112,26 +112,6 @@
 
 
 
-            /*Object.keys(sports).forEach(function (sportId) { // цикл по спортам
-                var sport = sports[sportId];
-                var maxValue = 0;
-                var axisData = [];
-                Object.keys(sport.data).forEach(function (imageId) { // цикл по восприятиям
-                    var value = sport.data[imageId].count / 1000 / 1000;
-                    value = Math.round(value * 10) / 10;
-                    axisData.push({axis: images[imageId].name, value: value});
-                    maxValue = Math.max(maxValue, value);
-                }, this);
-                //graph.push(axisData);
-                //localColors.push(sport.chartColor);
-
-                var sportData = {
-                    axisData: axisData,
-                    maxValue: maxValue
-                };
-                $scope.sportDatas[sport.id] = sportData;
-            }, this);
-*/
             
             var chartData = [];
             var localColors = [];
@@ -141,15 +121,20 @@
             sports.forEach(function(sport){
                 //var maxValue = 0;
                 var axisData = [];
-                var data = $scope.chartsData.sports[sport.key].data;
+                var data = $scope.chartsData.sports[sport.id].data;
                 images.forEach(function(image){
                 //Object.keys(images).forEach(function (imageId) { // цикл по восприятиям
                     // var value = sport.data[imageId].count / 1000 / 1000;
-                    var value = $scope.chartsData.sports[sport.key].data[image.id].count;
+                    var value = $scope.chartsData.sports[sport.id].data[image.id].count;
                     //var value = sport.data[imageId].count;
                     //value = Math.round(value * 10) / 10;
                     //axisData.push({axis: images[imageId].name, value: value});
-                    axisData.push({axis: image.name, value: value});
+                    axisData.push({
+                        axis: image.name, 
+                        value: value, 
+                        tooltip: sport.name + ': ' + image.name + ': ' + value.toLocaleString('en-US'),
+                        tooltipColor: sport.color
+                    });
                     maxValue = Math.max(maxValue, value);
                 }, this);
                 //graph.push(axisData);

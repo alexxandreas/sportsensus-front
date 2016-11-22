@@ -311,6 +311,55 @@
             });
             return d.promise;
         }
+        
+        function getRootingGraph(audience, sport, rooting){
+            var d = $q.defer();
+            var data = prepareRequestData("info_sportrooting", {sid: sid, audience:audience, sportrooting:{sport: sport, rooting: rooting}});
+            $http.post(url, data).then(function(response){
+                if (!response.data.result || !response.data.result.graph){
+                    d.reject(response);
+                }else {
+                    d.resolve(response.data.result.graph);
+                }
+            }, function(response){
+                d.reject(response);
+            });
+            return d.promise;
+        }
+
+
+        function getRootingWatchGraph(audience, sport, rooting){
+            var d = $q.defer();
+            var data = prepareRequestData("info_sportrooting", {sid: sid, audience:audience, sportrooting:{sport: sport, rooting_watch: rooting}});
+            $http.post(url, data).then(function(response){
+                if (!response.data.result || !response.data.result.graph){
+                    d.reject(response);
+                }else {
+                    d.resolve(response.data.result.graph);
+                }
+            }, function(response){
+                d.reject(response);
+            });
+            return d.promise;
+        }
+
+        function getRootingWalkGraph(audience, sport, rooting){
+            var d = $q.defer();
+            var data = prepareRequestData("info_sportrooting", {sid: sid, audience:audience, sportrooting:{sport: sport, rooting_walk: rooting}});
+            $http.post(url, data).then(function(response){
+                if (!response.data.result || !response.data.result.graph){
+                    d.reject(response);
+                }else {
+                    d.resolve(response.data.result.graph);
+                }
+            }, function(response){
+                d.reject(response);
+            });
+            return d.promise;
+        }
+
+
+
 
         function getExpressSport(audience, sport, clubs){
             var d = $q.defer();
@@ -363,6 +412,9 @@
             getImageGraph: getImageGraph,
             getInterestGraph: getInterestGraph,
             getInvolveGraph: getInvolveGraph,
+            getRootingGraph: getRootingGraph,
+            getRootingWatchGraph: getRootingWatchGraph,
+            getRootingWalkGraph: getRootingWalkGraph,
             
             getExpressSport: getExpressSport,
             getExpressAudience: getExpressAudience

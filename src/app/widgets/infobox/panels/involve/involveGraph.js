@@ -34,7 +34,7 @@
             var audience = ParamsSrv.getSelectedAudience();
             var sports = {};
             $scope.parameters.sport.lists.forEach(function (list) {
-                sports[list.id] = {interested: true}
+                sports[list.key] = {interested: true}
             });
             var involve = $scope.parameters.involve.lists.map(function (list) {
                 return list.id;
@@ -73,7 +73,7 @@
 
             var sports = {};
             $scope.parameters.sport.lists.forEach(function (list) {
-                sports[list.key] = angular.merge({
+                sports[list.id] = angular.merge({
                     data: angular.merge({}, involves)
                 }, list);
             });
@@ -125,12 +125,12 @@
                     var emptyDs = { label:[], fillColor:[], data:[] };
 
                     involves.forEach(function(involve){
-                        var value = $scope.chartsData.sports[sport.key].data[involve.id].count;
+                        var value = $scope.chartsData.sports[sport.id].data[involve.id].count;
                         if (value == 0) return;
 
-                        dataDs.label.push(involve.name);
+                        dataDs.label.push(involve.name + ': ' + value.toLocaleString('en-US'));
                         dataDs.fillColor.push(involve.color);
-                        dataDs.data.push($scope.chartsData.sports[sport.key].data[involve.id].count);
+                        dataDs.data.push($scope.chartsData.sports[sport.id].data[involve.id].count);
 
                         emptyDs.label.push(involve.name);
                         emptyDs.fillColor.push(involve.color);
@@ -167,9 +167,10 @@
             involves.forEach(function(involve){
                 var ds = { label:[], fillColor:[], data:[] };
                 sports.forEach(function(sport) {
-                    ds.label.push(involve.name);//item[0].name);
+                    var value = $scope.chartsData.sports[sport.id].data[involve.id].count;
+                    ds.label.push(involve.name + ': ' + value.toLocaleString('en-US'));//item[0].name);
                     ds.fillColor.push(involve.color);
-                    ds.data.push($scope.chartsData.sports[sport.key].data[involve.id].count);
+                    ds.data.push(value);
 
                 });
                 combineChart.data.datasets.push(ds);

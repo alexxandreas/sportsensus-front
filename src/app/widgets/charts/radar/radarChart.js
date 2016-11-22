@@ -227,22 +227,75 @@ function RadarChart(id, data, options) {
             tooltip
                 .attr('x', newX)
                 .attr('y', newY)
-                .text(Format(d.value))
-                .transition().duration(200)
-                .style('opacity', 1);
-                // .style('display', 'initial');
+                // .text(Format(d.value))
+                .text(d.tooltip)
+                //.transition().duration(200)
+                //.style('opacity', 1);
+                 .style('display', 'initial');
+
+            var bbox = tooltip.node().getBBox();
+            var chartW = (cfg.w + cfg.margin.left + cfg.margin.right)/2;
+
+            if (bbox.x + bbox.width > chartW){
+                newX = chartW - bbox.width - 10;
+                tooltip.attr('x', newX);
+                bbox = tooltip.node().getBBox();
+            }
+
+            var padding = 3;
+            tooltipRect
+                .attr("x", bbox.x - padding - 15 - 8)
+                .attr("y", bbox.y - padding)
+                .attr("width", bbox.width + (padding*2) + 15 + 8)
+                .attr("height", bbox.height + (padding*2))
+                .style('display', 'initial');
+            tooltipColor
+                .attr("x", bbox.x - 15 - 8)
+                .attr("y", bbox.y + (bbox.height - 15)/2)
+                .style('fill', d.tooltipColor)
+                .style('display', 'initial');
         })
         .on("mouseout", function(){
-            tooltip.transition().duration(200)
+            tooltip
+                //.transition().duration(200)
                  // .style("opacity", 0);
+                .style('display', 'none');
+            tooltipColor
+                .style('display', 'none');
+            tooltipRect
+                //.transition().duration(200)
+                //.style('fill', 'rgba(0, 0, 0, 0.7)')
                 .style('display', 'none');
         });
 
     //Set up the small tooltip for when you hover over a circle
+    var tooltipRect = g.append('rect')
+        .style('fill', 'rgba(0, 0, 0, 0.7)')
+        .attr('rx', '2')
+        .attr('ry', '2')
+       // .attr('class', 'chartjs-tooltip')
+        .style('display', 'none');
+
+    var tooltipColor = g.append('rect')
+        //.style('fill', 'rgba(0, 0, 0, 0.7)')
+        .attr('rx', '2')
+        .attr('ry', '2')
+        .attr("width", 15)
+        .attr("height", 15)
+        .attr('stroke', 'gray')
+        // .attr('class', 'chartjs-tooltip')
+        .style('display', 'none');
+
     var tooltip = g.append("text")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
-        // .style('display', 'none');
+        //.attr("class", "tooltip")
+        //.style("opacity", 0);
+        .style("fill", 'white')
+        .style('font-size', '13px')
+        .style('display', 'none');
+
+
+
+
 
     /////////////////////////////////////////////////////////
     /////////////////// Helper Function /////////////////////

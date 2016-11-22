@@ -17,7 +17,12 @@
         return {
             restrict: 'E',
             replace: true,
-            scope: true,
+            //scope: true,
+            scope: {
+                title: '@'
+                //savePdf: '&savePdf'
+            },
+            transclude: true,
             templateUrl: '/views/widgets/buttons/downloadPDF/downloadPDF.html',
             link: function ($scope, $el, attrs) {},
 
@@ -29,15 +34,15 @@
                     
                 ) {
                     $scope.save = function(){
-                        $scope.saveAsPdf && $scope.saveAsPdf();
+                        $scope.$parent.savePdf && $scope.$parent.savePdf({filename: $scope.title});
                     };
 
                     $scope.print = function(){
-
+                        $scope.$parent.printPdf && $scope.$parent.printPdf();
                     };
 
                     $scope.send = function(){
-
+                        $scope.$parent.sendPdf && $scope.$parent.sendPdf();
                     };
                     
                 }]

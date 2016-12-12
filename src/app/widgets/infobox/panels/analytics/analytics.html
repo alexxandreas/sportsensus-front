@@ -1,0 +1,33 @@
+<div class="infobox-panel" ng-controller="analyticsCtrl"
+     layout="column" layout-align="start stretch"
+     save-as-pdf-dir>
+
+    <div layout="row" layout-align="space-between center"
+         style="margin: 5px 0;">
+        <h1 class="infobox-panel-header" layout="row" layout-align="start center">
+            Оценка спонсорского пакета
+        </h1>
+        <download-dir title="Оценка спонсорского пакета"></download-dir>
+    </div>
+
+    <h2 class="infobox-panel-header2" ng-show="caption"
+        layout="row" layout-align="start center" ng-bind-html="caption | trustAsHtmlFltr">
+    </h2>
+
+
+
+    <div layout="column" layout-align="start stretch">
+        <div ng-if="playground"
+             ng-include="'/views/widgets/infobox/panels/analytics/advertising/'+playground.type+'.html'">
+        </div>
+
+        <!--<advertising-dir ng-repeat="ad in advertising" type="{{ad.type}}"> </advertising-dir>-->
+
+        <!--<div ng-repeat="ad in advertising"
+             ng-include="'/views/widgets/infobox/panels/analytics/advertising'+ad.type+'.html'">
+        </div>-->
+    </div>
+
+
+
+</div>

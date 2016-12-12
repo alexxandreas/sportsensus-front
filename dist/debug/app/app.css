@@ -479,6 +479,51 @@ th {
   border-style: solid;
 }
 
+.b-header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  height: 78px;
+  line-height: 78px;
+  padding: 0 30px;
+  background: #fff;
+}
+.b-header__logout {
+  float: right;
+}
+.b-header__logo {
+  float: left;
+}
+.b-header__logo-image {
+  vertical-align: middle;
+}
+.b-header__menu {
+  float: left;
+  margin: 0 0 0 100px;
+  padding: 0;
+  list-style-type: none;
+}
+.b-header__menu-item {
+  float: left;
+  margin-right: 40px;
+}
+.b-header__menu-item:last-child {
+  margin-right: 0;
+}
+.b-header__menu-link {
+  padding-bottom: 2px;
+  font-size: 16px;
+  font-family: NOKIAPUREHEADLINE_BOLD;
+  text-decoration: none;
+  color: #000;
+  border-bottom: 3px solid transparent;
+}
+.b-header__menu-link:hover {
+  border-bottom-color: #9fd9db;
+}
+
 /*@import "../../../static/fonts/style.css";      */
 .l-home {
   background: #fff;
@@ -657,51 +702,6 @@ th {
   line-height: 50px;
   border: 1px solid;
   color: #fff;
-}
-
-.b-header {
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  z-index: 10;
-  height: 78px;
-  line-height: 78px;
-  padding: 0 30px;
-  background: #fff;
-}
-.b-header__logout {
-  float: right;
-}
-.b-header__logo {
-  float: left;
-}
-.b-header__logo-image {
-  vertical-align: middle;
-}
-.b-header__menu {
-  float: left;
-  margin: 0 0 0 100px;
-  padding: 0;
-  list-style-type: none;
-}
-.b-header__menu-item {
-  float: left;
-  margin-right: 40px;
-}
-.b-header__menu-item:last-child {
-  margin-right: 0;
-}
-.b-header__menu-link {
-  padding-bottom: 2px;
-  font-size: 16px;
-  font-family: NOKIAPUREHEADLINE_BOLD;
-  text-decoration: none;
-  color: #000;
-  border-bottom: 3px solid transparent;
-}
-.b-header__menu-link:hover {
-  border-bottom-color: #9fd9db;
 }
 
 .infobox .left-menu .left-menu-item {
@@ -1427,6 +1427,15 @@ div > svg > circle:nth-child(5n) {
   border-width: 1px;
   border-style: solid;
 }
+.chart-legend .legend-item .legend-item-color-radio {
+  width: 15px;
+  height: 15px;
+  margin-right: 8px;
+  border-radius: 8px;
+  border-color: gray;
+  border-width: 1px;
+  border-style: solid;
+}
 .chart-legend .sublegend {
   margin-left: 15px;
 }
@@ -1477,6 +1486,15 @@ div > svg > circle:nth-child(5n) {
   height: 15px;
   margin-right: 8px;
   border-radius: 2px;
+  border-color: gray;
+  border-width: 1px;
+  border-style: solid;
+}
+.infobox-panel .infobox-panel-header2-checkbox .radio-color {
+  width: 15px;
+  height: 15px;
+  margin-right: 8px;
+  border-radius: 8px;
   border-color: gray;
   border-width: 1px;
   border-style: solid;
@@ -1657,6 +1675,119 @@ div > svg > circle:nth-child(5n) {
   height: 53px;
   background-position: center;
   margin: 10px;
+}
+
+.footballField .footballFieldImage {
+  background-image: url("../static/static/img/ad/footballField.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 600px;
+}
+.hockeyBox32 .hockeyBox32Image {
+  background-image: url("../static/static/img/ad/hockeyBox32.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 30px;
+  height: 612px;
+  width: 424px;
+}
+.hockeyBox32 .hockeyForm {
+  background-image: url("../static/static/img/ad/hockeyForm.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 30px;
+  height: 303px;
+  width: 424px;
+}
+.playground-checkboxes-table {
+  margin: 0 20px;
+}
+.playground-checkboxes-table .playground-table-row {
+  height: 35px;
+  width: 90px;
+  padding: 0 10px;
+}
+.hockeyBox40 .hockeyBox40Image {
+  background-image: url("../static/static/img/ad/hockeyBox32.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 30px;
+  height: 612px;
+  width: 424px;
+}
+.playground-checkboxes-table {
+  margin: 0 20px;
+}
+.playground-checkboxes-table .playground-table-row {
+  height: 35px;
+  width: 90px;
+  padding: 0 10px;
+}
+
+.analyticsResults .result-card .header {
+  padding: 10px;
+  border-top: 5px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 20px;
+}
+.analyticsResults .result-card .header2 {
+  padding: 10px;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 20px;
+}
+.analyticsResults .result-card .footer {
+  padding: 10px;
+  border-top: 1px dotted;
+  border-color: inherit;
+  height: 60px;
+  font-size: 32px;
+}
+.analyticsResults .result-card .header3 {
+  padding: 10px;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 40px;
+  font-size: 15px;
+  text-align: center;
+}
+.analyticsResults .result-card .footer3 {
+  padding: 10px;
+  border-top: 1px dotted;
+  border-color: inherit;
+  height: 40px;
+  font-size: 20px;
+}
+.analyticsResults .result-card .header4 {
+  padding: 10px;
+  border-right: 1px dotted;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 15px;
+  text-align: center;
+}
+.analyticsResults .result-card .footer4 {
+  padding: 10px;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 20px;
+}
+
+.playgroundParamsTable {
+  max-width: 600px;
+}
+.playgroundParamsTable .showHideButton {
+  outline: none;
+  cursor: pointer;
+  font-size: 11px;
+}
+.playgroundParamsTable .playground-table-row {
+  min-height: 35px;
+  padding: 0 10px;
 }
 
 .parameter-widget {

@@ -1,0 +1,22 @@
+<div layout="column" layout-align="start stretch" class="playgroundParamsTable">
+	<div layout="row" layout-align="start center"
+		 class="playground-table-row" style="background-color: #376092; color: white">
+		<div layout="row" layout-align="start center" flex>
+			Характеристики площадки 
+			<div flex></div> 
+			<span class="showHideButton" ng-click="showHide()">{{showed ? 'Свернуть' : 'Развернуть'}}</span>
+		</div>
+	</div>
+	<div ng-repeat="param in params"
+		 ng-show="showed"
+		 layout="row" layout-align="space-between center"
+		 class="playground-table-row"
+		 ng-style="{'background-color': $even ? '#FFFFFF' : '#DCE6F2'}">
+		<div flex="50" >
+			{{ param.name }}
+		</div>
+		<div flex="50" >
+			{{ param.value }}
+		</div>
+	</div>
+</div>

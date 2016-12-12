@@ -55,10 +55,13 @@
                         },
                         {
                             'name': 'Получить информацию',
-                            visible: function(){return $scope.loggedIn;}
+                            visible: function(){return $scope.loggedIn;},
+                            onClick: function(){$scope.setPath('/infobox/');}
+                            
                         },{
                             'name': 'Проанализировать',
-                            visible: function(){return $scope.loggedIn;}
+                            visible: function(){return $scope.loggedIn;},
+                            onClick: function(){$scope.setPath('/analytics/');}
                         },{
                             'name': 'Спланировать',
                             visible: function(){return $scope.loggedIn;}

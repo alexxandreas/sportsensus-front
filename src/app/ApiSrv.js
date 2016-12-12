@@ -66,6 +66,7 @@
             writeSidCookie(sid);
             // getEnums();
             getTranslations();
+            updateTotalCount();
         }
         
         function getUser(){
@@ -162,58 +163,6 @@
 
 
 
-        /*// Get Enumeration Items
-         //Получение списка перечисляемых параметров выбора фильтров АЦ.
-         var enumsDefer;
-         var enumsLoaded = false;// загружались ли когда-нибудь перечисления
-         function getEnums(){
-         //var d;
-         if (!enumsDefer){
-         enumsDefer = $q.defer();
-         //enumsPromise = d.promise;
-         }
-
-         if (!enumsLoaded && sid)
-         loadEnums();
-
-         return enumsDefer.promise;
-
-         function loadEnums(){
-         var enumTypes = [
-         'FootballClubsKnown', // - футбольные клубы
-         'HockeyClubsKnown', // - хоккейные команды
-         'BasketballClubsKnown', // - баскетбольные команды
-         'CarKnown', // - соревнования автоспорта
-         'MobileProvider', // - мобильные операторы
-         'TvCableProvider', // - операторы кабельного тв
-         'TvSputnicProvider', // - операторы спутникого тв
-         'GasStationPeriod', // - АЗС
-         'GamingPlatform' // - игровые платформы
-         ];
-
-
-
-         var promises = enumTypes.map(function(type){
-         var data = prepareRequestData("get_enumeration_items", {enum_name: type, sid: sid});
-         return $http.post(url, data);
-         });
-
-         $q.all(promises).then(function(results){
-         var allResults = {};
-         var err = false;
-         var enumsData = results.map(function(result){
-         if (result.data && result.data.result && result.data.result.items)
-         allResults[result.config.data.params.enum_name] = result.data.result.items;
-         else
-         err = true;
-         });
-         err ? enumsDefer.reject() : enumsDefer.resolve(allResults);
-         }, function (results){
-         enumsDefer.reject();
-         });
-         }
-
-         }*/
 
         var translationsDefer;
         var translationsLoaded = false;// загружались ли когда-нибудь перечисления
@@ -244,28 +193,48 @@
 
         }
 
+        var totalCount = 0;
+        // events: 
+        // 'ApiSrv.totalCountLoaded'
+        function updateTotalCount(){
+            getCount({}, true).then(function(result){
+                totalCount = result.audience_count;
+                $rootScope.$broadcast('ApiSrv.totalCountLoaded', totalCount);
+            });
+        }
+        function getTotalCount(){ return totalCount; }
+        
+        var lastCountResult = null;
+        function getLastCountResult(){ return lastCountResult; }
         // events: 
         // 'ApiSrv.countLoading'
         // 'ApiSrv.countLoaded'
         // 'ApiSrv.countError'
-        function getCount(audience){
+        function getCount(audience, silent){
             var d = $q.defer();
-            $rootScope.$broadcast('ApiSrv.countLoading');
+            !silent && $rootScope.$broadcast('ApiSrv.countLoading');
             var data = prepareRequestData("audienceCount", {sid: sid, audience:audience});
             $http.post(url, data).then(function(response){
                 if (!response.data.result){
+                    lastCountResult = null;
                     d.reject(response);
-                    $rootScope.$broadcast('ApiSrv.countError', response);
+                    !silent && $rootScope.$broadcast('ApiSrv.countError', response);
                 }else {
+                    var percent = totalCount ? response.data.result.audience_count / totalCount * 100 : 0;
+                    response.data.result.audience_percent = percent;
+                    lastCountResult = response.data.result;
                     d.resolve(response.data.result);
-                    $rootScope.$broadcast('ApiSrv.countLoaded', response.data.result);
+                    !silent && $rootScope.$broadcast('ApiSrv.countLoaded', response.data.result);
                 }
             }, function(response){
+                lastCountResult = null;
                 d.reject(response);
-                $rootScope.$broadcast('ApiSrv.countError', response);
+                !silent && $rootScope.$broadcast('ApiSrv.countError', response);
             });
             return d.promise;
         }
+        
+        
 
         function getImageGraph(audience, sportimage){
             var d = $q.defer();
@@ -409,6 +378,8 @@
             getTranslations: getTranslations,
             //getEnums: getEnums
             getCount: getCount,
+            getLastCountResult: getLastCountResult,
+            getTotalCount: getTotalCount,
             getImageGraph: getImageGraph,
             getInterestGraph: getInterestGraph,
             getInvolveGraph: getInvolveGraph,

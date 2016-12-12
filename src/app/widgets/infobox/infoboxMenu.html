@@ -1,5 +1,5 @@
 <ul>
-    <li data-id="audience" class="l-board__menu-section">
+    <li class="l-board__menu-section">
         <div class="l-board__menu-section-name">
             <img src="/static/img/icons/audience.png">
             Болельщик
@@ -13,55 +13,23 @@
                 ng-click="setActiveMenuItem(item)">
                 {{item.text}}
             </li>
-            <!--
-            <li data-id="demography" class="l-board__menu-button">
-                Социальная демография
-            </li>
-
-            <li data-id="consume" class="l-board__menu-button">
-                Потребительское поведение
-            </li>
-
-            <li data-id="regions" class="l-board__menu-button">
-                География
-            </li>-->
         </ul>
     </li>
 
-    <li data-id="sportinfo" class="l-board__menu-section">
+    <li class="l-board__menu-section">
         <div class="l-board__menu-section-name">
             <img src="/static/img/icons/sportinfo.png">
             Виды спорта
         </div> <!--ng-click="setActiveMenuItem(item)"-->
         <ul class="left-menu">
-            <li data-id="demography"
-                ng-repeat="item in sportinfoMenu"
+            <li
+                ng-repeat="item in bottomMenu"
                 class="left-menu-item"
                 ng-class="{'active': item == activeMenuItem, 'disabled':item.enabled && !item.enabled()}"
                 ng-click="!item.enabled || item.enabled() ? setActiveMenuItem(item) : null"
                 >
                 {{item.text}}
             </li>
-
-            <!--<li data-id="sport" class="l-board__menu-button">
-                Спорт
-            </li>
-
-            <li data-id="interest" class="l-board__menu-button">
-                Степень интереса
-            </li>
-
-            <li data-id="rooting" class="l-board__menu-button">
-                Сила боления
-            </li>
-
-            <li data-id="involve" class="l-board__menu-button">
-                Причастность к видам спорта
-            </li>
-
-            <li data-id="image" class="l-board__menu-button">
-                Восприятие видов спорта
-            </li>-->
         </ul>
     </li>
 

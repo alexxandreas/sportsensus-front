@@ -24,7 +24,10 @@ angular
 				template: '<home-dir></home-dir>'
 			})
 			.when('/infobox/', { 
-				template: '<infobox-dir></infobox-dir>'
+				template: '<infobox-dir type="infobox"></infobox-dir>'
+			})
+			.when('/analytics/', {
+				template: '<infobox-dir type="analytics"></infobox-dir>'
 			})
 			.when('/login/', { 
 				template: '<login-dir></login-dir>'
@@ -45,6 +48,13 @@ angular
 			
 		}
 	])
+	.config(function($mdThemingProvider) {
+		// $mdThemingProvider.theme('blue')
+		// 	.primaryPalette('blue');
+		$mdThemingProvider.theme('default')
+			.primaryPalette('blue')
+			.accentPalette('blue');
+	})
 	.run(['ConfigSrv', function (ConfigSrv) {
 		var config = window.appConfig;
 		ConfigSrv.set(config);

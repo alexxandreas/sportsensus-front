@@ -4,18 +4,7 @@
 
     <div layout="column" layout-align="start start"
         ng-repeat="items in legends">
-       <!-- <div class="legend-item no-outline no-select"
-              ng-repeat="item in items"
-              layout="row" layout-align="start center"
-              ng-class="{'selectable': selectable, 'disabled': !!disabled}"
-              ng-click="selectable && !disabled ? itemClick(item) : null"
-              ng-mouseenter="highlightable ? highlightItem(item) : null"
-              ng-mouseleave="highlightable ? unhighlightItem(item) : null">
-            &lt;!&ndash;ng-style="{'background-color': item.selected || !selectable ? (item.color || item.chartColor) : 'none'}"&ndash;&gt;
-            <div flex="none" class="legend-item-color"
-            ng-style="getPointStyles(item)"></div>
-            <div class="legend-item-text">{{item.name}}</div>
-        </div> -->
+
         <div layout="column" layout-align="start start"
              ng-repeat="item in items">
             <div class="legend-item no-outline no-select"

@@ -10,14 +10,16 @@
         '$scope',
         '$controller',
         'ParamsSrv',
-        'ApiSrv'
+        'ApiSrv',
+        'graphHelpersSrv'
     ];
 
     function involveGraphCrtl(
         $scope,
         $controller,
         ParamsSrv,
-        ApiSrv
+        ApiSrv,
+        graphHelpersSrv
     ) {
 
         $controller('baseGraphCtrl', {$scope: $scope});
@@ -51,8 +53,8 @@
         }
 
         $scope.prepareLegends = function () {
-            $scope.sportLegend = $scope.getSportLegend({color:'#555555'});
-            $scope.involveLegend = $scope.getInvolveLegend();
+            $scope.sportLegend = graphHelpersSrv.getSportLegend({color:'#555555'});
+            $scope.involveLegend = graphHelpersSrv.getInvolveLegend();
 
             $scope.$watch('sportLegend', $scope.updateGraph, true);
             $scope.$watch('involveLegend', $scope.updateGraph, true);

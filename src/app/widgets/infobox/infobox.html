@@ -1,20 +1,6 @@
 <div>
     <header-dir></header-dir>
 <div class="l-board infobox">
-   <!-- <script>
-        window.trl = {
-            trl: {{ data.translates|tojson }},
-        other: {
-            interest: 'Интерес к спорту',
-                    involvment: 'Вовлеченность',
-                    clubs_known: 'Спонтанное знание о клубах',
-                    clubs_known_help: 'Подсказанное знание о клубах',
-                    watch: 'Cмотрениe клубов',
-                    walk: 'Посещение клубов'
-        }
-        };
-    </script>-->
-
 
 
     <div class="l-board__chek-button">
@@ -31,13 +17,7 @@
     </div>
 
 
-
-
-    <form  >
-       <!-- <div class="l-board__body">
-            &lt;!&ndash;{% include 'l-board/l-board__view.html' %}&ndash;&gt;
-            <div ></div>
-        </div>-->
+    <form>
         <div ng-if="activePage" style="padding-bottom: 94px;" class="l-board__body" ng-include="'/views/widgets/infobox/panels/'+activePage.id+'.html'">
         </div>
     </form>

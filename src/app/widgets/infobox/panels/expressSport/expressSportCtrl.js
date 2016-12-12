@@ -10,14 +10,16 @@
         '$scope',
         '$controller',
         'ParamsSrv',
-        'ApiSrv'
+        'ApiSrv',
+        'graphHelpersSrv'
     ];
 
     function expressSportCtrl(
         $scope,
         $controller,
         ParamsSrv,
-        ApiSrv
+        ApiSrv,
+        graphHelpersSrv
     ) {
 
         $controller('baseGraphCtrl', {$scope: $scope});
@@ -62,7 +64,7 @@
         }
 
         $scope.prepareLegends = function () {
-            $scope.sportLegend = $scope.getSportLegend({color:'#555555', clubs:true, selectAll:false});
+            $scope.sportLegend = graphHelpersSrv.getSportLegend({color:'#555555', clubs:true, selectAll:false});
             //    .filter(function(sport){return !!sport.clubs;});
 
             $scope.sportLegend.forEach(function(sport){

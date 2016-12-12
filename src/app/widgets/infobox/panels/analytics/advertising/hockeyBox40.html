@@ -1,0 +1,46 @@
+<div layout="column" layout-align="start stretch" class="hockeyBox40"
+	 ng-controller="hockeyBox40Ctrl">
+	<h2 class="infobox-panel-header2"
+		layout="row" layout-align="start center">
+		Рекламные конструкции во время состязаний
+	</h2>
+
+
+	<div layout="row" layout-align="start start" style="margin-top: 20px;">
+
+		<!-- Площадка -->
+		<div class="hockeyBox40Image" ></div>
+
+		<!-- Флажки выбора позиций  -->
+		<div layout="row" layout-align="start start">
+			<div layout="column" layout-align="start stretch"
+				 class="playground-checkboxes-table" ng-repeat="column in [0,16]">
+				<div layout="row" layout-align="start center"
+					 class="playground-table-row" style="background-color: #376092; color: white">
+					<div flex="50" >Позиция</div>
+				</div>
+				<div ng-repeat="place in places | limitTo:16:column"
+					 layout="row" layout-align="space-between center"
+					 class="playground-table-row"
+					 ng-style="{'background-color': $even ? '#FFFFFF' : '#DCE6F2'}">
+					<div flex="33">
+						{{ place.name }}
+					</div>
+					<md-switch ng-model="place.selected" aria-label="Выбрано" flex="67"></md-switch>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+	<div layout="column" layout-align="start stretch" style="max-width: 800px; margin-top: 30px;">
+
+		<!-- -->
+		<playground-params-table-dir params="playgroundParams"></playground-params-table-dir>
+
+		<analytics-results-dir results="results" price="totalCost"></analytics-results-dir>
+
+	</div>
+
+</div>

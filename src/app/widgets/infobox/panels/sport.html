@@ -1,39 +1,15 @@
 <div class="infobox-panel"
      layout="column" layout-align="start stretch">
-<!--<div class="l-board__body-box" data-id="sport">-->
-
-    <!--<div class="infobox-panel"
-         layout="column" layout-align="start stretch">
-    -->
-    <!--<h1 class="l-board__header">
-        &lt;!&ndash;<img src="/static/img/l-board/sport.png" />&ndash;&gt;
-        &lt;!&ndash;Виды спорта&ndash;&gt;
-        {{parameters.sport.name}}
-    </h1>-->
 
     <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
         {{parameters.sport.name}}
     </h1>
 
     <div layout="row" layout-align="start start" layout-wrap>
-        <!--<div class="l-board__body-box-list" ng-repeat="sport in parameters.sport.lists">-->
         <div  ng-repeat="sport in parameters.sport.lists"
             layout="column" layout-align="start stretch"
             style="margin: 5px;"
             flex="30">
-
-            <!--<h2 class="infobox-panel-header2"
-                layout="row" layout-align="start center">
-                {{sport.name}}
-            </h2>
-
-            <h3>
-                <input type="checkbox" name="{{sport.id+'!'}}" id="{{sport.id}}"
-                       ng-model="sport.interested"
-                >
-                <label for="{{sport.id}}">{{sport.name}}</label>
-            </h3>-->
-
 
             <div class="infobox-panel-header2 infobox-panel-header2-checkbox no-outline no-select"
                  layout="row" layout-align="start center"
@@ -43,19 +19,6 @@
                      ng-style="{'background-color': sport.interested ? '#777777' : 'none'}"></div>
                 <div class="legend-item-text">{{sport.name}}</div>
             </div>
-
-
-
-            <!--<ul ng-show="sport.lists[1].lists">
-                <li ng-repeat="item in sport.lists[1].lists">
-                    &lt;!&ndash;ng-click="selectCheckbox(sport, item)"&ndash;&gt;
-                    <input type="checkbox" name="{{sport.id}}" id="{{sport.id+'_'+item.id}}"
-                           ng-model="item.selected"
-                           ng-disabled="!sport.interested"
-                           >
-                    <label for="{{sport.id+'_'+item.id}}">{{item.name}}</label>
-                </li>
-            </ul>-->
 
             <legend-dir legend="sport.lists[1].lists" columns-count="1"
                         selectable="true" highlightable="false"

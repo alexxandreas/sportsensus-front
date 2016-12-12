@@ -11,7 +11,8 @@
         '$controller',
         '$q',
         'ParamsSrv',
-        'ApiSrv'
+        'ApiSrv',
+        'graphHelpersSrv'
     ];
 
     function rootingGraphCrtl(
@@ -19,7 +20,8 @@
         $controller,
         $q,
         ParamsSrv,
-        ApiSrv
+        ApiSrv,
+        graphHelpersSrv
     ) {
 
         $controller('baseGraphCtrl', {$scope: $scope});
@@ -49,10 +51,10 @@
             //$scope.sportLegend = $scope.getSportLegend({color:'#555555', clubs:true, selectAll:false})
             //    .filter(function(sport){return !!sport.clubs;});
 
-            $scope.sportLegend = $scope.getLegend($scope.parameters.sport.lists, {color:'#555555', selectAll:false, depth:1})
+            $scope.sportLegend = graphHelpersSrv.getLegend($scope.parameters.sport.lists, {color:'#555555', selectAll:false, depth:1})
                 .filter(function(sport){return sport.clubs && sport.clubs.length;});
 
-            $scope.rootingLegend = $scope.getLegend($scope.parameters.rooting.lists, {depth:1});
+            $scope.rootingLegend = graphHelpersSrv.getLegend($scope.parameters.rooting.lists, {depth:1});
             $scope.watchLegend = $scope.rootingLegend.filter(function(child){return child.key == 'watch';})[0].lists;
             $scope.walkLegend = $scope.rootingLegend.filter(function(child){return child.key == 'walk';})[0].lists;
 

@@ -10,14 +10,16 @@
         '$scope',
         '$controller',
         'ParamsSrv',
-        'ApiSrv'
+        'ApiSrv',
+        'graphHelpersSrv'
     ];
 
     function imageGraphCrtl(
         $scope,
         $controller,
         ParamsSrv,
-        ApiSrv
+        ApiSrv,
+        graphHelpersSrv
     ) {
 
         $controller('baseGraphCtrl', {$scope: $scope});
@@ -49,8 +51,8 @@
         }
 
         $scope.prepareLegends = function () {
-            $scope.sportLegend = $scope.getSportLegend();
-            $scope.imageLegend = $scope.getImageLegend();
+            $scope.sportLegend = graphHelpersSrv.getSportLegend();
+            $scope.imageLegend = graphHelpersSrv.getImageLegend();
             $scope.$watch('sportLegend', $scope.updateGraph, true);
         };
 

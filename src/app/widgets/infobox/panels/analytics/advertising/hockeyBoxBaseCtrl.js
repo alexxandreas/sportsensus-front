@@ -105,13 +105,8 @@
 				watchAvg = 1;
 			}
 
-			//var uniqueKOnline = 0.41; // коэффициент для рассчета кол-ва уникальных зрителей ТВ
-			//var uniqueKOffline = 0.41; // коэффициент для рассчета кол-ва уникальных зрителей на трибунах
 			var avgEffFreqOnline = $scope.championship.data.avgEffFreqOnline;
 			var avgEffFreqOffline = $scope.championship.data.avgEffFreqOffline;
-
-			//var offlineFreq = 1.5; //Средняя частота просмотров off-line
-			//var onlineFreq = 3.5; //Средняя частота просмотров по ТВ
 
 			var playgrounds = Object.keys(homeTmp.playgrounds).map(function(id){
 				return homeTmp.playgrounds[id];

@@ -17,8 +17,8 @@
 
 
     <div layout="column" layout-align="start stretch">
-        <div ng-if="playground"
-             ng-include="'/views/widgets/infobox/panels/analytics/advertising/'+playground.type+'.html'">
+        <div ng-if="playgroundType"
+             ng-include="'/views/widgets/infobox/panels/analytics/advertising/'+playgroundType+'.html'">
         </div>
 
         <!--<advertising-dir ng-repeat="ad in advertising" type="{{ad.type}}"> </advertising-dir>-->

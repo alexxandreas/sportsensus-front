@@ -1,8 +1,9 @@
 var appConfig = {
 
-    apiUrl: 'https://sportsensus.ru:8080/api',
+    apiUrl: 'http://sportsensus.ru:8080/api',
     proxyURL: 'https://cors-anywhere.herokuapp.com/',
     
+    /*
     parameters:{
         interest:[{
                 id: 1,
@@ -39,6 +40,6 @@ var appConfig = {
                 id: 6,
                 text: 'Не слежу, но к этому спорту отношусь позитивно'
             }]
-    }
+    }*/
   
 };

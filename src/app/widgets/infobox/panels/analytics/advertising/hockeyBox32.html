@@ -6,6 +6,8 @@
 		Рекламные конструкции во время состязаний
 	</h2>
 
+
+
 	<!-- Площадка -->
 	<div layout="row" layout-align="start start" style="margin-top: 20px;">
 		<div class="hockeyBox32Image" ></div>
@@ -13,12 +15,12 @@
 		<!-- Флажки выбора позиций  -->
 		<div layout="row" layout-align="start start">
 			<div layout="column" layout-align="start stretch"
-				 class="playground-checkboxes-table" ng-repeat="column in [0,16]">
+				 class="playground-checkboxes-table" ng-repeat="column in playgroundPlacesA">
 				<div layout="row" layout-align="start center"
 					 class="playground-table-row" style="background-color: #376092; color: white">
 					<div flex="50" >Позиция</div>
 				</div>
-				<div ng-repeat="place in places | limitTo:16:column"
+				<div ng-repeat="place in column"
 					 layout="row" layout-align="space-between center"
 					 class="playground-table-row"
 					ng-style="{'background-color': $even ? '#FFFFFF' : '#DCE6F2'}">
@@ -32,7 +34,7 @@
 	</div>
 
 
-	<playground-params-table-dir params="playgroundParams" style="margin-top: 15px;"></playground-params-table-dir>
+
 
 	<h2 class="infobox-panel-header2" style="margin-top: 30px;"
 		layout="row" layout-align="start center">
@@ -51,7 +53,7 @@
 				 class="playground-table-row" style="background-color: #376092; color: white">
 				<div flex="50" >Позиция</div>
 			</div>
-			<div ng-repeat="place in formPlaces"
+			<div ng-repeat="place in uniformPlaces"
 				 layout="row" layout-align="space-between center"
 				 class="playground-table-row"
 				 ng-style="{'background-color': $even ? '#FFFFFF' : '#DCE6F2'}">
@@ -68,6 +70,12 @@
 	<div layout="column" layout-align="start stretch" style="max-width: 800px; margin-top: 30px;">
 
 		<analytics-results-dir results="results" price="totalCost"></analytics-results-dir>
+
+		<club-info-table-dir club-info="clubInfo" style="margin-top: 20px;"></club-info-table-dir>
+
+		<!--<hockey-box-info-table-dir style="margin-top: 20px;"></hockey-box-info-table-dir>-->
+
+		<!--<playground-params-table-dir params="playgroundParams" style="margin-top: 15px;"></playground-params-table-dir>-->
 
 	</div>
 

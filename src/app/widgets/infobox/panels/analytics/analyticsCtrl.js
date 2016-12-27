@@ -43,14 +43,18 @@
             //$scope.advertising = [];
             if (!selected.sport){ // нет спорта - нет жизни!
                 return;
+            } else if (selected.sport.key == 'hockey'){
+                //$scope.playground = playgrounds[0];
+                $scope.playgroundType = 'hockeyBox40';
             }
-
-            if (selected.club){
-                var playgrounds = selected.club.playgrounds;
-                if (playgrounds.length == 1){
-                    $scope.playground = playgrounds[0];
-                } // else if (!playgrounds.length){}
-            }
+            
+			//
+            // if (selected.club){
+            //     var playgrounds = selected.club.playgrounds;
+            //     if (playgrounds.length == 1){
+            //         $scope.playground = playgrounds[0];
+            //     } // else if (!playgrounds.length){}
+            // }
         }
 
         // определить выбранный спорт/лигу/клуб, загрузить из них playgrounds

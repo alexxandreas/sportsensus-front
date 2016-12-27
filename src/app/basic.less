@@ -18,3 +18,27 @@
 .pointer {
   cursor: pointer;
 }
+
+
+md-switch .md-thumb {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url(../static/static/img/md-thumb.png);
+  background-color: transparent;
+  box-shadow: none;
+  //background-color: red;
+}
+
+ md-switch.md-checked .md-thumb {
+  background-color: transparent;
+   background-image: url(../static/static/img/md-thumb-selected.png);
+
+}
+
+md-switch.md-checked .md-thumb-container {
+  transform: none;
+  //transform: translateX(100%)
+  //transform: translateX(10px);
+
+  left: 16px;
+}

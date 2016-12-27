@@ -25,161 +25,182 @@
 		analyticsSrv,
 		graphHelpersSrv
 	) {
+		$controller('hockeyBoxBaseCtrl', {$scope: $scope});
 
-		ParamsSrv.getParams().then(function(params){
-			$scope.parameters = params;
-			$scope.playgroundData = params.playgrounds.items.hockeyBox40;
-
-			$scope.places = Object.keys($scope.playgroundData.visibility).map(function(key){
-				return {name:key, selected: false};
+		
+		
+		var promises = [];
+		promises.push(ApiSrv.getStatic('hockey').then(function(hockeyData){
+			hockeyData.forEach(function(item) {
+				if (item.type == 'championship') {
+					$scope.championship = item;
+				} else if (item.type == 'hockeyBox40') {
+					$scope.playgroundData = item;
+				} else if (item.type == 'hockeyUniform') {
+					$scope.uniformData = item;
+				} else if (item.type == 'hockeyVideoOffline') {
+					$scope.videoOfflineData = item;
+				} else if (item.type == 'hockeyVideoOnline') {
+					$scope.videoOnlineData = item;
+				}
 			});
-			/*$scope.places = {};
-			 Object.keys($scope.playground.visibility).forEach(function(key){
-			 $scope.places[key] = {selected: false};
-			 });*/
-			//$scope.playground.params = [{'Вместимость':'12500', 'Заполняемость':'80%', 'Среднее что-то':'16.98'}];
-			var a = $scope.playground;
+		}));
 
-			$scope.playgroundParams = {
-				//"type": "hockeyBox", //(footballField, hockeyBox, basketballCourt, boxingRing, carTrack1, carTrack3...)
-				"stadium": { name: "Стадион", value: $scope.playground.stadium },
-				"city": { name: "Город", value: $scope.playground.city },
-				"capacity": { name: "Вместимость", value: $scope.playground.capacity },
-				"matchCount": { name: "Матчей в сезоне", value: $scope.playground.matchCount },
-				"tvMatchCount": { name: "Телетрансляций в сезоне", value: $scope.playground.tvMatchCount },
-				"occupancy": { name: "Заполняемость", value: $scope.playground.occupancy }
-				//"offline": {name: 'Оффлайн (на трибунах)', value: $scope.playground.capacity * $scope.playground.occupancy * $scope.playground.tvMatchCount},
-				//"online": {name: 'Онлайн (ТВ-аудитория)', value:0 }
-			};
+		promises.push(ParamsSrv.getParams().then(function(params){
+			$scope.parameters = params;
+		}));
 
-			/*$scope.watchData = $scope.parameters.watch.lists.map(function(list){
-			 return {
-			 name:list.name,
-			 id: list.id
-			 }
-			 });
 
-			 $scope.walkData = $scope.parameters.walk.lists.map(function(list){
-			 return {
-			 name:list.name,
-			 id: list.id
-			 }
-			 });
-			 */
+		// все данные загружены
+		$q.all(promises).then(function(){
+			$scope.prepareClubInfo();
 
+			function preparePlaces(data){
+				if (data.placesSelection) return;
+				data.placesSelection = {};
+				data.places.forEach(function(place){
+					data.placesSelection[place] = {key: place, selected: false};
+				});
+				/*
+				Object.keys(data.visibilityOffline).map(function(key){
+					// data.places[key] = data.places[key] || {selected: false};
+					if (!data.places.some(function(obj){ return obj.key == key; }))
+						data.places.push({key: key, selected: false});
+				});
+				Object.keys(data.visibilityOnline).map(function(key){
+					//data.places[key] = data.places[key] || {selected: false};
+					if (!data.places.some(function(obj){ return obj.key == key; }))
+						data.places.push({key: key, selected: false});
+				});*/
+			}
+			
+			preparePlaces($scope.playgroundData);
+			preparePlaces($scope.uniformData);
+			preparePlaces($scope.videoOfflineData);
+			preparePlaces($scope.videoOnlineData);
+			
+			// $scope.playgroundPlaces = Object.keys($scope.playgroundData.visibilityOffline).map(function(key){
+			// 	return {name:key, selected: false};
+			// });
+
+			$scope.playgroundPlacesA = [];
+			var columnsCount = 4;
+			//var places = Object.keys($scope.playgroundData.places).map(function(key){return {key: key, place: $scope.playgroundData.places[key]}; });
+			var count = $scope.playgroundData.places.length;
+			for (var col=1; col <= columnsCount; col++){
+				var arr = $scope.playgroundData.places.slice(Math.ceil(count/columnsCount*(col-1)),Math.ceil(count/columnsCount*col));
+				$scope.playgroundPlacesA.push(arr.map(function(key){ return $scope.playgroundData.placesSelection[key]; }));
+				//$scope.playgroundPlacesA.push(places.slice(Math.ceil(count/columnsCount*(col-1)),Math.ceil(count/columnsCount*col)));
+			}
+
+			
+			// $scope.uniformPlaces = Object.keys($scope.uniformData.visibilityOffline).map(function(key){
+			// 	return {name:key, selected: false};
+			// });
+			//
+			// $scope.videoOfflinePlaces = Object.keys($scope.videoOfflineData.visibilityOffline).map(function(key){
+			// 	return {name:key, selected: false};
+			// });
+			//
+			// $scope.videoOnlinePlaces = Object.keys($scope.videoOnlineData.visibilityOnline).map(function(key){
+			// 	return {name:key, selected: false};
+			// });
+
+			
 			$scope.$on('ApiSrv.countLoaded', readCount);
 			readCount();
 
-			$scope.$watch('totalCost', calc);
-			$scope.$watch('places', calc, true);
+			function readCount(){
+				var result = ApiSrv.getLastCountResult();
+				$scope.audiencePercent = result.audiencePercent / 100;
+				$scope.calc();
+			}
 
-			loadWalkWatch();
-
-
-			//recalc();
-			//recalc();
-
+			$scope.$watch('totalCost', $scope.calc);
+			
+			// $scope.$watch('playgroundPlaces', $scope.calc, true);
+			// $scope.$watch('uniformPlaces', $scope.calc, true);
+			// $scope.$watch('videoOfflinePlaces', $scope.calc, true);
+			// $scope.$watch('videoOnlinePlaces', $scope.calc, true);
+			
+			$scope.$watch('playgroundData.placesSelection', $scope.calc, true);
+			$scope.$watch('uniformData.placesSelection', $scope.calc, true);
+			// $scope.$watch(function(){return $scope.uniformData.placesSelection;}, $scope.calc, true);
+			
+			$scope.$watch('videoOfflineData.placesSelection', $scope.calc, true);
+			$scope.$watch('videoOnlineData.placesSelection', $scope.calc, true);
 		});
 
-		$scope.audiencePercent = 0;
 
+		$scope.audiencePercent = 0;
 		$scope.percentWatch = {};
 		$scope.percentWalk = {};
 
-		function readCount(){
-			var result = ApiSrv.getLastCountResult();
-			//if (result && result.is_valid_count)
-			//	$scope.audienceCount = result.audience_count;
-			$scope.audiencePercent = result.audience_percent;
-			calc();
-			//else
-			//	$scope.audienceCount = 0;
-		}
 
+		/*
 		function calc(){
 
+			var visibility = calcVisibility();
+			var audiencePercent = $scope.audiencePercent || 1;
+
 			var data = {};
-			data.peopleOffline = getPeopleOffline();
-			data.peopleOnline = getPeopleOnline();
+			// Аудитория клуба
+			data.peopleAllOnline = $scope.clubInfo.onlineTotalAll * visibility.online * audiencePercent;
+			data.peopleAllOffline = $scope.clubInfo.offlineTotalAll * visibility.offline * audiencePercent;
 
-			data.CPTOffline = data.peopleOffline && $scope.totalCost ? Math.round($scope.totalCost / data.peopleOffline * 1000) : 0;
-			data.CPTOnline = data.peopleOnline && $scope.totalCost ? Math.round($scope.totalCost  / data.peopleOnline * 1000) : 0;
+			// кол-во уникальных онлайн, тысяч шт
+			var uniqueOnline = $scope.clubInfo.onlineUniqueAll * visibility.online * audiencePercent;
+			var uniqueOffline = $scope.clubInfo.offlineUniqueAll * visibility.offline * audiencePercent;
 
-			data.peopleAll = data.peopleOffline + data.peopleOnline;
-			data.CPTAll = data.peopleAll && $scope.totalCost ? Math.round($scope.totalCost  / data.peopleAll * 1000) : 0;
+			data.CPTUniqueOnline = $scope.totalCost && uniqueOnline ? Math.round($scope.totalCost / uniqueOnline) : '-';
+			data.CPTUniqueOffline = $scope.totalCost && uniqueOffline ? Math.round($scope.totalCost / uniqueOffline) : '-';
 
-			data.peopleOfflineCA = Math.round(data.peopleOffline * $scope.audiencePercent / 100);
-			data.peopleOnlineCA = Math.round(data.peopleOnline * $scope.audiencePercent / 100);
+			// OTS, штук
+			var OTSOnline = $scope.clubInfo.OTSOnline * visibility.online * audiencePercent;
+			var OTSOffline = $scope.clubInfo.OTSOffline * visibility.offline * audiencePercent;
 
-			data.CPTOfflineCA = data.peopleOfflineCA && $scope.totalCost ? Math.round($scope.totalCost / data.peopleOfflineCA * 1000) : 0;
-			data.CPTOnlineCA = data.peopleOnlineCA && $scope.totalCost ? Math.round($scope.totalCost  / data.peopleOnlineCA * 1000) : 0;
-
-
-			data.watchData = $scope.parameters.watch.lists.map(function(list){
-				return {
-					name:list.name,
-					id: list.id,
-					count: Math.round(data.peopleOnlineCA * ($scope.percentWatch[list.id] || 0))
-				}
-			});
+			data.CPTOTSOnline = $scope.totalCost && OTSOnline ? Math.round($scope.totalCost / OTSOnline) : '-';
+			data.CPTOTSOffline = $scope.totalCost && OTSOffline ? Math.round($scope.totalCost / OTSOffline) : '-';
 
 
-			data.walkData = $scope.parameters.walk.lists.map(function(list){
-				return {
-					name:list.name,
-					id: list.id,
-					count: Math.round(data.peopleOfflineCA * ($scope.percentWalk[list.id] || 0))
-				}
-			});
+			data.audienceSelected = ParamsSrv.isAudienceSelected();
+
 
 
 			//$scope.places;
 			//$scope.playgroundData.statistics
 			$scope.results = data;
 		}
-
-		function getPeopleOffline(){
-			var allPeoples = $scope.playground.capacity * $scope.playground.occupancy * $scope.playground.matchCount;
-
-			return Math.round(allPeoples * calcVisibility());
-		}
-
-		function getPeopleOnline(){
-			var stat = getStatistics();
-			if (!stat) return 0;
-
-			var max = 0;
-			$scope.places.forEach(function(place){
-				if (!place.selected) return;
-				var data = stat.data[place.name];
-				if (!data) return;
-				max = Math.max(max, data["OTS"] || 0);
-			});
-			return Math.round(max * 1000);
-		}
-
-		function getStatistics(){
-			var selected = analyticsSrv.getSelected();
-			//selected.club
-			//selected.league
-			var leagueName = null;
-			if (selected.league)
-				leagueName = selected.league.name;
-
-			var filtered = $scope.playgroundData.statistics.filter(function(stat){
-				return leagueName ? stat.league == leagueName : true;
-			});
-
-			if (!filtered.length) return null;
-			return filtered[0];
-			//"league": "ВХЛ";
-		}
-
+		*/
+		/*
+		// расчет видимости выбранных рекламных конструкций на площадке (0.0 - 1.0)
 		function calcVisibility(){
-			var sectors = {};
-			$scope.places.forEach(function(place){
+			var result = {
+				playgroundOnline: Math.min(calcPlaygroundOnline(), 1),
+				playgroundOffline: Math.min(calcPlaygroundOffline(), 1),
+				uniformOnline: Math.min(calcUniformOnline(), 1),
+				uniformOffline: Math.min(calcUniformOffline(), 1)
+			};
+			result.online = Math.max(result.playgroundOnline, result.uniformOnline);
+			result.offline = Math.max(result.playgroundOffline, result.uniformOffline);
+
+			return result;
+
+			function calcPlaygroundOnline(){
+				var result = 0;
+				$scope.playgroundPlaces.forEach(function(place){
 				if (!place.selected) return;
-				var placeA = $scope.playgroundData.visibility[place.name];
+					if ($scope.playgroundData.visibilityOnline[place.name])
+						result = Math.max(result, $scope.playgroundData.visibilityOnline[place.name]);
+			});
+				return result;
+		}
+
+			function calcPlaygroundOffline(){
+			var sectors = {};
+				$scope.playgroundPlaces.forEach(function(place){
+				if (!place.selected) return;
+					var placeA = $scope.playgroundData.visibilityOffline[place.name];
 				//if (!placeA) return;
 				placeA.forEach(function(val, index){
 					sectors[index] = Math.max(sectors[index] || 0, val || 0);
@@ -192,7 +213,30 @@
 			return sum;
 		}
 
+			function calcUniformOnline(){
+				var result = 0;
+				$scope.uniformPlaces.forEach(function(place){
+					if (!place.selected) return;
+					if ($scope.uniformData.visibilityOnline[place.name])
+						result = Math.max(result,$scope.uniformData.visibilityOnline[place.name]);
+				});
+				return result;
+			}
 
+			function calcUniformOffline(){
+				var result = 0;
+				$scope.uniformPlaces.forEach(function(place){
+					if (!place.selected) return;
+					if ($scope.uniformData.visibilityOffline[place.name])
+						result = Math.max(result, $scope.uniformData.visibilityOffline[place.name]);
+				});
+				return result;
+			}
+
+		}
+		*/
+
+		/*
 		function loadWalkWatch(){
 
 			//var audience = ParamsSrv.getSelectedAudience();
@@ -204,14 +248,6 @@
 			if (selected.club)
 				sports[selected.sport.key].clubs = [selected.club.id]
 
-
-			/*$scope.sportLegend.forEach(function (list) {
-			 if (!list.selected) return;
-			 var sportObj = {interested: true};
-			 sportObj.clubs = list.clubs ? list.clubs.filter(function(club){return club.selected;}).map(function(club){return club.id; }) : [];
-			 if (!sportObj.clubs.length) return;
-			 sports[list.key] = sportObj;
-			 });*/
 
 			var rootingWatch = $scope.parameters.watch.lists.map(function (list) {return list.id;}); // [1, 2, 3, 4];
 			var rootingWalk = $scope.parameters.walk.lists.map(function (list) {return list.id;}); //[1, 2, 3, 4];
@@ -255,6 +291,8 @@
 			});
 
 		}
+		*/
+
 
 	}
 

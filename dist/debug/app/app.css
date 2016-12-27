@@ -416,6 +416,21 @@ th {
 .pointer {
   cursor: pointer;
 }
+md-switch .md-thumb {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url(../static/static/img/md-thumb.png);
+  background-color: transparent;
+  box-shadow: none;
+}
+md-switch.md-checked .md-thumb {
+  background-color: transparent;
+  background-image: url(../static/static/img/md-thumb-selected.png);
+}
+md-switch.md-checked .md-thumb-container {
+  transform: none;
+  left: 16px;
+}
 
 @font-face {
   font-family: NOKIAPUREHEADLINE_BOLD;
@@ -1691,7 +1706,7 @@ div > svg > circle:nth-child(5n) {
   height: 612px;
   width: 424px;
 }
-.hockeyBox32 .hockeyForm {
+.hockeyForm {
   background-image: url("../static/static/img/ad/hockeyForm.png");
   background-size: contain;
   background-repeat: no-repeat;
@@ -1699,29 +1714,38 @@ div > svg > circle:nth-child(5n) {
   height: 303px;
   width: 424px;
 }
-.playground-checkboxes-table {
-  margin: 0 20px;
-}
-.playground-checkboxes-table .playground-table-row {
-  height: 35px;
-  width: 90px;
-  padding: 0 10px;
-}
-.hockeyBox40 .hockeyBox40Image {
-  background-image: url("../static/static/img/ad/hockeyBox32.png");
+.hockeyVideoOffline {
+  background-image: url("../static/static/img/ad/hockeyVideoOffline.png");
   background-size: contain;
   background-repeat: no-repeat;
   margin-right: 30px;
-  height: 612px;
-  width: 424px;
+  height: 259px;
+  width: 469px;
+}
+.hockeyVideoOnline {
+  background-image: url("../static/static/img/ad/hockeyVideoOnline.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 30px;
+  height: 283px;
+  width: 409px;
 }
 .playground-checkboxes-table {
-  margin: 0 20px;
+  margin: 0 10px;
 }
 .playground-checkboxes-table .playground-table-row {
   height: 35px;
-  width: 90px;
-  padding: 0 10px;
+  width: 85px;
+  padding-left: 10px;
+  padding-right: 5px;
+}
+.hockeyBox40 .hockeyBox40Image {
+  background-image: url("../static/static/img/ad/hockeyBox40.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 30px;
+  height: 266px;
+  width: 472px;
 }
 
 .analyticsResults .result-card .header {
@@ -1730,6 +1754,7 @@ div > svg > circle:nth-child(5n) {
   border-color: inherit;
   height: 50px;
   font-size: 20px;
+  text-align: center;
 }
 .analyticsResults .result-card .header2 {
   padding: 10px;
@@ -1775,6 +1800,118 @@ div > svg > circle:nth-child(5n) {
   border-color: inherit;
   height: 50px;
   font-size: 20px;
+}
+
+.clubInfoTable {
+  max-width: 800px;
+  border-color: #006b99;
+}
+.clubInfoTable div {
+  border-bottom-color: inherit !important;
+  border-left-color: inherit !important;
+  border-right-color: inherit !important;
+  border-top-color: inherit !important;
+}
+.clubInfoTable > .header {
+  padding: 10px;
+  border-top: 4px solid;
+  height: 30px;
+  font-size: 15px;
+  background-color: #01a8e4;
+}
+.clubInfoTable > .header .text {
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.clubInfoTable > .header .showHideButton {
+  outline: none;
+  cursor: pointer;
+  font-size: 11px;
+}
+.clubInfoTable .card {
+  margin-top: 5px;
+  border-color: inherit;
+}
+.clubInfoTable .card .header {
+  padding: 10px;
+  border-top: 4px solid;
+  border-color: inherit;
+  height: 27px;
+  font-size: 15px;
+  background-color: #01a8e4;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.clubInfoTable .card .item {
+  padding: 5px;
+  border-top: 1px solid;
+  border-color: inherit;
+  font-size: 13px;
+}
+.clubInfoTable .card .row {
+  height: 24px;
+}
+.clubInfoTable .card .row-2 {
+  height: 48px;
+}
+.clubInfoTable .card .title {
+  border-right: 1px dotted;
+  text-align: center;
+  background-color: #99e4ff;
+}
+.clubInfoTable .card .info {
+  background-color: #ccf1ff;
+  text-align: center;
+}
+
+.hockeyBoxInfoTable {
+  max-width: 800px;
+  border-color: #006b99;
+}
+.hockeyBoxInfoTable div {
+  border-bottom-color: inherit !important;
+  border-left-color: inherit !important;
+  border-right-color: inherit !important;
+  border-top-color: inherit !important;
+}
+.hockeyBoxInfoTable > .header {
+  padding: 10px;
+  border-top: 4px solid;
+  height: 30px;
+  font-size: 15px;
+  background-color: #01a8e4;
+}
+.hockeyBoxInfoTable > .header .showHideButton {
+  outline: none;
+  cursor: pointer;
+  font-size: 11px;
+}
+.hockeyBoxInfoTable .card {
+  margin-top: 5px;
+  border-color: inherit;
+}
+.hockeyBoxInfoTable .card .header {
+  padding: 10px;
+  border-top: 4px solid;
+  border-color: inherit;
+  height: 27px;
+  font-size: 15px;
+  background-color: #01a8e4;
+}
+.hockeyBoxInfoTable .card .item {
+  padding: 5px;
+  border-top: 1px solid;
+  border-color: inherit;
+  font-size: 13px;
+}
+.hockeyBoxInfoTable .card .title {
+  border-right: 1px dotted;
+  text-align: center;
+  background-color: #99e4ff;
+}
+.hockeyBoxInfoTable .card .info {
+  background-color: #ccf1ff;
+  text-align: center;
 }
 
 .playgroundParamsTable {

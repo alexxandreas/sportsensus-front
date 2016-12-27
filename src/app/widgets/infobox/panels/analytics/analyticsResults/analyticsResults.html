@@ -6,7 +6,7 @@
 		<div layout="column" class="result-card" flex style="
 				border-color: #00415C;">
 			<!-- header -->
-			<div class="header" layout="row" layout-align="start center" style="background-color: #01698E; color:white;">Общая стоимость пакета</div>
+			<div class="header" layout="row" layout-align="center center" style="background-color: #01698E; color:white;">Общая стоимость пакета</div>
 			<!-- footer -->
 			<div class="footer" layout="row" layout-align="start center" style="background-color: hsla(196,99%,90%,1);">
 				<input flex=""
@@ -25,42 +25,42 @@
 
 		<div style="width: 10px"></div>
 
-		<!-- Online -->
+		<!-- Аудитория клуба -->
 		<div layout="column" class="result-card" flex style="border-color: #4b4483; ">
 			<!-- header -->
-			<div class="header" layout="row" layout-align="center center" style="background-color: #837EB6">Совокупная аудитория</div>
+			<div class="header" layout="row" layout-align="center center" style="background-color: #837EB6">Аудитория клуба</div>
 
 			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
-				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #aca8d1;">Количество</div>
-				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #aca8d1;">CPT</div>
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #aca8d1;">Online</div>
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #aca8d1;">Offline</div>
 			</div>
 
 			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
 				<!-- footer -->
-				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #dcdaec;">{{results.peopleAll.toLocaleString()}}</div>
-				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #dcdaec;">{{results.CPTAll.toLocaleString()}}</div>
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #dcdaec;">{{results.peopleAllOnline.toLocaleString()}}</div>
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #dcdaec;">{{results.peopleAllOffline.toLocaleString()}}</div>
 			</div>
 		</div>
 	</div>
 
-	<!--Вся аудитория-->
+	<!--  -->
 	<div layout="row" layout-align="start start" layout-wrap
 		 style="margin-top: 20px;">
 
-		<!-- Online -->
+		<!-- Стоимость уникальной аудитории (CPT) -->
 		<div layout="column" class="result-card" flex style="border-color: #F57721; ">
 			<!-- header -->
-			<div class="header" layout="row" layout-align="center center" style="background-color: hsla(55,73%,61%,1);">Вся ТВ-аудитория</div>
+			<div class="header" layout="row" layout-align="center center" style="background-color: hsla(55,73%,61%,1);">{{'Стоимость уникальной аудитории ' + (results.audienceSelected ? 'с учетом ЦА ' : '') + '(CPT)'}}</div>
 
 			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
-				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #FFF79A;">Количество</div>
-				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #FFF79A;">CPT</div>
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #FFF79A;">Online</div>
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #FFF79A;">Offline</div>
 			</div>
 
 			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
 				<!-- footer -->
-				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #FFFCDD;">{{results.peopleOnline.toLocaleString()}}</div>
-				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #FFFCDD;">{{results.CPTOnline.toLocaleString()}}</div>
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #FFFCDD;">{{results.CPTUniqueOnline.toLocaleString()}}</div>
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #FFFCDD;">{{results.CPTUniqueOffline.toLocaleString()}}</div>
 			</div>
 		</div>
 
@@ -70,28 +70,29 @@
 		<!-- Offline -->
 		<div layout="column" class="result-card" flex style="border-color: #14B584;">
 			<!-- header -->
-			<div class="header" layout="row" layout-align="center center" style="background-color: hsla(150,38%,70%,1);">Все зрители на трибунах</div>
+			<div class="header" layout="row" layout-align="center center" style="background-color: hsla(150,38%,70%,1);"><b>CPT всего (от OTS)</b></div>
 
 			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
-				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #CCE8DA;">Количество</div>
-				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #CCE8DA;">CPT</div>
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #CCE8DA;">Online</div>
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #CCE8DA;">Offline</div>
 			</div>
 
 			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
 				<!-- footer -->
-				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #EDF8F2;">{{results.peopleOffline.toLocaleString()}}</div>
-				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #EDF8F2;">{{results.CPTOffline.toLocaleString()}}</div>
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #EDF8F2;">{{results.CPTOTSOnline.toLocaleString()}}</div>
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #EDF8F2;">{{results.CPTOTSOffline.toLocaleString()}}</div>
 			</div>
 		</div>
 	</div>
 
-	<!--ЦА-->
+
+	<!--ЦА--><!--
 	<div layout="row" layout-align="start start" layout-wrap
 		 style="margin-top: 20px;">
 
-		<!-- Online -->
+		&lt;!&ndash; Online &ndash;&gt;
 		<div layout="column" class="result-card" flex style="border-color: #F57721;">
-			<!-- header -->
+			&lt;!&ndash; header &ndash;&gt;
 			<div class="header" layout="row" layout-align="center center" style="background-color: hsla(55,73%,61%,1);;">ТВ-аудитория с учетом ЦА</div>
 
 			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
@@ -100,7 +101,7 @@
 			</div>
 
 			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
-				<!-- footer -->
+				&lt;!&ndash; footer &ndash;&gt;
 				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #FFFCDD;">{{results.peopleOnlineCA.toLocaleString()}}</div>
 				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #FFFCDD;">{{results.CPTOnlineCA.toLocaleString()}}</div>
 			</div>
@@ -108,9 +109,9 @@
 
 		<div style="width: 10px"></div>
 
-		<!-- Offline -->
+		&lt;!&ndash; Offline &ndash;&gt;
 		<div layout="column" class="result-card" flex style="border-color: #14B584;">
-			<!-- header -->
+			&lt;!&ndash; header &ndash;&gt;
 			<div class="header" layout="row" layout-align="center center" style="background-color: hsla(150,38%,70%,1);">Зрители на трибунах с учетом ЦА</div>
 
 			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
@@ -119,48 +120,19 @@
 			</div>
 
 			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
-				<!-- footer -->
+				&lt;!&ndash; footer &ndash;&gt;
 				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #EDF8F2;">{{results.peopleOfflineCA.toLocaleString()}}</div>
 				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #EDF8F2;">{{results.CPTOfflineCA.toLocaleString()}}</div>
 			</div>
 		</div>
 	</div>
+-->
 
-
-	<!-- walk / watch вертикально -->
-	<!--<div layout="row" layout-align="start start" layout-wrap
-		 style="margin-top: 20px;">
-
-		&lt;!&ndash; Online &ndash;&gt;
-		<div layout="column" class="result-card" flex style="border-color: #F57721;">
-
-			<div style="border-top: 4px solid; border-color: inherit;"></div>
-			<div ng-repeat="item in results.watchData"
-				 layout="column" style="border-color: inherit;">
-				<div class="header3" layout="row" layout-align="center center" style="background-color: #FFF79A;">{{item.name}}</div>
-				<div class="footer3" layout="row" layout-align="center center" style="background-color: #FFFCDD;">{{item.count.toLocaleString()}}</div>
-			</div>
-		</div>
-
-		<div style="width: 10px"></div>
-
-		&lt;!&ndash; Offline &ndash;&gt;
-		<div layout="column" class="result-card" flex style="border-color: #14B584;">
-
-			<div style="border-top: 4px solid; border-color: inherit;"></div>
-			<div ng-repeat="item in results.walkData"
-				 layout="column" style="border-color: inherit;">
-				<div class="header3" layout="row" layout-align="center center" style="background-color: #CCE8DA;">{{item.name}}</div>
-				<div class="footer3" layout="row" layout-align="center center" style="background-color: #EDF8F2;">{{item.count.toLocaleString()}}</div>
-			</div>
-		</div>
-	</div>-->
-
-	<!-- walk / watch -->
+	<!-- walk / watch --><!--
 	<div layout="row" layout-align="start start" layout-wrap
 		 style="margin-top: 20px;">
 
-		<!-- Online -->
+		&lt;!&ndash; Online &ndash;&gt;
 		<div layout="column" class="result-card" flex style="border-color: #F57721;">
 
 			<div style="border-top: 4px solid; border-color: inherit;"></div>
@@ -174,7 +146,7 @@
 
 		<div style="width: 10px"></div>
 
-		<!-- Offline -->
+		&lt;!&ndash; Offline &ndash;&gt;
 		<div layout="column" class="result-card" flex style="border-color: #14B584;">
 
 			<div style="border-top: 4px solid; border-color: inherit;"></div>
@@ -185,6 +157,6 @@
 			</div>
 		</div>
 	</div>
-
+-->
 
 </div>

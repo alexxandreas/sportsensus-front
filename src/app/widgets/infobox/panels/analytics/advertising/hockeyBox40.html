@@ -1,45 +1,149 @@
 <div layout="column" layout-align="start stretch" class="hockeyBox40"
 	 ng-controller="hockeyBox40Ctrl">
-	<h2 class="infobox-panel-header2"
+
+	<club-info-table-dir club-info="clubInfo" style="margin-top: 10px; margin-bottom: 40px;"></club-info-table-dir>
+
+	<h1 class="infobox-panel-header" layout="row" layout-align="start center">
+		Формирование и оценка спонсорского пакета
+	</h1>
+
+
+	<!-------------- Площадка -------------->
+	<h2 class="infobox-panel-header2" style="margin-top: 30px;"
 		layout="row" layout-align="start center">
 		Рекламные конструкции во время состязаний
 	</h2>
 
-
 	<div layout="row" layout-align="start start" style="margin-top: 20px;">
-
-		<!-- Площадка -->
 		<div class="hockeyBox40Image" ></div>
 
 		<!-- Флажки выбора позиций  -->
 		<div layout="row" layout-align="start start">
 			<div layout="column" layout-align="start stretch"
-				 class="playground-checkboxes-table" ng-repeat="column in [0,16]">
+				 class="playground-checkboxes-table" ng-repeat="column in playgroundPlacesA">
 				<div layout="row" layout-align="start center"
 					 class="playground-table-row" style="background-color: #376092; color: white">
 					<div flex="50" >Позиция</div>
 				</div>
-				<div ng-repeat="place in places | limitTo:16:column"
+				<div ng-repeat="place in column"
 					 layout="row" layout-align="space-between center"
 					 class="playground-table-row"
 					 ng-style="{'background-color': $even ? '#FFFFFF' : '#DCE6F2'}">
 					<div flex="33">
-						{{ place.name }}
+						{{ place.key }}
 					</div>
-					<md-switch ng-model="place.selected" aria-label="Выбрано" flex="67"></md-switch>
+					<md-switch ng-model="playgroundData.placesSelection[place.key].selected" aria-label="Выбрано" flex="67"></md-switch>
 				</div>
 			</div>
 		</div>
-
 	</div>
+
+
+
+	<!-------------- Форма -------------->
+	<h2 class="infobox-panel-header2" style="margin-top: 30px;"
+		layout="row" layout-align="start center">
+		Оформление участников состязаний
+	</h2>
+
+	<div layout="row" layout-align="start start" style="margin-top: 20px;">
+		<div class="hockeyForm" ></div>
+
+		<!-- Флажки выбора позиций  -->
+		<div layout="column" layout-align="start stretch"
+			 class="playground-checkboxes-table">
+
+			<div layout="row" layout-align="start center"
+				 class="playground-table-row" style="background-color: #376092; color: white">
+				<div flex="50" >Позиция</div>
+			</div>
+			<div ng-repeat="key in uniformData.places"
+				 layout="row" layout-align="space-between center"
+				 class="playground-table-row"
+				 ng-style="{'background-color': $even ? '#FFFFFF' : '#DCE6F2'}">
+				<div flex="33">
+					{{ key }}
+				</div>
+				<md-switch ng-model="uniformData.placesSelection[key].selected" aria-label="Выбрано" flex="67"></md-switch>
+			</div>
+
+		</div>
+	</div>
+
+
+	<!-------------- Видео offline -------------->
+	<h2 class="infobox-panel-header2" style="margin-top: 30px;"
+		layout="row" layout-align="start center">
+		Видео off-line (для зрителей на трибунах во время матча)
+	</h2>
+
+	<div layout="row" layout-align="start start" style="margin-top: 20px;">
+		<div class="hockeyVideoOffline" ></div>
+
+		<!-- Флажки выбора позиций  -->
+		<div layout="column" layout-align="start stretch"
+			 class="playground-checkboxes-table">
+
+			<div layout="row" layout-align="start center"
+				 class="playground-table-row" style="background-color: #376092; color: white">
+				<div flex="50" >Позиция</div>
+			</div>
+			<div ng-repeat="key in videoOfflineData.places"
+				 layout="row" layout-align="space-between center"
+				 class="playground-table-row"
+				 ng-style="{'background-color': $even ? '#FFFFFF' : '#DCE6F2'}">
+				<div flex="33">
+					{{key }}
+				</div>
+				<md-switch ng-model="videoOfflineData.placesSelection[key].selected" aria-label="Выбрано" flex="67"></md-switch>
+			</div>
+
+		</div>
+	</div>
+
+
+	<!-------------- Видео online -------------->
+	<h2 class="infobox-panel-header2" style="margin-top: 30px;"
+		layout="row" layout-align="start center">
+		Видео во время телетрансляций
+	</h2>
+
+	<div layout="row" layout-align="start start" style="margin-top: 20px;">
+		<div class="hockeyVideoOnline" ></div>
+
+		<!-- Флажки выбора позиций  -->
+		<div layout="column" layout-align="start stretch"
+			 class="playground-checkboxes-table">
+
+			<div layout="row" layout-align="start center"
+				 class="playground-table-row" style="background-color: #376092; color: white">
+				<div flex="50" >Позиция</div>
+			</div>
+			<div ng-repeat="key in videoOnlineData.places"
+				 layout="row" layout-align="space-between center"
+				 class="playground-table-row"
+				 ng-style="{'background-color': $even ? '#FFFFFF' : '#DCE6F2'}">
+				<div flex="33">
+					{{ key }}
+				</div>
+				<md-switch ng-model="videoOnlineData.placesSelection[key].selected" aria-label="Выбрано" flex="67"></md-switch>
+			</div>
+
+		</div>
+	</div>
+
+
 
 
 	<div layout="column" layout-align="start stretch" style="max-width: 800px; margin-top: 30px;">
 
-		<!-- -->
-		<playground-params-table-dir params="playgroundParams"></playground-params-table-dir>
-
 		<analytics-results-dir results="results" price="totalCost"></analytics-results-dir>
+
+		<!--<club-info-table-dir club-info="clubInfo" style="margin-top: 20px;"></club-info-table-dir>-->
+
+		<!--<hockey-box-info-table-dir style="margin-top: 20px;"></hockey-box-info-table-dir>-->
+
+		<!--<playground-params-table-dir params="playgroundParams" style="margin-top: 15px;"></playground-params-table-dir>-->
 
 	</div>
 

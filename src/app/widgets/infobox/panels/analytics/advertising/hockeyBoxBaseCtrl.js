@@ -61,6 +61,7 @@
 					homeTmp.offlineTotal += game.offlineCount;
 					if (game.stadiumId >= 0){
 						homeTmp.playgrounds[game.stadiumId] = homeTmp.playgrounds[game.stadiumId] || {gamesCount:0};
+						homeTmp.playgrounds[game.stadiumId].stadiumId = game.stadiumId;
 						homeTmp.playgrounds[game.stadiumId].stadiumName = game.stadiumName;
 						homeTmp.playgrounds[game.stadiumId].stadiumCapacity = game.stadiumCapacity;
 						homeTmp.playgrounds[game.stadiumId].gamesCount++;
@@ -96,8 +97,8 @@
 					}
 				});
 				if (!finded){
-					walkAvg = walkAvg / $scope.championship.data.clubInfo/length;
-					watchAvg = watchAvg / $scope.championship.data.clubInfo/length;
+					walkAvg = walkAvg / $scope.championship.data.clubInfo.length;
+					watchAvg = watchAvg / $scope.championship.data.clubInfo.length;
 				}
 			} else {
 				walkAvg = 1;
@@ -119,12 +120,20 @@
 			});
 			var playground = playgrounds[0];
 
+			var playgroundGamesCount = 0;
+			playground && $scope.championship.data.championship.forEach(function(game) {
+				if (game.stadiumId == playground.stadiumId)
+					playgroundGamesCount++;
+			});
+
+
 			$scope.clubInfo = {
 				name: club.name,
 				//playgrounds: ['playground1', 'playground2'],
 				playground: playground.stadiumName,
 				playgroundCapacity: playground.stadiumCapacity,
-				gamesCount: homeGames.length + guestGames.length,
+				//gamesCount: homeGames.length + guestGames.length,
+				gamesCount: playgroundGamesCount,
 				offlineAVGHome: Math.round(homeTmp.occupancy / homeGames.length * 100),
 				offlineAVGGuest: Math.round(guestTmp.occupancy / guestGames.length * 100),
 

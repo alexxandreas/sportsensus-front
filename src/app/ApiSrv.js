@@ -87,6 +87,65 @@
             return data;
         }
 
+        function register(par){
+            var d = $q.defer();
+            // var params = {
+            //     first_name:  args.get('fname'),
+            //     last_name: args.get('lname'),
+            //     company_name: args.get('cname'),
+            //     phone: args.get('phone'),
+            //     login: args.get('email'),
+            //     company_type: 1,
+            //     legal_status: 1 if args.get('yr') else 0,
+            //     lang: "ru"
+            // };
+            var params = par;
+            var data = prepareRequestData("register", params);
+            $http.post(url, data).then(function(response){
+                if (!response.data.result || !response.data.result.created){
+                    //clearUser();
+                    d.reject(response);
+                }else {
+                    //setUser(response.data.result.sid, response.data.result.acl);
+                    //$rootScope.$broadcast('ApiSrv.loginSuccess');
+                    d.resolve(response);
+                }
+            }, function(response){
+                //clearUser();
+                d.reject(response);
+                //$rootScope.$broadcast('ApiSrv.loginError');
+            });
+            return d.promise;
+        }
+
+
+        function activate(secret){
+            var d = $q.defer();
+            var params = {
+                secret: secret
+            };
+            var data = prepareRequestData("activateProfile", params);
+            $http.post(url, data).then(function(response){
+                if (!response.data.result || !response.data.result.acl){
+                    //clearUser();
+                    d.reject(response);
+                }else {
+                    //setUser(response.data.result.sid, response.data.result.acl);
+                    //$rootScope.$broadcast('ApiSrv.loginSuccess');
+                    d.resolve(response);
+                }
+            }, function(response){
+                //clearUser();
+                d.reject(response);
+                //$rootScope.$broadcast('ApiSrv.loginError');
+            });
+            return d.promise;
+        }
+
+
+
+
+
         function auth(par){
             var d = $q.defer();
             var params = {
@@ -14342,6 +14401,8 @@
 
         var me = {
             getUser: getUser,
+            register: register,
+            activate: activate,
             auth: auth,
             checkSession: checkSession,
             logout: logout,

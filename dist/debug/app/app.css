@@ -494,7 +494,7 @@ md-switch.md-checked .md-thumb-container {
   border-style: solid;
 }
 
-.b-header {
+.site-header {
   position: fixed;
   left: 0;
   top: 0;
@@ -505,39 +505,92 @@ md-switch.md-checked .md-thumb-container {
   padding: 0 30px;
   background: #fff;
 }
-.b-header__logout {
-  float: right;
-}
-.b-header__logo {
-  float: left;
-}
-.b-header__logo-image {
-  vertical-align: middle;
-}
-.b-header__menu {
-  float: left;
+.site-header .header-menu {
   margin: 0 0 0 100px;
   padding: 0;
   list-style-type: none;
 }
-.b-header__menu-item {
-  float: left;
+.site-header .header-menu .header-menu-item {
   margin-right: 40px;
 }
-.b-header__menu-item:last-child {
+.site-header .header-menu .header-menu-item:last-child {
   margin-right: 0;
 }
-.b-header__menu-link {
+.site-header .header-menu .header-menu-item .header-menu-item-link {
   padding-bottom: 2px;
   font-size: 16px;
   font-family: NOKIAPUREHEADLINE_BOLD;
   text-decoration: none;
   color: #000;
+  white-space: pre;
   border-bottom: 3px solid transparent;
 }
-.b-header__menu-link:hover {
+.site-header .header-menu .header-menu-item .header-menu-item-link:hover {
   border-bottom-color: #9fd9db;
 }
+.site-header .header-logo-image {
+  vertical-align: middle;
+}
+.site-header .button-logout {
+  margin-left: 20px;
+}
+/*
+
+.b-header{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    height: @panel-height;
+    line-height: @panel-height;
+    padding: 0 30px;
+    background: #fff;
+
+    .b-header__logout{
+        float: right;
+    }
+
+    .b-header__logo{
+        float: left;
+    }
+
+    .b-header__logo-image{
+        vertical-align: middle;
+    }
+
+    .b-header__menu{
+        float: left;
+        margin: 0 0 0 100px;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    .b-header__menu-item{
+        float: left;
+        margin-right: 40px;
+
+        &:last-child{
+            margin-right: 0;
+        }
+    }
+
+    .b-header__menu-link{
+        padding-bottom: 2px;
+        font-size: 16px;
+        font-family: NOKIAPUREHEADLINE_BOLD;
+        text-decoration: none;
+        color: #000;
+
+        border-bottom: 3px solid transparent;
+
+        &:hover{
+            border-bottom-color: #9fd9db;
+        }
+    }
+
+}
+*/
 
 /*@import "../../../static/fonts/style.css";      */
 .l-home {
@@ -656,16 +709,28 @@ md-switch.md-checked .md-thumb-container {
   margin-bottom: 20px;
 }
 .l-home__registration-box input::-webkit-input-placeholder {
-  color: #000;
+  color: #777;
 }
 .l-home__registration-box input::-moz-placeholder {
-  color: #000;
+  color: #777;
 }
 .l-home__registration-box input:-moz-placeholder {
-  color: #000;
+  color: #777;
 }
 .l-home__registration-box input:-ms-input-placeholder {
-  color: #000;
+  color: #777;
+}
+.l-home__registration-box input:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+.l-home__registration-box input:focus::-moz-placeholder {
+  color: transparent;
+}
+.l-home__registration-box input:focus:-moz-placeholder {
+  color: transparent;
+}
+.l-home__registration-box input:focus:-ms-input-placeholder {
+  color: transparent;
 }
 .l-home__registration-box select {
   width: 100%;
@@ -1696,7 +1761,8 @@ div > svg > circle:nth-child(5n) {
   background-image: url("../static/static/img/ad/footballField.png");
   background-size: contain;
   background-repeat: no-repeat;
-  height: 600px;
+  height: 308px;
+  width: 519px;
 }
 .hockeyBox32 .hockeyBox32Image {
   background-image: url("../static/static/img/ad/hockeyBox32.png");
@@ -1736,8 +1802,8 @@ div > svg > circle:nth-child(5n) {
 .playground-checkboxes-table .playground-table-row {
   height: 35px;
   width: 85px;
-  padding-left: 10px;
-  padding-right: 5px;
+  padding-left: 7px;
+  padding-right: 0px;
 }
 .hockeyBox40 .hockeyBox40Image {
   background-image: url("../static/static/img/ad/hockeyBox40.png");

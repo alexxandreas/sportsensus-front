@@ -8,7 +8,7 @@
             Потому что болеем<br/>
             за эффективность
             <div class="l-home__promo-button-box">
-                <a href="/" class="l-home__promo-button">Демо версия</a>
+                <a href="/#!/" class="l-home__promo-button">Демо версия</a>
             </div>
         </div>
     </div>
@@ -98,28 +98,31 @@
         <h3>Регистрация</h3>
         <form>
             <div class="l-home__registration-box">
-                <input name="fname" placeholder="Имя"/>
-                <input name="cname" placeholder="Компания"/>
-                <input name="phone" placeholder="Телефон"/>
+                <input name="fname" placeholder="Имя" ng-model="regData.first_name"/>
+                <input name="cname" placeholder="Компания" ng-model="regData.company_name"/>
+                <input name="phone" placeholder="Телефон" ng-model="regData.phone"/>
                 <label>
                     Физическое лицо
-                    <input name="fiz" type="checkbox"/>
+                    <input name="fiz" type="checkbox" ng-model="companyTypeFiz" ng-model-options="{ getterSetter: true }"/>
                 </label>
             </div>
 
             <div class="l-home__registration-box">
-                <input name="lname" placeholder="Фамилия"/>
-                <input name="email" placeholder="Адрес эл. почты"/>
-                <select name="type">
-                    <option>Тип компании</option>
+                <input name="lname" placeholder="Фамилия" ng-model="regData.last_name"/>
+                <input name="email" placeholder="Адрес эл. почты" ng-model="regData.login"/>
+                <!--<select name="type" ng-model="regData.company_type">
+                    <option ng-repeat="option in companyTypes" ng-selected="option.selected" ng-value="option.value">{{option.name}}</option>
+                </select>-->
+                <select name="type" ng-model="regData.company_type" ng-options="obj.value as obj.name for obj in companyTypes">
+                    <option value="">Тип компании</option>
                 </select>
                 <label>
                     Юридическое лицо
-                    <input name="yr" type="checkbox"/>
+                    <input name="yr" type="checkbox" ng-model="companyTypeYur" ng-model-options="{ getterSetter: true }"/>
                 </label>
             </div>
             <div class="l-home__registration-button-box">
-                <button type="submit" class="l-home__registration-button">Получить демо</button>
+                <button class="l-home__registration-button" ng-click="register()">Получить демо</button>
             </div>
         </form>
     </div>

@@ -46,9 +46,12 @@
             } else if (selected.sport.key == 'hockey'){
                 //$scope.playground = playgrounds[0];
                 $scope.playgroundType = 'hockeyBox40';
+            } else if (selected.sport.key == 'football'){
+                //$scope.playground = playgrounds[0];
+                $scope.playgroundType = 'footballField';
             }
-            
-			//
+
+            //
             // if (selected.club){
             //     var playgrounds = selected.club.playgrounds;
             //     if (playgrounds.length == 1){

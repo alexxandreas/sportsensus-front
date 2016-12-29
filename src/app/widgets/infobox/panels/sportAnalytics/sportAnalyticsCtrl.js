@@ -54,6 +54,16 @@
 					sportObj.leagues = leagues;
 					sportObj.disableSelectionInAnalytics = true;
 					$scope.sports.push(sportObj);
+				} else if (sport.key == 'football'){
+					var sportObj = angular.extend({}, sport);
+					//var leagues = [];
+					delete sportObj.leagues;
+					sportObj.clubs = [{
+						name: 'Тестовый клуб',
+						id: 999
+					}];
+					sportObj.disableSelectionInAnalytics = true;
+					$scope.sports.push(sportObj);
 				}
 			}); 
 			

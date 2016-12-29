@@ -32,6 +32,46 @@ angular
 			.when('/login/', { 
 				template: '<login-dir></login-dir>'
 			})
+			.when('/activate/', {
+				//template: '<login-dir></login-dir>'
+				template: ' ',
+				// controller: 'ActivateController'
+				controller: function($scope, $location, $mdDialog, ApiSrv) {
+					//alert($routeParams.code)
+					var code = $location.search().code;
+					if (code){
+						ApiSrv.activate(code).then(function(){
+							//alert('Activated');
+							showAlert('Учётная запись успешно активирована');
+							$location.search('code', undefined);
+							$location.path('/');
+						}, function(){
+							//alert('Activation error');
+							showAlert('Ошибка активации учётной записи');
+							$location.search('code', undefined);
+							$location.path('/');
+						})
+					} else {
+						$location.path('/');
+					}
+
+					function showAlert(text) {
+						// Appending dialog to document.body to cover sidenav in docs app
+						// Modal dialogs should fully cover application
+						// to prevent interaction outside of dialog
+						$mdDialog.show(
+							$mdDialog.alert()
+								//.parent(angular.element(document.querySelector('#popupContainer')))
+								//.clickOutsideToClose(true)
+								.title('Активация учетной записи')
+								.textContent(text)
+								//.ariaLabel('Alert Dialog Demo')
+								.ok('OK')
+								//.targetEvent(ev)
+						);
+					}
+				}
+			})
 			/*.when('/hotel/:hotelId', {
 				template: '<hotel-dir></hotel-dir>'
 			})
@@ -48,6 +88,14 @@ angular
 			
 		}
 	])
+	.controller('ActivateController', function($scope, $routeParams) {
+		var init = function () {
+			alert($routeParams.code)
+		};
+
+		// fire on controller loaded
+		init();
+	})
 	.config(function($mdThemingProvider) {
 		// $mdThemingProvider.theme('blue')
 		// 	.primaryPalette('blue');

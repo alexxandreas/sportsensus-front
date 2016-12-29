@@ -32,6 +32,46 @@ angular
 			.when('/login/', { 
 				template: '<login-dir></login-dir>'
 			})
+			.when('/activate/', {
+				//template: '<login-dir></login-dir>'
+				template: ' ',
+				// controller: 'ActivateController'
+				controller: function($scope, $location, $mdDialog, ApiSrv) {
+					//alert($routeParams.code)
+					var code = $location.search().code;
+					if (code){
+						ApiSrv.activate(code).then(function(){
+							//alert('Activated');
+							showAlert('Учётная запись успешно активирована');
+							$location.search('code', undefined);
+							$location.path('/');
+						}, function(){
+							//alert('Activation error');
+							showAlert('Ошибка активации учётной записи');
+							$location.search('code', undefined);
+							$location.path('/');
+						})
+					} else {
+						$location.path('/');
+					}
+
+					function showAlert(text) {
+						// Appending dialog to document.body to cover sidenav in docs app
+						// Modal dialogs should fully cover application
+						// to prevent interaction outside of dialog
+						$mdDialog.show(
+							$mdDialog.alert()
+								//.parent(angular.element(document.querySelector('#popupContainer')))
+								//.clickOutsideToClose(true)
+								.title('Активация учетной записи')
+								.textContent(text)
+								//.ariaLabel('Alert Dialog Demo')
+								.ok('OK')
+								//.targetEvent(ev)
+						);
+					}
+				}
+			})
 			/*.when('/hotel/:hotelId', {
 				template: '<hotel-dir></hotel-dir>'
 			})
@@ -48,6 +88,14 @@ angular
 			
 		}
 	])
+	.controller('ActivateController', function($scope, $routeParams) {
+		var init = function () {
+			alert($routeParams.code)
+		};
+
+		// fire on controller loaded
+		init();
+	})
 	.config(function($mdThemingProvider) {
 		// $mdThemingProvider.theme('blue')
 		// 	.primaryPalette('blue');
@@ -152,6 +200,65 @@ angular
             };
             return data;
         }
+
+        function register(par){
+            var d = $q.defer();
+            // var params = {
+            //     first_name:  args.get('fname'),
+            //     last_name: args.get('lname'),
+            //     company_name: args.get('cname'),
+            //     phone: args.get('phone'),
+            //     login: args.get('email'),
+            //     company_type: 1,
+            //     legal_status: 1 if args.get('yr') else 0,
+            //     lang: "ru"
+            // };
+            var params = par;
+            var data = prepareRequestData("register", params);
+            $http.post(url, data).then(function(response){
+                if (!response.data.result || !response.data.result.created){
+                    //clearUser();
+                    d.reject(response);
+                }else {
+                    //setUser(response.data.result.sid, response.data.result.acl);
+                    //$rootScope.$broadcast('ApiSrv.loginSuccess');
+                    d.resolve(response);
+                }
+            }, function(response){
+                //clearUser();
+                d.reject(response);
+                //$rootScope.$broadcast('ApiSrv.loginError');
+            });
+            return d.promise;
+        }
+
+
+        function activate(secret){
+            var d = $q.defer();
+            var params = {
+                secret: secret
+            };
+            var data = prepareRequestData("activateProfile", params);
+            $http.post(url, data).then(function(response){
+                if (!response.data.result || !response.data.result.acl){
+                    //clearUser();
+                    d.reject(response);
+                }else {
+                    //setUser(response.data.result.sid, response.data.result.acl);
+                    //$rootScope.$broadcast('ApiSrv.loginSuccess');
+                    d.resolve(response);
+                }
+            }, function(response){
+                //clearUser();
+                d.reject(response);
+                //$rootScope.$broadcast('ApiSrv.loginError');
+            });
+            return d.promise;
+        }
+
+
+
+
 
         function auth(par){
             var d = $q.defer();
@@ -14408,6 +14515,8 @@ angular
 
         var me = {
             getUser: getUser,
+            register: register,
+            activate: activate,
             auth: auth,
             checkSession: checkSession,
             logout: logout,
@@ -15279,13 +15388,51 @@ angular
                 '$routeParams',
                 '$location',
                 '$window',
+                'ApiSrv',
                 function(
                     $scope,
                     $routeParams,
                     $location,
-                    $window
+                    $window,
+                    ApiSrv
                 ){
+                    
+                    $scope.regData = {
+                        first_name:  '',
+                        last_name: '',
+                        company_name: '',
+                        phone: '',
+                        login: '',
+                        company_type: null, // 0 - спонсор, 1 - правообладатель, 2 - агенство
+                        legal_status: 0, // 0 - физ, 1 - юр
+                        lang: "ru"
+                    };
 
+                    $scope.companyTypes = [
+                        //{value: null, name: 'Тип компании', selected:true},
+                        {value: 0, name: 'Спонсор'},
+                        {value: 1, name: 'Правообладатель'},
+                        {value: 2, name: 'Агенство'}
+                    ];
+                    
+                    $scope.companyTypeFiz = function(fiz) {
+                        if (arguments.length)
+                            return $scope.regData.legal_status  = fiz ? 0 : 1;
+                        else
+                            return $scope.regData.legal_status  == 0 ? true : false;
+                    };
+
+                    $scope.companyTypeYur = function(yur) {
+                        if (arguments.length)
+                            return $scope.regData.legal_status  = yur ? 1 : 0;
+                        else
+                            return $scope.regData.legal_status  == 0 ? false : true;
+                    };
+
+                    
+                    $scope.register = function(){
+                        ApiSrv.register($scope.regData);
+                    }
                 }]
         };
     }
@@ -15725,6 +15872,174 @@ angular
                             $scope.vm.error = 'Неправильный логин или пароль';
                         });
                     };
+                }]
+        };
+    }
+}());
+(function () {
+    "use strict";
+    /**
+     * @desc
+     * @example
+     */
+    angular.module('SportsensusApp')
+        .directive('downloadDir', downloadDir);
+
+    downloadDir.$inject = [
+        '$rootScope'
+    ];
+
+    function downloadDir(
+        $rootScope
+    )    {
+        return {
+            restrict: 'E',
+            replace: true,
+            //scope: true,
+            scope: {
+                title: '@'
+                //savePdf: '&savePdf'
+            },
+            transclude: true,
+            templateUrl: '/views/widgets/buttons/downloadPDF/downloadPDF.html',
+            link: function ($scope, $el, attrs) {},
+
+            controller: [
+                '$scope',
+                
+                function(
+                    $scope
+                    
+                ) {
+                    $scope.save = function(){
+                        $scope.$parent.savePdf && $scope.$parent.savePdf({filename: $scope.title});
+                    };
+
+                    $scope.print = function(){
+                        $scope.$parent.printPdf && $scope.$parent.printPdf();
+                    };
+
+                    $scope.send = function(){
+                        $scope.$parent.sendPdf && $scope.$parent.sendPdf();
+                    };
+                    
+                }]
+        };
+    }
+}());
+
+(function () {
+    "use strict";
+    /**
+     * @desc
+     * @example
+     */
+    angular.module('SportsensusApp')
+        .directive('doughnutDir', doughnutDir);
+
+    doughnutDir.$inject = [
+        '$rootScope'
+    ];
+
+    function doughnutDir(
+        $rootScope
+    )    {
+        return {
+            restrict: 'E',
+            scope: {
+                chart: '='
+            },
+            templateUrl: '/views/widgets/charts/doughnut/doughnut.html',
+            link: function ($scope, $el, attrs) {
+                $scope.el = $el;
+                $scope.tooltipEl = $el.find('div');
+                //$scope.draw();
+                $scope.$watch('chart', $scope.redrawChart);
+            },
+            replace: true,
+            controller: [
+                '$scope',
+                function(
+                    $scope
+                ){
+                    
+
+                    $scope.redrawChart = function(){
+                      
+                        if ($scope.chartObj){
+                            $scope.chartObj.clear();
+                            $scope.chartObj.destroy();
+                        }
+                        if (!$scope.chart || !$scope.chart.chartData){//} || !$scope.chart.options) {
+                            //$scope.el.empty();
+                            return;
+                        }
+                        
+
+                        var chartData = $scope.chart.chartData;
+                        var chartOptions = $scope.chart.options || {};
+
+
+
+                        var ctx = $scope.el.find('canvas')[0].getContext("2d");
+
+                       
+                        $scope.chartObj = new Chart(ctx).Doughnut(chartData, angular.extend({
+                            /*showLabels: false,
+                            showTooltips: true,
+                            stacked: true,
+                            barWidth: 30,
+                            barHeight: 100,
+                            padding: 20,
+                            barValueSpacing: 20,
+                            //scaleLabel: "<%=value%>M",
+                            scaleLabel: function(obj){
+                                return obj.value > 1000*1000 ? obj.value/1000/1000+'M' : obj.value > 1000 ? obj.value/1000+'K' : obj.value;
+                            },
+                            
+                            //customTooltips:customTooltips,
+                            tooltipHideZero: true,
+                            maintainAspectRatio: false
+                            //responsive: true
+                            //barStrokeWidth: 40
+                            //barValueSpacing: 40*/
+                            customTooltips:customTooltips,
+                            tooltipTemplate: function(bar){
+                                //return bar;
+                                //return '<div class="line"><div class="color" style="background-color:'+ bar.fillColor+';"></div><b>'+bar.label + ': </b>' + bar.value.toLocaleString('en-US')+'</div>';
+                                return '<div class="line"><div class="color" style="background-color:'+ bar.fillColor+';"></div><span>'+bar.label + '</span></div>';
+                            }
+                        }, chartOptions));
+
+                        function customTooltips(tooltip) {
+                            $scope.$apply(function () {
+                                var tooltipEl = $scope.tooltipEl;
+
+                                if (!tooltip) {
+                                    //tooltipEl.css({ opacity: 0});
+                                    $scope.tooltipVisible = false;
+                                    return;
+                                }
+                                $scope.tooltipVisible = true;
+
+                                //tooltipEl.removeClass('above below');
+                                //tooltipEl.addClass(tooltip.yAlign);
+
+                                var innerHtml = tooltip.text;
+                                tooltipEl.html(innerHtml);
+
+                                tooltipEl.css({
+                                    //opacity: 1,
+                                    left: tooltip.chart.canvas.offsetLeft + tooltip.x + 'px',
+                                    top: tooltip.chart.canvas.offsetTop + tooltip.y + 'px',
+                                    fontFamily: tooltip.fontFamily,
+                                    fontSize: tooltip.fontSize,
+                                    fontStyle: tooltip.fontStyle
+                                });
+                            });
+                        }
+                    }
+
                 }]
         };
     }
@@ -16842,122 +17157,6 @@ angular
      * @example
      */
     angular.module('SportsensusApp')
-        .directive('doughnutDir', doughnutDir);
-
-    doughnutDir.$inject = [
-        '$rootScope'
-    ];
-
-    function doughnutDir(
-        $rootScope
-    )    {
-        return {
-            restrict: 'E',
-            scope: {
-                chart: '='
-            },
-            templateUrl: '/views/widgets/charts/doughnut/doughnut.html',
-            link: function ($scope, $el, attrs) {
-                $scope.el = $el;
-                $scope.tooltipEl = $el.find('div');
-                //$scope.draw();
-                $scope.$watch('chart', $scope.redrawChart);
-            },
-            replace: true,
-            controller: [
-                '$scope',
-                function(
-                    $scope
-                ){
-                    
-
-                    $scope.redrawChart = function(){
-                      
-                        if ($scope.chartObj){
-                            $scope.chartObj.clear();
-                            $scope.chartObj.destroy();
-                        }
-                        if (!$scope.chart || !$scope.chart.chartData){//} || !$scope.chart.options) {
-                            //$scope.el.empty();
-                            return;
-                        }
-                        
-
-                        var chartData = $scope.chart.chartData;
-                        var chartOptions = $scope.chart.options || {};
-
-
-
-                        var ctx = $scope.el.find('canvas')[0].getContext("2d");
-
-                       
-                        $scope.chartObj = new Chart(ctx).Doughnut(chartData, angular.extend({
-                            /*showLabels: false,
-                            showTooltips: true,
-                            stacked: true,
-                            barWidth: 30,
-                            barHeight: 100,
-                            padding: 20,
-                            barValueSpacing: 20,
-                            //scaleLabel: "<%=value%>M",
-                            scaleLabel: function(obj){
-                                return obj.value > 1000*1000 ? obj.value/1000/1000+'M' : obj.value > 1000 ? obj.value/1000+'K' : obj.value;
-                            },
-                            
-                            //customTooltips:customTooltips,
-                            tooltipHideZero: true,
-                            maintainAspectRatio: false
-                            //responsive: true
-                            //barStrokeWidth: 40
-                            //barValueSpacing: 40*/
-                            customTooltips:customTooltips,
-                            tooltipTemplate: function(bar){
-                                //return bar;
-                                //return '<div class="line"><div class="color" style="background-color:'+ bar.fillColor+';"></div><b>'+bar.label + ': </b>' + bar.value.toLocaleString('en-US')+'</div>';
-                                return '<div class="line"><div class="color" style="background-color:'+ bar.fillColor+';"></div><span>'+bar.label + '</span></div>';
-                            }
-                        }, chartOptions));
-
-                        function customTooltips(tooltip) {
-                            $scope.$apply(function () {
-                                var tooltipEl = $scope.tooltipEl;
-
-                                if (!tooltip) {
-                                    //tooltipEl.css({ opacity: 0});
-                                    $scope.tooltipVisible = false;
-                                    return;
-                                }
-                                $scope.tooltipVisible = true;
-
-                                //tooltipEl.removeClass('above below');
-                                //tooltipEl.addClass(tooltip.yAlign);
-
-                                var innerHtml = tooltip.text;
-                                tooltipEl.html(innerHtml);
-
-                                tooltipEl.css({
-                                    //opacity: 1,
-                                    left: tooltip.chart.canvas.offsetLeft + tooltip.x + 'px',
-                                    top: tooltip.chart.canvas.offsetTop + tooltip.y + 'px',
-                                    fontFamily: tooltip.fontFamily,
-                                    fontSize: tooltip.fontSize,
-                                    fontStyle: tooltip.fontStyle
-                                });
-                            });
-                        }
-                    }
-
-                }]
-        };
-    }
-}());
-(function () {
-    "use strict";
-    /**
-     * @desc
-     * @example
-     */
-    angular.module('SportsensusApp')
         .directive('legendDir', legendDir);
 
     legendDir.$inject = [
@@ -17040,6 +17239,397 @@ angular
                         item.highlighted = false;
                     };
 
+                }]
+        };
+    }
+}());
+/////////////////////////////////////////////////////////
+/////////////// The Radar Chart Function ////////////////
+/////////////// Written by Nadieh Bremer ////////////////
+////////////////// VisualCinnamon.com ///////////////////
+/////////// Inspired by the code of alangrafu ///////////
+/////////////////////////////////////////////////////////
+
+function RadarChart(id, data, options) {
+    var cfg = {
+        w: 600,				//Width of the circle
+        h: 600,				//Height of the circle
+        margin: {top: 20, right: 20, bottom: 20, left: 20}, //The margins of the SVG
+        levels: 3,				//How many levels or inner circles should there be drawn
+        maxValue: 0, 			//What is the value that the biggest circle will represent
+        labelFactor: 1.25, 	//How much farther than the radius of the outer circle should the labels be placed
+        wrapWidth: 60, 		//The number of pixels after which a label needs to be given a new line
+        opacityArea: 0.35, 	//The opacity of the area of the blob
+        dotRadius: 4, 			//The size of the colored circles of each blog
+        opacityCircles: 0.1, 	//The opacity of the circles of each blob
+        strokeWidth: 2, 		//The width of the stroke around each blob
+        roundStrokes: false,	//If true the area and stroke will follow a round path (cardinal-closed)
+        color: d3.scale.category10()	//Color function
+    };
+
+    //Put all of the options into a variable called cfg
+    if('undefined' !== typeof options){
+        for(var i in options){
+            if('undefined' !== typeof options[i]){ cfg[i] = options[i]; }
+        }//for i
+    }//if
+
+    //If the supplied maxValue is smaller than the actual one, replace by the max in the data
+    var maxValue = Math.max(cfg.maxValue, d3.max(data, function(i){return d3.max(i.map(function(o){return o.value;}))}));
+
+    var allAxis = (data[0].map(function(i, j){return i.axis})),	//Names of each axis
+        total = allAxis.length,					//The number of different axes
+        radius = Math.min(cfg.w/2, cfg.h/2), 	//Radius of the outermost circle
+        //Format = d3.format('%'),			 	//Percentage formatting
+        //Format = d3.format('.1f'),			 	
+        Format = cfg.format,			 	
+        angleSlice = Math.PI * 2 / total;		//The width in radians of each "slice"
+
+    //Scale for the radius
+    var rScale = d3.scale.linear()
+        .range([0, radius])
+        .domain([0, maxValue]);
+
+    /////////////////////////////////////////////////////////
+    //////////// Create the container SVG and g /////////////
+    /////////////////////////////////////////////////////////
+
+    //Remove whatever chart with the same id/class was present before
+    d3.select(id).select("svg").remove();
+
+    //Initiate the radar chart SVG
+    var svg = d3.select(id).append("svg")
+        .attr("width",  cfg.w + cfg.margin.left + cfg.margin.right)
+        .attr("height", cfg.h + cfg.margin.top + cfg.margin.bottom)
+        .attr("class", "radar"+id);
+    //Append a g element		
+    var g = svg.append("g")
+        .attr("transform", "translate(" + (cfg.w/2 + cfg.margin.left) + "," + (cfg.h/2 + cfg.margin.top) + ")");
+
+    /////////////////////////////////////////////////////////
+    ////////// Glow filter for some extra pizzazz ///////////
+    /////////////////////////////////////////////////////////
+
+    //Filter for the outside glow
+    var filter = g.append('defs').append('filter').attr('id','glow'),
+        feGaussianBlur = filter.append('feGaussianBlur').attr('stdDeviation','2.5').attr('result','coloredBlur'),
+        feMerge = filter.append('feMerge'),
+        feMergeNode_1 = feMerge.append('feMergeNode').attr('in','coloredBlur'),
+        feMergeNode_2 = feMerge.append('feMergeNode').attr('in','SourceGraphic');
+
+
+
+    /////////////////////////////////////////////////////////
+    /////////////// Draw the Circular grid //////////////////
+    /////////////////////////////////////////////////////////
+
+    //Wrapper for the grid & axes
+    var axisGrid = g.append("g").attr("class", "axisWrapper");
+
+    //Draw the background circles
+    axisGrid.selectAll(".levels")
+        .data(d3.range(1,(cfg.levels+1)).reverse())
+        .enter()
+        .append("circle")
+        .attr("class", "gridCircle")
+        .attr("r", function(d, i){return radius/cfg.levels*d;})
+        .style("fill", "#CDCDCD")
+        .style("stroke", "#CDCDCD")
+        .style("fill-opacity", cfg.opacityCircles)
+        .style("filter" , "url(#glow)");
+
+    //Text indicating at what % each level is
+    axisGrid.selectAll(".axisLabel")
+        .data(d3.range(1,(cfg.levels+1)).reverse())
+        .enter().append("text")
+        .attr("class", "axisLabel")
+        .attr("x", 4)
+        .attr("y", function(d){return -d*radius/cfg.levels;})
+        .attr("dy", "0.4em")
+        .style("font-size", "10px")
+        .attr("fill", "#737373")
+        .text(function(d,i) { return Format(maxValue * d/cfg.levels); });
+
+    /////////////////////////////////////////////////////////
+    //////////////////// Draw the axes //////////////////////
+    /////////////////////////////////////////////////////////
+
+    //Create the straight lines radiating outward from the center
+    var axis = axisGrid.selectAll(".axis")
+        .data(allAxis)
+        .enter()
+        .append("g")
+        .attr("class", "axis");
+    //Append the lines
+    axis.append("line")
+        .attr("x1", 0)
+        .attr("y1", 0)
+        .attr("x2", function(d, i){ return rScale(maxValue*1.1) * Math.cos(angleSlice*i - Math.PI/2); })
+        .attr("y2", function(d, i){ return rScale(maxValue*1.1) * Math.sin(angleSlice*i - Math.PI/2); })
+        .attr("class", "line")
+        .style("stroke", "white")
+        .style("stroke-width", "2px");
+
+    //Append the labels at each axis
+    axis.append("text")
+        .attr("class", "legend")
+        .style("font-size", "11px")
+        .attr("text-anchor", "middle")
+        .attr("dy", "0.35em")
+        .attr("x", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice*i - Math.PI/2); })
+        .attr("y", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice*i - Math.PI/2); })
+        .text(function(d){return d})
+        .call(wrap, cfg.wrapWidth);
+
+    /////////////////////////////////////////////////////////
+    ///////////// Draw the radar chart blobs ////////////////
+    /////////////////////////////////////////////////////////
+
+    //The radial line function
+    var radarLine = d3.svg.line.radial()
+        .interpolate("linear-closed")
+        .radius(function(d) { return rScale(d.value); })
+        .angle(function(d,i) {	return i*angleSlice; });
+
+    if(cfg.roundStrokes) {
+        radarLine.interpolate("cardinal-closed");
+    }
+
+    //Create a wrapper for the blobs	
+    var blobWrapper = g.selectAll(".radarWrapper")
+        .data(data)
+        .enter().append("g")
+        .attr("class", "radarWrapper");
+
+    //Append the backgrounds	
+    blobWrapper
+        .append("path")
+        .attr("class", "radarArea")
+        .attr("d", function(d,i) { return radarLine(d); })
+        .style("fill", function(d,i) { return cfg.color(i); })
+        .style("fill-opacity", cfg.opacityArea)
+        .on('mouseover', function (d,i){
+            //Dim all blobs
+            d3.selectAll(".radarArea")
+                .transition().duration(200)
+                .style("fill-opacity", 0.1);
+            //Bring back the hovered over blob
+            d3.select(this)
+                .transition().duration(200)
+                .style("fill-opacity", 0.7);
+        })
+        .on('mouseout', function(){
+            //Bring back all blobs
+            d3.selectAll(".radarArea")
+                .transition().duration(200)
+                .style("fill-opacity", cfg.opacityArea);
+        });
+
+    //Create the outlines	
+    blobWrapper.append("path")
+        .attr("class", "radarStroke")
+        .attr("d", function(d,i) { return radarLine(d); })
+        .style("stroke-width", cfg.strokeWidth + "px")
+        .style("stroke", function(d,i) { return cfg.color(i); })
+        .style("fill", "none")
+        .style("filter" , "url(#glow)");
+
+    //Append the circles
+    blobWrapper.selectAll(".radarCircle")
+        .data(function(d,i) { return d; })
+        .enter().append("circle")
+        .attr("class", "radarCircle")
+        .attr("r", cfg.dotRadius)
+        .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
+        .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
+        .style("fill", function(d,i,j) { return cfg.color(j); })
+        .style("fill-opacity", 0.8);
+
+    /////////////////////////////////////////////////////////
+    //////// Append invisible circles for tooltip ///////////
+    /////////////////////////////////////////////////////////
+
+    //Wrapper for the invisible circles on top
+    var blobCircleWrapper = g.selectAll(".radarCircleWrapper")
+        .data(data)
+        .enter().append("g")
+        .attr("class", "radarCircleWrapper");
+
+    //Append a set of invisible circles on top for the mouseover pop-up
+    blobCircleWrapper.selectAll(".radarInvisibleCircle")
+        .data(function(d,i) { return d; })
+        .enter().append("circle")
+        .attr("class", "radarInvisibleCircle")
+        .attr("r", cfg.dotRadius*1.5)
+        .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
+        .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        .on("mouseover", function(d,i) {
+            newX =  parseFloat(d3.select(this).attr('cx')) - 10;
+            newY =  parseFloat(d3.select(this).attr('cy')) - 10;
+
+            tooltip
+                .attr('x', newX)
+                .attr('y', newY)
+                // .text(Format(d.value))
+                .text(d.tooltip)
+                //.transition().duration(200)
+                //.style('opacity', 1);
+                 .style('display', 'initial');
+
+            var bbox = tooltip.node().getBBox();
+            var chartW = (cfg.w + cfg.margin.left + cfg.margin.right)/2;
+
+            if (bbox.x + bbox.width > chartW){
+                newX = chartW - bbox.width - 10;
+                tooltip.attr('x', newX);
+                bbox = tooltip.node().getBBox();
+            }
+
+            var padding = 3;
+            tooltipRect
+                .attr("x", bbox.x - padding - 15 - 8)
+                .attr("y", bbox.y - padding)
+                .attr("width", bbox.width + (padding*2) + 15 + 8)
+                .attr("height", bbox.height + (padding*2))
+                .style('display', 'initial');
+            tooltipColor
+                .attr("x", bbox.x - 15 - 8)
+                .attr("y", bbox.y + (bbox.height - 15)/2)
+                .style('fill', d.tooltipColor)
+                .style('display', 'initial');
+        })
+        .on("mouseout", function(){
+            tooltip
+                //.transition().duration(200)
+                 // .style("opacity", 0);
+                .style('display', 'none');
+            tooltipColor
+                .style('display', 'none');
+            tooltipRect
+                //.transition().duration(200)
+                //.style('fill', 'rgba(0, 0, 0, 0.7)')
+                .style('display', 'none');
+        });
+
+    //Set up the small tooltip for when you hover over a circle
+    var tooltipRect = g.append('rect')
+        .style('fill', 'rgba(0, 0, 0, 0.7)')
+        .attr('rx', '2')
+        .attr('ry', '2')
+       // .attr('class', 'chartjs-tooltip')
+        .style('display', 'none');
+
+    var tooltipColor = g.append('rect')
+        //.style('fill', 'rgba(0, 0, 0, 0.7)')
+        .attr('rx', '2')
+        .attr('ry', '2')
+        .attr("width", 15)
+        .attr("height", 15)
+        .attr('stroke', 'gray')
+        // .attr('class', 'chartjs-tooltip')
+        .style('display', 'none');
+
+    var tooltip = g.append("text")
+        //.attr("class", "tooltip")
+        //.style("opacity", 0);
+        .style("fill", 'white')
+        .style('font-size', '13px')
+        .style('display', 'none');
+
+
+
+
+
+    /////////////////////////////////////////////////////////
+    /////////////////// Helper Function /////////////////////
+    /////////////////////////////////////////////////////////
+
+    //Taken from http://bl.ocks.org/mbostock/7555321
+    //Wraps SVG text	
+    function wrap(text, width) {
+        text.each(function() {
+            var text = d3.select(this),
+                words = text.text().split(/\s+/).reverse(),
+                word,
+                line = [],
+                lineNumber = 0,
+                lineHeight = 1.4, // ems
+                y = text.attr("y"),
+                x = text.attr("x"),
+                dy = parseFloat(text.attr("dy")),
+                tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+
+            while (word = words.pop()) {
+                line.push(word);
+                tspan.text(line.join(" "));
+                if (tspan.node().getComputedTextLength() > width) {
+                    line.pop();
+                    tspan.text(line.join(" "));
+                    line = [word];
+                    tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                }
+            }
+        });
+    }//wrap	
+
+}//RadarChart
+(function () {
+    "use strict";
+    /**
+     * @desc
+     * @example
+     */
+    angular.module('SportsensusApp')
+        .directive('radarDir', radarDir);
+
+    radarDir.$inject = [
+        '$rootScope'
+    ];
+
+    function radarDir(
+        $rootScope
+    )    {
+        return {
+            restrict: 'E',
+            scope: {
+                chart: '='
+            },
+            templateUrl: '/views/widgets/charts/radar/radar.html',
+            link: function ($scope, $el, attrs) {
+                $scope.el = $el;
+                $scope.$watch('chart', $scope.redrawChart);
+            },
+
+            controller: [
+                '$scope',
+                function(
+                    $scope
+                ){
+
+                    
+                    $scope.redrawChart = function(){
+                        if (!$scope.chart || !$scope.chart.data || !$scope.chart.options) {
+                            $scope.el.empty();
+                            return;
+                        }
+
+                        var margin = {top: 50, right: 120, bottom: 100, left: 120};
+                        var width = 700 - margin.left - margin.right;
+                        var height = 700 - margin.top - margin.bottom;
+
+                        
+                        var options = {
+                            w: width,
+                            h: height,
+                            margin: margin
+                        };
+                        options = angular.extend({},$scope.chart.options, options);
+                        
+                        RadarChart($scope.el[0], $scope.chart.data, options);
+                    }
+                    
                 }]
         };
     }
@@ -18933,449 +19523,6 @@ angular
         };
     }
 }());
-/////////////////////////////////////////////////////////
-/////////////// The Radar Chart Function ////////////////
-/////////////// Written by Nadieh Bremer ////////////////
-////////////////// VisualCinnamon.com ///////////////////
-/////////// Inspired by the code of alangrafu ///////////
-/////////////////////////////////////////////////////////
-
-function RadarChart(id, data, options) {
-    var cfg = {
-        w: 600,				//Width of the circle
-        h: 600,				//Height of the circle
-        margin: {top: 20, right: 20, bottom: 20, left: 20}, //The margins of the SVG
-        levels: 3,				//How many levels or inner circles should there be drawn
-        maxValue: 0, 			//What is the value that the biggest circle will represent
-        labelFactor: 1.25, 	//How much farther than the radius of the outer circle should the labels be placed
-        wrapWidth: 60, 		//The number of pixels after which a label needs to be given a new line
-        opacityArea: 0.35, 	//The opacity of the area of the blob
-        dotRadius: 4, 			//The size of the colored circles of each blog
-        opacityCircles: 0.1, 	//The opacity of the circles of each blob
-        strokeWidth: 2, 		//The width of the stroke around each blob
-        roundStrokes: false,	//If true the area and stroke will follow a round path (cardinal-closed)
-        color: d3.scale.category10()	//Color function
-    };
-
-    //Put all of the options into a variable called cfg
-    if('undefined' !== typeof options){
-        for(var i in options){
-            if('undefined' !== typeof options[i]){ cfg[i] = options[i]; }
-        }//for i
-    }//if
-
-    //If the supplied maxValue is smaller than the actual one, replace by the max in the data
-    var maxValue = Math.max(cfg.maxValue, d3.max(data, function(i){return d3.max(i.map(function(o){return o.value;}))}));
-
-    var allAxis = (data[0].map(function(i, j){return i.axis})),	//Names of each axis
-        total = allAxis.length,					//The number of different axes
-        radius = Math.min(cfg.w/2, cfg.h/2), 	//Radius of the outermost circle
-        //Format = d3.format('%'),			 	//Percentage formatting
-        //Format = d3.format('.1f'),			 	
-        Format = cfg.format,			 	
-        angleSlice = Math.PI * 2 / total;		//The width in radians of each "slice"
-
-    //Scale for the radius
-    var rScale = d3.scale.linear()
-        .range([0, radius])
-        .domain([0, maxValue]);
-
-    /////////////////////////////////////////////////////////
-    //////////// Create the container SVG and g /////////////
-    /////////////////////////////////////////////////////////
-
-    //Remove whatever chart with the same id/class was present before
-    d3.select(id).select("svg").remove();
-
-    //Initiate the radar chart SVG
-    var svg = d3.select(id).append("svg")
-        .attr("width",  cfg.w + cfg.margin.left + cfg.margin.right)
-        .attr("height", cfg.h + cfg.margin.top + cfg.margin.bottom)
-        .attr("class", "radar"+id);
-    //Append a g element		
-    var g = svg.append("g")
-        .attr("transform", "translate(" + (cfg.w/2 + cfg.margin.left) + "," + (cfg.h/2 + cfg.margin.top) + ")");
-
-    /////////////////////////////////////////////////////////
-    ////////// Glow filter for some extra pizzazz ///////////
-    /////////////////////////////////////////////////////////
-
-    //Filter for the outside glow
-    var filter = g.append('defs').append('filter').attr('id','glow'),
-        feGaussianBlur = filter.append('feGaussianBlur').attr('stdDeviation','2.5').attr('result','coloredBlur'),
-        feMerge = filter.append('feMerge'),
-        feMergeNode_1 = feMerge.append('feMergeNode').attr('in','coloredBlur'),
-        feMergeNode_2 = feMerge.append('feMergeNode').attr('in','SourceGraphic');
-
-
-
-    /////////////////////////////////////////////////////////
-    /////////////// Draw the Circular grid //////////////////
-    /////////////////////////////////////////////////////////
-
-    //Wrapper for the grid & axes
-    var axisGrid = g.append("g").attr("class", "axisWrapper");
-
-    //Draw the background circles
-    axisGrid.selectAll(".levels")
-        .data(d3.range(1,(cfg.levels+1)).reverse())
-        .enter()
-        .append("circle")
-        .attr("class", "gridCircle")
-        .attr("r", function(d, i){return radius/cfg.levels*d;})
-        .style("fill", "#CDCDCD")
-        .style("stroke", "#CDCDCD")
-        .style("fill-opacity", cfg.opacityCircles)
-        .style("filter" , "url(#glow)");
-
-    //Text indicating at what % each level is
-    axisGrid.selectAll(".axisLabel")
-        .data(d3.range(1,(cfg.levels+1)).reverse())
-        .enter().append("text")
-        .attr("class", "axisLabel")
-        .attr("x", 4)
-        .attr("y", function(d){return -d*radius/cfg.levels;})
-        .attr("dy", "0.4em")
-        .style("font-size", "10px")
-        .attr("fill", "#737373")
-        .text(function(d,i) { return Format(maxValue * d/cfg.levels); });
-
-    /////////////////////////////////////////////////////////
-    //////////////////// Draw the axes //////////////////////
-    /////////////////////////////////////////////////////////
-
-    //Create the straight lines radiating outward from the center
-    var axis = axisGrid.selectAll(".axis")
-        .data(allAxis)
-        .enter()
-        .append("g")
-        .attr("class", "axis");
-    //Append the lines
-    axis.append("line")
-        .attr("x1", 0)
-        .attr("y1", 0)
-        .attr("x2", function(d, i){ return rScale(maxValue*1.1) * Math.cos(angleSlice*i - Math.PI/2); })
-        .attr("y2", function(d, i){ return rScale(maxValue*1.1) * Math.sin(angleSlice*i - Math.PI/2); })
-        .attr("class", "line")
-        .style("stroke", "white")
-        .style("stroke-width", "2px");
-
-    //Append the labels at each axis
-    axis.append("text")
-        .attr("class", "legend")
-        .style("font-size", "11px")
-        .attr("text-anchor", "middle")
-        .attr("dy", "0.35em")
-        .attr("x", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice*i - Math.PI/2); })
-        .attr("y", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice*i - Math.PI/2); })
-        .text(function(d){return d})
-        .call(wrap, cfg.wrapWidth);
-
-    /////////////////////////////////////////////////////////
-    ///////////// Draw the radar chart blobs ////////////////
-    /////////////////////////////////////////////////////////
-
-    //The radial line function
-    var radarLine = d3.svg.line.radial()
-        .interpolate("linear-closed")
-        .radius(function(d) { return rScale(d.value); })
-        .angle(function(d,i) {	return i*angleSlice; });
-
-    if(cfg.roundStrokes) {
-        radarLine.interpolate("cardinal-closed");
-    }
-
-    //Create a wrapper for the blobs	
-    var blobWrapper = g.selectAll(".radarWrapper")
-        .data(data)
-        .enter().append("g")
-        .attr("class", "radarWrapper");
-
-    //Append the backgrounds	
-    blobWrapper
-        .append("path")
-        .attr("class", "radarArea")
-        .attr("d", function(d,i) { return radarLine(d); })
-        .style("fill", function(d,i) { return cfg.color(i); })
-        .style("fill-opacity", cfg.opacityArea)
-        .on('mouseover', function (d,i){
-            //Dim all blobs
-            d3.selectAll(".radarArea")
-                .transition().duration(200)
-                .style("fill-opacity", 0.1);
-            //Bring back the hovered over blob
-            d3.select(this)
-                .transition().duration(200)
-                .style("fill-opacity", 0.7);
-        })
-        .on('mouseout', function(){
-            //Bring back all blobs
-            d3.selectAll(".radarArea")
-                .transition().duration(200)
-                .style("fill-opacity", cfg.opacityArea);
-        });
-
-    //Create the outlines	
-    blobWrapper.append("path")
-        .attr("class", "radarStroke")
-        .attr("d", function(d,i) { return radarLine(d); })
-        .style("stroke-width", cfg.strokeWidth + "px")
-        .style("stroke", function(d,i) { return cfg.color(i); })
-        .style("fill", "none")
-        .style("filter" , "url(#glow)");
-
-    //Append the circles
-    blobWrapper.selectAll(".radarCircle")
-        .data(function(d,i) { return d; })
-        .enter().append("circle")
-        .attr("class", "radarCircle")
-        .attr("r", cfg.dotRadius)
-        .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
-        .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
-        .style("fill", function(d,i,j) { return cfg.color(j); })
-        .style("fill-opacity", 0.8);
-
-    /////////////////////////////////////////////////////////
-    //////// Append invisible circles for tooltip ///////////
-    /////////////////////////////////////////////////////////
-
-    //Wrapper for the invisible circles on top
-    var blobCircleWrapper = g.selectAll(".radarCircleWrapper")
-        .data(data)
-        .enter().append("g")
-        .attr("class", "radarCircleWrapper");
-
-    //Append a set of invisible circles on top for the mouseover pop-up
-    blobCircleWrapper.selectAll(".radarInvisibleCircle")
-        .data(function(d,i) { return d; })
-        .enter().append("circle")
-        .attr("class", "radarInvisibleCircle")
-        .attr("r", cfg.dotRadius*1.5)
-        .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
-        .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
-        .style("fill", "none")
-        .style("pointer-events", "all")
-        .on("mouseover", function(d,i) {
-            newX =  parseFloat(d3.select(this).attr('cx')) - 10;
-            newY =  parseFloat(d3.select(this).attr('cy')) - 10;
-
-            tooltip
-                .attr('x', newX)
-                .attr('y', newY)
-                // .text(Format(d.value))
-                .text(d.tooltip)
-                //.transition().duration(200)
-                //.style('opacity', 1);
-                 .style('display', 'initial');
-
-            var bbox = tooltip.node().getBBox();
-            var chartW = (cfg.w + cfg.margin.left + cfg.margin.right)/2;
-
-            if (bbox.x + bbox.width > chartW){
-                newX = chartW - bbox.width - 10;
-                tooltip.attr('x', newX);
-                bbox = tooltip.node().getBBox();
-            }
-
-            var padding = 3;
-            tooltipRect
-                .attr("x", bbox.x - padding - 15 - 8)
-                .attr("y", bbox.y - padding)
-                .attr("width", bbox.width + (padding*2) + 15 + 8)
-                .attr("height", bbox.height + (padding*2))
-                .style('display', 'initial');
-            tooltipColor
-                .attr("x", bbox.x - 15 - 8)
-                .attr("y", bbox.y + (bbox.height - 15)/2)
-                .style('fill', d.tooltipColor)
-                .style('display', 'initial');
-        })
-        .on("mouseout", function(){
-            tooltip
-                //.transition().duration(200)
-                 // .style("opacity", 0);
-                .style('display', 'none');
-            tooltipColor
-                .style('display', 'none');
-            tooltipRect
-                //.transition().duration(200)
-                //.style('fill', 'rgba(0, 0, 0, 0.7)')
-                .style('display', 'none');
-        });
-
-    //Set up the small tooltip for when you hover over a circle
-    var tooltipRect = g.append('rect')
-        .style('fill', 'rgba(0, 0, 0, 0.7)')
-        .attr('rx', '2')
-        .attr('ry', '2')
-       // .attr('class', 'chartjs-tooltip')
-        .style('display', 'none');
-
-    var tooltipColor = g.append('rect')
-        //.style('fill', 'rgba(0, 0, 0, 0.7)')
-        .attr('rx', '2')
-        .attr('ry', '2')
-        .attr("width", 15)
-        .attr("height", 15)
-        .attr('stroke', 'gray')
-        // .attr('class', 'chartjs-tooltip')
-        .style('display', 'none');
-
-    var tooltip = g.append("text")
-        //.attr("class", "tooltip")
-        //.style("opacity", 0);
-        .style("fill", 'white')
-        .style('font-size', '13px')
-        .style('display', 'none');
-
-
-
-
-
-    /////////////////////////////////////////////////////////
-    /////////////////// Helper Function /////////////////////
-    /////////////////////////////////////////////////////////
-
-    //Taken from http://bl.ocks.org/mbostock/7555321
-    //Wraps SVG text	
-    function wrap(text, width) {
-        text.each(function() {
-            var text = d3.select(this),
-                words = text.text().split(/\s+/).reverse(),
-                word,
-                line = [],
-                lineNumber = 0,
-                lineHeight = 1.4, // ems
-                y = text.attr("y"),
-                x = text.attr("x"),
-                dy = parseFloat(text.attr("dy")),
-                tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-
-            while (word = words.pop()) {
-                line.push(word);
-                tspan.text(line.join(" "));
-                if (tspan.node().getComputedTextLength() > width) {
-                    line.pop();
-                    tspan.text(line.join(" "));
-                    line = [word];
-                    tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-                }
-            }
-        });
-    }//wrap	
-
-}//RadarChart
-(function () {
-    "use strict";
-    /**
-     * @desc
-     * @example
-     */
-    angular.module('SportsensusApp')
-        .directive('radarDir', radarDir);
-
-    radarDir.$inject = [
-        '$rootScope'
-    ];
-
-    function radarDir(
-        $rootScope
-    )    {
-        return {
-            restrict: 'E',
-            scope: {
-                chart: '='
-            },
-            templateUrl: '/views/widgets/charts/radar/radar.html',
-            link: function ($scope, $el, attrs) {
-                $scope.el = $el;
-                $scope.$watch('chart', $scope.redrawChart);
-            },
-
-            controller: [
-                '$scope',
-                function(
-                    $scope
-                ){
-
-                    
-                    $scope.redrawChart = function(){
-                        if (!$scope.chart || !$scope.chart.data || !$scope.chart.options) {
-                            $scope.el.empty();
-                            return;
-                        }
-
-                        var margin = {top: 50, right: 120, bottom: 100, left: 120};
-                        var width = 700 - margin.left - margin.right;
-                        var height = 700 - margin.top - margin.bottom;
-
-                        
-                        var options = {
-                            w: width,
-                            h: height,
-                            margin: margin
-                        };
-                        options = angular.extend({},$scope.chart.options, options);
-                        
-                        RadarChart($scope.el[0], $scope.chart.data, options);
-                    }
-                    
-                }]
-        };
-    }
-}());
-(function () {
-    "use strict";
-    /**
-     * @desc
-     * @example
-     */
-    angular.module('SportsensusApp')
-        .directive('downloadDir', downloadDir);
-
-    downloadDir.$inject = [
-        '$rootScope'
-    ];
-
-    function downloadDir(
-        $rootScope
-    )    {
-        return {
-            restrict: 'E',
-            replace: true,
-            //scope: true,
-            scope: {
-                title: '@'
-                //savePdf: '&savePdf'
-            },
-            transclude: true,
-            templateUrl: '/views/widgets/buttons/downloadPDF/downloadPDF.html',
-            link: function ($scope, $el, attrs) {},
-
-            controller: [
-                '$scope',
-                
-                function(
-                    $scope
-                    
-                ) {
-                    $scope.save = function(){
-                        $scope.$parent.savePdf && $scope.$parent.savePdf({filename: $scope.title});
-                    };
-
-                    $scope.print = function(){
-                        $scope.$parent.printPdf && $scope.$parent.printPdf();
-                    };
-
-                    $scope.send = function(){
-                        $scope.$parent.sendPdf && $scope.$parent.sendPdf();
-                    };
-                    
-                }]
-        };
-    }
-}());
-
 (function () {
     "use strict";
     /**
@@ -19839,6 +19986,127 @@ function RadarChart(id, data, options) {
     }
 }());
 (function () {
+    "use strict";
+    /**
+     * @desc
+     */
+    angular.module('SportsensusApp')
+        .controller('analyticsCtrl', analyticsCtrl);
+
+    analyticsCtrl.$inject = [
+        '$scope',
+        '$controller',
+        'ParamsSrv',
+        'ApiSrv',
+        'analyticsSrv'
+    ];
+
+    function analyticsCtrl(
+        $scope,
+        $controller,
+        ParamsSrv,
+        ApiSrv,
+        analyticsSrv
+    ) {
+
+        $controller('baseGraphCtrl', {$scope: $scope});
+
+        ParamsSrv.getParams().then(function (params) {
+            $scope.parameters = params;
+            //$scope.prepareLegends();
+            //requestData();
+            //requestData($scope.sportLegend[0]);
+            updateCaption();
+            updatePanel();
+        });
+
+        function updateCaption(){
+            $scope.caption = ParamsSrv.getSelectedDemographyCaption();
+        }
+
+        function updatePanel(){
+            var selected = analyticsSrv.getSelected();
+
+            //$scope.advertising = [];
+            if (!selected.sport){ // нет спорта - нет жизни!
+                return;
+            } else if (selected.sport.key == 'hockey'){
+                //$scope.playground = playgrounds[0];
+                $scope.playgroundType = 'hockeyBox40';
+            } else if (selected.sport.key == 'football'){
+                //$scope.playground = playgrounds[0];
+                $scope.playgroundType = 'footballField';
+            }
+
+            //
+            // if (selected.club){
+            //     var playgrounds = selected.club.playgrounds;
+            //     if (playgrounds.length == 1){
+            //         $scope.playground = playgrounds[0];
+            //     } // else if (!playgrounds.length){}
+            // }
+        }
+
+        // определить выбранный спорт/лигу/клуб, загрузить из них playgrounds
+
+
+        
+        /*$scope.advertising = [{
+            "type": "hockeyBox32",
+            "stadium": "Стадион",
+            "city": "Город",
+            "capacity": 100500,
+            "matchCount": 100500,
+            "occupancy": 0.1
+        }];*/
+        
+        
+    /* TODO
+    что делать, если у клуба несколько площадок?
+    что делать, если выбрана лига (в ней несколько клубов и несколько площадок)?
+     */
+
+    }
+
+}());
+
+(function () {
+
+	"use strict";
+	angular.module('SportsensusApp')
+		.factory('analyticsSrv', analyticsSrv);
+
+	// инициализируем сервис
+	angular.module('SportsensusApp').run(['analyticsSrv', function(analyticsSrv) {
+
+	}]);
+	
+	analyticsSrv.$inject = [
+		'$rootScope',
+		'ApiSrv',
+		'ParamsSrv'
+	];
+
+	function analyticsSrv(
+		$rootScope,
+		ApiSrv,
+		ParamsSrv
+	) {
+
+		var selected = {
+			sport: null,
+			league: null,
+			club: null
+		};
+
+		var me = {
+			getSelected: function(){return selected; },
+			setSelected: function(val){ selected = val; }
+		};
+		return me;
+	}
+}());
+(function () {
 	"use strict";
 	/**
 	 * @desc
@@ -19959,22 +20227,20 @@ function RadarChart(id, data, options) {
      * @desc
      */
     angular.module('SportsensusApp')
-        .controller('analyticsCtrl', analyticsCtrl);
+        .controller('expressAudienceCtrl', expressAudienceCtrl);
 
-    analyticsCtrl.$inject = [
+    expressAudienceCtrl.$inject = [
         '$scope',
         '$controller',
         'ParamsSrv',
-        'ApiSrv',
-        'analyticsSrv'
+        'ApiSrv'
     ];
 
-    function analyticsCtrl(
+    function expressAudienceCtrl(
         $scope,
         $controller,
         ParamsSrv,
-        ApiSrv,
-        analyticsSrv
+        ApiSrv
     ) {
 
         $controller('baseGraphCtrl', {$scope: $scope});
@@ -19982,95 +20248,481 @@ function RadarChart(id, data, options) {
         ParamsSrv.getParams().then(function (params) {
             $scope.parameters = params;
             //$scope.prepareLegends();
-            //requestData();
+            requestData();
             //requestData($scope.sportLegend[0]);
             updateCaption();
-            updatePanel();
         });
+
+        $scope.sportDatas = {};
 
         function updateCaption(){
             $scope.caption = ParamsSrv.getSelectedDemographyCaption();
         }
 
-        function updatePanel(){
-            var selected = analyticsSrv.getSelected();
-
-            //$scope.advertising = [];
-            if (!selected.sport){ // нет спорта - нет жизни!
-                return;
-            } else if (selected.sport.key == 'hockey'){
-                //$scope.playground = playgrounds[0];
-                $scope.playgroundType = 'hockeyBox40';
-            }
+        function requestData(sport) { // sport from legend
+            var audience = ParamsSrv.getSelectedAudience();
             
-			//
-            // if (selected.club){
-            //     var playgrounds = selected.club.playgrounds;
-            //     if (playgrounds.length == 1){
-            //         $scope.playground = playgrounds[0];
-            //     } // else if (!playgrounds.length){}
-            // }
+            //var clubs = sport.clubs ? sport.clubs.filter(function(club){return club.selected;}).map(function(club){return club.id; }) : [];
+            //
+            // var sports = {};
+            // $scope.parameters.sport.lists.forEach(function (list) {
+            //     sports[list.id] = {interested: true}
+            // });
+            // var images = $scope.parameters.image.lists.map(function (list) {
+            //     return list.id;
+            // });
+            // var sportimage = { // все спорты и все интересы
+            //     sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
+            //     image: images // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
+            // };
+            ApiSrv.getExpressAudience(audience).then(function (data) {
+                $scope.graphs = {};
+                prepareInterestData(data.interest);
+                prepareInvolveData(data.involvment);
+                prepareKnownData(data.clubs_known);
+                prepareKnownHelpData(data.clubs_known_help);
+                prepareWatchData(data.watch);
+                prepareWalkData(data.walk);
+
+
+                var a = data;
+                
+                //$scope.updateGraph();
+            }, function () {
+            });
         }
 
-        // определить выбранный спорт/лигу/клуб, загрузить из них playgrounds
+        var colorGenerator = d3.scale.category10();
+
+        
 
 
-        
-        /*$scope.advertising = [{
-            "type": "hockeyBox32",
-            "stadium": "Стадион",
-            "city": "Город",
-            "capacity": 100500,
-            "matchCount": 100500,
-            "occupancy": 0.1
-        }];*/
-        
-        
-    /* TODO
-    что делать, если у клуба несколько площадок?
-    что делать, если выбрана лига (в ней несколько клубов и несколько площадок)?
-     */
+        function prepareInterestData(data){
+
+            data = $scope.prepareChartData(data, {
+                'sport': $scope.parameters.sport,
+                'interest': $scope.parameters.interest
+            });
+
+            
+            var datasets2 = data.legends.interest.map(function(){
+                return { label:[], fillColor:[], data:[] }
+            });
+            var chartData2 = {labels:[],datasets:datasets2};
+            data.legends.sport.forEach(function(sport) {
+                data.legends.interest.forEach(function (interest, interestIndex) {
+                    var count = data.getCount({'sport': sport.id, 'interest': interest.id});
+                    var ds = datasets2[interestIndex];
+                    //ds.label.push('');
+                    ds.label.push(interest.name + ': ' + count.toLocaleString('en-US'));
+                    ds.fillColor.push(interest.color);
+                    ds.data.push(count);
+                });
+                chartData2.labels.push(sport.name);
+            });
+
+            
+            $scope.graphs.interest = {
+                legends:data.legends,
+
+                chartData2:{
+                    data:chartData2,
+                    options:{
+                        showLabels: false, // : $scope.formatValue,
+                        stacked: true,
+                        scaleLabel: function(obj){return $scope.formatValue(obj.value)}
+                    }
+                }
+            };
+            
+
+            // $scope.showCharts = !!charts.length && !!interests.length;
+            // $scope.charts = charts;
+        }
+
+        function prepareInvolveData(data){
+            data = $scope.prepareChartData(data, {
+                'sport': $scope.parameters.sport,
+                'involve': $scope.parameters.involve
+            });
+
+            var charts = [];
+            // var datasets = data.legends.involve.map(function(){
+            //     return { label:[], fillColor:[], data:[] }
+            // });
+            // var chartData = {labels:[],datasets:datasets};
+
+            data.legends.sport.forEach(function(sport) {
+                var chart = {
+                    //sport: sport,
+                    text:sport.name,
+                    chartData: [],
+                    options: {
+                        percentageInnerCutout: 70
+                    }
+                };
+                charts.push(chart);
+
+                data.legends.involve.forEach(function (involve, involveIndex) {
+                    var count = data.getCount({'sport': sport.id, 'involve': involve.id});
+                    chart.chartData.push({
+                        //label: involve.name,
+                        label: involve.name + ': ' + count.toLocaleString('en-US'),
+                        color: involve.color,
+                        //highlight: "#78acd9",
+                        value: count
+                    });
+
+                });
+
+            });
+
+            $scope.graphs.involve = {
+                legends:data.legends,
+                charts: charts
+            };
+
+
+            
+        }
+
+        function prepareKnownData(data){
+            data = $scope.prepareChartData(data, {
+                'sport': $scope.parameters.sport,
+                'club': $scope.parameters.sport
+            });
+
+            
+            
+            var dataDs2 = { label:[], fillColor:[], data:[] };
+            var chartData2 = {labels:[],datasets:[dataDs2]};
+
+            data.legends.club.forEach(function(club, index) {
+                var count = data.getCount({'sport': club.sport.id, 'club': club.id});
+                dataDs2.label.push(club.name + ' (' + club.sport.name + '): ' + count.toLocaleString('en-US'));
+                dataDs2.fillColor.push(colorGenerator(index)); //club.color);
+                dataDs2.data.push(count);
+
+                chartData2.labels.push(club.name + ' (' + club.sport.name + ')');
+            });
+
+
+            $scope.graphs.known = {
+                legends:data.legends,
+                chartData2:{
+                    data:chartData2,
+                    options:{
+                        showLabels: false, // : $scope.formatValue,
+                        scaleLabel: function(obj){return $scope.formatValue(obj.value)}
+                    }
+                }
+            };
+        }
+
+        function prepareKnownHelpData(data){
+            data = $scope.prepareChartData(data, {
+                'sport': $scope.parameters.sport,
+                'club': $scope.parameters.sport
+            });
+
+           
+            var dataDs2 = { label:[], fillColor:[], data:[] };
+            var chartData2 = {labels:[],datasets:[dataDs2]};
+            data.legends.club.forEach(function(club, index) {
+                var count = data.getCount({'sport': club.sport.id, 'club': club.id});
+                dataDs2.label.push(club.name + ' (' + club.sport.name + '): ' + count.toLocaleString('en-US'));
+                dataDs2.fillColor.push(colorGenerator(index));
+                dataDs2.data.push(count);
+
+                chartData2.labels.push(club.name + ' (' + club.sport.name + ')');
+            });
+
+
+            $scope.graphs.knownHelp = {
+                legends:data.legends,
+                
+                chartData2:{
+                    data:chartData2,
+                    options:{
+                        showLabels: false, // : $scope.formatValue,
+                        scaleLabel: function(obj){return $scope.formatValue(obj.value)}
+                    }
+                }
+            };
+        }
+
+        function prepareWatchData(data){
+            data = $scope.prepareChartData(data, {
+                'sport': $scope.parameters.sport,
+                'club': $scope.parameters.sport,
+                'watch': $scope.parameters.watch
+            });
+
+           
+
+
+            var datasets2 = data.legends.watch.map(function(){
+                return { label:[], fillColor:[], data:[] }
+            });
+            var chartData2 = {labels:[],datasets:datasets2};
+
+            data.legends.club.forEach(function(club) {
+                data.legends.watch.forEach(function (watch, watchIndex) {
+                    var count = data.getCount({'sport': club.sport.id, 'club': club.id, 'watch': watch.id}) || 0;
+                    var ds = datasets2[watchIndex];
+                    ds.label.push(watch.name + ': ' + count.toLocaleString('en-US'));
+                    ds.fillColor.push(watch.color);
+                    ds.data.push(count);
+                });
+                chartData2.labels.push(club.name + ' (' + club.sport.name + ')');
+            });
+            
+            $scope.graphs.watch = {
+                legends:data.legends,
+               
+                chartData2:{
+                    data:chartData2,
+                    options:{
+                        showLabels: false, // : $scope.formatValue,
+                        scaleLabel: function(obj){return $scope.formatValue(obj.value)}
+                    }
+                }
+            };
+        }
+
+        function prepareWalkData(data){
+            data = $scope.prepareChartData(data, {
+                'sport': $scope.parameters.sport,
+                'club': $scope.parameters.sport,
+                'walk': $scope.parameters.walk
+            });
+            
+
+            var datasets2 = data.legends.walk.map(function(){
+                return { label:[], fillColor:[], data:[] }
+            });
+            var chartData2 = {labels:[],datasets:datasets2};
+
+            data.legends.club.forEach(function(club) {
+                data.legends.walk.forEach(function (walk, walkIndex) {
+                    var count = data.getCount({'sport': club.sport.id, 'club': club.id, 'walk': walk.id}) || 0;
+                    var ds = datasets2[walkIndex];
+                    ds.label.push(walk.name + ': ' + count.toLocaleString('en-US'));
+                    ds.fillColor.push(walk.color);
+                    ds.data.push(count);
+                });
+                chartData2.labels.push(club.name + ' (' + club.sport.name + ')');
+            });
+            
+            $scope.graphs.walk = {
+                legends:data.legends,
+                
+                chartData2:{
+                    data:chartData2,
+                    options:{
+                        showLabels: false, // : $scope.formatValue,
+                        scaleLabel: function(obj){return $scope.formatValue(obj.value)}
+                    }
+                }
+            };
+        }
+
+
 
     }
 
 }());
 
 (function () {
+    "use strict";
+    /**
+     * @desc
+     */
+    angular.module('SportsensusApp')
+        .controller('imageGraphCrtl', imageGraphCrtl);
 
-	"use strict";
-	angular.module('SportsensusApp')
-		.factory('analyticsSrv', analyticsSrv);
+    imageGraphCrtl.$inject = [
+        '$scope',
+        '$controller',
+        'ParamsSrv',
+        'ApiSrv',
+        'graphHelpersSrv'
+    ];
 
-	// инициализируем сервис
-	angular.module('SportsensusApp').run(['analyticsSrv', function(analyticsSrv) {
+    function imageGraphCrtl(
+        $scope,
+        $controller,
+        ParamsSrv,
+        ApiSrv,
+        graphHelpersSrv
+    ) {
 
-	}]);
-	
-	analyticsSrv.$inject = [
-		'$rootScope',
-		'ApiSrv',
-		'ParamsSrv'
-	];
+        $controller('baseGraphCtrl', {$scope: $scope});
+        
+        ParamsSrv.getParams().then(function (params) {
+            $scope.parameters = params;
+            $scope.prepareLegends();
+            requestGraph();
+        });
 
-	function analyticsSrv(
-		$rootScope,
-		ApiSrv,
-		ParamsSrv
-	) {
+        function requestGraph() {
+            var audience = ParamsSrv.getSelectedAudience();
+            var sports = {};
+            $scope.parameters.sport.lists.forEach(function (list) {
+                sports[list.key] = {interested: true}
+            });
+            var images = $scope.parameters.image.lists.map(function (list) {
+                return list.id;
+            });
+            var sportimage = { // все спорты и все интересы
+                sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
+                image: images // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
+            };
+            ApiSrv.getImageGraph(audience, sportimage).then(function (graphData) {
+                $scope.prepareData(graphData);
+                $scope.updateGraph();
+            }, function () {
+            });
+        }
 
-		var selected = {
-			sport: null,
-			league: null,
-			club: null
-		};
+        $scope.prepareLegends = function () {
+            $scope.sportLegend = graphHelpersSrv.getSportLegend();
+            $scope.imageLegend = graphHelpersSrv.getImageLegend();
+            $scope.$watch('sportLegend', $scope.updateGraph, true);
+        };
 
-		var me = {
-			getSelected: function(){return selected; },
-			setSelected: function(val){ selected = val; }
-		};
-		return me;
-	}
+
+        $scope.prepareData = function (data) {
+
+            var images = {};
+            $scope.parameters.image.lists.forEach(function (list) {
+                images[list.id] = {
+                    id: list.id,
+                    name: list.name,
+                    count: 0
+                }
+            });
+
+            var sports = {};
+            $scope.parameters.sport.lists.forEach(function (list) {
+                sports[list.id] = angular.merge({
+                    data: angular.merge({}, images)
+                }, list);
+            });
+
+            var legendIndexes = {};
+            data.legends.forEach(function(item, index){
+                legendIndexes[item.name] = index;
+            });
+            var maxValue = 0;
+            data.data.forEach(function (item) {
+                var sportId = item.legend[legendIndexes['sport']];
+                var imageId = item.legend[legendIndexes['image']];
+                sports[sportId].data[imageId].count += item.count;
+                maxValue = Math.max(maxValue, sports[sportId].data[imageId].count);
+            }, this);
+            var multiplier = maxValue > 1000*1000 ? 1000*1000 : maxValue > 1000 ? 1000 : 1;
+
+            // $scope.sportDatas = {};
+            $scope.chartsData = {
+                multiplier: multiplier,
+                maxValue: maxValue,
+                sports: sports
+            };
+
+
+
+        };
+
+        $scope.updateGraph = function () {
+            if (!$scope.chartsData) return;
+
+            var sports = $scope.sportLegend.filter(function(item) {
+                return item.selected;
+            });
+
+            var images = $scope.imageLegend;
+            // var image = $scope.imageLegend.filter(function(item) {
+            //     return item.selected;
+            // });
+
+
+
+
+            
+            var chartData = [];
+            var localColors = [];
+            var maxValue = 0;
+            //$scope.sportLegend.forEach(function (item) {
+                //if (!item.selected) return;
+            sports.forEach(function(sport){
+                //var maxValue = 0;
+                var axisData = [];
+                var data = $scope.chartsData.sports[sport.id].data;
+                images.forEach(function(image){
+                //Object.keys(images).forEach(function (imageId) { // цикл по восприятиям
+                    // var value = sport.data[imageId].count / 1000 / 1000;
+                    var value = $scope.chartsData.sports[sport.id].data[image.id].count;
+                    //var value = sport.data[imageId].count;
+                    //value = Math.round(value * 10) / 10;
+                    //axisData.push({axis: images[imageId].name, value: value});
+                    axisData.push({
+                        axis: image.name, 
+                        value: value, 
+                        tooltip: sport.name + ': ' + image.name + ': ' + value.toLocaleString('en-US'),
+                        tooltipColor: sport.color
+                    });
+                    maxValue = Math.max(maxValue, value);
+                }, this);
+                //graph.push(axisData);
+                //localColors.push(sport.chartColor);
+
+                // var sportData = {
+                //     axisData: axisData,
+                //     maxValue: maxValue
+                // };
+                // $scope.sportDatas[sport.id] = sportData;
+
+                //chartData.push($scope.sportDatas[item.id].axisData);
+                chartData.push(axisData);
+                localColors.push(sport.color);
+                //maxValue = Math.max(maxValue, $scope.sportDatas[item.id].maxValue);
+            });
+
+            // округляем до 5 в большую сторону
+            //maxValue = Math.ceil(maxValue / 5) * 5;
+            var multiplier = 1;
+            while (maxValue > 100){
+                multiplier *= 10;
+                maxValue /= 10;
+            }
+            maxValue = Math.ceil(maxValue / 5) * 5 * multiplier;
+
+            var radarChartOptions = {
+                //w: width,
+                //h: height,
+                //margin: margin,
+                maxValue: maxValue,
+                levels: 5,
+                wrapWidth: 100,
+                labelFactor: 1.32,
+                roundStrokes: true,
+                //color: color
+                format: $scope.formatValue,
+                color: function (i) {
+                    return localColors[i];
+                }
+            };
+
+            if (chartData && chartData.length)
+                $scope.chart = {data: chartData, options: radarChartOptions};
+            else $scope.chart = null;
+        };
+
+    }
+
 }());
+
 (function () {
     "use strict";
     /**
@@ -20656,508 +21308,6 @@ function RadarChart(id, data, options) {
      * @desc
      */
     angular.module('SportsensusApp')
-        .controller('expressAudienceCtrl', expressAudienceCtrl);
-
-    expressAudienceCtrl.$inject = [
-        '$scope',
-        '$controller',
-        'ParamsSrv',
-        'ApiSrv'
-    ];
-
-    function expressAudienceCtrl(
-        $scope,
-        $controller,
-        ParamsSrv,
-        ApiSrv
-    ) {
-
-        $controller('baseGraphCtrl', {$scope: $scope});
-
-        ParamsSrv.getParams().then(function (params) {
-            $scope.parameters = params;
-            //$scope.prepareLegends();
-            requestData();
-            //requestData($scope.sportLegend[0]);
-            updateCaption();
-        });
-
-        $scope.sportDatas = {};
-
-        function updateCaption(){
-            $scope.caption = ParamsSrv.getSelectedDemographyCaption();
-        }
-
-        function requestData(sport) { // sport from legend
-            var audience = ParamsSrv.getSelectedAudience();
-            
-            //var clubs = sport.clubs ? sport.clubs.filter(function(club){return club.selected;}).map(function(club){return club.id; }) : [];
-            //
-            // var sports = {};
-            // $scope.parameters.sport.lists.forEach(function (list) {
-            //     sports[list.id] = {interested: true}
-            // });
-            // var images = $scope.parameters.image.lists.map(function (list) {
-            //     return list.id;
-            // });
-            // var sportimage = { // все спорты и все интересы
-            //     sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
-            //     image: images // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
-            // };
-            ApiSrv.getExpressAudience(audience).then(function (data) {
-                $scope.graphs = {};
-                prepareInterestData(data.interest);
-                prepareInvolveData(data.involvment);
-                prepareKnownData(data.clubs_known);
-                prepareKnownHelpData(data.clubs_known_help);
-                prepareWatchData(data.watch);
-                prepareWalkData(data.walk);
-
-
-                var a = data;
-                
-                //$scope.updateGraph();
-            }, function () {
-            });
-        }
-
-        var colorGenerator = d3.scale.category10();
-
-        
-
-
-        function prepareInterestData(data){
-
-            data = $scope.prepareChartData(data, {
-                'sport': $scope.parameters.sport,
-                'interest': $scope.parameters.interest
-            });
-
-            
-            var datasets2 = data.legends.interest.map(function(){
-                return { label:[], fillColor:[], data:[] }
-            });
-            var chartData2 = {labels:[],datasets:datasets2};
-            data.legends.sport.forEach(function(sport) {
-                data.legends.interest.forEach(function (interest, interestIndex) {
-                    var count = data.getCount({'sport': sport.id, 'interest': interest.id});
-                    var ds = datasets2[interestIndex];
-                    //ds.label.push('');
-                    ds.label.push(interest.name + ': ' + count.toLocaleString('en-US'));
-                    ds.fillColor.push(interest.color);
-                    ds.data.push(count);
-                });
-                chartData2.labels.push(sport.name);
-            });
-
-            
-            $scope.graphs.interest = {
-                legends:data.legends,
-
-                chartData2:{
-                    data:chartData2,
-                    options:{
-                        showLabels: false, // : $scope.formatValue,
-                        stacked: true,
-                        scaleLabel: function(obj){return $scope.formatValue(obj.value)}
-                    }
-                }
-            };
-            
-
-            // $scope.showCharts = !!charts.length && !!interests.length;
-            // $scope.charts = charts;
-        }
-
-        function prepareInvolveData(data){
-            data = $scope.prepareChartData(data, {
-                'sport': $scope.parameters.sport,
-                'involve': $scope.parameters.involve
-            });
-
-            var charts = [];
-            // var datasets = data.legends.involve.map(function(){
-            //     return { label:[], fillColor:[], data:[] }
-            // });
-            // var chartData = {labels:[],datasets:datasets};
-
-            data.legends.sport.forEach(function(sport) {
-                var chart = {
-                    //sport: sport,
-                    text:sport.name,
-                    chartData: [],
-                    options: {
-                        percentageInnerCutout: 70
-                    }
-                };
-                charts.push(chart);
-
-                data.legends.involve.forEach(function (involve, involveIndex) {
-                    var count = data.getCount({'sport': sport.id, 'involve': involve.id});
-                    chart.chartData.push({
-                        //label: involve.name,
-                        label: involve.name + ': ' + count.toLocaleString('en-US'),
-                        color: involve.color,
-                        //highlight: "#78acd9",
-                        value: count
-                    });
-
-                });
-
-            });
-
-            $scope.graphs.involve = {
-                legends:data.legends,
-                charts: charts
-            };
-
-
-            
-        }
-
-        function prepareKnownData(data){
-            data = $scope.prepareChartData(data, {
-                'sport': $scope.parameters.sport,
-                'club': $scope.parameters.sport
-            });
-
-            
-            
-            var dataDs2 = { label:[], fillColor:[], data:[] };
-            var chartData2 = {labels:[],datasets:[dataDs2]};
-
-            data.legends.club.forEach(function(club, index) {
-                var count = data.getCount({'sport': club.sport.id, 'club': club.id});
-                dataDs2.label.push(club.name + ' (' + club.sport.name + '): ' + count.toLocaleString('en-US'));
-                dataDs2.fillColor.push(colorGenerator(index)); //club.color);
-                dataDs2.data.push(count);
-
-                chartData2.labels.push(club.name + ' (' + club.sport.name + ')');
-            });
-
-
-            $scope.graphs.known = {
-                legends:data.legends,
-                chartData2:{
-                    data:chartData2,
-                    options:{
-                        showLabels: false, // : $scope.formatValue,
-                        scaleLabel: function(obj){return $scope.formatValue(obj.value)}
-                    }
-                }
-            };
-        }
-
-        function prepareKnownHelpData(data){
-            data = $scope.prepareChartData(data, {
-                'sport': $scope.parameters.sport,
-                'club': $scope.parameters.sport
-            });
-
-           
-            var dataDs2 = { label:[], fillColor:[], data:[] };
-            var chartData2 = {labels:[],datasets:[dataDs2]};
-            data.legends.club.forEach(function(club, index) {
-                var count = data.getCount({'sport': club.sport.id, 'club': club.id});
-                dataDs2.label.push(club.name + ' (' + club.sport.name + '): ' + count.toLocaleString('en-US'));
-                dataDs2.fillColor.push(colorGenerator(index));
-                dataDs2.data.push(count);
-
-                chartData2.labels.push(club.name + ' (' + club.sport.name + ')');
-            });
-
-
-            $scope.graphs.knownHelp = {
-                legends:data.legends,
-                
-                chartData2:{
-                    data:chartData2,
-                    options:{
-                        showLabels: false, // : $scope.formatValue,
-                        scaleLabel: function(obj){return $scope.formatValue(obj.value)}
-                    }
-                }
-            };
-        }
-
-        function prepareWatchData(data){
-            data = $scope.prepareChartData(data, {
-                'sport': $scope.parameters.sport,
-                'club': $scope.parameters.sport,
-                'watch': $scope.parameters.watch
-            });
-
-           
-
-
-            var datasets2 = data.legends.watch.map(function(){
-                return { label:[], fillColor:[], data:[] }
-            });
-            var chartData2 = {labels:[],datasets:datasets2};
-
-            data.legends.club.forEach(function(club) {
-                data.legends.watch.forEach(function (watch, watchIndex) {
-                    var count = data.getCount({'sport': club.sport.id, 'club': club.id, 'watch': watch.id}) || 0;
-                    var ds = datasets2[watchIndex];
-                    ds.label.push(watch.name + ': ' + count.toLocaleString('en-US'));
-                    ds.fillColor.push(watch.color);
-                    ds.data.push(count);
-                });
-                chartData2.labels.push(club.name + ' (' + club.sport.name + ')');
-            });
-            
-            $scope.graphs.watch = {
-                legends:data.legends,
-               
-                chartData2:{
-                    data:chartData2,
-                    options:{
-                        showLabels: false, // : $scope.formatValue,
-                        scaleLabel: function(obj){return $scope.formatValue(obj.value)}
-                    }
-                }
-            };
-        }
-
-        function prepareWalkData(data){
-            data = $scope.prepareChartData(data, {
-                'sport': $scope.parameters.sport,
-                'club': $scope.parameters.sport,
-                'walk': $scope.parameters.walk
-            });
-            
-
-            var datasets2 = data.legends.walk.map(function(){
-                return { label:[], fillColor:[], data:[] }
-            });
-            var chartData2 = {labels:[],datasets:datasets2};
-
-            data.legends.club.forEach(function(club) {
-                data.legends.walk.forEach(function (walk, walkIndex) {
-                    var count = data.getCount({'sport': club.sport.id, 'club': club.id, 'walk': walk.id}) || 0;
-                    var ds = datasets2[walkIndex];
-                    ds.label.push(walk.name + ': ' + count.toLocaleString('en-US'));
-                    ds.fillColor.push(walk.color);
-                    ds.data.push(count);
-                });
-                chartData2.labels.push(club.name + ' (' + club.sport.name + ')');
-            });
-            
-            $scope.graphs.walk = {
-                legends:data.legends,
-                
-                chartData2:{
-                    data:chartData2,
-                    options:{
-                        showLabels: false, // : $scope.formatValue,
-                        scaleLabel: function(obj){return $scope.formatValue(obj.value)}
-                    }
-                }
-            };
-        }
-
-
-
-    }
-
-}());
-
-(function () {
-    "use strict";
-    /**
-     * @desc
-     */
-    angular.module('SportsensusApp')
-        .controller('imageGraphCrtl', imageGraphCrtl);
-
-    imageGraphCrtl.$inject = [
-        '$scope',
-        '$controller',
-        'ParamsSrv',
-        'ApiSrv',
-        'graphHelpersSrv'
-    ];
-
-    function imageGraphCrtl(
-        $scope,
-        $controller,
-        ParamsSrv,
-        ApiSrv,
-        graphHelpersSrv
-    ) {
-
-        $controller('baseGraphCtrl', {$scope: $scope});
-        
-        ParamsSrv.getParams().then(function (params) {
-            $scope.parameters = params;
-            $scope.prepareLegends();
-            requestGraph();
-        });
-
-        function requestGraph() {
-            var audience = ParamsSrv.getSelectedAudience();
-            var sports = {};
-            $scope.parameters.sport.lists.forEach(function (list) {
-                sports[list.key] = {interested: true}
-            });
-            var images = $scope.parameters.image.lists.map(function (list) {
-                return list.id;
-            });
-            var sportimage = { // все спорты и все интересы
-                sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
-                image: images // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
-            };
-            ApiSrv.getImageGraph(audience, sportimage).then(function (graphData) {
-                $scope.prepareData(graphData);
-                $scope.updateGraph();
-            }, function () {
-            });
-        }
-
-        $scope.prepareLegends = function () {
-            $scope.sportLegend = graphHelpersSrv.getSportLegend();
-            $scope.imageLegend = graphHelpersSrv.getImageLegend();
-            $scope.$watch('sportLegend', $scope.updateGraph, true);
-        };
-
-
-        $scope.prepareData = function (data) {
-
-            var images = {};
-            $scope.parameters.image.lists.forEach(function (list) {
-                images[list.id] = {
-                    id: list.id,
-                    name: list.name,
-                    count: 0
-                }
-            });
-
-            var sports = {};
-            $scope.parameters.sport.lists.forEach(function (list) {
-                sports[list.id] = angular.merge({
-                    data: angular.merge({}, images)
-                }, list);
-            });
-
-            var legendIndexes = {};
-            data.legends.forEach(function(item, index){
-                legendIndexes[item.name] = index;
-            });
-            var maxValue = 0;
-            data.data.forEach(function (item) {
-                var sportId = item.legend[legendIndexes['sport']];
-                var imageId = item.legend[legendIndexes['image']];
-                sports[sportId].data[imageId].count += item.count;
-                maxValue = Math.max(maxValue, sports[sportId].data[imageId].count);
-            }, this);
-            var multiplier = maxValue > 1000*1000 ? 1000*1000 : maxValue > 1000 ? 1000 : 1;
-
-            // $scope.sportDatas = {};
-            $scope.chartsData = {
-                multiplier: multiplier,
-                maxValue: maxValue,
-                sports: sports
-            };
-
-
-
-        };
-
-        $scope.updateGraph = function () {
-            if (!$scope.chartsData) return;
-
-            var sports = $scope.sportLegend.filter(function(item) {
-                return item.selected;
-            });
-
-            var images = $scope.imageLegend;
-            // var image = $scope.imageLegend.filter(function(item) {
-            //     return item.selected;
-            // });
-
-
-
-
-            
-            var chartData = [];
-            var localColors = [];
-            var maxValue = 0;
-            //$scope.sportLegend.forEach(function (item) {
-                //if (!item.selected) return;
-            sports.forEach(function(sport){
-                //var maxValue = 0;
-                var axisData = [];
-                var data = $scope.chartsData.sports[sport.id].data;
-                images.forEach(function(image){
-                //Object.keys(images).forEach(function (imageId) { // цикл по восприятиям
-                    // var value = sport.data[imageId].count / 1000 / 1000;
-                    var value = $scope.chartsData.sports[sport.id].data[image.id].count;
-                    //var value = sport.data[imageId].count;
-                    //value = Math.round(value * 10) / 10;
-                    //axisData.push({axis: images[imageId].name, value: value});
-                    axisData.push({
-                        axis: image.name, 
-                        value: value, 
-                        tooltip: sport.name + ': ' + image.name + ': ' + value.toLocaleString('en-US'),
-                        tooltipColor: sport.color
-                    });
-                    maxValue = Math.max(maxValue, value);
-                }, this);
-                //graph.push(axisData);
-                //localColors.push(sport.chartColor);
-
-                // var sportData = {
-                //     axisData: axisData,
-                //     maxValue: maxValue
-                // };
-                // $scope.sportDatas[sport.id] = sportData;
-
-                //chartData.push($scope.sportDatas[item.id].axisData);
-                chartData.push(axisData);
-                localColors.push(sport.color);
-                //maxValue = Math.max(maxValue, $scope.sportDatas[item.id].maxValue);
-            });
-
-            // округляем до 5 в большую сторону
-            //maxValue = Math.ceil(maxValue / 5) * 5;
-            var multiplier = 1;
-            while (maxValue > 100){
-                multiplier *= 10;
-                maxValue /= 10;
-            }
-            maxValue = Math.ceil(maxValue / 5) * 5 * multiplier;
-
-            var radarChartOptions = {
-                //w: width,
-                //h: height,
-                //margin: margin,
-                maxValue: maxValue,
-                levels: 5,
-                wrapWidth: 100,
-                labelFactor: 1.32,
-                roundStrokes: true,
-                //color: color
-                format: $scope.formatValue,
-                color: function (i) {
-                    return localColors[i];
-                }
-            };
-
-            if (chartData && chartData.length)
-                $scope.chart = {data: chartData, options: radarChartOptions};
-            else $scope.chart = null;
-        };
-
-    }
-
-}());
-
-(function () {
-    "use strict";
-    /**
-     * @desc
-     */
-    angular.module('SportsensusApp')
         .controller('interestGraphCrtl', interestGraphCrtl);
 
     interestGraphCrtl.$inject = [
@@ -21531,192 +21681,6 @@ function RadarChart(id, data, options) {
 
 
 
-
-    }
-
-}());
-
-(function () {
-    "use strict";
-    /**
-     * @desc
-     */
-    angular.module('SportsensusApp')
-        .controller('involveGraphCrtl', involveGraphCrtl);
-
-    involveGraphCrtl.$inject = [
-        '$scope',
-        '$controller',
-        'ParamsSrv',
-        'ApiSrv',
-        'graphHelpersSrv'
-    ];
-
-    function involveGraphCrtl(
-        $scope,
-        $controller,
-        ParamsSrv,
-        ApiSrv,
-        graphHelpersSrv
-    ) {
-
-        $controller('baseGraphCtrl', {$scope: $scope});
-
-        ParamsSrv.getParams().then(function (params) {
-            $scope.parameters = params;
-            $scope.prepareLegends();
-            requestGraph();
-        });
-
-        $scope.showCharts = false;
-
-        function requestGraph() {
-            var audience = ParamsSrv.getSelectedAudience();
-            var sports = {};
-            $scope.parameters.sport.lists.forEach(function (list) {
-                sports[list.key] = {interested: true}
-            });
-            var involve = $scope.parameters.involve.lists.map(function (list) {
-                return list.id;
-            });
-            var sportInvolve = { // все спорты и все интересы
-                sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
-                involve: involve // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
-            };
-            ApiSrv.getInvolveGraph(audience, sportInvolve).then(function (graphData) {
-                $scope.prepareData(graphData);
-                $scope.updateGraph();
-            }, function () {
-            });
-        }
-
-        $scope.prepareLegends = function () {
-            $scope.sportLegend = graphHelpersSrv.getSportLegend({color:'#555555'});
-            $scope.involveLegend = graphHelpersSrv.getInvolveLegend();
-
-            $scope.$watch('sportLegend', $scope.updateGraph, true);
-            $scope.$watch('involveLegend', $scope.updateGraph, true);
-        };
-
-
-
-        $scope.prepareData = function (data) {
-
-            var involves = {};
-            $scope.parameters.involve.lists.forEach(function (list) {
-                involves[list.id] = {
-                    id: list.id,
-                    name: list.name,
-                    count: 0
-                }
-            });
-
-            var sports = {};
-            $scope.parameters.sport.lists.forEach(function (list) {
-                sports[list.id] = angular.merge({
-                    data: angular.merge({}, involves)
-                }, list);
-            });
-
-
-            var legendIndexes = {};
-            data.legends.forEach(function(item, index){
-                legendIndexes[item.name] = index;
-            });
-
-            var maxValue = 0;
-            data.data.forEach(function (item) {
-                var sportId = item.legend[legendIndexes['sport']];
-                var involveId = item.legend[legendIndexes['involve']];
-                sports[sportId].data[involveId].count += item.count;
-                maxValue = Math.max(maxValue, sports[sportId].data[involveId].count);
-            }, this);
-            var multiplier = maxValue > 1000*1000 ? 1000*1000 : maxValue > 1000 ? 1000 : 1;
-
-
-            $scope.chartsData = {
-                multiplier: multiplier,
-                maxValue: maxValue,
-                sports: sports
-            };
-            
-
-        };
-
-        $scope.updateGraph = function () {
-            if (!$scope.chartsData) return;
-            
-
-            var sports = $scope.sportLegend.filter(function(item) {
-                return item.selected;
-            });
-
-            var involves = $scope.involveLegend.filter(function(item) {
-                return item.selected;
-            });
-
-            var charts = [];
-            sports.forEach(function(sport){
-                // if (!sport.selected) return;
-                //charts.push(sport);
-                var chartData = {labels:[],datasets:[]};
-
-                    var dataDs = { label:[], fillColor:[], data:[] };
-                    var emptyDs = { label:[], fillColor:[], data:[] };
-
-                    involves.forEach(function(involve){
-                        var value = $scope.chartsData.sports[sport.id].data[involve.id].count;
-                        if (value == 0) return;
-
-                        dataDs.label.push(involve.name + ': ' + value.toLocaleString('en-US'));
-                        dataDs.fillColor.push(involve.color);
-                        dataDs.data.push($scope.chartsData.sports[sport.id].data[involve.id].count);
-
-                        emptyDs.label.push(involve.name);
-                        emptyDs.fillColor.push(involve.color);
-                        emptyDs.data.push(0);
-
-                        chartData.labels.push('');
-                    });
-
-                    chartData.datasets.push(dataDs);
-                    chartData.datasets.push(emptyDs);
-                // }
-
-
-                charts.push({
-                    sport:sport,
-                    chartData:{data:chartData, options:{
-                        showLabels: $scope.formatValue,
-                        scaleLabel: function(obj){return $scope.formatValue(obj.value);}
-                    }}
-                })
-            });
-
-            $scope.showCharts = !!charts.length && !!involves.length;
-            $scope.charts = charts;
-
-            // Combine all sports in one graph
-            var combineChart = {data:{labels:[], datasets:[]}, options:{
-                scaleLabel: function(obj){return $scope.formatValue(obj.value);},
-                barWidth: 40,
-                barHeight: 300,
-                barValueSpacing: 30
-            }};
-            combineChart.data.labels = sports.map(function(item){return item.name;});
-            involves.forEach(function(involve){
-                var ds = { label:[], fillColor:[], data:[] };
-                sports.forEach(function(sport) {
-                    var value = $scope.chartsData.sports[sport.id].data[involve.id].count;
-                    ds.label.push(involve.name + ': ' + value.toLocaleString('en-US'));//item[0].name);
-                    ds.fillColor.push(involve.color);
-                    ds.data.push(value);
-
-                });
-                combineChart.data.datasets.push(ds);
-            });
-            $scope.combineChart = (combineChart.data.labels.length > 1 ? combineChart : null);
-        };
 
     }
 
@@ -22194,6 +22158,192 @@ function RadarChart(id, data, options) {
 }());
 
 (function () {
+    "use strict";
+    /**
+     * @desc
+     */
+    angular.module('SportsensusApp')
+        .controller('involveGraphCrtl', involveGraphCrtl);
+
+    involveGraphCrtl.$inject = [
+        '$scope',
+        '$controller',
+        'ParamsSrv',
+        'ApiSrv',
+        'graphHelpersSrv'
+    ];
+
+    function involveGraphCrtl(
+        $scope,
+        $controller,
+        ParamsSrv,
+        ApiSrv,
+        graphHelpersSrv
+    ) {
+
+        $controller('baseGraphCtrl', {$scope: $scope});
+
+        ParamsSrv.getParams().then(function (params) {
+            $scope.parameters = params;
+            $scope.prepareLegends();
+            requestGraph();
+        });
+
+        $scope.showCharts = false;
+
+        function requestGraph() {
+            var audience = ParamsSrv.getSelectedAudience();
+            var sports = {};
+            $scope.parameters.sport.lists.forEach(function (list) {
+                sports[list.key] = {interested: true}
+            });
+            var involve = $scope.parameters.involve.lists.map(function (list) {
+                return list.id;
+            });
+            var sportInvolve = { // все спорты и все интересы
+                sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
+                involve: involve // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
+            };
+            ApiSrv.getInvolveGraph(audience, sportInvolve).then(function (graphData) {
+                $scope.prepareData(graphData);
+                $scope.updateGraph();
+            }, function () {
+            });
+        }
+
+        $scope.prepareLegends = function () {
+            $scope.sportLegend = graphHelpersSrv.getSportLegend({color:'#555555'});
+            $scope.involveLegend = graphHelpersSrv.getInvolveLegend();
+
+            $scope.$watch('sportLegend', $scope.updateGraph, true);
+            $scope.$watch('involveLegend', $scope.updateGraph, true);
+        };
+
+
+
+        $scope.prepareData = function (data) {
+
+            var involves = {};
+            $scope.parameters.involve.lists.forEach(function (list) {
+                involves[list.id] = {
+                    id: list.id,
+                    name: list.name,
+                    count: 0
+                }
+            });
+
+            var sports = {};
+            $scope.parameters.sport.lists.forEach(function (list) {
+                sports[list.id] = angular.merge({
+                    data: angular.merge({}, involves)
+                }, list);
+            });
+
+
+            var legendIndexes = {};
+            data.legends.forEach(function(item, index){
+                legendIndexes[item.name] = index;
+            });
+
+            var maxValue = 0;
+            data.data.forEach(function (item) {
+                var sportId = item.legend[legendIndexes['sport']];
+                var involveId = item.legend[legendIndexes['involve']];
+                sports[sportId].data[involveId].count += item.count;
+                maxValue = Math.max(maxValue, sports[sportId].data[involveId].count);
+            }, this);
+            var multiplier = maxValue > 1000*1000 ? 1000*1000 : maxValue > 1000 ? 1000 : 1;
+
+
+            $scope.chartsData = {
+                multiplier: multiplier,
+                maxValue: maxValue,
+                sports: sports
+            };
+            
+
+        };
+
+        $scope.updateGraph = function () {
+            if (!$scope.chartsData) return;
+            
+
+            var sports = $scope.sportLegend.filter(function(item) {
+                return item.selected;
+            });
+
+            var involves = $scope.involveLegend.filter(function(item) {
+                return item.selected;
+            });
+
+            var charts = [];
+            sports.forEach(function(sport){
+                // if (!sport.selected) return;
+                //charts.push(sport);
+                var chartData = {labels:[],datasets:[]};
+
+                    var dataDs = { label:[], fillColor:[], data:[] };
+                    var emptyDs = { label:[], fillColor:[], data:[] };
+
+                    involves.forEach(function(involve){
+                        var value = $scope.chartsData.sports[sport.id].data[involve.id].count;
+                        if (value == 0) return;
+
+                        dataDs.label.push(involve.name + ': ' + value.toLocaleString('en-US'));
+                        dataDs.fillColor.push(involve.color);
+                        dataDs.data.push($scope.chartsData.sports[sport.id].data[involve.id].count);
+
+                        emptyDs.label.push(involve.name);
+                        emptyDs.fillColor.push(involve.color);
+                        emptyDs.data.push(0);
+
+                        chartData.labels.push('');
+                    });
+
+                    chartData.datasets.push(dataDs);
+                    chartData.datasets.push(emptyDs);
+                // }
+
+
+                charts.push({
+                    sport:sport,
+                    chartData:{data:chartData, options:{
+                        showLabels: $scope.formatValue,
+                        scaleLabel: function(obj){return $scope.formatValue(obj.value);}
+                    }}
+                })
+            });
+
+            $scope.showCharts = !!charts.length && !!involves.length;
+            $scope.charts = charts;
+
+            // Combine all sports in one graph
+            var combineChart = {data:{labels:[], datasets:[]}, options:{
+                scaleLabel: function(obj){return $scope.formatValue(obj.value);},
+                barWidth: 40,
+                barHeight: 300,
+                barValueSpacing: 30
+            }};
+            combineChart.data.labels = sports.map(function(item){return item.name;});
+            involves.forEach(function(involve){
+                var ds = { label:[], fillColor:[], data:[] };
+                sports.forEach(function(sport) {
+                    var value = $scope.chartsData.sports[sport.id].data[involve.id].count;
+                    ds.label.push(involve.name + ': ' + value.toLocaleString('en-US'));//item[0].name);
+                    ds.fillColor.push(involve.color);
+                    ds.data.push(value);
+
+                });
+                combineChart.data.datasets.push(ds);
+            });
+            $scope.combineChart = (combineChart.data.labels.length > 1 ? combineChart : null);
+        };
+
+    }
+
+}());
+
+(function () {
 	"use strict";
 	/**
 	 * @desc
@@ -22247,6 +22397,16 @@ function RadarChart(id, data, options) {
 						}
 					});
 					sportObj.leagues = leagues;
+					sportObj.disableSelectionInAnalytics = true;
+					$scope.sports.push(sportObj);
+				} else if (sport.key == 'football'){
+					var sportObj = angular.extend({}, sport);
+					//var leagues = [];
+					delete sportObj.leagues;
+					sportObj.clubs = [{
+						name: 'Тестовый клуб',
+						id: 999
+					}];
 					sportObj.disableSelectionInAnalytics = true;
 					$scope.sports.push(sportObj);
 				}
@@ -22368,6 +22528,7 @@ function RadarChart(id, data, options) {
 	footballFieldCtrl.$inject = [
 		'$scope',
 		'$controller',
+		'$q',
 		'ParamsSrv',
 		'ApiSrv'
 	];
@@ -22375,11 +22536,111 @@ function RadarChart(id, data, options) {
 	function footballFieldCtrl(
 		$scope,
 		$controller,
+		$q,
 		ParamsSrv,
 		ApiSrv
 	) {
+		$controller('hockeyBoxBaseCtrl', {$scope: $scope});
+		
+		var promises = [];
+		promises.push(ApiSrv.getStatic('football').then(function(hockeyData){
+			hockeyData.forEach(function(item) {
+				if (item.type == 'championship') {
+					$scope.championship = item;
+				} else if (item.type == 'footballField') {
+					$scope.playgroundData = item;
+				} /*else if (item.type == 'hockeyUniform') {
+					$scope.uniformData = item;
+				} else if (item.type == 'hockeyVideoOffline') {
+					$scope.videoOfflineData = item;
+				} else if (item.type == 'hockeyVideoOnline') {
+					$scope.videoOnlineData = item;
+				}*/
+			});
+		}));
 
-		// Вид спорта «Футбол» средние показатели за матча РПФЛ 2015-16
+		promises.push(ParamsSrv.getParams().then(function(params){
+			$scope.parameters = params;
+		}));
+
+
+		// все данные загружены
+		$q.all(promises).then(function(){
+			$scope.prepareClubInfo();
+
+			function preparePlaces(data){
+				if (data.placesSelection) return;
+				data.placesSelection = {};
+				data.places.forEach(function(place){
+					data.placesSelection[place] = {key: place, selected: false};
+				});
+			}
+
+			preparePlaces($scope.playgroundData);
+			// preparePlaces($scope.uniformData);
+			// preparePlaces($scope.videoOfflineData);
+			// preparePlaces($scope.videoOnlineData);
+
+
+			$scope.playgroundPlacesA = [];
+			var columnsCount = 4;
+			//var places = Object.keys($scope.playgroundData.places).map(function(key){return {key: key, place: $scope.playgroundData.places[key]}; });
+			var count = $scope.playgroundData.places.length;
+			for (var col=1; col <= columnsCount; col++){
+				var arr = $scope.playgroundData.places.slice(Math.ceil(count/columnsCount*(col-1)),Math.ceil(count/columnsCount*col));
+				$scope.playgroundPlacesA.push(arr.map(function(key){ return $scope.playgroundData.placesSelection[key]; }));
+			}
+
+			$scope.$on('ApiSrv.countLoaded', readCount);
+			readCount();
+
+			function readCount(){
+				var result = ApiSrv.getLastCountResult();
+				$scope.audiencePercent = result.audiencePercent / 100;
+				$scope.calc();
+			}
+
+			$scope.$watch('totalCost', $scope.calc);
+
+			$scope.$watch('playgroundData.placesSelection', $scope.calc, true);
+			// $scope.$watch('uniformData.placesSelection', $scope.calc, true);
+			// $scope.$watch('videoOfflineData.placesSelection', $scope.calc, true);
+			// $scope.$watch('videoOnlineData.placesSelection', $scope.calc, true);
+		});
+		
+		$scope.audiencePercent = 0;
+
+
+// расчет видимости выбранных рекламных конструкций на площадке (0.0 - 1.0)
+		$scope.calcVisibility = function(){
+			var result = {
+				playgroundOnline: 		calcSectors($scope.playgroundData, 'visibilityOnline'),
+				playgroundOffline:		calcSectors($scope.playgroundData, 'visibilityOffline')
+			};
+			result.online = Math.max(result.playgroundOnline);
+			result.offline = Math.max(result.playgroundOffline);
+
+			return result;
+
+			function calcSectors(data, dataKey){
+				var sectors = {};
+				Object.keys(data.placesSelection).forEach(function(key){
+					if (!data.placesSelection[key].selected) return;
+					var placeA = data[dataKey][key];
+					if (!placeA) return;
+					placeA.forEach(function(val, index){
+						sectors[index] = Math.max(sectors[index] || 0, val || 0);
+					});
+				});
+
+				var sum = 0;
+				Object.keys(sectors).forEach(function(index){
+					sum += sectors[index];
+				});
+				return Math.min(sum, 1);
+			}
+
+		};
 		
 	}
 
@@ -22665,7 +22926,6 @@ function RadarChart(id, data, options) {
 		$controller('hockeyBoxBaseCtrl', {$scope: $scope});
 
 		
-		
 		var promises = [];
 		promises.push(ApiSrv.getStatic('hockey').then(function(hockeyData){
 			hockeyData.forEach(function(item) {
@@ -22698,17 +22958,6 @@ function RadarChart(id, data, options) {
 				data.places.forEach(function(place){
 					data.placesSelection[place] = {key: place, selected: false};
 				});
-				/*
-				Object.keys(data.visibilityOffline).map(function(key){
-					// data.places[key] = data.places[key] || {selected: false};
-					if (!data.places.some(function(obj){ return obj.key == key; }))
-						data.places.push({key: key, selected: false});
-				});
-				Object.keys(data.visibilityOnline).map(function(key){
-					//data.places[key] = data.places[key] || {selected: false};
-					if (!data.places.some(function(obj){ return obj.key == key; }))
-						data.places.push({key: key, selected: false});
-				});*/
 			}
 			
 			preparePlaces($scope.playgroundData);
@@ -22716,9 +22965,6 @@ function RadarChart(id, data, options) {
 			preparePlaces($scope.videoOfflineData);
 			preparePlaces($scope.videoOnlineData);
 			
-			// $scope.playgroundPlaces = Object.keys($scope.playgroundData.visibilityOffline).map(function(key){
-			// 	return {name:key, selected: false};
-			// });
 
 			$scope.playgroundPlacesA = [];
 			var columnsCount = 4;
@@ -22729,20 +22975,6 @@ function RadarChart(id, data, options) {
 				$scope.playgroundPlacesA.push(arr.map(function(key){ return $scope.playgroundData.placesSelection[key]; }));
 				//$scope.playgroundPlacesA.push(places.slice(Math.ceil(count/columnsCount*(col-1)),Math.ceil(count/columnsCount*col)));
 			}
-
-			
-			// $scope.uniformPlaces = Object.keys($scope.uniformData.visibilityOffline).map(function(key){
-			// 	return {name:key, selected: false};
-			// });
-			//
-			// $scope.videoOfflinePlaces = Object.keys($scope.videoOfflineData.visibilityOffline).map(function(key){
-			// 	return {name:key, selected: false};
-			// });
-			//
-			// $scope.videoOnlinePlaces = Object.keys($scope.videoOnlineData.visibilityOnline).map(function(key){
-			// 	return {name:key, selected: false};
-			// });
-
 			
 			$scope.$on('ApiSrv.countLoaded', readCount);
 			readCount();
@@ -22755,15 +22987,8 @@ function RadarChart(id, data, options) {
 
 			$scope.$watch('totalCost', $scope.calc);
 			
-			// $scope.$watch('playgroundPlaces', $scope.calc, true);
-			// $scope.$watch('uniformPlaces', $scope.calc, true);
-			// $scope.$watch('videoOfflinePlaces', $scope.calc, true);
-			// $scope.$watch('videoOnlinePlaces', $scope.calc, true);
-			
 			$scope.$watch('playgroundData.placesSelection', $scope.calc, true);
 			$scope.$watch('uniformData.placesSelection', $scope.calc, true);
-			// $scope.$watch(function(){return $scope.uniformData.placesSelection;}, $scope.calc, true);
-			
 			$scope.$watch('videoOfflineData.placesSelection', $scope.calc, true);
 			$scope.$watch('videoOnlineData.placesSelection', $scope.calc, true);
 		});
@@ -22772,165 +22997,7 @@ function RadarChart(id, data, options) {
 		$scope.audiencePercent = 0;
 		$scope.percentWatch = {};
 		$scope.percentWalk = {};
-
-
-		/*
-		function calc(){
-
-			var visibility = calcVisibility();
-			var audiencePercent = $scope.audiencePercent || 1;
-
-			var data = {};
-			// Аудитория клуба
-			data.peopleAllOnline = $scope.clubInfo.onlineTotalAll * visibility.online * audiencePercent;
-			data.peopleAllOffline = $scope.clubInfo.offlineTotalAll * visibility.offline * audiencePercent;
-
-			// кол-во уникальных онлайн, тысяч шт
-			var uniqueOnline = $scope.clubInfo.onlineUniqueAll * visibility.online * audiencePercent;
-			var uniqueOffline = $scope.clubInfo.offlineUniqueAll * visibility.offline * audiencePercent;
-
-			data.CPTUniqueOnline = $scope.totalCost && uniqueOnline ? Math.round($scope.totalCost / uniqueOnline) : '-';
-			data.CPTUniqueOffline = $scope.totalCost && uniqueOffline ? Math.round($scope.totalCost / uniqueOffline) : '-';
-
-			// OTS, штук
-			var OTSOnline = $scope.clubInfo.OTSOnline * visibility.online * audiencePercent;
-			var OTSOffline = $scope.clubInfo.OTSOffline * visibility.offline * audiencePercent;
-
-			data.CPTOTSOnline = $scope.totalCost && OTSOnline ? Math.round($scope.totalCost / OTSOnline) : '-';
-			data.CPTOTSOffline = $scope.totalCost && OTSOffline ? Math.round($scope.totalCost / OTSOffline) : '-';
-
-
-			data.audienceSelected = ParamsSrv.isAudienceSelected();
-
-
-
-			//$scope.places;
-			//$scope.playgroundData.statistics
-			$scope.results = data;
-		}
-		*/
-		/*
-		// расчет видимости выбранных рекламных конструкций на площадке (0.0 - 1.0)
-		function calcVisibility(){
-			var result = {
-				playgroundOnline: Math.min(calcPlaygroundOnline(), 1),
-				playgroundOffline: Math.min(calcPlaygroundOffline(), 1),
-				uniformOnline: Math.min(calcUniformOnline(), 1),
-				uniformOffline: Math.min(calcUniformOffline(), 1)
-			};
-			result.online = Math.max(result.playgroundOnline, result.uniformOnline);
-			result.offline = Math.max(result.playgroundOffline, result.uniformOffline);
-
-			return result;
-
-			function calcPlaygroundOnline(){
-				var result = 0;
-				$scope.playgroundPlaces.forEach(function(place){
-				if (!place.selected) return;
-					if ($scope.playgroundData.visibilityOnline[place.name])
-						result = Math.max(result, $scope.playgroundData.visibilityOnline[place.name]);
-			});
-				return result;
-		}
-
-			function calcPlaygroundOffline(){
-			var sectors = {};
-				$scope.playgroundPlaces.forEach(function(place){
-				if (!place.selected) return;
-					var placeA = $scope.playgroundData.visibilityOffline[place.name];
-				//if (!placeA) return;
-				placeA.forEach(function(val, index){
-					sectors[index] = Math.max(sectors[index] || 0, val || 0);
-				});
-			});
-			var sum = 0;
-			Object.keys(sectors).forEach(function(index){
-				sum += sectors[index];
-			});
-			return sum;
-		}
-
-			function calcUniformOnline(){
-				var result = 0;
-				$scope.uniformPlaces.forEach(function(place){
-					if (!place.selected) return;
-					if ($scope.uniformData.visibilityOnline[place.name])
-						result = Math.max(result,$scope.uniformData.visibilityOnline[place.name]);
-				});
-				return result;
-			}
-
-			function calcUniformOffline(){
-				var result = 0;
-				$scope.uniformPlaces.forEach(function(place){
-					if (!place.selected) return;
-					if ($scope.uniformData.visibilityOffline[place.name])
-						result = Math.max(result, $scope.uniformData.visibilityOffline[place.name]);
-				});
-				return result;
-			}
-
-		}
-		*/
-
-		/*
-		function loadWalkWatch(){
-
-			//var audience = ParamsSrv.getSelectedAudience();
-
-			var selected = analyticsSrv.getSelected();
-			var sports = {};
-			sports[selected.sport.key] = {interested: true};
-
-			if (selected.club)
-				sports[selected.sport.key].clubs = [selected.club.id]
-
-
-			var rootingWatch = $scope.parameters.watch.lists.map(function (list) {return list.id;}); // [1, 2, 3, 4];
-			var rootingWalk = $scope.parameters.walk.lists.map(function (list) {return list.id;}); //[1, 2, 3, 4];
-
-			$q.all({
-				//rooting: ApiSrv.getRootingGraph(audience, sports, rooting),
-				watch: ApiSrv.getRootingWatchGraph({}, sports, rootingWatch),
-				walk: ApiSrv.getRootingWalkGraph({}, sports, rootingWalk)
-			}).then(function(data){
-				var watchData = data.watch ? graphHelpersSrv.prepareChartData(data.watch, {
-					'rooting':$scope.parameters.watch,
-					'sport':$scope.parameters.sport,
-					'club':$scope.parameters.sport
-				}) : null;
-
-				var walkData = data.walk ? graphHelpersSrv.prepareChartData(data.walk, {
-					'rooting':$scope.parameters.walk,
-					'sport':$scope.parameters.sport,
-					'club':$scope.parameters.sport
-				}) : null;
-
-				var allWatch = watchData.getCount({ }) || 1;
-				var allWalk = walkData.getCount({ }) || 1;
-
-				rootingWatch.forEach(function(id){
-					$scope.percentWatch[id] =(watchData.getCount({
-							//'sport': sport.id,
-							//'club': club.id,
-							'rooting': id
-						}) || 0) / allWatch;
-				});
-				rootingWalk.forEach(function(id){
-					$scope.percentWalk[id] = (walkData.getCount({
-							//'sport': sport.id,
-							//'club': club.id,
-							'rooting': id
-						}) || 0) / allWalk;
-				});
-
-				calc();
-			});
-
-		}
-		*/
-
-
+		
 	}
 
 }());
@@ -23214,6 +23281,47 @@ function RadarChart(id, data, options) {
 	 * @example
 	 */
 	angular.module('SportsensusApp')
+		.directive('analyticsResultsDir', analyticsResultsDir);
+
+	analyticsResultsDir.$inject = [
+		'$rootScope'
+	];
+
+	function analyticsResultsDir(
+		$rootScope
+	)    {
+		return {
+			restrict: 'E',
+			scope: {
+				results: '=',
+				price: '='
+			},
+			templateUrl: '/views/widgets/infobox/panels/analytics/analyticsResults/analyticsResults.html',
+			link: function ($scope, $el, attrs) {
+				
+			},
+
+			controller: [
+				'$scope',
+				function(
+					$scope
+				){
+
+
+
+				}
+			]
+			
+		};
+	}
+}());
+(function () {
+	"use strict";
+	/**
+	 * @desc
+	 * @example
+	 */
+	angular.module('SportsensusApp')
 		.directive('clubInfoTableDir', clubInfoTableDir);
 
 	clubInfoTableDir.$inject = [
@@ -23280,47 +23388,6 @@ function RadarChart(id, data, options) {
 				}
 			]
 
-		};
-	}
-}());
-(function () {
-	"use strict";
-	/**
-	 * @desc
-	 * @example
-	 */
-	angular.module('SportsensusApp')
-		.directive('analyticsResultsDir', analyticsResultsDir);
-
-	analyticsResultsDir.$inject = [
-		'$rootScope'
-	];
-
-	function analyticsResultsDir(
-		$rootScope
-	)    {
-		return {
-			restrict: 'E',
-			scope: {
-				results: '=',
-				price: '='
-			},
-			templateUrl: '/views/widgets/infobox/panels/analytics/analyticsResults/analyticsResults.html',
-			link: function ($scope, $el, attrs) {
-				
-			},
-
-			controller: [
-				'$scope',
-				function(
-					$scope
-				){
-
-
-
-				}
-			]
-			
 		};
 	}
 }());

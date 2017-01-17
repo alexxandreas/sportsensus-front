@@ -37,6 +37,7 @@
                     ApiSrv
                 ) {
                     $scope.loggedIn = false;
+                    $scope.isAdmin = false;
                     
                     $scope.menu = [{
                             'name': 'О проекте',
@@ -55,28 +56,33 @@
                         },
                         {
                             'name': 'Получить информацию',
-                            visible: function(){return $scope.loggedIn;},
+                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
                             onClick: function(){$scope.setPath('/infobox/');}
-                            
                         },{
                             'name': 'Проанализировать',
-                            visible: function(){return $scope.loggedIn;},
+                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
                             onClick: function(){$scope.setPath('/analytics/');}
                         },{
                             'name': 'Спланировать',
-                            visible: function(){return $scope.loggedIn;}
+                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
                         },{
                             'name': 'Оценить',
-                            visible: function(){return $scope.loggedIn;}
+                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
                         },{
                             'name': 'Личный кабинет',
-                            visible: function(){return $scope.loggedIn;}
+                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
+                        },{
+                            'name': 'Панель администрирования',
+                            visible: function(){return $scope.isAdmin;},
+                            onClick: function(){$scope.setPath('/admin/');}
                         }
                     ];
 
                     
                     $scope.$watch( function () { return ApiSrv.getUser().sid; }, function (sid) {
                         $scope.loggedIn = !!sid;
+                        $scope.isAdmin = ApiSrv.getUser().userRights && !!ApiSrv.getUser().userRights.admin;
+
                     }, true);
                     
                     $scope.setPath = function(path){

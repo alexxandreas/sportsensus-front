@@ -19,7 +19,8 @@
             replace: true,
             //scope: true,
             scope: {
-                title: '@'
+                title: '@',
+                subtitle: '@'
                 //savePdf: '&savePdf'
             },
             transclude: true,
@@ -34,15 +35,19 @@
                     
                 ) {
                     $scope.save = function(){
-                        $scope.$parent.savePdf && $scope.$parent.savePdf({filename: $scope.title});
+                        $scope.$parent.savePdf && $scope.$parent.savePdf({filename: $scope.filename || $scope.title});
                     };
 
                     $scope.print = function(){
-                        $scope.$parent.printPdf && $scope.$parent.printPdf();
+                        $scope.$parent.printPdf && $scope.$parent.printPdf({filename: $scope.filename || $scope.title});
                     };
 
                     $scope.send = function(){
-                        $scope.$parent.sendPdf && $scope.$parent.sendPdf();
+                        $scope.$parent.sendPdf && $scope.$parent.sendPdf({
+                            title: $scope.title,
+                            filename: $scope.title,
+                            message: ($scope.subtitle || '' ) + '<br>'
+                        });
                     };
                     
                 }]

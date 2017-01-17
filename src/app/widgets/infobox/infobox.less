@@ -1,5 +1,44 @@
 .infobox {
 
+  .menu {
+    position: fixed;
+    top: 78px;
+    left: 0;
+    width: 315px;
+
+    ul{
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    .menu-section{
+      padding: 50px 0;
+      border-bottom: 1px solid #dcddda;
+
+      &:first-child{
+        padding-top: 25px;
+      }
+      &:last-child{
+        border-bottom: none;
+      }
+    }
+
+    .menu-section-name{
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      padding-left: 30px;
+
+      img{
+        vertical-align: middle;
+        margin-right: 18px;
+      }
+    }
+
+  }
+
   .left-menu {
 
     .left-menu-item {
@@ -25,20 +64,60 @@
     color: #68b729;
   }
 
-  .check-button {
-    display: inline-block;
-    cursor: pointer;
-    margin-left: 10px;
-    padding: 0 20px;
-    height: 50px;
-    font-weight: bold;
-    border-radius: 50px;
-    border: 2px solid #86d5cf;
+  .chek-button{
+    position: fixed;
+    z-index: 99;
+    padding: 20px 20px 20px 0;
+    bottom: 0;
+    right: 30px;
+    left: 345px;
+    text-align: right;
+    line-height: 50px;
+    //text-transform: uppercase;
+    box-shadow: 0 -4px 10px -4px rgba(0,0,0,.6);
     background: #fff;
 
-    &.disabled {
-      color: gray !important;
+    .button {
+      display: inline-block;
+      cursor: pointer;
+      margin-left: 10px;
+      padding: 0 20px;
+      height: 50px;
+      font-weight: bold;
+      border-radius: 50px;
+      border: 2px solid #86d5cf;
+      background: #fff;
+
+      &.disabled {
+        color: gray !important;
+      }
     }
+  }
+
+
+  .infobox-body{
+    margin-left: 345px;
+    padding-top: 25px;
+    padding-bottom: 0;
+    padding-right: 30px;
+  }
+
+  .infobox-express{
+
+    margin-left: 345px;
+    padding-top: 25px;
+    //padding-bottom: 0;
+    padding-right: 30px;
+
+    padding-bottom: 120px;
+    &:after{
+      content: '';
+      display: block;
+      clear: both;
+    }
+
+    display: none;
+    flex-flow: row wrap;
   }
 
 }

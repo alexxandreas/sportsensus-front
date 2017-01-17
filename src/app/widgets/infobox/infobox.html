@@ -1,27 +1,24 @@
 <div>
     <header-dir></header-dir>
-<div class="l-board infobox">
 
+    <div class="infobox">
 
-    <div class="l-board__chek-button">
-        <!--<span class="l-board__chek-button-text">Найдено болельщиков - 1 901 297</span>-->
-        <span class="audience-count-text no-select" >{{audienceCount == null ? '' : (audienceCount != 0 ? 'Болельщики: ' + audienceCount.toLocaleString() : 'Болельщики: недостаточно данных')}}</span>
-        <span class="check-button no-outline no-select"
-              ng-class="{'disabled': !audienceCount}"
-              ng-show="checkButtonText"
-              ng-click="audienceCount ? checkButtonClick() : null"
-        >{{checkButtonText}}</span>
-    </div>
+        <div class="chek-button">
 
-    <div class="l-board__menu" ng-include="'/views/widgets/infobox/infoboxMenu.html'">
-    </div>
-
-
-    <form>
-        <div ng-if="activePage" style="padding-bottom: 94px;" class="l-board__body" ng-include="'/views/widgets/infobox/panels/'+activePage.id+'.html'">
+            <span class="audience-count-text no-select" >{{audienceCount == null ? '' : (audienceCount != 0 ? 'Болельщики: ' + audienceCount.toLocaleString() : 'Болельщики: недостаточно данных')}}</span>
+            <span class="button no-outline no-select"
+                  ng-class="{'disabled': !audienceCount}"
+                  ng-show="checkButtonText"
+                  ng-click="audienceCount ? checkButtonClick() : null"
+            >{{checkButtonText}}</span>
         </div>
-    </form>
 
-    <div class="l-board__express"></div>
-</div>
+        <div class="menu" ng-include="'/views/widgets/infobox/infoboxMenu.html'"></div>
+
+        <div>
+            <div ng-if="activePage" style="padding-bottom: 94px;" class="infobox-body" ng-include="'/views/widgets/infobox/panels/'+activePage.id+'.html'"></div>
+        </div>
+
+        <!--<div class=" infobox-express"></div>-->
+    </div>
 </div>

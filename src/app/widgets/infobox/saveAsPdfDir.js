@@ -10,13 +10,17 @@
     saveAsPdfDir.$inject = [
         '$rootScope',
         '$q',
-        '$timeout'
+        '$timeout',
+        '$mdDialog',
+        'ApiSrv'
     ];
 
     function saveAsPdfDir(
         $rootScope,
         $q,
-        $timeout
+        $timeout,
+        $mdDialog,
+        ApiSrv
     )    {
         //var el;
 
@@ -159,7 +163,47 @@
                     $scope.$broadcast('printStart');
                     $timeout(function() {
                         saveAsPdf($el).then(function (doc) {
-                                //doc.save(options && options.filename || 'sportsensus-report.pdf');
+                                var confirm = $mdDialog.prompt()
+                                    .title('Отправка на почту')
+                                    .textContent('Введите почту, на которую нужно отправить письмо')
+                                    .placeholder('e-mail')
+                                    .ariaLabel('e-mail')
+                                    //.initialValue('Buddy')
+                                    //.targetEvent(ev)
+                                    .ok('OK')
+                                    .cancel('Отмена');
+                                $mdDialog.show(confirm).then(function(result) {
+                                    if (!result) return;
+
+                                    //var data = doc.output('datauristring');
+                                    var data = btoa(doc.output());
+                                    ApiSrv.sendEmail({
+                                        address: result,
+                                        // theme: 'Отчет',
+                                        
+                                        theme: options.title || 'Отчет с портала sportsensus.ru',
+                                        // message: 'Получите файлик',
+                                        message: options.message || '',
+                                        attachments: [{
+                                            filename: options && options.filename ? options.filename + '.pdf' : 'sportsensus-report.pdf',
+                                            data: data
+                                        }]
+                                    }).then(function(){
+                                        $mdDialog.show($mdDialog.alert()
+                                            .title('Отправка на почту')
+                                            .textContent('Письмо успешно отправлено на ' + result)
+                                            .ok('OK'));
+                                    }, function(){
+                                        $mdDialog.show($mdDialog.alert()
+                                            .title('Отправка на почту')
+                                            .textContent('Ошибка отправки письма на ' + result)
+                                            .ok('OK'));
+                                    });
+                                    //$scope.status = 'You decided to name your dog ' + result + '.';
+                                }, function() {
+                                    //$scope.status = 'You didn\'t name your dog.';
+                                });
+                            //doc.save(options && options.filename || 'sportsensus-report.pdf');
                             }, function () {
                                 alert('Ошибка записи в PDF');
                             })

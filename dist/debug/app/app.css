@@ -784,6 +784,37 @@ md-switch.md-checked .md-thumb-container {
   color: #fff;
 }
 
+.infobox .menu {
+  position: fixed;
+  top: 78px;
+  left: 0;
+  width: 315px;
+}
+.infobox .menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.infobox .menu .menu-section {
+  padding: 50px 0;
+  border-bottom: 1px solid #dcddda;
+}
+.infobox .menu .menu-section:first-child {
+  padding-top: 25px;
+}
+.infobox .menu .menu-section:last-child {
+  border-bottom: none;
+}
+.infobox .menu .menu-section-name {
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  padding-left: 30px;
+}
+.infobox .menu .menu-section-name img {
+  vertical-align: middle;
+  margin-right: 18px;
+}
 .infobox .left-menu .left-menu-item {
   line-height: 35px;
   padding-left: 80px;
@@ -802,7 +833,19 @@ md-switch.md-checked .md-thumb-container {
 .infobox .audience-count-text {
   color: #68b729;
 }
-.infobox .check-button {
+.infobox .chek-button {
+  position: fixed;
+  z-index: 99;
+  padding: 20px 20px 20px 0;
+  bottom: 0;
+  right: 30px;
+  left: 345px;
+  text-align: right;
+  line-height: 50px;
+  box-shadow: 0 -4px 10px -4px rgba(0, 0, 0, 0.6);
+  background: #fff;
+}
+.infobox .chek-button .button {
   display: inline-block;
   cursor: pointer;
   margin-left: 10px;
@@ -813,8 +856,27 @@ md-switch.md-checked .md-thumb-container {
   border: 2px solid #86d5cf;
   background: #fff;
 }
-.infobox .check-button.disabled {
+.infobox .chek-button .button.disabled {
   color: gray !important;
+}
+.infobox .infobox-body {
+  margin-left: 345px;
+  padding-top: 25px;
+  padding-bottom: 0;
+  padding-right: 30px;
+}
+.infobox .infobox-express {
+  margin-left: 345px;
+  padding-top: 25px;
+  padding-right: 30px;
+  padding-bottom: 120px;
+  display: none;
+  flex-flow: row wrap;
+}
+.infobox .infobox-express:after {
+  content: '';
+  display: block;
+  clear: both;
 }
 
 .l-board:after {
@@ -917,18 +979,19 @@ div > svg > circle:nth-child(5n) {
 .l-board__map path:hover {
   fill: #A4DEF4;
 }
-.l-board__chek-button {
-  position: fixed;
-  z-index: 99;
-  padding: 20px 20px 20px 0;
-  bottom: 0;
-  right: 30px;
-  left: 345px;
-  text-align: right;
-  line-height: 50px;
-  box-shadow: 0 -4px 10px -4px rgba(0, 0, 0, 0.6);
-  background: #fff;
-}
+/*.l-board__chek-button{
+    position: fixed;
+    z-index: 99;
+    padding: 20px 20px 20px 0;
+    bottom: 0;
+    right: 30px;
+    left: 345px;
+    text-align: right;
+    line-height: 50px;
+    //text-transform: uppercase;
+    box-shadow: 0 -4px 10px -4px rgba(0,0,0,.6);
+    background: #fff;
+}*/
 /*.l-board__chek-button-text{
     color: #68b729;
 }
@@ -944,37 +1007,45 @@ div > svg > circle:nth-child(5n) {
     border: 2px solid #86d5cf;
     background: #fff;
 }*/
-.l-board__menu {
-  position: fixed;
-  top: 78px;
-  left: 0;
-  width: 315px;
+/*
+
+.l-board__menu{
+    position: fixed;
+    top: 78px;
+    left: 0;
+    width: 315px;
+
+    ul{
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
 }
-.l-board__menu ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+
+.l-board__menu-section{
+    padding: 50px 0;
+    border-bottom: 1px solid #dcddda;
+
+    &:first-child{
+        padding-top: 25px;
+    }
+    &:last-child{
+        border-bottom: none;
+    }
 }
-.l-board__menu-section {
-  padding: 50px 0;
-  border-bottom: 1px solid #dcddda;
+
+.l-board__menu-section-name{
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    padding-left: 30px;
+
+    img{
+        vertical-align: middle;
+        margin-right: 18px;
+    }
 }
-.l-board__menu-section:first-child {
-  padding-top: 25px;
-}
-.l-board__menu-section:last-child {
-  border-bottom: none;
-}
-.l-board__menu-section-name {
-  font-weight: bold;
-  text-transform: uppercase;
-  margin-bottom: 5px;
-  padding-left: 30px;
-}
-.l-board__menu-section-name img {
-  vertical-align: middle;
-  margin-right: 18px;
-}
+*/
 /*.l-board__menu-button{
     line-height: 35px;
     padding-left: 80px;
@@ -986,25 +1057,28 @@ div > svg > circle:nth-child(5n) {
         background: #d7ece8;
     }
 }*/
+/*
 .l-board__express,
-.l-board__body {
-  margin-left: 345px;
-  padding-top: 25px;
-  padding-bottom: 0;
-  padding-right: 30px;
+.l-board__body{
+    margin-left: 345px;
+    padding-top: 25px;
+    padding-bottom: 0;
+    padding-right: 30px;
 }
-.l-board__express {
-  padding-bottom: 120px;
+
+.l-board__express{
+    padding-bottom: 120px;
+    &:after{
+        content: '';
+        display: block;
+        clear: both;
+    }
 }
-.l-board__express:after {
-  content: '';
-  display: block;
-  clear: both;
-}
-.l-board__express {
-  display: none;
-  flex-flow: row wrap;
-}
+
+.l-board__express{
+    display: none;
+    flex-flow: row wrap;
+}*/
 .l-board__body-box {
   display: flex;
   flex-flow: row wrap;
@@ -1597,6 +1671,7 @@ div > svg > circle:nth-child(5n) {
   transform: translate(-50%, 0);
 }
 
+
 .map-marker {
   background-repeat: no-repeat;
 }
@@ -1755,6 +1830,40 @@ div > svg > circle:nth-child(5n) {
   height: 53px;
   background-position: center;
   margin: 10px;
+}
+
+.profiles-panel .profiles-table {
+  width: 100%;
+  font-size: 12px;
+}
+.profiles-panel .profiles-table td,
+.profiles-panel .profiles-table th {
+  padding: 5px;
+}
+.profiles-panel .profiles-table > tbody > tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+.profiles-panel .profiles-table .switch {
+  width: 40px;
+  margin: auto;
+}
+
+.parameter-widget {
+  margin-right: 30px;
+}
+.parameter-widget .widget-header {
+  font-size: 19px;
+}
+.parameter-widget .widget-text {
+  margin-top: 4px;
+  font-size: 25px;
+  color: #4ac0b6;
+}
+.parameter-widget .widget-footer {
+  font-size: 13px;
+  color: #4ac0b6;
 }
 
 .footballField .footballFieldImage {
@@ -1991,20 +2100,4 @@ div > svg > circle:nth-child(5n) {
 .playgroundParamsTable .playground-table-row {
   min-height: 35px;
   padding: 0 10px;
-}
-
-.parameter-widget {
-  margin-right: 30px;
-}
-.parameter-widget .widget-header {
-  font-size: 19px;
-}
-.parameter-widget .widget-text {
-  margin-top: 4px;
-  font-size: 25px;
-  color: #4ac0b6;
-}
-.parameter-widget .widget-footer {
-  font-size: 13px;
-  color: #4ac0b6;
 }

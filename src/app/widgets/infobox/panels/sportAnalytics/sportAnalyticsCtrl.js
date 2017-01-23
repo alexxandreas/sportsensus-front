@@ -40,14 +40,7 @@
 						//if (league.id == 1){
 						if (league.name == "КХЛ"){
 							var leagueObj = angular.extend({}, league);
-							leagueObj.disableSelectionInAnalytics = true;
-
-							// var clubs = [];
-							// leagueObj.clubs.forEach(function(club) {
-							// 	if (club.id == 19)
-							// 		clubs.push(club);
-							// });
-							// leagueObj.clubs = clubs;
+							//leagueObj.disableSelectionInAnalytics = true;
 							leagues.push(leagueObj);
 						}
 					});
@@ -56,12 +49,23 @@
 					$scope.sports.push(sportObj);
 				} else if (sport.key == 'football'){
 					var sportObj = angular.extend({}, sport);
-					//var leagues = [];
-					delete sportObj.leagues;
-					sportObj.clubs = [{
-						name: 'Тестовый клуб',
-						id: 999
-					}];
+
+					// delete sportObj.leagues;
+					// sportObj.clubs = [{
+					// 	name: 'Тестовый клуб',
+					// 	id: 999
+					// }];
+					var leagues = [];
+					sportObj.leagues.forEach(function(league){
+						//if (league.id == 1){
+						if (league.name == "РФПЛ"){
+							var leagueObj = angular.extend({}, league);
+							leagueObj.disableSelectionInAnalytics = true;
+							leagues.push(leagueObj);
+						}
+					});
+					sportObj.leagues = leagues;
+
 					sportObj.disableSelectionInAnalytics = true;
 					$scope.sports.push(sportObj);
 				}

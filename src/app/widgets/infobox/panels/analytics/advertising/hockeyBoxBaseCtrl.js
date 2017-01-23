@@ -28,6 +28,63 @@
 		
 		$scope.audiencePercent = 0;
 
+		$scope.prepare = function(){
+			var selected = analyticsSrv.getSelected();
+			var club = selected.club;
+			var league = selected.league;
+			//if (!club) return;
+			if (club)
+				$scope.prepareClubInfo();
+			else if (league)
+				$scope.prepareLeagueInfo();
+		};
+
+		$scope.prepareLeagueInfo = function(){
+			var selected = analyticsSrv.getSelected();
+			//var club = selected.club;
+			var league = selected.league;
+			if (!league) return;
+
+
+			var allTmp = {
+				onlineTotal: 0,
+				//onlineTotalFederal: 0,
+				//onlineTotalLocal: 0,
+				offlineTotal: 0  // += (game.offlineCount || 0);
+			};
+
+			$scope.championship.data.championship.forEach(function(game){
+				allTmp.onlineTotal += (game.federalTVAudience || 0) + (game.regionalTVAudience || 0);
+				allTmp.offlineTotal += (game.offlineCount || 0);
+			});
+
+			var walkAvg = 0; // Среднее количество посещений хоккейных матчей на 1 зрителя данного клуба
+			var watchAvg = 0; // Среднее количество ТВ-просмотров хоккейных матчей на 1 зрителя данного клуба
+			if ($scope.championship.data.clubInfo){
+				$scope.championship.data.clubInfo.forEach(function(_club){
+					walkAvg += _club.walkAVG;
+					watchAvg += _club.watchAVG;
+				});
+				walkAvg = walkAvg / $scope.championship.data.clubInfo.length;
+				watchAvg = watchAvg / $scope.championship.data.clubInfo.length;
+			} else {
+				walkAvg = 1;
+				watchAvg = 1;
+			}
+
+			var avgEffFreqOnline = $scope.championship.data.avgEffFreqOnline;
+			var avgEffFreqOffline = $scope.championship.data.avgEffFreqOffline;
+
+			$scope.calcParams = {
+				onlineTotalAll: allTmp.onlineTotal, // в тысячах
+				offlineTotalAll: allTmp.offlineTotal/1000, // в тысячах
+				onlineUniqueAll: allTmp.onlineTotal/watchAvg, // в тысячах
+				offlineUniqueAll:  allTmp.offlineTotal/1000/walkAvg,  // в тысячах
+				OTSOnline:  allTmp.onlineTotal*avgEffFreqOnline, // в тысячах
+				OTSOffline: allTmp.offlineTotal*avgEffFreqOffline/1000 // в тысячах
+			}
+
+		};
 
 		$scope.prepareClubInfo = function(){
 
@@ -65,19 +122,18 @@
 						homeTmp.playgrounds[game.stadiumId].stadiumName = game.stadiumName;
 						homeTmp.playgrounds[game.stadiumId].stadiumCapacity = game.stadiumCapacity;
 						homeTmp.playgrounds[game.stadiumId].gamesCount++;
-
 					}
-					allTmp.onlineRatings += game.federalTVRating;
-					allTmp.onlineTotalFederal += game.federalTVAudience;
-					allTmp.onlineTotalLocal += game.regionalTVAudience;
+					allTmp.onlineRatings += (game.federalTVRating || 0);
+					allTmp.onlineTotalFederal += (game.federalTVAudience || 0);
+					allTmp.onlineTotalLocal += (game.regionalTVAudience || 0);
 				}
 				if (game.guestClubId == club.id){
 					guestGames.push(game);
 					guestTmp.occupancy += game.offlineCount / game.stadiumCapacity;
-					guestTmp.offlineTotal += game.offlineCount;
-					allTmp.onlineRatings += game.federalTVRating;
-					allTmp.onlineTotalFederal += game.federalTVAudience;
-					allTmp.onlineTotalLocal += game.regionalTVAudience;
+					guestTmp.offlineTotal += (game.offlineCount || 0);
+					allTmp.onlineRatings += (game.federalTVRating || 0);
+					allTmp.onlineTotalFederal += (game.federalTVAudience || 0);
+					allTmp.onlineTotalLocal += (game.regionalTVAudience || 0);
 				}
 			});
 
@@ -142,21 +198,32 @@
 
 				onlineRatings: Math.round(allTmp.onlineRatings*10)/10,
 
-				onlineTotalFederal: Math.round(allTmp.onlineTotalFederal*10)/10,
-				onlineTotalLocal: Math.round(allTmp.onlineTotalLocal*10)/10,
-				onlineTotalAll: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10)/10,
+				onlineTotalFederal: Math.round(allTmp.onlineTotalFederal*10)/10, // в тысячах
+				onlineTotalLocal: Math.round(allTmp.onlineTotalLocal*10)/10, // в тысячах
+				onlineTotalAll: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10)/10, // в тысячах
 
-				onlineUniqueFederal: Math.round(allTmp.onlineTotalFederal*10/watchAvg)/10,
-				onlineUniqueLocal: Math.round(allTmp.onlineTotalLocal*10/watchAvg)/10,
-				onlineUniqueAll: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10/watchAvg)/10,
+				onlineUniqueFederal: Math.round(allTmp.onlineTotalFederal*10/watchAvg)/10, // в тысячах
+				onlineUniqueLocal: Math.round(allTmp.onlineTotalLocal*10/watchAvg)/10, // в тысячах
+				onlineUniqueAll: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10/watchAvg)/10, // в тысячах
 
 				reachOffline: Math.round((homeTmp.offlineTotal + guestTmp.offlineTotal)/100/walkAvg)/10, // offlineUniqueAll
 				reachOnline: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10/watchAvg)/10, // onlineUniqueAll
 				OTSOffline: Math.round((homeTmp.offlineTotal + guestTmp.offlineTotal)/100*avgEffFreqOffline)/10, // // offlineTotalAll * onlineFreq * 3
 				OTSOnline:  Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10*avgEffFreqOnline)/10 // onlineTotalAll * onlineFreq
 			};
+
+			$scope.calcParams = {
+				onlineTotalAll: allTmp.onlineTotalFederal + allTmp.onlineTotalLocal, // в тысячах
+				offlineTotalAll: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000, // в тысячах
+				onlineUniqueAll: (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)/watchAvg, // в тысячах
+				offlineUniqueAll: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000/walkAvg,  // в тысячах
+				OTSOffline: (homeTmp.offlineTotal + guestTmp.offlineTotal)*avgEffFreqOffline/1000, // в тысячах
+				OTSOnline:  (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*avgEffFreqOnline // в тысячах
+			}
 			
 		};
+
+
 
 
 		$scope.calc = function(){
@@ -166,19 +233,25 @@
 
 			var data = {};
 			// Аудитория клуба
-			data.peopleAllOnline = Math.round($scope.clubInfo.onlineTotalAll * visibility.online * audiencePercent);
-			data.peopleAllOffline = Math.round($scope.clubInfo.offlineTotalAll * visibility.offline * audiencePercent);
+			//data.peopleAllOnline = Math.round($scope.clubInfo.onlineTotalAll * visibility.online * audiencePercent);
+			//data.peopleAllOffline = Math.round($scope.clubInfo.offlineTotalAll * visibility.offline * audiencePercent);
+			data.peopleAllOnline = Math.round($scope.calcParams.onlineTotalAll * visibility.online * audiencePercent);
+			data.peopleAllOffline = Math.round($scope.calcParams.offlineTotalAll * visibility.offline * audiencePercent);
 
 			// кол-во уникальных онлайн, тысяч шт
-			var uniqueOnline = $scope.clubInfo.onlineUniqueAll * visibility.online * audiencePercent;
-			var uniqueOffline = $scope.clubInfo.offlineUniqueAll * visibility.offline * audiencePercent;
+			// var uniqueOnline = $scope.clubInfo.onlineUniqueAll * visibility.online * audiencePercent;
+			// var uniqueOffline = $scope.clubInfo.offlineUniqueAll * visibility.offline * audiencePercent;
+			var uniqueOnline = $scope.calcParams.onlineUniqueAll * visibility.online * audiencePercent;
+			var uniqueOffline = $scope.calcParams.offlineUniqueAll * visibility.offline * audiencePercent;
 
 			data.CPTUniqueOnline = $scope.totalCost && uniqueOnline ? Math.round($scope.totalCost / uniqueOnline * 10)/10 : '-';
 			data.CPTUniqueOffline = $scope.totalCost && uniqueOffline ? Math.round($scope.totalCost / uniqueOffline * 10)/10 : '-';
 
 			// OTS, штук
-			var OTSOnline = $scope.clubInfo.OTSOnline * visibility.online * audiencePercent;
-			var OTSOffline = $scope.clubInfo.OTSOffline * visibility.offline * audiencePercent;
+			// var OTSOnline = $scope.clubInfo.OTSOnline * visibility.online * audiencePercent;
+			// var OTSOffline = $scope.clubInfo.OTSOffline * visibility.offline * audiencePercent;
+			var OTSOnline = $scope.calcParams.OTSOnline * visibility.online * audiencePercent;
+			var OTSOffline = $scope.calcParams.OTSOffline * visibility.offline * audiencePercent;
 
 			data.CPTOTSOnline = $scope.totalCost && OTSOnline ? Math.round($scope.totalCost / OTSOnline * 10)/10 : '-';
 			data.CPTOTSOffline = $scope.totalCost && OTSOffline ? Math.round($scope.totalCost / OTSOffline * 10)/10 : '-';
@@ -187,42 +260,6 @@
 			data.audienceSelected = ParamsSrv.isAudienceSelected();
 
 
-			/*data.peopleOffline = getPeopleOffline();
-			 data.peopleOnline = getPeopleOnline();
-
-			 data.CPTOffline = data.peopleOffline && $scope.totalCost ? Math.round($scope.totalCost / data.peopleOffline * 1000) : 0;
-			 data.CPTOnline = data.peopleOnline && $scope.totalCost ? Math.round($scope.totalCost  / data.peopleOnline * 1000) : 0;
-
-			 data.peopleAll = data.peopleOffline + data.peopleOnline;
-			 data.CPTAll = data.peopleAll && $scope.totalCost ? Math.round($scope.totalCost  / data.peopleAll * 1000) : 0;
-
-			 data.peopleOfflineCA = Math.round(data.peopleOffline * $scope.audiencePercent / 100);
-			 data.peopleOnlineCA = Math.round(data.peopleOnline * $scope.audiencePercent / 100);
-
-			 data.CPTOfflineCA = data.peopleOfflineCA && $scope.totalCost ? Math.round($scope.totalCost / data.peopleOfflineCA * 1000) : 0;
-			 data.CPTOnlineCA = data.peopleOnlineCA && $scope.totalCost ? Math.round($scope.totalCost  / data.peopleOnlineCA * 1000) : 0;
-
-
-			 data.watchData = $scope.parameters.watch.lists.map(function(list){
-			 return {
-			 name:list.name,
-			 id: list.id,
-			 count: Math.round(data.peopleOnlineCA * ($scope.percentWatch[list.id] || 0))
-			 }
-			 });
-
-
-			 data.walkData = $scope.parameters.walk.lists.map(function(list){
-			 return {
-			 name:list.name,
-			 id: list.id,
-			 count: Math.round(data.peopleOfflineCA * ($scope.percentWalk[list.id] || 0))
-			 }
-			 });
-
-			 */
-			//$scope.places;
-			//$scope.playgroundData.statistics
 			$scope.results = data;
 		};
 

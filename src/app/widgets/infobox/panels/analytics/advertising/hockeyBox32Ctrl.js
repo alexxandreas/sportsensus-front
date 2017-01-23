@@ -48,7 +48,7 @@
 
 		// все данные загружены
 		$q.all(promises).then(function(){
-			$scope.prepareClubInfo();
+			$scope.prepare();
 
 			
 			$scope.playgroundPlaces = Object.keys($scope.playgroundData.visibilityOffline).map(function(key){

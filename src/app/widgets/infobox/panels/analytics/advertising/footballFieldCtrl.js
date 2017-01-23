@@ -47,7 +47,7 @@
 
 		// все данные загружены
 		$q.all(promises).then(function(){
-			$scope.prepareClubInfo();
+			$scope.prepare();
 
 			function preparePlaces(data){
 				if (data.placesSelection) return;

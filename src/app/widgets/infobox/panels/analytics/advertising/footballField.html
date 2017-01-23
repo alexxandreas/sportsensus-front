@@ -1,7 +1,7 @@
 <div layout="column" layout-align="start stretch" class="footballField"
 	 ng-controller="footballFieldCtrl">
 
-	<club-info-table-dir club-info="clubInfo" style="margin-top: 10px; margin-bottom: 40px;"></club-info-table-dir>
+	<club-info-table-dir club-info="clubInfo" ng-show="clubInfo" style="margin-top: 10px; margin-bottom: 40px;"></club-info-table-dir>
 
 	<h1 class="infobox-panel-header" layout="row" layout-align="start center">
 		Формирование и оценка спонсорского пакета

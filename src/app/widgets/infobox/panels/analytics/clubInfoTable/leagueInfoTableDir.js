@@ -5,24 +5,23 @@
 	 * @example
 	 */
 	angular.module('SportsensusApp')
-		.directive('analyticsResultsDir', analyticsResultsDir);
+		.directive('leagueInfoTableDir', leagueInfoTableDir);
 
-	analyticsResultsDir.$inject = [
+	leagueInfoTableDir.$inject = [
 		'$rootScope'
 	];
 
-	function analyticsResultsDir(
+	function leagueInfoTableDir(
 		$rootScope
 	)    {
 		return {
 			restrict: 'E',
 			scope: {
-				results: '=',
-				price: '='
+				leagueInfo: '='
 			},
-			templateUrl: '/views/widgets/infobox/panels/analytics/analyticsResults/analyticsResults.html',
+			templateUrl: '/views/widgets/infobox/panels/analytics/clubInfoTable/leagueInfoTable.html',
 			link: function ($scope, $el, attrs) {
-				
+
 			},
 
 			controller: [
@@ -30,12 +29,10 @@
 				function(
 					$scope
 				){
-					$scope.currency = '₽';
-
-
+					$scope.showed = true;
 				}
 			]
-			
+
 		};
 	}
 }());

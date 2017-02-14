@@ -8,6 +8,11 @@
     </h1>-->
     <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
         {{parameters.involve.name}}
+        <div flex></div>
+        <md-button class="md-raised md-primary"
+                   ng-show="checkSelected('involve')"
+                   ng-click="clearSelection('involve')"
+        >Сбросить</md-button>
     </h1>
 
     <legend-dir legend="parameters.involve.lists" columns-count="1"

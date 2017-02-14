@@ -1,5 +1,5 @@
-<div class="clubInfoTable"
-	layout="column" layotu-align="start stretch">
+<div class="leagueInfoTable"
+	 layout="column" layotu-align="start stretch">
 
 	<!--<div class="header" layout="row" layout-align="start center" flex>
 		<span class="text">Информация о клубе</span>
@@ -9,7 +9,7 @@
 
 	<h2 class="infobox-panel-header2" style="margin-top: 30px;"
 		layout="row" layout-align="start center">
-		Информация о клубе
+		Информация о лиге
 	</h2>
 
 
@@ -22,25 +22,25 @@
 
 				<div layout="row" layout-align="space-around stretch" class="row">
 					<div class="item title" layout="row" layout-align="center center" flex="50" >Название</div>
-					<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.name}}</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.name}}</div>
 				</div>
 
 				<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
-					<div class="item title" layout="row" layout-align="center center" flex="50" >Домашняя площадка</div>
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Домашние площадки</div>
 					<div class="item info" layout="row" layout-align="center center" flex="50" >
-						<!--<span ng-repeat="playground in clubInfo.playgrounds">{{playground}}</span>-->
-						{{clubInfo.playground}}
+						<!--<span ng-repeat="playground in leagueInfo.playgrounds">{{playground}}</span>-->
+						{{leagueInfo.playgroundsCount + ' шт'}}
 					</div>
 				</div>
 
 				<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
-					<div class="item title" layout="row" layout-align="center center" flex="50" >Вместимость площадки</div>
-					<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.playgroundCapacity.toLocaleString()}}</div>
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Вместимость площадок</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.playgroundsCapacity.toLocaleString()}}</div>
 				</div>
 
 				<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 					<div class="item title" layout="row" layout-align="center center" flex="50" >Игр в сезоне</div>
-					<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.gamesCount.toLocaleString()}}</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.gamesCount.toLocaleString()}}</div>
 				</div>
 			</div>
 
@@ -51,22 +51,22 @@
 
 				<div layout="row" layout-align="space-around stretch" class="row">
 					<div class="item title" layout="row" layout-align="center center" flex="50" >Reach ('000) offline</div>
-					<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.reachOffline.toLocaleString()}}</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.reachOffline.toLocaleString()}}</div>
 				</div>
 
 				<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 					<div class="item title" layout="row" layout-align="center center" flex="50" >Reach ('000) ТВ</div>
-					<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.reachOnline.toLocaleString()}}</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.reachOnline.toLocaleString()}}</div>
 				</div>
 
 				<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 					<div class="item title" layout="row" layout-align="center center" flex="50" >OTS оффлайн</div>
-					<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.OTSOffline.toLocaleString()}}</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.OTSOffline.toLocaleString()}}</div>
 				</div>
 
 				<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 					<div class="item title" layout="row" layout-align="center center" flex="50" >OTS ТВ</div>
-					<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.OTSOnline.toLocaleString()}}</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.OTSOnline.toLocaleString()}}</div>
 				</div>
 			</div>
 		</div>
@@ -77,55 +77,70 @@
 			<div layout="column" class="card" flex ng-show="showed">
 				<div class="header" layout="row" layout-align="center center" >Зрители на трибунах</div>
 
-				<div layout="row" layout-align="space-around stretch" >
+				<div layout="row" layout-align="space-around stretch"  class="row-2">
 					<div class="item title" layout="row" layout-align="center center" flex="50" >Средняя посещаемость в сезоне 2015/16</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.offlineAVGAll.toLocaleString()}}%</div>
+				</div>
+
+				<!--<div layout="row" layout-align="space-around stretch" >
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Средняя посещаемость в сезоне 2015/16 ('000)</div>
 					<div layout="column" layout-align="start stretch" flex="50" >
 						<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 							<div class="item title" layout="row" layout-align="center center" flex="50" >Дома</div>
-							<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.offlineAVGHome.toLocaleString()}}%</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.offlineAVGHome.toLocaleString()}}%</div>
 						</div>
 						<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 							<div class="item title" layout="row" layout-align="center center" flex="50" >В гостях</div>
-							<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.offlineAVGGuest.toLocaleString()}}%</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.offlineAVGGuest.toLocaleString()}}%</div>
 						</div>
 					</div>
+				</div>-->
+
+				<div layout="row" layout-align="space-around stretch"  class="row-2">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Всего зрителей на трибунах в сезоне 2015/16 ('000)</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.offlineTotalAll.toLocaleString()}}</div>
 				</div>
 
-				<div layout="row" layout-align="space-around stretch">
+				<!--<div layout="row" layout-align="space-around stretch">
 					<div class="item title" layout="row" layout-align="center center" flex="50" >Всего зрителей на трибунах в сезоне 2015/16 ('000)</div>
 					<div layout="column" layout-align="start stretch" flex="50" >
 						<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 							<div class="item title" layout="row" layout-align="center center" flex="50" >Дома</div>
-							<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.offlineTotalHome.toLocaleString()}}</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.offlineTotalHome.toLocaleString()}}</div>
 						</div>
 						<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 							<div class="item title" layout="row" layout-align="center center" flex="50" >В гостях</div>
-							<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.offlineTotalGuest.toLocaleString()}}</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.offlineTotalGuest.toLocaleString()}}</div>
 						</div>
 						<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 							<div class="item title" layout="row" layout-align="center center" flex="50" >Всего</div>
-							<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.offlineTotalAll.toLocaleString()}}</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.offlineTotalAll.toLocaleString()}}</div>
 						</div>
 					</div>
+				</div>-->
+
+				<div layout="row" layout-align="space-around stretch"  class="row-2">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Уникальных зрителей на трибунах в сезоне 2015/16 ('000)</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.offlineUniqueAll.toLocaleString()}}</div>
 				</div>
 
-				<div layout="row" layout-align="space-around stretch">
+				<!--<div layout="row" layout-align="space-around stretch">
 					<div class="item title" layout="row" layout-align="center center" flex="50" >Уникальных зрителей на трибунах в сезоне 2015/16 ('000)</div>
 					<div layout="column" layout-align="start stretch" flex="50" >
 						<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 							<div class="item title" layout="row" layout-align="center center" flex="50" >Дома</div>
-							<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.offlineUniqueHome.toLocaleString()}}</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.offlineUniqueHome.toLocaleString()}}</div>
 						</div>
 						<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 							<div class="item title" layout="row" layout-align="center center" flex="50" >В гостях</div>
-							<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.offlineUniqueGuest.toLocaleString()}}</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.offlineUniqueGuest.toLocaleString()}}</div>
 						</div>
 						<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 							<div class="item title" layout="row" layout-align="center center" flex="50" >Всего</div>
-							<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.offlineUniqueAll.toLocaleString()}}</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.offlineUniqueAll.toLocaleString()}}</div>
 						</div>
 					</div>
-				</div>
+				</div>-->
 			</div>
 
 			<div style="width: 5px;"></div>
@@ -135,44 +150,54 @@
 
 				<div layout="row" layout-align="space-around stretch"  class="row-2">
 					<div class="item title" layout="row" layout-align="center center" flex="50" >Телевизионных рейтингов в сезоне 2015/16</div>
-					<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.onlineRatings.toLocaleString()}}</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.onlineRatings.toLocaleString()}}</div>
 				</div>
 
-				<div layout="row" layout-align="space-around stretch">
+				<div layout="row" layout-align="space-around stretch"  class="row-2">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Телевизионная аудитория в сезоне 2015/16 ('000)</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.onlineTotalAll.toLocaleString()}}</div>
+				</div>
+
+				<!--<div layout="row" layout-align="space-around stretch">
 					<div class="item title" layout="row" layout-align="center center" flex="50" >Телевизионная аудитория в сезоне 2015/16 ('000)</div>
 					<div layout="column" layout-align="start stretch" flex="50" >
 						<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 							<div class="item title" layout="row" layout-align="center center" flex="50" >Федеральная</div>
-							<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.onlineTotalFederal.toLocaleString()}}</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.onlineTotalFederal.toLocaleString()}}</div>
 						</div>
 						<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 							<div class="item title" layout="row" layout-align="center center" flex="50" >Местная</div>
-							<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.onlineTotalLocal.toLocaleString()}}</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.onlineTotalLocal.toLocaleString()}}</div>
 						</div>
 						<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 							<div class="item title" layout="row" layout-align="center center" flex="50" >Всего</div>
-							<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.onlineTotalAll.toLocaleString()}}</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.onlineTotalAll.toLocaleString()}}</div>
 						</div>
 					</div>
+				</div>-->
+
+				<div layout="row" layout-align="space-around stretch"  class="row-2">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Уникальная телевизионная аудитория в сезоне 2015/16 ('000)</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.onlineUniqueAll.toLocaleString()}}</div>
 				</div>
 
-				<div layout="row" layout-align="space-around stretch">
+				<!--<div layout="row" layout-align="space-around stretch">
 					<div class="item title" layout="row" layout-align="center center" flex="50" >Уникальная телевизионная аудитория в сезоне 2015/16 ('000)</div>
 					<div layout="column" layout-align="start stretch" flex="50" >
 						<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 							<div class="item title" layout="row" layout-align="center center" flex="50" >Федеральная</div>
-							<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.onlineUniqueFederal.toLocaleString()}}</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.onlineUniqueFederal.toLocaleString()}}</div>
 						</div>
 						<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 							<div class="item title" layout="row" layout-align="center center" flex="50" >Местная</div>
-							<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.onlineUniqueLocal.toLocaleString()}}</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.onlineUniqueLocal.toLocaleString()}}</div>
 						</div>
 						<div layout="row" layout-align="space-around stretch" class="row" style="border-color: inherit;">
 							<div class="item title" layout="row" layout-align="center center" flex="50" >Всего</div>
-							<div class="item info" layout="row" layout-align="center center" flex="50" >{{clubInfo.onlineUniqueAll.toLocaleString()}}</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{leagueInfo.onlineUniqueAll.toLocaleString()}}</div>
 						</div>
 					</div>
-				</div>
+				</div>-->
 
 			</div>
 		</div>

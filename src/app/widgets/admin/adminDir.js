@@ -42,7 +42,7 @@
 					ApiSrv
 				) {
 
-					$scope.audienceCountText = null;
+					
 
 					$scope.menu = [{
 						id:'profiles',

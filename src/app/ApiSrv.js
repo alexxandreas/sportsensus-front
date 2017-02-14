@@ -37,16 +37,12 @@
 
         var proxyURL = ConfigSrv.get().proxyURL || '';
 
-        //var proxyURL = 'https://cors-anywhere.herokuapp.com/';
-        // var url = 'http://sportsensus.ru:8080/api';
-        //var url = proxyURL + 'http://sportsensus.ru:8080/api';
         var url = proxyURL + ConfigSrv.get().apiUrl;
 
         var sidCookieName = 'sportsensus_sid';
         function readSidCookie(){ return  $cookies.get(sidCookieName); }
         function writeSidCookie(sid){ $cookies.put(sidCookieName, sid); }
 
-        // var sid = $cookies.get(sidCookieName);
         var sid = null;
 
         var userRights;
@@ -64,17 +60,6 @@
                 $q.reject(response);
             });
 
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                var value = get(response, resultPath);
-                if (typeof o == "undefined")
-                    d.reject(response);
-                else
-                    d.resolve(value);
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
 
             function get(obj, key) {
                 return key.split(".").reduce(function(o, x) {
@@ -86,7 +71,6 @@
         function clearUser(){
             sid = null;
             userRights = null;
-            //$rootScope.$broadcast('ApiSrv.logout');
         }
 
         function setUser(_sid, rights){
@@ -119,42 +103,16 @@
         function register(par){
             var params = par;
             var data = prepareRequestData("register", params);
-
             return request(data, 'data.result.created');
-
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.created){
-                    d.reject(response);
-                }else {
-                    d.resolve(response);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
 
         function activate(secret){
-
             var params = {
                 secret: secret
             };
             var data = prepareRequestData("activateProfile", params);
             return request(data, 'data.result.acl');
-
-           /* var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.acl){
-                    d.reject(response);
-                }else {
-                    d.resolve(response);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
 
@@ -176,21 +134,6 @@
                 clearUser();
                 return $q.reject();
             });
-
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result){
-                    clearUser();
-                    d.reject(response);
-                }else {
-                    setUser(response.data.result.sid, response.data.result.acl);
-                    d.resolve(response);
-                }
-            }, function(response){
-                clearUser();
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
         function checkSession(_sid){
@@ -212,23 +155,6 @@
                 clearUser();
                 return $q.reject();
             });
-
-           /* var d = $q.defer();
-            $http.post(url, data).then(function(response) {
-                if (response.data.result && response.data.result.exist){
-                    setUser(checkedSid, response.data.result.acl);
-                    d.resolve(response);
-                } else {
-                    clearUser();
-                    d.reject(response);
-                }
-                //$rootScope.$broadcast('ApiSrv.loginSuccess');
-            }, function(response){
-                clearUser();
-                //$rootScope.$broadcast('ApiSrv.loginError');
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
         function logout(){
@@ -245,24 +171,6 @@
                 clearUser();
                 return $q.reject(result);
             });
-
-
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response) {
-                clearUser();
-                if (response.data.result && response.data.result.deleted){
-                    d.resolve(response);
-                } else {
-                    d.reject(response);
-                }
-                //$rootScope.$broadcast('ApiSrv.loginSuccess');
-            }, function(response){
-                clearUser();
-                //$rootScope.$broadcast('ApiSrv.loginError');
-                d.reject(response);
-            });
-            return d.promise;*/
-
         }
 
 
@@ -273,29 +181,18 @@
             if (!staticDefers[type]){
                 staticDefers[type] = $q.defer();
             }
-
             if (!staticLoaded[type] && sid)
                 loadStatic(type);
 
             return staticDefers[type].promise;
 
             function loadStatic(){
-
                 var data = prepareRequestData("get_static", {sid: sid, type:type});
                 request(data, 'data.result.data').then(function(data){
                     staticDefers[type].resolve(data);
                 }, function(){
                     staticDefers[type].reject();
                 });
-
-                /*return $http.post(url, data).then(function(result){
-                    if (result.data && result.data.result && result.data.result.data)
-                        staticDefers[type].resolve(result.data.result.data);
-                    else
-                        staticDefers[type].reject();
-                }, function (result){
-                    staticDefers[type].reject();
-                });*/
             }
         }
 
@@ -303,10 +200,8 @@
         var translationsDefer;
         var translationsLoaded = false;// загружались ли когда-нибудь перечисления
         function getTranslations(){
-            //var d;
             if (!translationsDefer){
                 translationsDefer = $q.defer();
-                //enumsPromise = d.promise;
             }
 
             if (!translationsLoaded && sid)
@@ -321,14 +216,6 @@
                 }, function(){
                     translationsDefer.reject();
                 });
-                /*return $http.post(url, data).then(function(result){
-                    if (result.data && result.data.result && result.data.result.data)
-                        translationsDefer.resolve(result.data.result.data);
-                    else
-                        translationsDefer.reject();
-                }, function (result){
-                    translationsDefer.reject();
-                });*/
             }
         }
 
@@ -365,28 +252,6 @@
                 !silent && $rootScope.$broadcast('ApiSrv.countError');
                 return $q.reject(result);
             });
-
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result){
-                    lastCountResult = null;
-                    d.reject(response);
-                    !silent && $rootScope.$broadcast('ApiSrv.countError', response);
-                }else {
-                    var percent = totalCount ? response.data.result.audience_count / totalCount * 100 : 0;
-                    response.data.result.audiencePercent = percent;
-                    //response.data.result.audienceSelected = totalCount ? response.data.result.audience_count != totalCount : false;
-
-                    lastCountResult = response.data.result;
-                    d.resolve(response.data.result);
-                    !silent && $rootScope.$broadcast('ApiSrv.countLoaded', response.data.result);
-                }
-            }, function(response){
-                lastCountResult = null;
-                d.reject(response);
-                !silent && $rootScope.$broadcast('ApiSrv.countError', response);
-            });
-            return d.promise;*/
         }
 
 
@@ -394,50 +259,16 @@
         function getImageGraph(audience, sportimage){
             var data = prepareRequestData("info_sportimage", {sid: sid, audience:audience, sportimage:sportimage});
             return request(data, 'data.result.graph');
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.graph){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result.graph);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
         function getInterestGraph(audience, sportinterest){
             var data = prepareRequestData("info_sportinterest", {sid: sid, audience:audience, sportinterest:sportinterest});
             return request(data, 'data.result.graph');
-            /*
-            var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.graph){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result.graph);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
         function getInvolveGraph(audience, involve){
             var data = prepareRequestData("info_fan_involvment", {sid: sid, audience:audience, involve:involve});
             return request(data, 'data.result.graph');
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.graph){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result.graph);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
 
@@ -445,53 +276,18 @@
         function getRootingGraph(audience, sport, rooting){
             var data = prepareRequestData("info_sportrooting", {sid: sid, audience:audience, sportrooting:{sport: sport, rooting: rooting}});
             return request(data, 'data.result.graph');
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.graph){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result.graph);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
 
         function getRootingWatchGraph(audience, sport, rooting){
             var data = prepareRequestData("info_sportrooting", {sid: sid, audience:audience, sportrooting:{sport: sport, rooting_watch: rooting}});
             return request(data, 'data.result.graph');
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.graph){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result.graph);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
         function getRootingWalkGraph(audience, sport, rooting){
             var data = prepareRequestData("info_sportrooting", {sid: sid, audience:audience, sportrooting:{sport: sport, rooting_walk: rooting}});
             return request(data, 'data.result.graph');
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.graph){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result.graph);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
-
-
 
 
         function getExpressSport(audience, sport, clubs){
@@ -502,17 +298,6 @@
                 clubs: clubs
             });
             return request(data, 'data.result');
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
         function getExpressAudience(audience){
@@ -521,18 +306,6 @@
                 audience: audience
             });
             return request(data, 'data.result');
-            /*
-            var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
         function sendEmail(options) {
@@ -565,6 +338,22 @@
             return request(data, 'data.result');
         }
 
+        function getProfile(){
+            var data = prepareRequestData("getProfile", {sid: sid});
+            return request(data, 'data.result');
+        }
+
+        function editProfile(params){
+            var data = prepareRequestData("editProfile", angular.extend({sid: sid}, params));
+            return request(data, 'data.result.edit_result');
+        }
+
+        function changePassword(password){
+            var data = prepareRequestData("change_pass", {sid: sid, password: password});
+            return request(data, 'data.result.changed');
+        }
+
+
         var me = {
             getUser: getUser,
             register: register,
@@ -592,7 +381,10 @@
             sendEmail: sendEmail,
 
             getProfilesList: getProfilesList,
-            addRole: addRole
+            addRole: addRole,
+            getProfile: getProfile,
+            editProfile: editProfile,
+            changePassword: changePassword
         };
 
 

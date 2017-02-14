@@ -45,17 +45,31 @@
 			var league = selected.league;
 			if (!league) return;
 
-
 			var allTmp = {
 				onlineTotal: 0,
-				//onlineTotalFederal: 0,
-				//onlineTotalLocal: 0,
+				onlineRatings: 0,
+				onlineTotalFederal: 0,
+				onlineTotalLocal: 0,
+				playgrounds:{},
+				occupancy: 0,
 				offlineTotal: 0  // += (game.offlineCount || 0);
 			};
 
 			$scope.championship.data.championship.forEach(function(game){
 				allTmp.onlineTotal += (game.federalTVAudience || 0) + (game.regionalTVAudience || 0);
 				allTmp.offlineTotal += (game.offlineCount || 0);
+				allTmp.onlineRatings += (game.federalTVRating || 0);
+				allTmp.onlineTotalFederal += (game.federalTVAudience || 0);
+				allTmp.onlineTotalLocal += (game.regionalTVAudience || 0);
+				allTmp.occupancy += (game.offlineCount / game.stadiumCapacity || 0);
+
+				if (game.stadiumId >= 0){
+					allTmp.playgrounds[game.stadiumId] = allTmp.playgrounds[game.stadiumId] || {gamesCount:0};
+					allTmp.playgrounds[game.stadiumId].stadiumId = game.stadiumId;
+					allTmp.playgrounds[game.stadiumId].stadiumName = game.stadiumName;
+					allTmp.playgrounds[game.stadiumId].stadiumCapacity = game.stadiumCapacity || 0;
+					allTmp.playgrounds[game.stadiumId].gamesCount++;
+				}
 			});
 
 			var walkAvg = 0; // Среднее количество посещений хоккейных матчей на 1 зрителя данного клуба
@@ -74,6 +88,54 @@
 
 			var avgEffFreqOnline = $scope.championship.data.avgEffFreqOnline;
 			var avgEffFreqOffline = $scope.championship.data.avgEffFreqOffline;
+
+			var gamesCount = $scope.championship.data.championship.length;
+
+			$scope.leagueInfo = {
+				name: league.name,
+				//playgrounds: ['playground1', 'playground2'],
+				playgroundsCount: Object.keys(allTmp.playgrounds).length,
+				playgroundsCapacity: Object.keys(allTmp.playgrounds)
+					.map(function(key){return allTmp.playgrounds[key].stadiumCapacity})
+					.reduce(function(pv, cv) { return pv + cv; }, 0),
+
+
+				//playground: playground.stadiumName,
+				//playgroundCapacity: playground.stadiumCapacity,
+				//gamesCount: homeGames.length + guestGames.length,
+
+				gamesCount: gamesCount,
+
+
+				// offlineAVGHome: Math.round(homeTmp.occupancy / homeGames.length * 100),
+				// offlineAVGGuest: Math.round(guestTmp.occupancy / guestGames.length * 100),
+				//
+				offlineAVGAll: Math.round(allTmp.occupancy / gamesCount * 100),
+				//
+				// offlineTotalHome: Math.round(homeTmp.offlineTotal/100)/10,
+				// offlineTotalGuest: Math.round(guestTmp.offlineTotal/100)/10,
+				offlineTotalAll: Math.round((allTmp.offlineTotal)/100)/10,
+				//
+				// offlineUniqueHome: Math.round(homeTmp.offlineTotal/100/walkAvg)/10,
+				// offlineUniqueGuest: Math.round(guestTmp.offlineTotal/100/walkAvg)/10,
+				offlineUniqueAll: Math.round((allTmp.offlineTotal)/100/walkAvg)/10,
+				//
+				onlineRatings: Math.round(allTmp.onlineRatings*10)/10,
+				//
+				// onlineTotalFederal: Math.round(allTmp.onlineTotalFederal*10)/10, // в тысячах
+				// onlineTotalLocal: Math.round(allTmp.onlineTotalLocal*10)/10, // в тысячах
+				onlineTotalAll: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10)/10, // в тысячах
+				//
+				// onlineUniqueFederal: Math.round(allTmp.onlineTotalFederal*10/watchAvg)/10, // в тысячах
+				// onlineUniqueLocal: Math.round(allTmp.onlineTotalLocal*10/watchAvg)/10, // в тысячах
+				onlineUniqueAll: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10/watchAvg)/10, // в тысячах
+				//
+				reachOffline: Math.round((allTmp.offlineTotal)/100/walkAvg)/10, // offlineUniqueAll
+				reachOnline: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10/watchAvg)/10, // onlineUniqueAll
+				OTSOffline: Math.round((allTmp.offlineTotal)/100*avgEffFreqOffline)/10, // // offlineTotalAll * onlineFreq * 3
+				OTSOnline:  Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10*avgEffFreqOnline)/10 // onlineTotalAll * onlineFreq
+			};
+
 
 			$scope.calcParams = {
 				onlineTotalAll: allTmp.onlineTotal, // в тысячах
@@ -217,8 +279,10 @@
 				offlineTotalAll: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000, // в тысячах
 				onlineUniqueAll: (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)/watchAvg, // в тысячах
 				offlineUniqueAll: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000/walkAvg,  // в тысячах
-				OTSOffline: (homeTmp.offlineTotal + guestTmp.offlineTotal)*avgEffFreqOffline/1000, // в тысячах
-				OTSOnline:  (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*avgEffFreqOnline // в тысячах
+				// OTSOffline: (homeTmp.offlineTotal + guestTmp.offlineTotal)*avgEffFreqOffline/1000, // в тысячах
+				// OTSOnline:  (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*avgEffFreqOnline // в тысячах
+				OTSOffline: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000, // в тысячах без коэфф.
+				OTSOnline:  (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal) // в тысячах без коэфф.
 			}
 			
 		};
@@ -244,17 +308,21 @@
 			var uniqueOnline = $scope.calcParams.onlineUniqueAll * visibility.online * audiencePercent;
 			var uniqueOffline = $scope.calcParams.offlineUniqueAll * visibility.offline * audiencePercent;
 
-			data.CPTUniqueOnline = $scope.totalCost && uniqueOnline ? Math.round($scope.totalCost / uniqueOnline * 10)/10 : '-';
-			data.CPTUniqueOffline = $scope.totalCost && uniqueOffline ? Math.round($scope.totalCost / uniqueOffline * 10)/10 : '-';
+			data.CPTUniqueOnline = $scope.totalCost && uniqueOnline ? Math.round($scope.totalCost / uniqueOnline * 10)/10 : '';
+			data.CPTUniqueOffline = $scope.totalCost && uniqueOffline ? Math.round($scope.totalCost / uniqueOffline * 10)/10 : '';
 
 			// OTS, штук
-			// var OTSOnline = $scope.clubInfo.OTSOnline * visibility.online * audiencePercent;
-			// var OTSOffline = $scope.clubInfo.OTSOffline * visibility.offline * audiencePercent;
-			var OTSOnline = $scope.calcParams.OTSOnline * visibility.online * audiencePercent;
-			var OTSOffline = $scope.calcParams.OTSOffline * visibility.offline * audiencePercent;
+			var OTSOnline = $scope.calcParams.OTSOnline * visibility.onlineEff * audiencePercent;
 
-			data.CPTOTSOnline = $scope.totalCost && OTSOnline ? Math.round($scope.totalCost / OTSOnline * 10)/10 : '-';
-			data.CPTOTSOffline = $scope.totalCost && OTSOffline ? Math.round($scope.totalCost / OTSOffline * 10)/10 : '-';
+
+			// (onlineTotalFederal + onlineTotalLocal) * avgEffFreqOnline * visibility.online * audiencePercent;
+			// audiencePercent - процент выбранной аудитории (0..1)
+			// visibility.online - процент видимости выбранных рекламных конструкций (0..1)
+
+			var OTSOffline = $scope.calcParams.OTSOffline * visibility.offlineEff * audiencePercent;
+
+			data.CPTOTSOnline = $scope.totalCost && OTSOnline ? Math.round($scope.totalCost / OTSOnline * 10)/10 : '';
+			data.CPTOTSOffline = $scope.totalCost && OTSOffline ? Math.round($scope.totalCost / OTSOffline * 10)/10 : '';
 
 
 			data.audienceSelected = ParamsSrv.isAudienceSelected();
@@ -267,37 +335,82 @@
 
 		// расчет видимости выбранных рекламных конструкций на площадке (0.0 - 1.0)
 		$scope.calcVisibility = function(){
-			var result = {
-				playgroundOnline: 		calcSectors($scope.playgroundData, 'visibilityOnline'),
-				playgroundOffline:		calcSectors($scope.playgroundData, 'visibilityOffline'),
-				uniformOnline: 			calcSectors($scope.uniformData, 'visibilityOnline'),
-				uniformOffline: 		calcSectors($scope.uniformData, 'visibilityOffline'),
-				videoOfflineOnline: 	calcSectors($scope.videoOfflineData, 'visibilityOnline'),
-				videoOfflineOffline: 	calcSectors($scope.videoOfflineData, 'visibilityOffline'),
-				videoOnlineOnline: 		calcSectors($scope.videoOnlineData, 'visibilityOnline'),
-				videoOnlineOffline: 	calcSectors($scope.videoOnlineData, 'visibilityOffline')
-			};
-			result.online = Math.max(result.playgroundOnline, result.uniformOnline, result.videoOfflineOnline, result.videoOnlineOnline);
-			result.offline = Math.max(result.playgroundOffline, result.uniformOffline, result.videoOfflineOffline, result.videoOnlineOffline);
 
+			var data =  {
+				playgroundOnline: 		calcSectors($scope.playgroundData, 'Online'),
+				playgroundOffline:		calcSectors($scope.playgroundData, 'Offline'),
+				uniformOnline:	 		calcSectors($scope.uniformData, 'Online'),
+				uniformOffline: 		calcSectors($scope.uniformData, 'Offline'),
+				videoOfflineOnline: 	calcSectors($scope.videoOfflineData, 'Online'),
+				videoOfflineOffline: 	calcSectors($scope.videoOfflineData, 'Offline'),
+				videoOnlineOnline: 		calcSectors($scope.videoOnlineData, 'Online'),
+				videoOnlineOffline: 	calcSectors($scope.videoOnlineData, 'Offline')
+			};
+			var dataEff = {
+				playgroundOnline: 		calcSectors($scope.playgroundData, 'Online', true),
+				playgroundOffline:		calcSectors($scope.playgroundData, 'Offline', true),
+				uniformOnline:	 		calcSectors($scope.uniformData, 'Online', true),
+				uniformOffline: 		calcSectors($scope.uniformData, 'Offline', true),
+				videoOfflineOnline: 	calcSectors($scope.videoOfflineData, 'Online', true),
+				videoOfflineOffline: 	calcSectors($scope.videoOfflineData, 'Offline', true),
+				videoOnlineOnline: 		calcSectors($scope.videoOnlineData, 'Online', true),
+				videoOnlineOffline: 	calcSectors($scope.videoOnlineData, 'Offline', true)
+			};
+
+			// var result = {
+			// 	playgroundOnline: 		calcSectors($scope.playgroundData, 'Online'),
+			// 	playgroundOffline:		calcSectors($scope.playgroundData, 'Offline'),
+			// 	uniformOnline:	 		calcSectors($scope.uniformData, 'Online'),
+			// 	uniformOffline: 		calcSectors($scope.uniformData, 'Offline'),
+			// 	videoOfflineOnline: 	calcSectors($scope.videoOfflineData, 'Online'),
+			// 	videoOfflineOffline: 	calcSectors($scope.videoOfflineData, 'Offline'),
+			// 	videoOnlineOnline: 		calcSectors($scope.videoOnlineData, 'Online'),
+			// 	videoOnlineOffline: 	calcSectors($scope.videoOnlineData, 'Offline')
+			// };
+			var result = {
+				online: Math.max(data.playgroundOnline, data.uniformOnline, data.videoOfflineOnline, data.videoOnlineOnline),
+				offline: Math.max(data.playgroundOffline, data.uniformOffline, data.videoOfflineOffline, data.videoOnlineOffline),
+				onlineEff: Math.max(dataEff.playgroundOnline, dataEff.uniformOnline, dataEff.videoOfflineOnline, dataEff.videoOnlineOnline),
+				offlineEff: Math.max(dataEff.playgroundOffline, dataEff.uniformOffline, dataEff.videoOfflineOffline, dataEff.videoOnlineOffline)
+			};
 			return result;
 
-			function calcSectors(data, dataKey){
+			function calcSectors(data, type, useFreq){ //} dataKey, freqKey){
 				var sectors = {};
+				var sectorsEff = {};
+				var effFreq = 0;
+				var dataKey = 'visibility' + type;
+				if (useFreq) {
+					var freqKey = 'exposure' + type;
+					var defaultFreq = $scope.championship.data['avgEffFreq' + type];
+				}
+
 				Object.keys(data.placesSelection).forEach(function(key){
 					if (!data.placesSelection[key].selected) return;
 					var placeA = data[dataKey][key];
 					if (!placeA) return;
+					if (useFreq) {
+						if (data[freqKey] && data[freqKey][key])
+							effFreq = data[freqKey][key];
+						else
+							effFreq = defaultFreq;
+					}
 					placeA.forEach(function(val, index){
 						sectors[index] = Math.max(sectors[index] || 0, val || 0);
+						if (useFreq)
+							sectorsEff[index] = Math.max(sectorsEff[index] || 0, val * effFreq || 0);
 					});
 				});
 
 				var sum = 0;
+				var sumEff = 0;
 				Object.keys(sectors).forEach(function(index){
 					sum += sectors[index];
+					if (useFreq)
+						sumEff += sectorsEff[index];
 				});
-				return Math.min(sum, 1);
+				//return Math.min(sum, 1);
+				return useFreq ? sumEff : sum;
 			}
 
 		};

@@ -1,14 +1,13 @@
 <div class="infobox-panel" ng-controller="consumeCtrl"
      layout="column" layout-align="start stretch">
-<!--<div class="l-board__body-box" data-id="consume">-->
 
-    <!--<h1 class="l-board__header">
-        &lt;!&ndash;<img src="/static/img/l-board/potreb-pov.png" />&ndash;&gt;
-        &lt;!&ndash;Потребительское поведение&ndash;&gt;
-        {{parameters.consume.name}}
-    </h1>-->
     <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
         {{parameters.consume.name}}
+        <div flex></div>
+        <md-button class="md-raised md-primary"
+                   ng-show="checkSelected('consume')"
+                   ng-click="clearSelection('consume')"
+        >Сбросить</md-button>
     </h1>
 
     <div layout="column" layout-align="start stretch"

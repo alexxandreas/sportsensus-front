@@ -31,7 +31,8 @@ angular
 				}
 			})
 			.when('/analytics/', {
-				template: '<infobox-dir type="analytics"></infobox-dir>',
+				//template: '<infobox-dir type="analytics"></infobox-dir>',
+				template: '<analytics-dir></analytics-dir>',
 				controller: function($scope, $location, ApiSrv) {
 					if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
 						$location.path('/');
@@ -84,6 +85,13 @@ angular
 				template: '<admin-dir></admin-dir>',
 				controller: function($scope, $location, ApiSrv) {
 					if (!ApiSrv.getUser().userRights || !ApiSrv.getUser().userRights.admin)
+						$location.path('/');
+				}
+			})
+			.when('/account/', {
+				template: '<account-dir></account-dir>',
+				controller: function($scope, $location, ApiSrv) {
+					if (!ApiSrv.getUser().userRights)
 						$location.path('/');
 				}
 			})
@@ -166,16 +174,12 @@ angular
 
         var proxyURL = ConfigSrv.get().proxyURL || '';
 
-        //var proxyURL = 'https://cors-anywhere.herokuapp.com/';
-        // var url = 'http://sportsensus.ru:8080/api';
-        //var url = proxyURL + 'http://sportsensus.ru:8080/api';
         var url = proxyURL + ConfigSrv.get().apiUrl;
 
         var sidCookieName = 'sportsensus_sid';
         function readSidCookie(){ return  $cookies.get(sidCookieName); }
         function writeSidCookie(sid){ $cookies.put(sidCookieName, sid); }
 
-        // var sid = $cookies.get(sidCookieName);
         var sid = null;
 
         var userRights;
@@ -193,17 +197,6 @@ angular
                 $q.reject(response);
             });
 
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                var value = get(response, resultPath);
-                if (typeof o == "undefined")
-                    d.reject(response);
-                else
-                    d.resolve(value);
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
 
             function get(obj, key) {
                 return key.split(".").reduce(function(o, x) {
@@ -215,7 +208,6 @@ angular
         function clearUser(){
             sid = null;
             userRights = null;
-            //$rootScope.$broadcast('ApiSrv.logout');
         }
 
         function setUser(_sid, rights){
@@ -248,42 +240,16 @@ angular
         function register(par){
             var params = par;
             var data = prepareRequestData("register", params);
-
             return request(data, 'data.result.created');
-
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.created){
-                    d.reject(response);
-                }else {
-                    d.resolve(response);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
 
         function activate(secret){
-
             var params = {
                 secret: secret
             };
             var data = prepareRequestData("activateProfile", params);
             return request(data, 'data.result.acl');
-
-           /* var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.acl){
-                    d.reject(response);
-                }else {
-                    d.resolve(response);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
 
@@ -305,21 +271,6 @@ angular
                 clearUser();
                 return $q.reject();
             });
-
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result){
-                    clearUser();
-                    d.reject(response);
-                }else {
-                    setUser(response.data.result.sid, response.data.result.acl);
-                    d.resolve(response);
-                }
-            }, function(response){
-                clearUser();
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
         function checkSession(_sid){
@@ -341,23 +292,6 @@ angular
                 clearUser();
                 return $q.reject();
             });
-
-           /* var d = $q.defer();
-            $http.post(url, data).then(function(response) {
-                if (response.data.result && response.data.result.exist){
-                    setUser(checkedSid, response.data.result.acl);
-                    d.resolve(response);
-                } else {
-                    clearUser();
-                    d.reject(response);
-                }
-                //$rootScope.$broadcast('ApiSrv.loginSuccess');
-            }, function(response){
-                clearUser();
-                //$rootScope.$broadcast('ApiSrv.loginError');
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
         function logout(){
@@ -374,24 +308,6 @@ angular
                 clearUser();
                 return $q.reject(result);
             });
-
-
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response) {
-                clearUser();
-                if (response.data.result && response.data.result.deleted){
-                    d.resolve(response);
-                } else {
-                    d.reject(response);
-                }
-                //$rootScope.$broadcast('ApiSrv.loginSuccess');
-            }, function(response){
-                clearUser();
-                //$rootScope.$broadcast('ApiSrv.loginError');
-                d.reject(response);
-            });
-            return d.promise;*/
-
         }
 
 
@@ -402,29 +318,18 @@ angular
             if (!staticDefers[type]){
                 staticDefers[type] = $q.defer();
             }
-
             if (!staticLoaded[type] && sid)
                 loadStatic(type);
 
             return staticDefers[type].promise;
 
             function loadStatic(){
-
                 var data = prepareRequestData("get_static", {sid: sid, type:type});
                 request(data, 'data.result.data').then(function(data){
                     staticDefers[type].resolve(data);
                 }, function(){
                     staticDefers[type].reject();
                 });
-
-                /*return $http.post(url, data).then(function(result){
-                    if (result.data && result.data.result && result.data.result.data)
-                        staticDefers[type].resolve(result.data.result.data);
-                    else
-                        staticDefers[type].reject();
-                }, function (result){
-                    staticDefers[type].reject();
-                });*/
             }
         }
 
@@ -432,10 +337,8 @@ angular
         var translationsDefer;
         var translationsLoaded = false;// загружались ли когда-нибудь перечисления
         function getTranslations(){
-            //var d;
             if (!translationsDefer){
                 translationsDefer = $q.defer();
-                //enumsPromise = d.promise;
             }
 
             if (!translationsLoaded && sid)
@@ -450,14 +353,6 @@ angular
                 }, function(){
                     translationsDefer.reject();
                 });
-                /*return $http.post(url, data).then(function(result){
-                    if (result.data && result.data.result && result.data.result.data)
-                        translationsDefer.resolve(result.data.result.data);
-                    else
-                        translationsDefer.reject();
-                }, function (result){
-                    translationsDefer.reject();
-                });*/
             }
         }
 
@@ -494,28 +389,6 @@ angular
                 !silent && $rootScope.$broadcast('ApiSrv.countError');
                 return $q.reject(result);
             });
-
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result){
-                    lastCountResult = null;
-                    d.reject(response);
-                    !silent && $rootScope.$broadcast('ApiSrv.countError', response);
-                }else {
-                    var percent = totalCount ? response.data.result.audience_count / totalCount * 100 : 0;
-                    response.data.result.audiencePercent = percent;
-                    //response.data.result.audienceSelected = totalCount ? response.data.result.audience_count != totalCount : false;
-
-                    lastCountResult = response.data.result;
-                    d.resolve(response.data.result);
-                    !silent && $rootScope.$broadcast('ApiSrv.countLoaded', response.data.result);
-                }
-            }, function(response){
-                lastCountResult = null;
-                d.reject(response);
-                !silent && $rootScope.$broadcast('ApiSrv.countError', response);
-            });
-            return d.promise;*/
         }
 
 
@@ -523,50 +396,16 @@ angular
         function getImageGraph(audience, sportimage){
             var data = prepareRequestData("info_sportimage", {sid: sid, audience:audience, sportimage:sportimage});
             return request(data, 'data.result.graph');
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.graph){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result.graph);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
         function getInterestGraph(audience, sportinterest){
             var data = prepareRequestData("info_sportinterest", {sid: sid, audience:audience, sportinterest:sportinterest});
             return request(data, 'data.result.graph');
-            /*
-            var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.graph){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result.graph);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
         function getInvolveGraph(audience, involve){
             var data = prepareRequestData("info_fan_involvment", {sid: sid, audience:audience, involve:involve});
             return request(data, 'data.result.graph');
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.graph){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result.graph);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
 
@@ -574,53 +413,18 @@ angular
         function getRootingGraph(audience, sport, rooting){
             var data = prepareRequestData("info_sportrooting", {sid: sid, audience:audience, sportrooting:{sport: sport, rooting: rooting}});
             return request(data, 'data.result.graph');
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.graph){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result.graph);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
 
         function getRootingWatchGraph(audience, sport, rooting){
             var data = prepareRequestData("info_sportrooting", {sid: sid, audience:audience, sportrooting:{sport: sport, rooting_watch: rooting}});
             return request(data, 'data.result.graph');
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.graph){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result.graph);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
         function getRootingWalkGraph(audience, sport, rooting){
             var data = prepareRequestData("info_sportrooting", {sid: sid, audience:audience, sportrooting:{sport: sport, rooting_walk: rooting}});
             return request(data, 'data.result.graph');
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result || !response.data.result.graph){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result.graph);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
-
-
 
 
         function getExpressSport(audience, sport, clubs){
@@ -631,17 +435,6 @@ angular
                 clubs: clubs
             });
             return request(data, 'data.result');
-            /*var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
         function getExpressAudience(audience){
@@ -650,18 +443,6 @@ angular
                 audience: audience
             });
             return request(data, 'data.result');
-            /*
-            var d = $q.defer();
-            $http.post(url, data).then(function(response){
-                if (!response.data.result){
-                    d.reject(response);
-                }else {
-                    d.resolve(response.data.result);
-                }
-            }, function(response){
-                d.reject(response);
-            });
-            return d.promise;*/
         }
 
         function sendEmail(options) {
@@ -694,6 +475,22 @@ angular
             return request(data, 'data.result');
         }
 
+        function getProfile(){
+            var data = prepareRequestData("getProfile", {sid: sid});
+            return request(data, 'data.result');
+        }
+
+        function editProfile(params){
+            var data = prepareRequestData("editProfile", angular.extend({sid: sid}, params));
+            return request(data, 'data.result.edit_result');
+        }
+
+        function changePassword(password){
+            var data = prepareRequestData("change_pass", {sid: sid, password: password});
+            return request(data, 'data.result.changed');
+        }
+
+
         var me = {
             getUser: getUser,
             register: register,
@@ -721,7 +518,10 @@ angular
             sendEmail: sendEmail,
 
             getProfilesList: getProfilesList,
-            addRole: addRole
+            addRole: addRole,
+            getProfile: getProfile,
+            editProfile: editProfile,
+            changePassword: changePassword
         };
 
 
@@ -816,351 +616,7 @@ angular
 
         function extendTranslations(){
             return;
-            translations.pages.push({
-                key: 'playgrounds',
-                items:{
-                    "hockeyBox40": {
-                        "visibilityOffline":{
-                            "1":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0, 0, 0, 0, 0, 0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0, 0, 0, 0, 0, 0, 0.04, 0.044, 0, 0 ],
-                            "2":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0, 0, 0, 0, 0, 0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0, 0, 0, 0, 0, 0, 0.04, 0.044, 0, 0 ],
-                            "3":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0, 0, 0, 0, 0, 0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0, 0, 0, 0, 0, 0, 0.04, 0.044, 0, 0 ],
-                            "4":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0, 0, 0, 0, 0, 0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0, 0, 0, 0, 0, 0, 0.04, 0.044, 0, 0 ],
-                            "5":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0, 0, 0, 0, 0, 0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0, 0, 0, 0, 0, 0, 0.04, 0.044, 0, 0 ],
-                            "6":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0, 0, 0, 0, 0, 0, 0, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0, 0, 0, 0, 0, 0, 0, 0.044, 0, 0 ],
-                            "7":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0, 0, 0, 0, 0, 0, 0, 0, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                            "8":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0, 0, 0, 0, 0, 0, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                            "9":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0, 0, 0, 0, 0, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0, 0, 0, 0, 0, 0.007, 0.002 ],
-                            "10": [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0, 0, 0, 0, 0, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0, 0, 0, 0, 0, 0.007, 0.002 ],
-                            "11": [   0, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0, 0, 0, 0, 0, 0, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0, 0, 0, 0, 0, 0.007, 0.002 ],
-                            "12": [   0, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0, 0, 0, 0, 0, 0, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0, 0, 0, 0, 0, 0.007, 0.002 ],
-                            "13": [   0,    0, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027,     0,     0,     0,     0,     0,     0, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0, 0, 0, 0, 0.007, 0.002 ],
-                            "14": [   0,    0,     0,     0, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039,     0,     0,     0,     0,     0,     0,     0, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0, 0, 0, 0.007, 0.002 ],
-                            "15": [   0,    0,     0,     0, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028,     0,     0,     0,     0,     0,     0, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041,    0,     0, 0.007, 0.002 ],
-                            "16": [   0,    0,     0,     0, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028,     0,     0,     0,     0,     0,     0, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041,    0,     0, 0.007, 0.002 ],
-                            "17": [   0,    0,     0,     0,     0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028,     0,     0,     0,     0,     0,     0,    0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041,    0,     0, 0.007, 0.002 ],
-                            "18": [   0,    0,     0,     0,     0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028,     0,     0,     0,     0,     0,     0,    0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041,    0,     0, 0.007, 0.002 ],
-                            "19": [   0,    0,     0,     0,     0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028,     0,     0,     0,     0,     0,     0,    0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041,    0,     0, 0.007, 0.002 ],
-                            "20": [   0,    0,     0,     0,     0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028,     0,     0,     0,     0,     0,     0,    0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041,    0,     0, 0.007, 0.002 ],
-                            "21": [   0,    0,     0,     0,     0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028,     0,     0,     0,     0,     0,     0,    0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041,    0,     0, 0.007, 0.002 ],
-                            "22": [   0,    0,     0,     0,     0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028,     0,     0,     0,     0,     0,     0,    0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041,    0,     0, 0.007, 0.002 ],
-                            "23": [   0,    0,     0,     0,     0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028,     0,     0,     0,     0,     0,     0,    0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041,    0,     0, 0.007, 0.002 ],
-                            "24": [   0,    0,     0,     0,     0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028,     0,     0,     0,     0,     0,     0,    0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041,    0,     0, 0.007, 0.002 ],
-                            "25": [   0,    0,     0,     0,     0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028,     0,     0,     0,     0,     0,     0,    0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041,    0,     0, 0.007, 0.002 ],
-                            "26": [   0,    0,     0,     0,     0,     0, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028,     0,     0,     0,     0,     0,     0,    0,     0, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041,    0,     0, 0.007, 0.002 ],
-                            "27": [   0,    0,     0,     0,     0,     0, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022,     0,     0,     0,     0,     0,    0,     0, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04,     0, 0.007, 0.002 ],
-                            "28": [   0,    0,     0,     0,     0,     0,    0, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022,     0,     0,     0,     0,     0,    0,     0,     0, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04,     0, 0.007, 0.002 ],
-                            "29": [0.02, 0.02,     0,     0,     0,     0,    0,     0, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038,     0,     0,    0,     0,     0,     0, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "30": [0.02, 0.02,     0,     0,     0,     0,    0,     0, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038,     0,     0,    0,     0,     0,     0, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "31": [0.02, 0.02, 0.023,     0,     0,     0,    0,     0, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043,     0,    0,     0,     0,     0, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "32": [0.02, 0.02, 0.023,     0,     0,     0,    0,     0, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043,     0,    0,     0,     0,     0, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "33": [0.02, 0.02, 0.023,     0,     0,     0,    0,     0, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043,     0,    0,     0,     0,     0, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "34": [0.02, 0.02, 0.023,     0,     0,     0,    0,     0,     0, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043,     0,    0,     0,     0,     0,     0, 0.043, 0.044, 0.041, 0.04, 0.044,     0,     0 ],
-                            "35": [0.02, 0.02, 0.023, 0.042, 0.022, 0.029,    0,     0,     0,     0,     0, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042,     0,     0,     0,     0,     0, 0.041, 0.04, 0.044,     0,     0 ],
-                            "36": [0.02, 0.02, 0.023, 0.042, 0.022, 0.029,    0,     0,     0,     0,     0, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042,     0,     0,     0,     0,     0, 0.041, 0.04, 0.044,     0,     0 ],
-                            "37": [0.02, 0.02, 0.023, 0.042, 0.022, 0.029,    0,     0,     0,     0,     0,     0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042,     0,     0,     0,     0,     0,     0, 0.04, 0.044,     0,     0 ],
-                            "38": [0.02, 0.02, 0.023, 0.042, 0.022, 0.029,    0,     0,     0,     0,     0,     0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042,     0,     0,     0,     0,     0,     0, 0.04, 0.044,     0,     0 ],
-                            "39": [0.02, 0.02, 0.023, 0.042, 0.022, 0.029,    0,     0,     0,     0,     0,     0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042,     0,     0,     0,     0,     0,     0, 0.04, 0.044,     0,     0 ],
-                            "40": [0.02, 0.02, 0.023, 0.042, 0.022, 0.029,    0,     0,     0,     0,     0,     0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042,     0,     0,     0,     0,     0,     0, 0.04, 0.044,     0,     0 ],
-                            "A":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "B":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "C":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "D":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "E":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "F":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ]
-                        },
-                        "visibilityOnline": {
-                            "1": 1,
-                            "2": 1,
-                            "3": 1,
-                            "4": 1,
-                            "5": 1,
-                            "6": 1,
-                            "7": 1,
-                            "8": 1,
-                            "9": 1,
-                            "10":1,
-                            "11":1,
-                            "12":1,
-                            "13":1,
-                            "28":1,
-                            "29":1,
-                            "30":1,
-                            "31":1,
-                            "32":1,
-                            "33":1,
-                            "34":1,
-                            "35":1,
-                            "36":1,
-                            "37":1,
-                            "38":1,
-                            "39":1,
-                            "40":1,
-                            "A":1,
-                            "B":1,
-                            "C":1,
-                            "D":1,
-                            "E":1,
-                            "F":1
-                        }
-                    },
-                    "hockeyBox32": {
-                        "visibilityOffline":{
-                            "1":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0, 0, 0, 0, 0, 0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0, 0, 0, 0, 0, 0, 0.04, 0.044, 0, 0 ],
-                            "2":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0, 0, 0, 0, 0, 0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0, 0, 0, 0, 0, 0, 0.04, 0.044, 0, 0 ],
-                            "3":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0, 0, 0, 0, 0, 0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0, 0, 0, 0, 0, 0, 0.04, 0.044, 0, 0 ],
-                            "4":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0, 0, 0, 0, 0, 0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0, 0, 0, 0, 0, 0, 0.04, 0.044, 0, 0 ],
-                            "5":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0, 0, 0, 0, 0, 0, 0, 0, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                            "6":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0, 0, 0, 0, 0, 0, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                            "7":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0, 0, 0, 0, 0, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0, 0, 0, 0, 0, 0.007, 0.002 ],
-                            "8":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0, 0, 0, 0, 0, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0, 0, 0, 0, 0, 0.007, 0.002 ],
-                            "9":  [0, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0, 0, 0, 0, 0, 0, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0, 0, 0, 0, 0, 0.007, 0.002 ],
-                            "10": [0, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0, 0, 0, 0, 0, 0, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0, 0, 0, 0, 0, 0.007, 0.002 ],
-                            "11": [0, 0, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0, 0, 0, 0, 0, 0, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0, 0, 0, 0, 0.007, 0.002 ],
-                            "12": [0, 0, 0, 0, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0, 0, 0, 0, 0, 0, 0, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0, 0, 0, 0.007, 0.002 ],
-                            "13": [0, 0, 0, 0, 0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0, 0, 0, 0, 0, 0, 0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0, 0, 0.007, 0.002 ],
-                            "14": [0, 0, 0, 0, 0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0, 0, 0, 0, 0, 0, 0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0, 0, 0.007, 0.002 ],
-                            "15": [0, 0, 0, 0, 0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0, 0, 0, 0, 0, 0, 0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0, 0, 0.007, 0.002 ],
-                            "16": [0, 0, 0, 0, 0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0, 0, 0, 0, 0, 0, 0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0, 0, 0.007, 0.002 ],
-                            "17": [0, 0, 0, 0, 0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0, 0, 0, 0, 0, 0, 0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0, 0, 0.007, 0.002 ],
-                            "18": [0, 0, 0, 0, 0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0, 0, 0, 0, 0, 0, 0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0, 0, 0.007, 0.002 ],
-                            "19": [0, 0, 0, 0, 0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0, 0, 0, 0, 0, 0, 0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0, 0, 0.007, 0.002 ],
-                            "20": [0, 0, 0, 0, 0, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0, 0, 0, 0, 0, 0, 0, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0, 0, 0.007, 0.002 ],
-                            "21": [   0,    0,     0,     0,     0,     0, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022, 0, 0, 0, 0, 0, 0, 0, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04, 0, 0.007, 0.002 ],
-                            "22": [   0,    0,     0,     0,     0,     0,    0, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022, 0, 0, 0, 0, 0, 0, 0, 0, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04, 0, 0.007, 0.002 ],
-                            "23": [0.02, 0.02,     0,     0,     0,     0,    0,     0, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0, 0, 0, 0, 0, 0, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "24": [0.02, 0.02,     0,     0,     0,     0,    0,     0, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0, 0, 0, 0, 0, 0, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "25": [0.02, 0.02, 0.023,     0,     0,     0,    0,     0, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043,     0,    0,     0,     0,     0, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "26": [0.02, 0.02, 0.023,     0,     0,     0,    0,     0, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043,     0,    0,     0,     0,     0, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "27": [0.02, 0.02, 0.023,     0,     0,     0,    0,     0, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043,     0,    0,     0,     0,     0, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "28": [0.02, 0.02, 0.023,     0,     0,     0,    0,     0,     0, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043,     0,    0,     0,     0,     0,     0, 0.043, 0.044, 0.041, 0.04, 0.044,     0,     0 ],
-                            "29": [0.02, 0.02, 0.023, 0.042, 0.022, 0.029,    0,     0,     0,     0,     0,     0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042,     0,     0,     0,     0,     0,     0, 0.04, 0.044,     0,     0 ],
-                            "30": [0.02, 0.02, 0.023, 0.042, 0.022, 0.029,    0,     0,     0,     0,     0,     0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042,     0,     0,     0,     0,     0,     0, 0.04, 0.044,     0,     0 ],
-                            "31": [0.02, 0.02, 0.023, 0.042, 0.022, 0.029,    0,     0,     0,     0,     0,     0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042,     0,     0,     0,     0,     0,     0, 0.04, 0.044,     0,     0 ],
-                            "32": [0.02, 0.02, 0.023, 0.042, 0.022, 0.029,    0,     0,     0,     0,     0,     0, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042,     0,     0,     0,     0,     0,     0, 0.04, 0.044,     0,     0 ],
-                            "A":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "B":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "C":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "D":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "E":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ],
-                            "F":  [0.02, 0.02, 0.023, 0.042, 0.022, 0.029, 0.04, 0.027, 0.025, 0.027, 0.039, 0.028, 0.022, 0.039, 0.043, 0.038, 0.043, 0.044, 0.04, 0.042, 0.045, 0.043, 0.036, 0.043, 0.044, 0.041, 0.04, 0.044, 0.007, 0.002 ]
-
-                        },
-                        "visibilityOnline": {
-                            "8": 1,
-                            "9": 1,
-                            "10":1,
-                            "11":1,
-                            "12":1,
-                            "13":1,
-                            "14":1,
-                            "15":1,
-                            "16":1,
-                            "17":1,
-                            "18":1,
-                            "19":1,
-                            "20":1,
-                            "21":1,
-                            "22":1,
-                            "23":1,
-                            "24":1,
-                            "25":1,
-                            "A":1,
-                            "B":1,
-                            "C":1,
-                            "D":1,
-                            "E":1,
-                            "F":1
-                        }
-                    },
-                    "hockeyUniform": {
-                        "visibilityOffline":{
-                            "А": 1,
-                            "Б": 1,
-                            "В": 0.38,
-                            "Г": 0.38,
-                            "Д": 0.38
-                        },
-                        "visibilityOnline": {
-                            "А": 1,
-                            "Б": 1
-                        }
-                    },
-                    "footballField": {
-                        "visibility":{},
-                        "statistics": [{
-                            "league": "РПФЛ",
-                            "season": "2015/16",
-                            "data": {
-                                "A1": {
-                                    "TVR":1.46,
-                                    "OTS":2097.87,
-                                    "offline":6.30
-                                },
-                                "В1": {
-                                    "TVR":1.31,
-                                    "OTS":1888.09,
-                                    "offline":7.87
-                                },
-                                "С1": {
-                                    "TVR":1.24,
-                                    "OTS":1783.19,
-                                    "offline":7.35
-                                },
-                                "D1": {
-                                    "TVR":1.34,
-                                    "OTS":1930.04,
-                                    "offline":5.77
-                                },
-                                "E1": {
-                                    "TVR":1.34,
-                                    "OTS":1930.04,
-                                    "offline":5.25
-                                },
-                                "F1": {
-                                    "TVR":1.26,
-                                    "OTS":1804.17,
-                                    "offline":5.25
-                                },
-                                "G1": {
-                                    "TVR":1.14,
-                                    "OTS":1636.34,
-                                    "offline":5.25
-                                },
-                                "H": {
-                                    "TVR":1.46,
-                                    "OTS":2065.87,
-                                    "offline":10.50
-                                },
-                                "В2": {
-                                    "offline":7.87
-                                },
-                                "С2": {
-                                    "offline":7.35
-                                },
-                                "D2": {
-                                    "offline":5.77
-                                },
-                                "E2": {
-                                    "offline":5.25
-                                },
-                                "F2": {
-                                    "offline":5.25
-                                },
-                                "G2": {
-                                    "offline":5.25
-                                }
-                            }
-                        },{
-                            "league": "ФНЛ",
-                            "season": "2015/16",
-                            "data": {
-                                "А1": {
-                                    "offline":1.86
-                                },
-                                "В1": {
-                                    "offline":2.32
-                                },
-                                "С1": {
-                                    "offline":2.17
-                                },
-                                "D1": {
-                                    "offline":5.77
-                                },
-                                "E1": {
-                                    "offline":5.25
-                                },
-                                "F1": {
-                                    "offline":5.25
-                                },
-                                "G1": {
-                                    "offline":5.25
-                                },
-                                "H": {
-                                    "offline":3.1
-                                },
-                                "В2": {
-                                    "offline":2.32
-                                },
-                                "С2": {
-                                    "offline":2.17
-                                },
-                                "D2": {
-                                    "offline":5.77
-                                },
-                                "E2": {
-                                    "offline":5.25
-                                },
-                                "F2": {
-                                    "offline":5.25
-                                },
-                                "G2": {
-                                    "offline":5.25
-                                }
-                            }
-                        }]
-                    },
-                    "basketballCourt": {
-                        "visibility":{},
-                        "statistics": [{
-                            "league": "ЕЛ ВТБ",
-                            "season": "2015/16",
-                            "data": {
-                                "А": {
-                                    "TVR":0.16,
-                                    "OTS":729.39,
-                                    "offline":1.31
-                                },
-                                "Б": {
-                                    "TVR":0.16,
-                                    "OTS":729.39,
-                                    "offline":1.31
-                                },
-                                "В": {
-                                    "TVR":0.16,
-                                    "OTS":711.35,
-                                    "offline":1.21
-                                },
-                                "Г": {
-                                    "TVR":0.13,
-                                    "OTS":607.83,
-                                    "offline":1.21
-                                },
-                                "1": {
-                                    "TVR":	0.04,
-                                    "OTS":162.09,
-                                    "offline":1.12
-                                },
-                                "2": {
-                                    "TVR":	0.04,
-                                    "OTS":162.09,
-                                    "offline":1.87
-                                },
-                                "3": {
-                                    "TVR":	0.15,
-                                    "OTS":675.28,
-                                    "offline":1.87
-                                },
-                                "4": {
-                                    "TVR":	0.15,
-                                    "OTS":675.28,
-                                    "offline":1.22
-                                },
-                                "5": {
-                                    "TVR":	0.14,
-                                    "OTS":652.73,
-                                    "offline":1.22
-                                },
-                                "6": {
-                                    "TVR":	0.13,
-                                    "OTS":598.61,
-                                    "offline":1.12
-                                }
-                            }
-                        }]
-                    }
-                }
-            });
-
+          
         }
 
 
@@ -1175,25 +631,7 @@ angular
                 return !isNaN(parseFloat(n)) && isFinite(n);
             }
 
-           /* (function update(items){
-                items.forEach(function(item){
-                    //items.some(function(item){
-                    //if (item.id && item.id == id){
-                    var id;
-                    if (item.key)
-                        id = item.key;
-                    if (item.id && !isNumber(item.id)){
-                        item.key = item.id;
-                        if (id !== undefined)
-                            item.id = id;
-                        else
-                            delete item.id;
-                    }
-                    if (item.lists instanceof Array){
-                        update(item.lists);
-                    }
-                });
-            })(translations.pages);*/
+          
 
             function getElement(key){
                 function recFind(items){
@@ -1254,7 +692,13 @@ angular
                                return item.clubs[i];
                        return null;
                    }).filter(function(club){return !!club; });
+                    
+                    
+                    // TODO хардкодим, какие лиги показываются в аналитике!!!
+                    if(league.name == "КХЛ" || league.name == "РФПЛ")
+                        league.showInAnalytics = true;
                 });
+                item.disableSelectionInAnalytics = true;
             });
 
 
@@ -1277,6 +721,43 @@ angular
 
         }
 
+        function clearSelection(type){
+            //parameters[type]
+            clearRec(parameters[type]);
+            
+            function clearRec(item) {
+                if (item.selected) item.selected = false;
+                if (item.interested) item.interested = false;
+
+                item.lists && item.lists.forEach(function (subitem) {
+                    clearRec(subitem);
+                });
+            }
+                /*
+                if (item.lists && item.lists.some(function(subitem){return !subitem.lists; })){ // терминальный лист (age, clubs)
+                    var selectedA = item.lists.filter(function(subitem){return subitem.selected; })
+                        .map(function(subitem){return subitem.id});
+                    if (selectedA.length){
+                        return selectedA.length ? selectedA : undefined;
+                    }
+                } else {
+                    var res = {};
+                    // проходим по дочерним, только если текущий не отмечен, как выбранный
+                    if (item.selected !== false && item.interested !== false) {
+                        /!*item.lists && *!/item.lists.forEach(function (subitem) {
+                            if (!subitem.key) return;
+                            var subitemList = getSelectedParamsRec(subitem);
+                            if (subitemList) {
+                                res[subitem.key] = subitemList;
+                            } //else res[subitem.id] = []; //  TODO comment this line
+                        });
+                    }
+                    if (item.interested) // хардкодим для спорта
+                        res.interested = true;
+                    return Object.keys(res).length ? res : undefined;
+                }*/
+            
+        }
 
         function getSelectedParamsRec(item){
             if (item.lists && item.lists.some(function(subitem){return !subitem.lists; })){ // терминальный лист (age, clubs)
@@ -1416,8 +897,9 @@ angular
             getParams: getParams,
             getSelectedParams: getSelectedParams,
             getSelectedAudience: getSelectedAudience,
-            isAudienceSelected: isAudienceSelected, 
+            isAudienceSelected: isAudienceSelected,
 
+            clearSelection: clearSelection,
             getSelectedDemographyCaption: getSelectedDemographyCaption,
             getSelectedSportCaption: getSelectedSportCaption
 
@@ -1451,6 +933,199 @@ angular
             return $sce.trustAsHtml(value);
         };
     }
+}());
+
+(function () {
+	"use strict";
+	/**
+	 * @desc
+	 * @example
+	 */
+	angular.module('SportsensusApp')
+		.directive('accountDir', accountDir);
+
+	accountDir.$inject = [
+		'$rootScope',
+		'analyticsSrv'
+	];
+
+	function accountDir(
+		$rootScope,
+		analyticsSrv
+	)    {
+		return {
+			restrict: 'E',
+			scope: {
+				type: '@'
+			},
+			templateUrl: '/views/widgets/account/account.html',
+			link: function ($scope, $el, attrs) {
+
+			},
+
+			controller: [
+				'$scope',
+				'$controller',
+				'$routeParams',
+				'$location',
+				'$window',
+				'$mdDialog',
+				'ParamsSrv',
+				'ApiSrv',
+				function(
+					$scope,
+					$controller,
+					$routeParams,
+					$location,
+					$window,
+					$mdDialog,
+					ParamsSrv,
+					ApiSrv
+				) {
+
+					$controller('baseInfoboxCtrl', {$scope: $scope});
+
+					$scope.topMenu = [{
+						id:'personalData',
+						tpl:'personalData',
+						text:'Личные данные'
+						// isSelected: $scope.checkSelected.bind(null, 'consume'),
+						//footer: 'analytics'
+					},{
+						id:'address',
+						tpl:'address',
+						text:'Адрес'
+						// isSelected: $scope.checkSelected.bind(null, 'consume'),
+						//footer: 'analytics'
+					},{
+						id:'bank',
+						tpl:'bank',
+						text:'Банковские реквизиты'
+						// isSelected: $scope.checkSelected.bind(null, 'consume'),
+						//footer: 'analytics'
+					},{
+						id:'password',
+						tpl:'password',
+						text:'Смена пароля'
+						// isSelected: $scope.checkSelected.bind(null, 'consume'),
+						//footer: 'analytics'
+					}];
+
+
+					$scope.pages = {};
+
+					[$scope.topMenu/*, $scope.bottomMenu, $scope.extPages*/].forEach(function(collection) {
+						collection.forEach(function (item) {
+							$scope.pages[item.id] = item;
+						});
+					});
+
+					$scope.setActiveMenuItem($scope.topMenu[0]);
+
+
+					// Личные данные
+					// Адрес
+					// Банковские реквизиты
+					// Смена пароля
+
+					$scope.params1 = {
+						'first_name': {title: 'Имя'},
+						'last_name': {title: 'Фамилия'},
+						'phone': {title: 'Телефон'},
+						'company_name': {title: 'Название компании'},
+						'legal_status': {
+							title: 'Юридический статус',
+							type: 'combo',
+							items: [
+								{value: 0, name: 'Физическое лицо'},
+								{value: 1, name: 'Юридическое лицо'}
+							]
+						},
+						'company_type': {
+							title: 'Тип компании',
+							type: 'combo',
+							items: [
+								{value: 0, name: 'Спонсор'},
+								{value: 1, name: 'Правообладатель'},
+								{value: 2, name: 'Агенство'}
+							]
+						}
+					};
+
+					$scope.params2 = {
+						'city_address': {title: 'Город'},
+						'street_address': {title: 'Улица'},
+						'house_address': {title: 'Дом'},
+						'address_type': {
+							title: 'Тип адреса',
+							type: 'combo',
+							items: [
+								{value: 0, name: 'Офис'},
+								{value: 1, name: 'Дом'}
+							]
+						}
+					};
+
+					$scope.params3 = {
+						'legal_address': 	{title: 'Юридический адрес'},
+						'inn': 				{title: 'Инн'},
+						'kpp':	 			{title: 'Кпп'},
+						'okpo': 			{title: 'Код окпо'},
+						'okonh': 			{title: 'Код оконх'},
+						'bank_account': 	{title: 'Банковский счет'},
+						'corr_account': 	{title: 'Корр. счет'},
+						'bic': 				{title: 'Бик'}
+					};
+
+
+					getProfile();
+
+					function getProfile(){
+						ApiSrv.getProfile().then(function(data){
+							$scope.profile = data;
+							$scope.originalProfile = angular.extend({}, data);
+						}, function(){});
+					}
+
+
+					$scope.isProfileChanged = function(){
+						return !angular.equals($scope.profile, $scope.originalProfile);
+					};
+
+					$scope.saveProfile = function(){
+						ApiSrv.editProfile($scope.profile).then(function(){
+							$scope.originalProfile = angular.extend({}, $scope.profile);	
+						}, function(){
+							$mdDialog.show($mdDialog.alert()
+								.title('Ошибка сохранения')
+								.textContent('Невозможно сохранить изменения')
+								.ok('OK'));
+						});
+						
+					};
+
+					$scope._newPassword = null;
+					$scope.newPassword = function(pass){
+						if (arguments.length)
+							$scope._newPassword = pass;
+						return $scope._newPassword;
+					};
+					
+					$scope.savePassword = function(){
+						ApiSrv.changePassword($scope.newPassword()).then(function(){
+							$scope.newPassword(null);
+						}, function(){
+							$mdDialog.show($mdDialog.alert()
+								.title('Ошибка сохранения')
+								.textContent('Невозможно сохранить новый пароль')
+								.ok('OK'));
+						})
+
+					}
+
+				}]
+		};
+	}
 }());
 
 (function () {
@@ -1497,7 +1172,7 @@ angular
 					ApiSrv
 				) {
 
-					$scope.audienceCountText = null;
+					
 
 					$scope.menu = [{
 						id:'profiles',
@@ -1585,103 +1260,116 @@ angular
 }());
 
 (function () {
-    "use strict";
-    /**
-     * @desc
-     * @example
-     */
-    angular.module('SportsensusApp')
-        .directive('headerDir', headerDir);
+	"use strict";
+	/**
+	 * @desc
+	 * @example
+	 */
+	angular.module('SportsensusApp')
+		.directive('analyticsDir', analyticsDir);
 
-    headerDir.$inject = [
-        '$rootScope',
-        'ApiSrv'
-    ];
+	analyticsDir.$inject = [
+		'$rootScope',
+		'analyticsSrv'
+	];
 
-    function headerDir(
-        $rootScope,
-        ApiSrv
-    )    {
-        return {
-            restrict: 'E',
-            scope: {
-            },
-            templateUrl: '/views/widgets/header/header.html',
-            link: function ($scope, $el, attrs) {},
+	function analyticsDir(
+		$rootScope,
+		analyticsSrv
+	)    {
+		return {
+			restrict: 'E',
+			scope: {
+				type: '@'
+			},
+			templateUrl: '/views/widgets/analytics/analytics.html',
+			link: function ($scope, $el, attrs) {
 
-            controller: [
-                '$scope',
-                '$routeParams',
-                '$location',
-                '$window',
-                'ApiSrv',
-                function(
-                    $scope,
-                    $routeParams,
-                    $location,
-                    $window,
-                    ApiSrv
-                ) {
-                    $scope.loggedIn = false;
-                    $scope.isAdmin = false;
-                    
-                    $scope.menu = [{
-                            'name': 'О проекте',
-                            visible: function(){return !$scope.loggedIn;}
-                        }, {
-                            'name': 'Зарегистрироваться',
-                            visible: function(){return !$scope.loggedIn;}
-                        },{
-                            'name': 'Войти',
-                            visible: function(){return !$scope.loggedIn;},
-                            onClick: function(){$scope.setPath('/login/');}
-                        },{
-                            'name': 'Техническая поддержка',
-                            visible: function(){return !$scope.loggedIn;},
-                            onClick: function(){$scope.setPath('/infobox/');}
-                        },
-                        {
-                            'name': 'Получить информацию',
-                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
-                            onClick: function(){$scope.setPath('/infobox/');}
-                        },{
-                            'name': 'Проанализировать',
-                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
-                            onClick: function(){$scope.setPath('/analytics/');}
-                        },{
-                            'name': 'Спланировать',
-                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
-                        },{
-                            'name': 'Оценить',
-                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
-                        },{
-                            'name': 'Личный кабинет',
-                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
-                        },{
-                            'name': 'Панель администрирования',
-                            visible: function(){return $scope.isAdmin;},
-                            onClick: function(){$scope.setPath('/admin/');}
-                        }
-                    ];
+			},
 
-                    
-                    $scope.$watch( function () { return ApiSrv.getUser().sid; }, function (sid) {
-                        $scope.loggedIn = !!sid;
-                        $scope.isAdmin = ApiSrv.getUser().userRights && !!ApiSrv.getUser().userRights.admin;
+			controller: [
+				'$scope',
+				'$controller',
+				'$routeParams',
+				'$location',
+				'$window',
+				'$mdDialog',
+				'ParamsSrv',
+				'ApiSrv',
+				function(
+					$scope,
+					$controller,
+					$routeParams,
+					$location,
+					$window,
+					$mdDialog,
+					ParamsSrv,
+					ApiSrv
+				) {
 
-                    }, true);
-                    
-                    $scope.setPath = function(path){
-                        $location.path(path);
-                    };
-                
-                    $scope.logout = function(){
-                        ApiSrv.logout();
-                        $scope.setPath('/');
-                    };
-                }]
-        };
-    }
+					$controller('baseInfoboxCtrl', {$scope: $scope});
+
+
+					$scope.audienceMenu = [{
+						id:'demography',
+						tpl:'demography',
+						text:'Социальная демография',
+						isSelected: $scope.checkSelected.bind(null, 'demography'),
+						footer: 'analytics'
+					},{
+						id:'consume',
+						tpl:'consume/consume',
+						text:'Потребительское поведение',
+						isSelected: $scope.checkSelected.bind(null, 'consume'),
+						footer: 'analytics'
+					},{
+						id:'regions',
+						tpl:'regions',
+						text:'География',
+						isSelected: $scope.checkSelected.bind(null, 'regions'),
+						footer: 'analytics'
+					}];
+					$scope.topMenu = $scope.audienceMenu;
+
+
+					function checkSportAnalyticsSelected(){
+						var selected = analyticsSrv.getSelected();
+						return !!(selected.sport || selected.league || selected.club);
+					}
+
+					$scope.bottomMenu = [
+						{
+							id:'sportAnalytics/sportAnalytics',
+							tpl:'sportAnalytics/sportAnalytics',
+							text:'Спорт',
+							footer: 'analytics',
+							isSelected: checkSportAnalyticsSelected
+						}
+					];
+
+
+					$scope.extPages = [{
+						id:'analytics/analytics',
+						tpl:'analytics/analytics',
+						footer: 'infoboxResult'
+					}];
+
+					$scope.pages = {};
+
+					[$scope.audienceMenu, $scope.bottomMenu, $scope.extPages].forEach(function(collection) {
+						collection.forEach(function (item) {
+							$scope.pages[item.id] = item;
+						});
+					});
+
+					$scope.setActiveMenuItem($scope.audienceMenu[0]);
+					
+
+					
+
+				}]
+		};
+	}
 }());
 
 (function () {
@@ -1769,6 +1457,254 @@ angular
      * @example
      */
     angular.module('SportsensusApp')
+        .directive('headerDir', headerDir);
+
+    headerDir.$inject = [
+        '$rootScope',
+        'ApiSrv'
+    ];
+
+    function headerDir(
+        $rootScope,
+        ApiSrv
+    )    {
+        return {
+            restrict: 'E',
+            scope: {
+            },
+            templateUrl: '/views/widgets/header/header.html',
+            link: function ($scope, $el, attrs) {},
+
+            controller: [
+                '$scope',
+                '$routeParams',
+                '$location',
+                '$window',
+                '$anchorScroll',
+                'ApiSrv',
+                function(
+                    $scope,
+                    $routeParams,
+                    $location,
+                    $window,
+                    $anchorScroll,
+                    ApiSrv
+                ) {
+                    $scope.loggedIn = false;
+                    $scope.isAdmin = false;
+                    
+                    $scope.menu = [{
+                            'name': 'О проекте',
+                            visible: function(){return !$scope.loggedIn;},
+                            onClick: function(){$scope.scrollTo('about');}
+                        }, {
+                            'name': 'Зарегистрироваться',
+                            visible: function(){return !$scope.loggedIn;},
+                            onClick: function(){$scope.scrollTo('registration');}
+                        },{
+                            'name': 'Войти',
+                            visible: function(){return !$scope.loggedIn;},
+                            onClick: function(){$scope.setPath('/login/');}
+                        },{
+                            'name': 'Техническая поддержка',
+                            visible: function(){return !$scope.loggedIn;},
+                            onClick: function(){$scope.setPath('/infobox/');}
+                        },
+                        {
+                            'name': 'Получить информацию',
+                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
+                            onClick: function(){$scope.setPath('/infobox/');}
+                        },{
+                            'name': 'Проанализировать',
+                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
+                            onClick: function(){$scope.setPath('/analytics/');}
+                        },{
+                            'name': 'Спланировать',
+                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
+                        },{
+                            'name': 'Оценить',
+                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
+                        },{
+                            'name': 'Личный кабинет',
+                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
+                            onClick: function(){$scope.setPath('/account/');}
+                        },{
+                            'name': 'Панель администрирования',
+                            visible: function(){return $scope.isAdmin;},
+                            onClick: function(){$scope.setPath('/admin/');}
+                        }
+                    ];
+
+                    
+                    $scope.$watch( function () { return ApiSrv.getUser().sid; }, function (sid) {
+                        $scope.loggedIn = !!sid;
+                        $scope.isAdmin = ApiSrv.getUser().userRights && !!ApiSrv.getUser().userRights.admin;
+
+                    }, true);
+                    
+                    $scope.setPath = function(path){
+                        $location.path(path);
+                    };
+                
+                    $scope.logout = function(){
+                        ApiSrv.logout();
+                        $scope.setPath('/');
+                    };
+
+                    $scope.scrollTo = function(id) {
+                        // $location.hash(id);
+                        // $anchorScroll();
+
+                        var old = $location.hash();
+                        $location.hash(id);
+                        $anchorScroll();
+                        //reset to old to keep any additional routing logic from kicking in
+                        $location.hash(old);
+                    }
+                }]
+        };
+    }
+}());
+
+(function () {
+    "use strict";
+    /**
+     * @desc
+     * @example
+     */
+    angular.module('SportsensusApp')
+        .directive('loginDir', loginDir);
+
+    loginDir.$inject = [
+        '$rootScope'
+    ];
+
+    function loginDir(
+        $rootScope
+    )    {
+        return {
+            restrict: 'E',
+            scope: {
+            },
+            templateUrl: '/views/widgets/login/login.html',
+            link: function ($scope, $el, attrs) {},
+
+            controller: [
+                '$scope',
+                '$routeParams',
+                '$location',
+                '$window',
+                'ApiSrv',
+                function(
+                    $scope,
+                    $routeParams,
+                    $location,
+                    $window,
+                    ApiSrv
+                ){
+                    $scope.vm={
+                        login: null,
+                        password: null,
+                        error: null
+                    };
+
+                    $scope.login = function() {
+                        $scope.vm.dataLoading = true;
+                        $scope.vm.error = null;
+                        ApiSrv.auth($scope.vm).then(function(){
+                            $location.path('/infobox/');
+                            $scope.vm.dataLoading = false;
+                        }, function(){
+                            $scope.vm.dataLoading = false;
+                            $scope.vm.error = 'Неправильный логин или пароль';
+                        });
+                    };
+                }]
+        };
+    }
+}());
+(function () {
+	"use strict";
+	angular.module('SportsensusApp')
+		.controller('baseInfoboxCtrl', baseInfoboxCtrl);
+
+	baseInfoboxCtrl.$inject = [
+		'$scope',
+		'$controller',
+		'ParamsSrv',
+		'ApiSrv'
+	];
+
+	function baseInfoboxCtrl(
+		$scope,
+		$controller,
+		ParamsSrv,
+		ApiSrv
+	) {
+
+		ParamsSrv.getParams().then(function(params){
+			$scope.parameters = params;
+		});
+		
+		$scope.checkSelected = function(type){
+			return !!ParamsSrv.getSelectedParams(type);
+		};
+
+		$scope.clearSelection = function(type){
+			ParamsSrv.clearSelection(type);
+		};
+
+
+		$scope.activePage = null;
+		$scope.activeMenuItem = null;
+		$scope.setActiveMenuItem = function(item){
+			$scope.activeMenuItem = item;
+			$scope.setActivePage(item);
+		};
+
+
+
+		$scope.setActivePage = function(item){
+			$scope.activePage = item;
+			$scope.activeFooter = item.footer + 'Footer';
+		};
+
+
+		$scope.setActiveMenuItemById = function(id){
+			var item = $scope.pages[id];
+			$scope.setActiveMenuItem(item);
+		};
+		
+		$scope.setActivePageById = function(id){
+			var item = $scope.pages[id];
+			$scope.setActivePage(item);
+		};
+
+		// снимает выделение с соседний radio
+		$scope.selectCheckbox = function(collection, item){
+			ParamsSrv.getParams().then(function(params){
+				var a = params;
+			});
+
+			if (collection.type != 'radio') return;
+			angular.forEach(collection.items, function(_item) {
+				if (item != _item) {
+					_item.selected = false;
+				}
+			});
+		};
+
+	}
+
+}());
+
+(function () {
+    "use strict";
+    /**
+     * @desc
+     * @example
+     */
+    angular.module('SportsensusApp')
         .directive('infoboxDir', infoboxDir);
 
     infoboxDir.$inject = [
@@ -1785,11 +1721,12 @@ angular
             },
             templateUrl: '/views/widgets/infobox/infobox.html',
             link: function ($scope, $el, attrs) {
-                $scope.init();
+               
             },
 
             controller: [
                 '$scope',
+                '$controller',
                 '$routeParams',
                 '$location',
                 '$window',
@@ -1797,160 +1734,122 @@ angular
                 'ApiSrv',
                 function(
                     $scope,
+                    $controller,
                     $routeParams,
                     $location,
                     $window,
                     ParamsSrv,
                     ApiSrv
                 ) {
-                    $scope.audienceCountText = null;
+
+                    $controller('baseInfoboxCtrl', {$scope: $scope});
+
+                 
 
                     $scope.audienceMenu = [{
                         id:'demography',
-                        text:'Социальная демография'
+                        tpl:'demography',
+                        text:'Социальная демография',
+                        isSelected: $scope.checkSelected.bind(null, 'demography'),
+                        footer: 'infobox'
                     },{
                         id:'consume/consume',
-                        text:'Потребительское поведение'
+                        tpl:'consume/consume',
+                        text:'Потребительское поведение',
+                        isSelected: $scope.checkSelected.bind(null, 'consume'),
+                        footer: 'infobox'
                     },{
                         id:'regions',
-                        text:'География'
+                        tpl:'regions',
+                        text:'География',
+                        isSelected: $scope.checkSelected.bind(null, 'regions'),
+                        footer: 'infobox'
                     }];
+
+                    $scope.topMenu = $scope.audienceMenu;
+                    
                     
                     function isSportSelected(){return $scope.sportSelected}
                     $scope.sportinfoMenu = [{
                         id:'sport',
-                        text:'Спорт'
+                        tpl:'sport/sport',
+                        text:'Спорт',
+                        isSelected: $scope.checkSelected.bind(null, 'sport'),
+                        footer: 'infobox'
                     },{
                         id:'interest/interest',
+                        tpl:'interest/interest',
                         // id:'interest/interestGraph',
                         enabled: isSportSelected,
-                        text:'Степень интереса'
+                        text:'Степень интереса',
+                        isSelected: $scope.checkSelected.bind(null, 'interest'),
+                        footer: 'infobox'
                     },{
                         id:'rooting/rooting',
+                        tpl:'rooting/rooting',
                         // id:'rooting/rootingGraph',
                         enabled: isSportSelected,
-                        text:'Сила боления'
+                        text:'Сила боления',
+                        isSelected: $scope.checkSelected.bind(null, 'rooting'),
+                        footer: 'infobox'
                     },{
                         id:'involve/involve',
+                        tpl:'involve/involve',
                         enabled: isSportSelected,
-                        text:'Причастность к видам спорта'
+                        text:'Причастность к видам спорта',
+                        isSelected: $scope.checkSelected.bind(null, 'involve'),
+                        footer: 'infobox'
                     },{
                         id:'image/image',
+                        tpl:'image/image',
                         // id:'image/imageGraph',
                         enabled: isSportSelected,
-                        text:'Восприятие видов спорта'
+                        text:'Восприятие видов спорта',
+                        isSelected: $scope.checkSelected.bind(null, 'image'),
+                        footer: 'infobox'
+                    }];
+                    $scope.bottomMenu = $scope.sportinfoMenu;
+
+                    
+
+                    $scope.extPages = [{
+                        id:'image/imageGraph',
+                        tpl:'image/imageGraph',
+                        footer: 'infoboxResult'
+                    },{
+                        id:'allGraphs',
+                        tpl:'allGraphs',
+                        footer: 'infoboxResult'
+                    },{
+                        id:'expressSport/expressSport',
+                        tpl:'expressSport/expressSport',
+                        footer: 'infoboxResult'
+                    },{
+                        id:'expressAudience/expressAudience',
+                        tpl:'expressAudience/expressAudience',
+                        footer: 'infoboxResult'
                     }];
 
-                    $scope.analyticsMenu = [
-                        {
-                            id:'sportAnalytics/sportAnalytics',
-                            text:'Спорт'
-                        }
-                    ];
-                    
                     $scope.pages = {};
-                    [
-                        'image/imageGraph',
-                        'allGraphs',
-                        'expressSport/expressSport',
-                        'expressAudience/expressAudience',
-                        'analytics/analytics'
-                    ].forEach(function(page){
-                        $scope.pages[page] = {id:page};
+
+                    [$scope.audienceMenu, $scope.sportinfoMenu,  $scope.extPages, /*$scope.analyticsMenu*/].forEach(function(collection) {
+                        collection.forEach(function (item) {
+                            $scope.pages[item.id] = item;
+                        });
                     });
-                    
-
-
-                    ParamsSrv.getParams().then(function(params){
-                        $scope.parameters = params;
-                        
-                        //$scope.regionsLegend = {};
-                    });
-
-
-                    $scope.activePage = null;
-                    $scope.activeMenuItem = null;
-                    $scope.setActiveMenuItem = function(item){
-                        $scope.activeMenuItem = item;
-                        $scope.activePage = item;
-                    };
-
-                    $scope.sportSelected = false; // показывает, выбран ли какой-либо вид спорта
 
                     $scope.setActiveMenuItem($scope.audienceMenu[0]);
                     
 
+                    $scope.sportSelected = false; // показывает, выбран ли какой-либо вид спорта
                     
-                    $scope.$on('ApiSrv.countError', function(){
-                        $scope.audienceCount = 0;
-                        //$scope.audienceCountText = 'Болельщики: ошибка загрузки';
-                    });
-                    $scope.$on('ApiSrv.countLoaded', readCount);
-
-                    function readCount(){
-                        var result = ApiSrv.getLastCountResult();
-                        if (result && result.is_valid_count)
-                            $scope.audienceCount = result.audience_count;
-                        else
-                            $scope.audienceCount = 0;
-                    }
-                    readCount();
-
-
-                    $scope.checkButtonText = '';
-                    $scope.checkButtonPage = null;
-                    $scope.checkButtonClick = function(){
-                        $scope.activePage = $scope.pages[$scope.checkButtonPage];
-                    };
-
                     $scope.$on('ParamsSrv.paramsChanged', paramsChanged);
                     paramsChanged();
 
-                    function paramsChanged(){
-                        var selected = ParamsSrv.getSelectedParams();
-                        var audienceSelected = !!(selected.demography || selected.regions || selected.consume);
-                        $scope.sportSelected = !!selected.sport;
-                        var filtersSelected = !!(selected.interest || selected.rooting || selected.involve || selected.image);
-
-                        if ($scope.type == 'infobox') {
-                            if (audienceSelected && !$scope.sportSelected) { //} && !filtersSelected){
-                                $scope.checkButtonText = 'Экспресс-результат';
-                                $scope.checkButtonPage = 'expressAudience/expressAudience';
-                            } else if ($scope.sportSelected && !audienceSelected && !filtersSelected) {
-                                $scope.checkButtonText = 'Экспресс-результат';
-                                $scope.checkButtonPage = 'expressSport/expressSport';
-                            } else {
-                                $scope.checkButtonText = 'Показать результат';
-                                $scope.checkButtonPage = 'allGraphs';
-                            }
-                        } else if ($scope.type == 'analytics'){
-                            $scope.checkButtonText = 'Анализ пакета';
-                            $scope.checkButtonPage = 'analytics/analytics';
-                        }
+                    function paramsChanged() {
+                        $scope.sportSelected = !!ParamsSrv.getSelectedParams('sport');
                     }
                     
-                    // снимает выделение с соседний radio
-                    $scope.selectCheckbox = function(collection, item){
-                        ParamsSrv.getParams().then(function(params){
-                            var a = params;
-                        });
-
-                        if (collection.type != 'radio') return;
-                        angular.forEach(collection.items, function(_item) {
-                            if (item != _item) {
-                                _item.selected = false;
-                            }
-                        });
-                    };
-
-                    
-                    $scope.init = function(){
-                        if ($scope.type == 'infobox'){
-                            $scope.bottomMenu = $scope.sportinfoMenu;
-                        } else if ($scope.type == 'analytics'){
-                            $scope.bottomMenu = $scope.analyticsMenu;
-                        }
-                    }
                     
                 }]
         };
@@ -2187,63 +2086,6 @@ angular
     }
 }());
 
-(function () {
-    "use strict";
-    /**
-     * @desc
-     * @example
-     */
-    angular.module('SportsensusApp')
-        .directive('loginDir', loginDir);
-
-    loginDir.$inject = [
-        '$rootScope'
-    ];
-
-    function loginDir(
-        $rootScope
-    )    {
-        return {
-            restrict: 'E',
-            scope: {
-            },
-            templateUrl: '/views/widgets/login/login.html',
-            link: function ($scope, $el, attrs) {},
-
-            controller: [
-                '$scope',
-                '$routeParams',
-                '$location',
-                '$window',
-                'ApiSrv',
-                function(
-                    $scope,
-                    $routeParams,
-                    $location,
-                    $window,
-                    ApiSrv
-                ){
-                    $scope.vm={
-                        login: null,
-                        password: null,
-                        error: null
-                    };
-
-                    $scope.login = function() {
-                        $scope.vm.dataLoading = true;
-                        $scope.vm.error = null;
-                        ApiSrv.auth($scope.vm).then(function(){
-                            $location.path('/infobox/');
-                            $scope.vm.dataLoading = false;
-                        }, function(){
-                            $scope.vm.dataLoading = false;
-                            $scope.vm.error = 'Неправильный логин или пароль';
-                        });
-                    };
-                }]
-        };
-    }
-}());
 (function () {
     "use strict";
     /**
@@ -6460,6 +6302,10 @@ function RadarChart(id, data, options) {
 		'ParamsSrv'
 	];
 
+/**
+ * events:
+ * analyticsSrv.selectionChanged
+ */
 	function analyticsSrv(
 		$rootScope,
 		ApiSrv,
@@ -6471,10 +6317,22 @@ function RadarChart(id, data, options) {
 			league: null,
 			club: null
 		};
+	
+		function getSelected(){
+			return selected; 
+		}
+	
 
+		function setSelected(val){ 
+			selected = val || {};
+			$rootScope.$broadcast('analyticsSrv.selectionChanged', selected);
+		}
+		
+	
+	
 		var me = {
-			getSelected: function(){return selected; },
-			setSelected: function(val){ selected = val; }
+			getSelected: getSelected,
+			setSelected: setSelected
 		};
 		return me;
 	}
@@ -7486,6 +7344,609 @@ function RadarChart(id, data, options) {
 }());
 
 (function () {
+	"use strict";
+	angular.module('SportsensusApp')
+		.controller('analyticsFooterCtrl', analyticsFooterCtrl);
+
+	analyticsFooterCtrl.$inject = [
+		'$scope',
+		'$controller',
+		'ParamsSrv',
+		'ApiSrv'
+	];
+
+	function analyticsFooterCtrl(
+		$scope,
+		$controller,
+		ParamsSrv,
+		ApiSrv
+	) {
+		$controller('baseFooterCtrl', {$scope: $scope});
+
+		$scope.checkButtonText = 'Анализ пакета';
+		//$scope.checkButtonPage = null;
+		$scope.checkButtonClick = function(){
+			//$scope.activePage = $scope.pages[$scope.checkButtonPage];
+			$scope.setActivePageById('analytics/analytics');
+		};
+		
+	}
+
+}());
+
+
+
+(function () {
+	"use strict";
+	angular.module('SportsensusApp')
+		.controller('baseFooterCtrl', baseFooterCtrl);
+
+	baseFooterCtrl.$inject = [
+		'$scope',
+		'$controller',
+		'ParamsSrv',
+		'ApiSrv'
+	];
+
+	function baseFooterCtrl(
+		$scope,
+		$controller,
+		ParamsSrv,
+		ApiSrv
+	) {
+		
+
+		$scope.$on('ApiSrv.countError', function(){
+			setAudienceCount(0);
+		});
+		$scope.$on('ApiSrv.countLoaded', readCount);
+
+		function readCount(){
+			var result = ApiSrv.getLastCountResult();
+			if (result && result.is_valid_count)
+				setAudienceCount(result.audience_count);
+			else
+				setAudienceCount(0);
+		}
+		readCount();
+
+		function setAudienceCount(audienceCount) {
+			$scope.audienceCount = audienceCount;
+			if (audienceCount == null)
+				$scope.audienceCountText = '' ;
+			else if (audienceCount != 0)
+				$scope.audienceCountText = 'Болельщики: ' + audienceCount.toLocaleString();
+			else
+				$scope.audienceCountText = 'Болельщики: недостаточно данных';
+		}
+
+
+		$scope.checkButtonText = '';
+		//$scope.checkButtonPage = null;
+		$scope.checkButtonClick = function(){
+			//$scope.activePage = $scope.pages[$scope.checkButtonPage];
+			$scope.setActivePage($scope.pages[$scope.checkButtonPage]);
+		};
+
+		$scope.$on('ParamsSrv.paramsChanged', paramsChanged);
+		paramsChanged();
+
+		function paramsChanged(){
+			var selected = ParamsSrv.getSelectedParams();
+			var audienceSelected = !!(selected.demography || selected.regions || selected.consume);
+			$scope.sportSelected = !!selected.sport;
+			var filtersSelected = !!(selected.interest || selected.rooting || selected.involve || selected.image);
+
+			if ($scope.type == 'infobox') {
+				if (audienceSelected && !$scope.sportSelected) {
+					$scope.checkButtonText = 'Экспресс-результат';
+					$scope.checkButtonPage = 'expressAudience/expressAudience';
+				} else if ($scope.sportSelected && !audienceSelected && !filtersSelected) {
+					$scope.checkButtonText = 'Экспресс-результат';
+					$scope.checkButtonPage = 'expressSport/expressSport';
+				} else {
+					$scope.checkButtonText = 'Показать результат';
+					$scope.checkButtonPage = 'allGraphs';
+				}
+			} /*else if ($scope.type == 'analytics'){
+			 $scope.checkButtonText = 'Анализ пакета';
+			 $scope.checkButtonPage = 'analytics/analytics';
+			 }*/
+		}
+
+
+
+	}
+
+}());
+
+(function () {
+	"use strict";
+	angular.module('SportsensusApp')
+		.controller('infoboxFooterCtrl', infoboxFooterCtrl);
+
+	infoboxFooterCtrl.$inject = [
+		'$scope',
+		'$controller',
+		'ParamsSrv',
+		'ApiSrv'
+	];
+
+	function infoboxFooterCtrl(
+		$scope,
+		$controller,
+		ParamsSrv,
+		ApiSrv
+	) {
+		$controller('baseFooterCtrl', {$scope: $scope});
+
+
+		
+		$scope.checkButtonText = '';
+		//$scope.checkButtonPage = null;
+		$scope.checkButtonClick = function(){
+			//$scope.activePage = $scope.pages[$scope.checkButtonPage];
+			$scope.setActivePage($scope.pages[$scope.checkButtonPage]);
+		};
+
+		$scope.$on('ParamsSrv.paramsChanged', paramsChanged);
+		paramsChanged();
+
+		function paramsChanged(){
+			var selected = ParamsSrv.getSelectedParams();
+			var audienceSelected = !!(selected.demography || selected.regions || selected.consume);
+			$scope.sportSelected = !!selected.sport;
+			var filtersSelected = !!(selected.interest || selected.rooting || selected.involve || selected.image);
+
+			if ($scope.type == 'infobox') {
+				if (audienceSelected && !$scope.sportSelected) {
+					$scope.checkButtonText = 'Экспресс-результат';
+					$scope.checkButtonPage = 'expressAudience/expressAudience';
+				} else if ($scope.sportSelected && !audienceSelected && !filtersSelected) {
+					$scope.checkButtonText = 'Экспресс-результат';
+					$scope.checkButtonPage = 'expressSport/expressSport';
+				} else {
+					$scope.checkButtonText = 'Показать результат';
+					$scope.checkButtonPage = 'allGraphs';
+				}
+			} /*else if ($scope.type == 'analytics'){
+				$scope.checkButtonText = 'Анализ пакета';
+				$scope.checkButtonPage = 'analytics/analytics';
+			}*/
+		}
+
+
+
+	}
+
+}());
+
+(function () {
+	"use strict";
+	angular.module('SportsensusApp')
+		.controller('infoboxResultFooterCtrl', infoboxResultFooterCtrl);
+
+	infoboxResultFooterCtrl.$inject = [
+		'$scope',
+		'$controller',
+		'ParamsSrv',
+		'ApiSrv',
+		'analyticsSrv'
+	];
+
+	function infoboxResultFooterCtrl(
+		$scope,
+		$controller,
+		ParamsSrv,
+		ApiSrv,
+		analyticsSrv
+	) {
+		$controller('baseFooterCtrl', {$scope: $scope});
+
+		$scope.checkButtonText = 'Сбросить';
+		//$scope.checkButtonPage = null;
+		$scope.checkButtonClick = function(){
+			//$scope.activePage = $scope.pages[$scope.checkButtonPage];
+			//$scope.setActivePage($scope.pages[$scope.checkButtonPage]);
+			['demography', 'consume', 'regions',
+				'sport','interest','rooting','involve','image'].forEach(function(type){
+				ParamsSrv.clearSelection(type);
+			});
+			
+			analyticsSrv.setSelected({
+				sport: null,
+				league: null,
+				club: null
+			});
+			
+			$scope.setActiveMenuItemById('demography');
+
+		};
+
+	}
+
+}());
+
+
+
+
+(function () {
+    "use strict";
+    /**
+     * @desc
+     */
+    angular.module('SportsensusApp')
+        .controller('imageGraphCrtl', imageGraphCrtl);
+
+    imageGraphCrtl.$inject = [
+        '$scope',
+        '$controller',
+        'ParamsSrv',
+        'ApiSrv',
+        'graphHelpersSrv'
+    ];
+
+    function imageGraphCrtl(
+        $scope,
+        $controller,
+        ParamsSrv,
+        ApiSrv,
+        graphHelpersSrv
+    ) {
+
+        $controller('baseGraphCtrl', {$scope: $scope});
+        
+        ParamsSrv.getParams().then(function (params) {
+            $scope.parameters = params;
+            $scope.prepareLegends();
+            requestGraph();
+        });
+
+        function requestGraph() {
+            var audience = ParamsSrv.getSelectedAudience();
+            var sports = {};
+            $scope.parameters.sport.lists.forEach(function (list) {
+                sports[list.key] = {interested: true}
+            });
+            var images = $scope.parameters.image.lists.map(function (list) {
+                return list.id;
+            });
+            var sportimage = { // все спорты и все интересы
+                sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
+                image: images // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
+            };
+            ApiSrv.getImageGraph(audience, sportimage).then(function (graphData) {
+                $scope.prepareData(graphData);
+                $scope.updateGraph();
+            }, function () {
+            });
+        }
+
+        $scope.prepareLegends = function () {
+            $scope.sportLegend = graphHelpersSrv.getSportLegend();
+            $scope.imageLegend = graphHelpersSrv.getImageLegend();
+            $scope.$watch('sportLegend', $scope.updateGraph, true);
+        };
+
+
+        $scope.prepareData = function (data) {
+
+            var images = {};
+            $scope.parameters.image.lists.forEach(function (list) {
+                images[list.id] = {
+                    id: list.id,
+                    name: list.name,
+                    count: 0
+                }
+            });
+
+            var sports = {};
+            $scope.parameters.sport.lists.forEach(function (list) {
+                sports[list.id] = angular.merge({
+                    data: angular.merge({}, images)
+                }, list);
+            });
+
+            var legendIndexes = {};
+            data.legends.forEach(function(item, index){
+                legendIndexes[item.name] = index;
+            });
+            var maxValue = 0;
+            data.data.forEach(function (item) {
+                var sportId = item.legend[legendIndexes['sport']];
+                var imageId = item.legend[legendIndexes['image']];
+                sports[sportId].data[imageId].count += item.count;
+                maxValue = Math.max(maxValue, sports[sportId].data[imageId].count);
+            }, this);
+            var multiplier = maxValue > 1000*1000 ? 1000*1000 : maxValue > 1000 ? 1000 : 1;
+
+            // $scope.sportDatas = {};
+            $scope.chartsData = {
+                multiplier: multiplier,
+                maxValue: maxValue,
+                sports: sports
+            };
+
+
+
+        };
+
+        $scope.updateGraph = function () {
+            if (!$scope.chartsData) return;
+
+            var sports = $scope.sportLegend.filter(function(item) {
+                return item.selected;
+            });
+
+            var images = $scope.imageLegend;
+            // var image = $scope.imageLegend.filter(function(item) {
+            //     return item.selected;
+            // });
+
+
+
+
+            
+            var chartData = [];
+            var localColors = [];
+            var maxValue = 0;
+            //$scope.sportLegend.forEach(function (item) {
+                //if (!item.selected) return;
+            sports.forEach(function(sport){
+                //var maxValue = 0;
+                var axisData = [];
+                var data = $scope.chartsData.sports[sport.id].data;
+                images.forEach(function(image){
+                //Object.keys(images).forEach(function (imageId) { // цикл по восприятиям
+                    // var value = sport.data[imageId].count / 1000 / 1000;
+                    var value = $scope.chartsData.sports[sport.id].data[image.id].count;
+                    //var value = sport.data[imageId].count;
+                    //value = Math.round(value * 10) / 10;
+                    //axisData.push({axis: images[imageId].name, value: value});
+                    axisData.push({
+                        axis: image.name, 
+                        value: value, 
+                        tooltip: sport.name + ': ' + image.name + ': ' + value.toLocaleString('en-US'),
+                        tooltipColor: sport.color
+                    });
+                    maxValue = Math.max(maxValue, value);
+                }, this);
+                //graph.push(axisData);
+                //localColors.push(sport.chartColor);
+
+                // var sportData = {
+                //     axisData: axisData,
+                //     maxValue: maxValue
+                // };
+                // $scope.sportDatas[sport.id] = sportData;
+
+                //chartData.push($scope.sportDatas[item.id].axisData);
+                chartData.push(axisData);
+                localColors.push(sport.color);
+                //maxValue = Math.max(maxValue, $scope.sportDatas[item.id].maxValue);
+            });
+
+            // округляем до 5 в большую сторону
+            //maxValue = Math.ceil(maxValue / 5) * 5;
+            var multiplier = 1;
+            while (maxValue > 100){
+                multiplier *= 10;
+                maxValue /= 10;
+            }
+            maxValue = Math.ceil(maxValue / 5) * 5 * multiplier;
+
+            var radarChartOptions = {
+                //w: width,
+                //h: height,
+                //margin: margin,
+                maxValue: maxValue,
+                levels: 5,
+                wrapWidth: 100,
+                labelFactor: 1.32,
+                roundStrokes: true,
+                //color: color
+                format: $scope.formatValue,
+                color: function (i) {
+                    return localColors[i];
+                }
+            };
+
+            if (chartData && chartData.length)
+                $scope.chart = {data: chartData, options: radarChartOptions};
+            else $scope.chart = null;
+        };
+
+    }
+
+}());
+
+(function () {
+    "use strict";
+    /**
+     * @desc
+     */
+    angular.module('SportsensusApp')
+        .controller('involveGraphCrtl', involveGraphCrtl);
+
+    involveGraphCrtl.$inject = [
+        '$scope',
+        '$controller',
+        'ParamsSrv',
+        'ApiSrv',
+        'graphHelpersSrv'
+    ];
+
+    function involveGraphCrtl(
+        $scope,
+        $controller,
+        ParamsSrv,
+        ApiSrv,
+        graphHelpersSrv
+    ) {
+
+        $controller('baseGraphCtrl', {$scope: $scope});
+
+        ParamsSrv.getParams().then(function (params) {
+            $scope.parameters = params;
+            $scope.prepareLegends();
+            requestGraph();
+        });
+
+        $scope.showCharts = false;
+
+        function requestGraph() {
+            var audience = ParamsSrv.getSelectedAudience();
+            var sports = {};
+            $scope.parameters.sport.lists.forEach(function (list) {
+                sports[list.key] = {interested: true}
+            });
+            var involve = $scope.parameters.involve.lists.map(function (list) {
+                return list.id;
+            });
+            var sportInvolve = { // все спорты и все интересы
+                sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
+                involve: involve // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
+            };
+            ApiSrv.getInvolveGraph(audience, sportInvolve).then(function (graphData) {
+                $scope.prepareData(graphData);
+                $scope.updateGraph();
+            }, function () {
+            });
+        }
+
+        $scope.prepareLegends = function () {
+            $scope.sportLegend = graphHelpersSrv.getSportLegend({color:'#555555'});
+            $scope.involveLegend = graphHelpersSrv.getInvolveLegend();
+
+            $scope.$watch('sportLegend', $scope.updateGraph, true);
+            $scope.$watch('involveLegend', $scope.updateGraph, true);
+        };
+
+
+
+        $scope.prepareData = function (data) {
+
+            var involves = {};
+            $scope.parameters.involve.lists.forEach(function (list) {
+                involves[list.id] = {
+                    id: list.id,
+                    name: list.name,
+                    count: 0
+                }
+            });
+
+            var sports = {};
+            $scope.parameters.sport.lists.forEach(function (list) {
+                sports[list.id] = angular.merge({
+                    data: angular.merge({}, involves)
+                }, list);
+            });
+
+
+            var legendIndexes = {};
+            data.legends.forEach(function(item, index){
+                legendIndexes[item.name] = index;
+            });
+
+            var maxValue = 0;
+            data.data.forEach(function (item) {
+                var sportId = item.legend[legendIndexes['sport']];
+                var involveId = item.legend[legendIndexes['involve']];
+                sports[sportId].data[involveId].count += item.count;
+                maxValue = Math.max(maxValue, sports[sportId].data[involveId].count);
+            }, this);
+            var multiplier = maxValue > 1000*1000 ? 1000*1000 : maxValue > 1000 ? 1000 : 1;
+
+
+            $scope.chartsData = {
+                multiplier: multiplier,
+                maxValue: maxValue,
+                sports: sports
+            };
+            
+
+        };
+
+        $scope.updateGraph = function () {
+            if (!$scope.chartsData) return;
+            
+
+            var sports = $scope.sportLegend.filter(function(item) {
+                return item.selected;
+            });
+
+            var involves = $scope.involveLegend.filter(function(item) {
+                return item.selected;
+            });
+
+            var charts = [];
+            sports.forEach(function(sport){
+                // if (!sport.selected) return;
+                //charts.push(sport);
+                var chartData = {labels:[],datasets:[]};
+
+                    var dataDs = { label:[], fillColor:[], data:[] };
+                    var emptyDs = { label:[], fillColor:[], data:[] };
+
+                    involves.forEach(function(involve){
+                        var value = $scope.chartsData.sports[sport.id].data[involve.id].count;
+                        if (value == 0) return;
+
+                        dataDs.label.push(involve.name + ': ' + value.toLocaleString('en-US'));
+                        dataDs.fillColor.push(involve.color);
+                        dataDs.data.push($scope.chartsData.sports[sport.id].data[involve.id].count);
+
+                        emptyDs.label.push(involve.name);
+                        emptyDs.fillColor.push(involve.color);
+                        emptyDs.data.push(0);
+
+                        chartData.labels.push('');
+                    });
+
+                    chartData.datasets.push(dataDs);
+                    chartData.datasets.push(emptyDs);
+                // }
+
+
+                charts.push({
+                    sport:sport,
+                    chartData:{data:chartData, options:{
+                        showLabels: $scope.formatValue,
+                        scaleLabel: function(obj){return $scope.formatValue(obj.value);}
+                    }}
+                })
+            });
+
+            $scope.showCharts = !!charts.length && !!involves.length;
+            $scope.charts = charts;
+
+            // Combine all sports in one graph
+            var combineChart = {data:{labels:[], datasets:[]}, options:{
+                scaleLabel: function(obj){return $scope.formatValue(obj.value);},
+                barWidth: 40,
+                barHeight: 300,
+                barValueSpacing: 30
+            }};
+            combineChart.data.labels = sports.map(function(item){return item.name;});
+            involves.forEach(function(involve){
+                var ds = { label:[], fillColor:[], data:[] };
+                sports.forEach(function(sport) {
+                    var value = $scope.chartsData.sports[sport.id].data[involve.id].count;
+                    ds.label.push(involve.name + ': ' + value.toLocaleString('en-US'));//item[0].name);
+                    ds.fillColor.push(involve.color);
+                    ds.data.push(value);
+
+                });
+                combineChart.data.datasets.push(ds);
+            });
+            $scope.combineChart = (combineChart.data.labels.length > 1 ? combineChart : null);
+        };
+
+    }
+
+}());
+
+(function () {
     "use strict";
     /**
      * @desc
@@ -7864,192 +8325,6 @@ function RadarChart(id, data, options) {
 
 
 
-
-    }
-
-}());
-
-(function () {
-    "use strict";
-    /**
-     * @desc
-     */
-    angular.module('SportsensusApp')
-        .controller('involveGraphCrtl', involveGraphCrtl);
-
-    involveGraphCrtl.$inject = [
-        '$scope',
-        '$controller',
-        'ParamsSrv',
-        'ApiSrv',
-        'graphHelpersSrv'
-    ];
-
-    function involveGraphCrtl(
-        $scope,
-        $controller,
-        ParamsSrv,
-        ApiSrv,
-        graphHelpersSrv
-    ) {
-
-        $controller('baseGraphCtrl', {$scope: $scope});
-
-        ParamsSrv.getParams().then(function (params) {
-            $scope.parameters = params;
-            $scope.prepareLegends();
-            requestGraph();
-        });
-
-        $scope.showCharts = false;
-
-        function requestGraph() {
-            var audience = ParamsSrv.getSelectedAudience();
-            var sports = {};
-            $scope.parameters.sport.lists.forEach(function (list) {
-                sports[list.key] = {interested: true}
-            });
-            var involve = $scope.parameters.involve.lists.map(function (list) {
-                return list.id;
-            });
-            var sportInvolve = { // все спорты и все интересы
-                sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
-                involve: involve // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
-            };
-            ApiSrv.getInvolveGraph(audience, sportInvolve).then(function (graphData) {
-                $scope.prepareData(graphData);
-                $scope.updateGraph();
-            }, function () {
-            });
-        }
-
-        $scope.prepareLegends = function () {
-            $scope.sportLegend = graphHelpersSrv.getSportLegend({color:'#555555'});
-            $scope.involveLegend = graphHelpersSrv.getInvolveLegend();
-
-            $scope.$watch('sportLegend', $scope.updateGraph, true);
-            $scope.$watch('involveLegend', $scope.updateGraph, true);
-        };
-
-
-
-        $scope.prepareData = function (data) {
-
-            var involves = {};
-            $scope.parameters.involve.lists.forEach(function (list) {
-                involves[list.id] = {
-                    id: list.id,
-                    name: list.name,
-                    count: 0
-                }
-            });
-
-            var sports = {};
-            $scope.parameters.sport.lists.forEach(function (list) {
-                sports[list.id] = angular.merge({
-                    data: angular.merge({}, involves)
-                }, list);
-            });
-
-
-            var legendIndexes = {};
-            data.legends.forEach(function(item, index){
-                legendIndexes[item.name] = index;
-            });
-
-            var maxValue = 0;
-            data.data.forEach(function (item) {
-                var sportId = item.legend[legendIndexes['sport']];
-                var involveId = item.legend[legendIndexes['involve']];
-                sports[sportId].data[involveId].count += item.count;
-                maxValue = Math.max(maxValue, sports[sportId].data[involveId].count);
-            }, this);
-            var multiplier = maxValue > 1000*1000 ? 1000*1000 : maxValue > 1000 ? 1000 : 1;
-
-
-            $scope.chartsData = {
-                multiplier: multiplier,
-                maxValue: maxValue,
-                sports: sports
-            };
-            
-
-        };
-
-        $scope.updateGraph = function () {
-            if (!$scope.chartsData) return;
-            
-
-            var sports = $scope.sportLegend.filter(function(item) {
-                return item.selected;
-            });
-
-            var involves = $scope.involveLegend.filter(function(item) {
-                return item.selected;
-            });
-
-            var charts = [];
-            sports.forEach(function(sport){
-                // if (!sport.selected) return;
-                //charts.push(sport);
-                var chartData = {labels:[],datasets:[]};
-
-                    var dataDs = { label:[], fillColor:[], data:[] };
-                    var emptyDs = { label:[], fillColor:[], data:[] };
-
-                    involves.forEach(function(involve){
-                        var value = $scope.chartsData.sports[sport.id].data[involve.id].count;
-                        if (value == 0) return;
-
-                        dataDs.label.push(involve.name + ': ' + value.toLocaleString('en-US'));
-                        dataDs.fillColor.push(involve.color);
-                        dataDs.data.push($scope.chartsData.sports[sport.id].data[involve.id].count);
-
-                        emptyDs.label.push(involve.name);
-                        emptyDs.fillColor.push(involve.color);
-                        emptyDs.data.push(0);
-
-                        chartData.labels.push('');
-                    });
-
-                    chartData.datasets.push(dataDs);
-                    chartData.datasets.push(emptyDs);
-                // }
-
-
-                charts.push({
-                    sport:sport,
-                    chartData:{data:chartData, options:{
-                        showLabels: $scope.formatValue,
-                        scaleLabel: function(obj){return $scope.formatValue(obj.value);}
-                    }}
-                })
-            });
-
-            $scope.showCharts = !!charts.length && !!involves.length;
-            $scope.charts = charts;
-
-            // Combine all sports in one graph
-            var combineChart = {data:{labels:[], datasets:[]}, options:{
-                scaleLabel: function(obj){return $scope.formatValue(obj.value);},
-                barWidth: 40,
-                barHeight: 300,
-                barValueSpacing: 30
-            }};
-            combineChart.data.labels = sports.map(function(item){return item.name;});
-            involves.forEach(function(involve){
-                var ds = { label:[], fillColor:[], data:[] };
-                sports.forEach(function(sport) {
-                    var value = $scope.chartsData.sports[sport.id].data[involve.id].count;
-                    ds.label.push(involve.name + ': ' + value.toLocaleString('en-US'));//item[0].name);
-                    ds.fillColor.push(involve.color);
-                    ds.data.push(value);
-
-                });
-                combineChart.data.datasets.push(ds);
-            });
-            $scope.combineChart = (combineChart.data.labels.length > 1 ? combineChart : null);
-        };
 
     }
 
@@ -8553,49 +8828,79 @@ function RadarChart(id, data, options) {
 	) {
 		//$controller('baseGraphCtrl', {$scope: $scope});
 
+
+
 		ParamsSrv.getParams().then(function (params) {
 			$scope.parameters = params;
 
 			// TODO фильтровать спорты/лиги/клубы по наличию данных для аналитики, не хардкодить
 			$scope.sports = [];
 
+			
+			$scope.selected = analyticsSrv.getSelected();
+			$scope.$on('analyticsSrv.selectionChanged', function(event, value){
+				$scope.selected = value;
+			});
+			
+			
 			$scope.parameters.sport.lists.forEach(function(sport){
+
+				var selected = analyticsSrv.getSelected || {};
+
 				//return sport.key == 'football' || sport.key == 'hockey';
 				if (sport.key == 'hockey'){
-					var sportObj = angular.extend({}, sport);
+
+					/*var sportObj = angular.extend({}, sport);
+
+					if (!selected.club && !selected.league && selected.sport && selected.sport.id == sportObj.id)
+						sportObj.selectedInAnalytics = true;
+
 					var leagues = [];
 					sportObj.leagues.forEach(function(league){
 						//if (league.id == 1){
 						if (league.name == "КХЛ"){
 							var leagueObj = angular.extend({}, league);
 							//leagueObj.disableSelectionInAnalytics = true;
+							if (!selected.club && selected.league && selected.sport &&
+								selected.sport.id == sportObj.id && selected.league.id == leagueObj.id )
+								leagueObj.selectedInAnalytics = true;
+
 							leagues.push(leagueObj);
 						}
 					});
 					sportObj.leagues = leagues;
 					sportObj.disableSelectionInAnalytics = true;
-					$scope.sports.push(sportObj);
-				} else if (sport.key == 'football'){
-					var sportObj = angular.extend({}, sport);
 
-					// delete sportObj.leagues;
-					// sportObj.clubs = [{
-					// 	name: 'Тестовый клуб',
-					// 	id: 999
-					// }];
+					$scope.sports.push(sportObj);*/
+					$scope.sports.push(sport);
+
+				} else if (sport.key == 'football'){
+
+					/*var sportObj = angular.extend({}, sport);
+
+					if (!selected.club && !selected.league && selected.sport && selected.sport.id == sportObj.id)
+						sportObj.selectedInAnalytics = true;
+
 					var leagues = [];
 					sportObj.leagues.forEach(function(league){
 						//if (league.id == 1){
 						if (league.name == "РФПЛ"){
 							var leagueObj = angular.extend({}, league);
-							leagueObj.disableSelectionInAnalytics = true;
+
+							if (!selected.club && selected.league && selected.sport &&
+								selected.sport.id == sportObj.id && selected.league.id == leagueObj.id )
+								leagueObj.selectedInAnalytics = true;
+
+							//leagueObj.disableSelectionInAnalytics = true;
 							leagues.push(leagueObj);
 						}
 					});
 					sportObj.leagues = leagues;
 
 					sportObj.disableSelectionInAnalytics = true;
-					$scope.sports.push(sportObj);
+					$scope.sports.push(sportObj);*/
+					$scope.sports.push(sport);
+
 				}
 			}); 
 			
@@ -8603,25 +8908,37 @@ function RadarChart(id, data, options) {
 			//$scope.prepareLegends();
 		});
 
+		$scope.checkSelected = function(){
+			var selected = analyticsSrv.getSelected();
+			return !!(selected.sport || selected.league || selected.club);
+		};
 
-		function clearSelection(){
+
+		$scope.clearSelection = function(){
 			// $scope.parameters.sport.lists.forEach(function(sport){
 			$scope.sports.forEach(function(sport){
-				sport.selectedInAnalytics = false;
+				//sport.selectedInAnalytics = false;
 				sport.leagues && sport.leagues.forEach(function(league){
-					league.selectedInAnalytics = false;
+					//league.selectedInAnalytics = false;
 				});
 				sport.clubs && sport.clubs.forEach(function(club){
-					club.selectedInAnalytics = false;
+					//club.selectedInAnalytics = false;
 				});
-			})
-		}
+			});
+			analyticsSrv.setSelected({
+				sport: null,
+				league: null,
+				club: null
+			});
+		};
 
 		$scope.selectSport = function(sport){
 			if (sport.disableSelectionInAnalytics) return;
-			var val = !sport.selectedInAnalytics;
-			clearSelection();
-			sport.selectedInAnalytics = val;
+			var val = (sport != $scope.selected.sport || ($scope.selected.league || $scope.selected.club));
+
+			//var val = !sport.selectedInAnalytics;
+			$scope.clearSelection();
+			//sport.selectedInAnalytics = val;
 			analyticsSrv.setSelected({
 				sport: val ? sport: null,
 				league: null,
@@ -8631,9 +8948,10 @@ function RadarChart(id, data, options) {
 
 		$scope.selectLeague = function(league, sport){
 			if (league.disableSelectionInAnalytics) return;
-			var val = !league.selectedInAnalytics;
-			clearSelection();
-			league.selectedInAnalytics = val;
+			var val = (league != $scope.selected.league || ($scope.selected.club));
+			//var val = !league.selectedInAnalytics;
+			$scope.clearSelection();
+			//league.selectedInAnalytics = val;
 			//sport.selectedInAnalytics = false;
 			analyticsSrv.setSelected({
 				sport: val ? sport : null,
@@ -8643,9 +8961,10 @@ function RadarChart(id, data, options) {
 		};
 
 		$scope.selectClub = function(club, league, sport){
-			var val = !club.selectedInAnalytics;
-			clearSelection();
-			club.selectedInAnalytics = val;
+			var val = (club != $scope.selected.club);
+			//var val = !club.selectedInAnalytics;
+			$scope.clearSelection();
+			//club.selectedInAnalytics = val;
 			//league.selectedInAnalytics = false;
 			//sport.selectedInAnalytics = false;
 			analyticsSrv.setSelected({
@@ -8658,196 +8977,6 @@ function RadarChart(id, data, options) {
 
 
 	}
-
-}());
-
-(function () {
-    "use strict";
-    /**
-     * @desc
-     */
-    angular.module('SportsensusApp')
-        .controller('imageGraphCrtl', imageGraphCrtl);
-
-    imageGraphCrtl.$inject = [
-        '$scope',
-        '$controller',
-        'ParamsSrv',
-        'ApiSrv',
-        'graphHelpersSrv'
-    ];
-
-    function imageGraphCrtl(
-        $scope,
-        $controller,
-        ParamsSrv,
-        ApiSrv,
-        graphHelpersSrv
-    ) {
-
-        $controller('baseGraphCtrl', {$scope: $scope});
-        
-        ParamsSrv.getParams().then(function (params) {
-            $scope.parameters = params;
-            $scope.prepareLegends();
-            requestGraph();
-        });
-
-        function requestGraph() {
-            var audience = ParamsSrv.getSelectedAudience();
-            var sports = {};
-            $scope.parameters.sport.lists.forEach(function (list) {
-                sports[list.key] = {interested: true}
-            });
-            var images = $scope.parameters.image.lists.map(function (list) {
-                return list.id;
-            });
-            var sportimage = { // все спорты и все интересы
-                sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
-                image: images // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
-            };
-            ApiSrv.getImageGraph(audience, sportimage).then(function (graphData) {
-                $scope.prepareData(graphData);
-                $scope.updateGraph();
-            }, function () {
-            });
-        }
-
-        $scope.prepareLegends = function () {
-            $scope.sportLegend = graphHelpersSrv.getSportLegend();
-            $scope.imageLegend = graphHelpersSrv.getImageLegend();
-            $scope.$watch('sportLegend', $scope.updateGraph, true);
-        };
-
-
-        $scope.prepareData = function (data) {
-
-            var images = {};
-            $scope.parameters.image.lists.forEach(function (list) {
-                images[list.id] = {
-                    id: list.id,
-                    name: list.name,
-                    count: 0
-                }
-            });
-
-            var sports = {};
-            $scope.parameters.sport.lists.forEach(function (list) {
-                sports[list.id] = angular.merge({
-                    data: angular.merge({}, images)
-                }, list);
-            });
-
-            var legendIndexes = {};
-            data.legends.forEach(function(item, index){
-                legendIndexes[item.name] = index;
-            });
-            var maxValue = 0;
-            data.data.forEach(function (item) {
-                var sportId = item.legend[legendIndexes['sport']];
-                var imageId = item.legend[legendIndexes['image']];
-                sports[sportId].data[imageId].count += item.count;
-                maxValue = Math.max(maxValue, sports[sportId].data[imageId].count);
-            }, this);
-            var multiplier = maxValue > 1000*1000 ? 1000*1000 : maxValue > 1000 ? 1000 : 1;
-
-            // $scope.sportDatas = {};
-            $scope.chartsData = {
-                multiplier: multiplier,
-                maxValue: maxValue,
-                sports: sports
-            };
-
-
-
-        };
-
-        $scope.updateGraph = function () {
-            if (!$scope.chartsData) return;
-
-            var sports = $scope.sportLegend.filter(function(item) {
-                return item.selected;
-            });
-
-            var images = $scope.imageLegend;
-            // var image = $scope.imageLegend.filter(function(item) {
-            //     return item.selected;
-            // });
-
-
-
-
-            
-            var chartData = [];
-            var localColors = [];
-            var maxValue = 0;
-            //$scope.sportLegend.forEach(function (item) {
-                //if (!item.selected) return;
-            sports.forEach(function(sport){
-                //var maxValue = 0;
-                var axisData = [];
-                var data = $scope.chartsData.sports[sport.id].data;
-                images.forEach(function(image){
-                //Object.keys(images).forEach(function (imageId) { // цикл по восприятиям
-                    // var value = sport.data[imageId].count / 1000 / 1000;
-                    var value = $scope.chartsData.sports[sport.id].data[image.id].count;
-                    //var value = sport.data[imageId].count;
-                    //value = Math.round(value * 10) / 10;
-                    //axisData.push({axis: images[imageId].name, value: value});
-                    axisData.push({
-                        axis: image.name, 
-                        value: value, 
-                        tooltip: sport.name + ': ' + image.name + ': ' + value.toLocaleString('en-US'),
-                        tooltipColor: sport.color
-                    });
-                    maxValue = Math.max(maxValue, value);
-                }, this);
-                //graph.push(axisData);
-                //localColors.push(sport.chartColor);
-
-                // var sportData = {
-                //     axisData: axisData,
-                //     maxValue: maxValue
-                // };
-                // $scope.sportDatas[sport.id] = sportData;
-
-                //chartData.push($scope.sportDatas[item.id].axisData);
-                chartData.push(axisData);
-                localColors.push(sport.color);
-                //maxValue = Math.max(maxValue, $scope.sportDatas[item.id].maxValue);
-            });
-
-            // округляем до 5 в большую сторону
-            //maxValue = Math.ceil(maxValue / 5) * 5;
-            var multiplier = 1;
-            while (maxValue > 100){
-                multiplier *= 10;
-                maxValue /= 10;
-            }
-            maxValue = Math.ceil(maxValue / 5) * 5 * multiplier;
-
-            var radarChartOptions = {
-                //w: width,
-                //h: height,
-                //margin: margin,
-                maxValue: maxValue,
-                levels: 5,
-                wrapWidth: 100,
-                labelFactor: 1.32,
-                roundStrokes: true,
-                //color: color
-                format: $scope.formatValue,
-                color: function (i) {
-                    return localColors[i];
-                }
-            };
-
-            if (chartData && chartData.length)
-                $scope.chart = {data: chartData, options: radarChartOptions};
-            else $scope.chart = null;
-        };
-
-    }
 
 }());
 
@@ -9426,17 +9555,31 @@ function RadarChart(id, data, options) {
 			var league = selected.league;
 			if (!league) return;
 
-
 			var allTmp = {
 				onlineTotal: 0,
-				//onlineTotalFederal: 0,
-				//onlineTotalLocal: 0,
+				onlineRatings: 0,
+				onlineTotalFederal: 0,
+				onlineTotalLocal: 0,
+				playgrounds:{},
+				occupancy: 0,
 				offlineTotal: 0  // += (game.offlineCount || 0);
 			};
 
 			$scope.championship.data.championship.forEach(function(game){
 				allTmp.onlineTotal += (game.federalTVAudience || 0) + (game.regionalTVAudience || 0);
 				allTmp.offlineTotal += (game.offlineCount || 0);
+				allTmp.onlineRatings += (game.federalTVRating || 0);
+				allTmp.onlineTotalFederal += (game.federalTVAudience || 0);
+				allTmp.onlineTotalLocal += (game.regionalTVAudience || 0);
+				allTmp.occupancy += (game.offlineCount / game.stadiumCapacity || 0);
+
+				if (game.stadiumId >= 0){
+					allTmp.playgrounds[game.stadiumId] = allTmp.playgrounds[game.stadiumId] || {gamesCount:0};
+					allTmp.playgrounds[game.stadiumId].stadiumId = game.stadiumId;
+					allTmp.playgrounds[game.stadiumId].stadiumName = game.stadiumName;
+					allTmp.playgrounds[game.stadiumId].stadiumCapacity = game.stadiumCapacity || 0;
+					allTmp.playgrounds[game.stadiumId].gamesCount++;
+				}
 			});
 
 			var walkAvg = 0; // Среднее количество посещений хоккейных матчей на 1 зрителя данного клуба
@@ -9455,6 +9598,54 @@ function RadarChart(id, data, options) {
 
 			var avgEffFreqOnline = $scope.championship.data.avgEffFreqOnline;
 			var avgEffFreqOffline = $scope.championship.data.avgEffFreqOffline;
+
+			var gamesCount = $scope.championship.data.championship.length;
+
+			$scope.leagueInfo = {
+				name: league.name,
+				//playgrounds: ['playground1', 'playground2'],
+				playgroundsCount: Object.keys(allTmp.playgrounds).length,
+				playgroundsCapacity: Object.keys(allTmp.playgrounds)
+					.map(function(key){return allTmp.playgrounds[key].stadiumCapacity})
+					.reduce(function(pv, cv) { return pv + cv; }, 0),
+
+
+				//playground: playground.stadiumName,
+				//playgroundCapacity: playground.stadiumCapacity,
+				//gamesCount: homeGames.length + guestGames.length,
+
+				gamesCount: gamesCount,
+
+
+				// offlineAVGHome: Math.round(homeTmp.occupancy / homeGames.length * 100),
+				// offlineAVGGuest: Math.round(guestTmp.occupancy / guestGames.length * 100),
+				//
+				offlineAVGAll: Math.round(allTmp.occupancy / gamesCount * 100),
+				//
+				// offlineTotalHome: Math.round(homeTmp.offlineTotal/100)/10,
+				// offlineTotalGuest: Math.round(guestTmp.offlineTotal/100)/10,
+				offlineTotalAll: Math.round((allTmp.offlineTotal)/100)/10,
+				//
+				// offlineUniqueHome: Math.round(homeTmp.offlineTotal/100/walkAvg)/10,
+				// offlineUniqueGuest: Math.round(guestTmp.offlineTotal/100/walkAvg)/10,
+				offlineUniqueAll: Math.round((allTmp.offlineTotal)/100/walkAvg)/10,
+				//
+				onlineRatings: Math.round(allTmp.onlineRatings*10)/10,
+				//
+				// onlineTotalFederal: Math.round(allTmp.onlineTotalFederal*10)/10, // в тысячах
+				// onlineTotalLocal: Math.round(allTmp.onlineTotalLocal*10)/10, // в тысячах
+				onlineTotalAll: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10)/10, // в тысячах
+				//
+				// onlineUniqueFederal: Math.round(allTmp.onlineTotalFederal*10/watchAvg)/10, // в тысячах
+				// onlineUniqueLocal: Math.round(allTmp.onlineTotalLocal*10/watchAvg)/10, // в тысячах
+				onlineUniqueAll: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10/watchAvg)/10, // в тысячах
+				//
+				reachOffline: Math.round((allTmp.offlineTotal)/100/walkAvg)/10, // offlineUniqueAll
+				reachOnline: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10/watchAvg)/10, // onlineUniqueAll
+				OTSOffline: Math.round((allTmp.offlineTotal)/100*avgEffFreqOffline)/10, // // offlineTotalAll * onlineFreq * 3
+				OTSOnline:  Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10*avgEffFreqOnline)/10 // onlineTotalAll * onlineFreq
+			};
+
 
 			$scope.calcParams = {
 				onlineTotalAll: allTmp.onlineTotal, // в тысячах
@@ -9598,8 +9789,10 @@ function RadarChart(id, data, options) {
 				offlineTotalAll: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000, // в тысячах
 				onlineUniqueAll: (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)/watchAvg, // в тысячах
 				offlineUniqueAll: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000/walkAvg,  // в тысячах
-				OTSOffline: (homeTmp.offlineTotal + guestTmp.offlineTotal)*avgEffFreqOffline/1000, // в тысячах
-				OTSOnline:  (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*avgEffFreqOnline // в тысячах
+				// OTSOffline: (homeTmp.offlineTotal + guestTmp.offlineTotal)*avgEffFreqOffline/1000, // в тысячах
+				// OTSOnline:  (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*avgEffFreqOnline // в тысячах
+				OTSOffline: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000, // в тысячах без коэфф.
+				OTSOnline:  (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal) // в тысячах без коэфф.
 			}
 			
 		};
@@ -9625,17 +9818,21 @@ function RadarChart(id, data, options) {
 			var uniqueOnline = $scope.calcParams.onlineUniqueAll * visibility.online * audiencePercent;
 			var uniqueOffline = $scope.calcParams.offlineUniqueAll * visibility.offline * audiencePercent;
 
-			data.CPTUniqueOnline = $scope.totalCost && uniqueOnline ? Math.round($scope.totalCost / uniqueOnline * 10)/10 : '-';
-			data.CPTUniqueOffline = $scope.totalCost && uniqueOffline ? Math.round($scope.totalCost / uniqueOffline * 10)/10 : '-';
+			data.CPTUniqueOnline = $scope.totalCost && uniqueOnline ? Math.round($scope.totalCost / uniqueOnline * 10)/10 : '';
+			data.CPTUniqueOffline = $scope.totalCost && uniqueOffline ? Math.round($scope.totalCost / uniqueOffline * 10)/10 : '';
 
 			// OTS, штук
-			// var OTSOnline = $scope.clubInfo.OTSOnline * visibility.online * audiencePercent;
-			// var OTSOffline = $scope.clubInfo.OTSOffline * visibility.offline * audiencePercent;
-			var OTSOnline = $scope.calcParams.OTSOnline * visibility.online * audiencePercent;
-			var OTSOffline = $scope.calcParams.OTSOffline * visibility.offline * audiencePercent;
+			var OTSOnline = $scope.calcParams.OTSOnline * visibility.onlineEff * audiencePercent;
 
-			data.CPTOTSOnline = $scope.totalCost && OTSOnline ? Math.round($scope.totalCost / OTSOnline * 10)/10 : '-';
-			data.CPTOTSOffline = $scope.totalCost && OTSOffline ? Math.round($scope.totalCost / OTSOffline * 10)/10 : '-';
+
+			// (onlineTotalFederal + onlineTotalLocal) * avgEffFreqOnline * visibility.online * audiencePercent;
+			// audiencePercent - процент выбранной аудитории (0..1)
+			// visibility.online - процент видимости выбранных рекламных конструкций (0..1)
+
+			var OTSOffline = $scope.calcParams.OTSOffline * visibility.offlineEff * audiencePercent;
+
+			data.CPTOTSOnline = $scope.totalCost && OTSOnline ? Math.round($scope.totalCost / OTSOnline * 10)/10 : '';
+			data.CPTOTSOffline = $scope.totalCost && OTSOffline ? Math.round($scope.totalCost / OTSOffline * 10)/10 : '';
 
 
 			data.audienceSelected = ParamsSrv.isAudienceSelected();
@@ -9648,37 +9845,82 @@ function RadarChart(id, data, options) {
 
 		// расчет видимости выбранных рекламных конструкций на площадке (0.0 - 1.0)
 		$scope.calcVisibility = function(){
-			var result = {
-				playgroundOnline: 		calcSectors($scope.playgroundData, 'visibilityOnline'),
-				playgroundOffline:		calcSectors($scope.playgroundData, 'visibilityOffline'),
-				uniformOnline: 			calcSectors($scope.uniformData, 'visibilityOnline'),
-				uniformOffline: 		calcSectors($scope.uniformData, 'visibilityOffline'),
-				videoOfflineOnline: 	calcSectors($scope.videoOfflineData, 'visibilityOnline'),
-				videoOfflineOffline: 	calcSectors($scope.videoOfflineData, 'visibilityOffline'),
-				videoOnlineOnline: 		calcSectors($scope.videoOnlineData, 'visibilityOnline'),
-				videoOnlineOffline: 	calcSectors($scope.videoOnlineData, 'visibilityOffline')
-			};
-			result.online = Math.max(result.playgroundOnline, result.uniformOnline, result.videoOfflineOnline, result.videoOnlineOnline);
-			result.offline = Math.max(result.playgroundOffline, result.uniformOffline, result.videoOfflineOffline, result.videoOnlineOffline);
 
+			var data =  {
+				playgroundOnline: 		calcSectors($scope.playgroundData, 'Online'),
+				playgroundOffline:		calcSectors($scope.playgroundData, 'Offline'),
+				uniformOnline:	 		calcSectors($scope.uniformData, 'Online'),
+				uniformOffline: 		calcSectors($scope.uniformData, 'Offline'),
+				videoOfflineOnline: 	calcSectors($scope.videoOfflineData, 'Online'),
+				videoOfflineOffline: 	calcSectors($scope.videoOfflineData, 'Offline'),
+				videoOnlineOnline: 		calcSectors($scope.videoOnlineData, 'Online'),
+				videoOnlineOffline: 	calcSectors($scope.videoOnlineData, 'Offline')
+			};
+			var dataEff = {
+				playgroundOnline: 		calcSectors($scope.playgroundData, 'Online', true),
+				playgroundOffline:		calcSectors($scope.playgroundData, 'Offline', true),
+				uniformOnline:	 		calcSectors($scope.uniformData, 'Online', true),
+				uniformOffline: 		calcSectors($scope.uniformData, 'Offline', true),
+				videoOfflineOnline: 	calcSectors($scope.videoOfflineData, 'Online', true),
+				videoOfflineOffline: 	calcSectors($scope.videoOfflineData, 'Offline', true),
+				videoOnlineOnline: 		calcSectors($scope.videoOnlineData, 'Online', true),
+				videoOnlineOffline: 	calcSectors($scope.videoOnlineData, 'Offline', true)
+			};
+
+			// var result = {
+			// 	playgroundOnline: 		calcSectors($scope.playgroundData, 'Online'),
+			// 	playgroundOffline:		calcSectors($scope.playgroundData, 'Offline'),
+			// 	uniformOnline:	 		calcSectors($scope.uniformData, 'Online'),
+			// 	uniformOffline: 		calcSectors($scope.uniformData, 'Offline'),
+			// 	videoOfflineOnline: 	calcSectors($scope.videoOfflineData, 'Online'),
+			// 	videoOfflineOffline: 	calcSectors($scope.videoOfflineData, 'Offline'),
+			// 	videoOnlineOnline: 		calcSectors($scope.videoOnlineData, 'Online'),
+			// 	videoOnlineOffline: 	calcSectors($scope.videoOnlineData, 'Offline')
+			// };
+			var result = {
+				online: Math.max(data.playgroundOnline, data.uniformOnline, data.videoOfflineOnline, data.videoOnlineOnline),
+				offline: Math.max(data.playgroundOffline, data.uniformOffline, data.videoOfflineOffline, data.videoOnlineOffline),
+				onlineEff: Math.max(dataEff.playgroundOnline, dataEff.uniformOnline, dataEff.videoOfflineOnline, dataEff.videoOnlineOnline),
+				offlineEff: Math.max(dataEff.playgroundOffline, dataEff.uniformOffline, dataEff.videoOfflineOffline, dataEff.videoOnlineOffline)
+			};
 			return result;
 
-			function calcSectors(data, dataKey){
+			function calcSectors(data, type, useFreq){ //} dataKey, freqKey){
 				var sectors = {};
+				var sectorsEff = {};
+				var effFreq = 0;
+				var dataKey = 'visibility' + type;
+				if (useFreq) {
+					var freqKey = 'exposure' + type;
+					var defaultFreq = $scope.championship.data['avgEffFreq' + type];
+				}
+
 				Object.keys(data.placesSelection).forEach(function(key){
 					if (!data.placesSelection[key].selected) return;
 					var placeA = data[dataKey][key];
 					if (!placeA) return;
+					if (useFreq) {
+						if (data[freqKey] && data[freqKey][key])
+							effFreq = data[freqKey][key];
+						else
+							effFreq = defaultFreq;
+					}
 					placeA.forEach(function(val, index){
 						sectors[index] = Math.max(sectors[index] || 0, val || 0);
+						if (useFreq)
+							sectorsEff[index] = Math.max(sectorsEff[index] || 0, val * effFreq || 0);
 					});
 				});
 
 				var sum = 0;
+				var sumEff = 0;
 				Object.keys(sectors).forEach(function(index){
 					sum += sectors[index];
+					if (useFreq)
+						sumEff += sectorsEff[index];
 				});
-				return Math.min(sum, 1);
+				//return Math.min(sum, 1);
+				return useFreq ? sumEff : sum;
 			}
 
 		};
@@ -9720,7 +9962,7 @@ function RadarChart(id, data, options) {
 				function(
 					$scope
 				){
-
+					$scope.currency = '₽';
 
 
 				}
@@ -9763,42 +10005,44 @@ function RadarChart(id, data, options) {
 					$scope
 				){
 					$scope.showed = true;
-					
-					/*$scope.clubInfo = {
-						name: 'name',
-						playgrounds: ['playground1','playground2'],
-						gamesCount: 1234560,
+				}
+			]
 
-						reachOffline: 1234561,
-						reachOnline: 1234562,
-						OTSOffline: 1234563,
-						OTSOnline: 1234564,
+		};
+	}
+}());
+(function () {
+	"use strict";
+	/**
+	 * @desc
+	 * @example
+	 */
+	angular.module('SportsensusApp')
+		.directive('leagueInfoTableDir', leagueInfoTableDir);
 
-						offlineAVGHome: 1234565,
-						offlineAVGGuest: 1234566,
-						//offlineAVGAll: 1234566,
+	leagueInfoTableDir.$inject = [
+		'$rootScope'
+	];
 
-						offlineTotalHome: 1234567,
-						offlineTotalGuest: 1234568,
-						offlineTotalAll: 1234569,
+	function leagueInfoTableDir(
+		$rootScope
+	)    {
+		return {
+			restrict: 'E',
+			scope: {
+				leagueInfo: '='
+			},
+			templateUrl: '/views/widgets/infobox/panels/analytics/clubInfoTable/leagueInfoTable.html',
+			link: function ($scope, $el, attrs) {
 
-						offlineUniqueHome: 1234560,
-						offlineUniqueGuest: 1234561,
-						offlineUniqueAll: 1234562,
+			},
 
-						
-						onlineRatings: 1234563,
-
-						onlineTotalFederal: 1234564,
-						onlineTotalLocal: 1234565,
-						onlineTotalAll: 1234566,
-
-						onlineUniqueFederal: 1234567,
-						onlineUniqueLocal: 1234568,
-						onlineUniqueAll: 1234569
-					}
-*/
-
+			controller: [
+				'$scope',
+				function(
+					$scope
+				){
+					$scope.showed = true;
 				}
 			]
 

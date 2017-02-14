@@ -3,20 +3,16 @@
 
     <div class="infobox">
 
-        <div class="chek-button">
 
-            <span class="audience-count-text no-select" >{{audienceCount == null ? '' : (audienceCount != 0 ? 'Болельщики: ' + audienceCount.toLocaleString() : 'Болельщики: недостаточно данных')}}</span>
-            <span class="button no-outline no-select"
-                  ng-class="{'disabled': !audienceCount}"
-                  ng-show="checkButtonText"
-                  ng-click="audienceCount ? checkButtonClick() : null"
-            >{{checkButtonText}}</span>
-        </div>
+        <!--<div ng-include="'/views/widgets/infobox/panels/footer/'+footer+'.html'"></div>-->
+        <div ng-include="'/views/widgets/infobox/panels/footer/'+activeFooter+'.html'"></div>
+        <!--<div class="infoboxFooterDir"></div>-->
+        <!--<div ng-class="{{activeFooter}}"></div>-->
 
         <div class="menu" ng-include="'/views/widgets/infobox/infoboxMenu.html'"></div>
 
         <div>
-            <div ng-if="activePage" style="padding-bottom: 94px;" class="infobox-body" ng-include="'/views/widgets/infobox/panels/'+activePage.id+'.html'"></div>
+            <div ng-if="activePage" style="padding-bottom: 94px;" class="infobox-body" ng-include="'/views/widgets/infobox/panels/'+activePage.tpl+'.html'"></div>
         </div>
 
         <!--<div class=" infobox-express"></div>-->

@@ -1,0 +1,38 @@
+<div class="infobox-panel account-panel"
+	 layout="column" layout-align="start stretch">
+
+	<h1 class="infobox-panel-header" layout="row" layout-align="start center" >
+		Адрес
+	</h1>
+
+	<table class="params-table">
+		<!--<thead>
+		<tr>
+			<th>Id</th>
+			<th>Login</th>
+		</tr>
+		</thead>-->
+		<tbody>
+		<tr ng-repeat="(key, param) in params2">
+			<td>{{param.title}}</td>
+			<td>
+				<input ng-if="!param.type" placeholder="{{param.title}}" ng-model="profile[key]"/>
+				<select ng-if="param.type == 'combo'"
+						ng-model="profile[key]" ng-options="obj.value as obj.name for obj in param.items">
+					<option value="">{{param.title}}</option>
+				</select>
+			</td>
+
+		</tr>
+		</tbody>
+	</table>
+
+	<div layout="row" layout-align="start center" style="height: 40px;">
+		<div flex></div>
+		<md-button class="md-raised md-primary"
+				   ng-show="isProfileChanged()"
+				   ng-click="saveProfile()"
+		>Сохранить</md-button>
+	</div>
+
+</div>

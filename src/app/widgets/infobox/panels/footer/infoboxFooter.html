@@ -1,0 +1,12 @@
+<div class="footer-panel" ng-controller="infoboxFooterCtrl">
+
+	<!--<span class="audience-count-text no-select" >{{audienceCount == null ? '' : (audienceCount != 0 ? 'Болельщики: ' + audienceCount.toLocaleString() : 'Болельщики: недостаточно данных')}}</span>-->
+	<span class="audience-count-text no-select" >{{audienceCountText}}</span>
+
+
+	<span class="button no-outline no-select"
+				  ng-class="{'disabled': !audienceCount}"
+				  ng-show="checkButtonText"
+				  ng-click="audienceCount ? checkButtonClick() : null"
+			>{{checkButtonText}}</span>
+</div>

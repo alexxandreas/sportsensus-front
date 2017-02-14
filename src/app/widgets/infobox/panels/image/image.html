@@ -8,6 +8,11 @@
 -->
     <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
         {{parameters.image.name}}
+        <div flex></div>
+        <md-button class="md-raised md-primary"
+                   ng-show="checkSelected('image')"
+                   ng-click="clearSelection('image')"
+        >Сбросить</md-button>
     </h1>
 
     <legend-dir legend="parameters.image.lists" columns-count="1"

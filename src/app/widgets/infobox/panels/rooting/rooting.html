@@ -4,6 +4,11 @@
 
     <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
         {{parameters.rooting.name}}
+        <div flex></div>
+        <md-button class="md-raised md-primary"
+                   ng-show="checkSelected('rooting')"
+                   ng-click="clearSelection('rooting')"
+        >Сбросить</md-button>
     </h1>
 
     <!--<h1 class="l-board__header">

@@ -7,11 +7,12 @@
         <ul class="left-menu">
 
             <li data-id="demography"
-                ng-repeat="item in audienceMenu"
+                ng-repeat="item in topMenu"
                 class="left-menu-item"
                 ng-class="{'active': item == activeMenuItem}"
                 ng-click="setActiveMenuItem(item)">
                 {{item.text}}
+                <span ng-show="item.isSelected()">*</span>
             </li>
         </ul>
     </li>
@@ -29,6 +30,7 @@
                 ng-click="!item.enabled || item.enabled() ? setActiveMenuItem(item) : null"
                 >
                 {{item.text}}
+                <span ng-show="item.isSelected()">*</span>
             </li>
         </ul>
     </li>

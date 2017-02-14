@@ -1,18 +1,15 @@
 <div class="infobox-panel"
 layout="column" layout-align="start stretch">
-<!--<div class="l-board__body-box">-->
 
-    <!--<h1 class="l-board__header">
-        &lt;!&ndash;<img src="/static/img/l-board/soc-dem.png" />&ndash;&gt;
-        &lt;!&ndash;Социальная демография&ndash;&gt;
-        {{parameters.demography.name}}
-    </h1>-->
     <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
         {{parameters.demography.name}}
+        <div flex></div>
+        <md-button class="md-raised md-primary"
+                   ng-show="checkSelected('demography')"
+                    ng-click="clearSelection('demography')"
+        >Сбросить</md-button>
     </h1>
 
-    <!--<map-marker-dir region="Москва" count="1381712" color="green" progress="88.7"></map-marker-dir>-->
-    <!--class="l-board__body-box-list"-->
     <div layout="row" layout-align="start start" layout-wrap>
         <div  ng-repeat="collection in parameters.demography.lists"
         layout="column" layout-align="start start" flex="30"
@@ -20,25 +17,11 @@ layout="column" layout-align="start stretch">
             <div class="infobox-panel-header3" >
                 {{collection.name}}
             </div>
-           <!-- <h3>
-                &lt;!&ndash;<img ng-show="collection.img" ng-src="{{collection.img}}">&ndash;&gt;
-                {{collection.name}}
-            </h3>-->
 
             <legend-dir legend="collection.lists" columns-count="1"
                         selectable="true" highlightable="false"
                         highlighted-color="'#bfebff'" selected-color="'#777777'"
                         ></legend-dir>
-            <!--<ul>
-                &lt;!&ndash;ng-click="selectCheckbox(collection, item)"&ndash;&gt;
-                <li ng-repeat="item in collection.lists">
-                    <input type="checkbox" name="{{collection.id}}" id="{{collection.id+'_'+item.id}}"
-                           ng-model="item.selected"
-                           ng-click="selectCheckbox(collection, item)">
-                    <label for="{{collection.id+'_'+item.id}}">{{item.name}}</label>
-
-                </li>
-            </ul>-->
         </div>
     </div>
     

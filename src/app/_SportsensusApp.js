@@ -31,7 +31,8 @@ angular
 				}
 			})
 			.when('/analytics/', {
-				template: '<infobox-dir type="analytics"></infobox-dir>',
+				//template: '<infobox-dir type="analytics"></infobox-dir>',
+				template: '<analytics-dir></analytics-dir>',
 				controller: function($scope, $location, ApiSrv) {
 					if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
 						$location.path('/');
@@ -84,6 +85,13 @@ angular
 				template: '<admin-dir></admin-dir>',
 				controller: function($scope, $location, ApiSrv) {
 					if (!ApiSrv.getUser().userRights || !ApiSrv.getUser().userRights.admin)
+						$location.path('/');
+				}
+			})
+			.when('/account/', {
+				template: '<account-dir></account-dir>',
+				controller: function($scope, $location, ApiSrv) {
+					if (!ApiSrv.getUser().userRights)
 						$location.path('/');
 				}
 			})

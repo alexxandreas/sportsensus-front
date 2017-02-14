@@ -15,6 +15,10 @@
 		'ParamsSrv'
 	];
 
+/**
+ * events:
+ * analyticsSrv.selectionChanged
+ */
 	function analyticsSrv(
 		$rootScope,
 		ApiSrv,
@@ -26,10 +30,22 @@
 			league: null,
 			club: null
 		};
+	
+		function getSelected(){
+			return selected; 
+		}
+	
 
+		function setSelected(val){ 
+			selected = val || {};
+			$rootScope.$broadcast('analyticsSrv.selectionChanged', selected);
+		}
+		
+	
+	
 		var me = {
-			getSelected: function(){return selected; },
-			setSelected: function(val){ selected = val; }
+			getSelected: getSelected,
+			setSelected: setSelected
 		};
 		return me;
 	}

@@ -28,12 +28,14 @@
                 '$routeParams',
                 '$location',
                 '$window',
+                '$anchorScroll',
                 'ApiSrv',
                 function(
                     $scope,
                     $routeParams,
                     $location,
                     $window,
+                    $anchorScroll,
                     ApiSrv
                 ) {
                     $scope.loggedIn = false;
@@ -41,10 +43,12 @@
                     
                     $scope.menu = [{
                             'name': 'О проекте',
-                            visible: function(){return !$scope.loggedIn;}
+                            visible: function(){return !$scope.loggedIn;},
+                            onClick: function(){$scope.scrollTo('about');}
                         }, {
                             'name': 'Зарегистрироваться',
-                            visible: function(){return !$scope.loggedIn;}
+                            visible: function(){return !$scope.loggedIn;},
+                            onClick: function(){$scope.scrollTo('registration');}
                         },{
                             'name': 'Войти',
                             visible: function(){return !$scope.loggedIn;},
@@ -70,7 +74,8 @@
                             visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
                         },{
                             'name': 'Личный кабинет',
-                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
+                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
+                            onClick: function(){$scope.setPath('/account/');}
                         },{
                             'name': 'Панель администрирования',
                             visible: function(){return $scope.isAdmin;},
@@ -93,6 +98,17 @@
                         ApiSrv.logout();
                         $scope.setPath('/');
                     };
+
+                    $scope.scrollTo = function(id) {
+                        // $location.hash(id);
+                        // $anchorScroll();
+
+                        var old = $location.hash();
+                        $location.hash(id);
+                        $anchorScroll();
+                        //reset to old to keep any additional routing logic from kicking in
+                        $location.hash(old);
+                    }
                 }]
         };
     }

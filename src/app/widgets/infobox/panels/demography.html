@@ -5,7 +5,7 @@ layout="column" layout-align="start stretch">
         {{parameters.demography.name}}
         <div flex></div>
         <md-button class="md-raised md-primary"
-                   ng-show="checkSelected('demography')"
+                   ng-disabled="!checkSelected('demography')"
                     ng-click="clearSelection('demography')"
         >Сбросить</md-button>
     </h1>

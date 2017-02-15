@@ -9,14 +9,17 @@
     <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
         {{parameters.image.name}}
         <div flex></div>
+
         <md-button class="md-raised md-primary"
                    ng-show="checkSelected('image')"
                    ng-click="clearSelection('image')"
         >Сбросить</md-button>
     </h1>
 
+    <div class="infobox-panel-header3">Все уровни восприятия будут отображены на одном сводном графике</div>
+
     <legend-dir legend="parameters.image.lists" columns-count="1"
-                selectable="true" highlightable="false"
+                selectable="false" highlightable="false"
                 highlighted-color="'#bfebff'" selected-color="'#777777'"
     ></legend-dir>
 

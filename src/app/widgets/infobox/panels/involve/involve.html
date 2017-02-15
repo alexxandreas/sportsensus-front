@@ -10,7 +10,10 @@
         {{parameters.involve.name}}
         <div flex></div>
         <md-button class="md-raised md-primary"
-                   ng-show="checkSelected('involve')"
+                   ng-click="selectAll('involve')"
+        >Выделить всё</md-button>
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!checkSelected('involve')"
                    ng-click="clearSelection('involve')"
         >Сбросить</md-button>
     </h1>

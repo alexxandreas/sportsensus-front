@@ -29,6 +29,9 @@
 			ParamsSrv.clearSelection(type);
 		};
 
+		$scope.selectAll = function(type){
+			ParamsSrv.selectAll(type);
+		};
 
 		$scope.activePage = null;
 		$scope.activeMenuItem = null;

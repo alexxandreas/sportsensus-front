@@ -170,7 +170,6 @@
         }
 
         function clearSelection(type){
-            //parameters[type]
             clearRec(parameters[type]);
             
             function clearRec(item) {
@@ -181,30 +180,26 @@
                     clearRec(subitem);
                 });
             }
-                /*
-                if (item.lists && item.lists.some(function(subitem){return !subitem.lists; })){ // терминальный лист (age, clubs)
-                    var selectedA = item.lists.filter(function(subitem){return subitem.selected; })
-                        .map(function(subitem){return subitem.id});
-                    if (selectedA.length){
-                        return selectedA.length ? selectedA : undefined;
-                    }
-                } else {
-                    var res = {};
-                    // проходим по дочерним, только если текущий не отмечен, как выбранный
-                    if (item.selected !== false && item.interested !== false) {
-                        /!*item.lists && *!/item.lists.forEach(function (subitem) {
-                            if (!subitem.key) return;
-                            var subitemList = getSelectedParamsRec(subitem);
-                            if (subitemList) {
-                                res[subitem.key] = subitemList;
-                            } //else res[subitem.id] = []; //  TODO comment this line
-                        });
-                    }
-                    if (item.interested) // хардкодим для спорта
-                        res.interested = true;
-                    return Object.keys(res).length ? res : undefined;
-                }*/
-            
+        }
+
+        function selectAll(type){
+            var lists = parameters[type] && parameters[type].lists;
+            if (!lists) return;
+            lists.forEach(function (item) {
+                if (item.interested !== undefined) item.interested = true;
+                else item.selected = true;
+            });
+            /*
+            selectRec(parameters[type]);
+
+            function selectRec(item) {
+                if (item.selected !== undefined) item.selected = true;
+                if (item.interested !== undefined) item.interested = true;
+
+                item.lists && item.lists.forEach(function (subitem) {
+                    selectRec(subitem);
+                });
+            }*/
         }
 
         function getSelectedParamsRec(item){
@@ -348,6 +343,7 @@
             isAudienceSelected: isAudienceSelected,
 
             clearSelection: clearSelection,
+            selectAll: selectAll,
             getSelectedDemographyCaption: getSelectedDemographyCaption,
             getSelectedSportCaption: getSelectedSportCaption
 

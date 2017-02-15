@@ -5,7 +5,7 @@
         {{parameters.consume.name}}
         <div flex></div>
         <md-button class="md-raised md-primary"
-                   ng-show="checkSelected('consume')"
+                   ng-disabled="!checkSelected('consume')"
                    ng-click="clearSelection('consume')"
         >Сбросить</md-button>
     </h1>

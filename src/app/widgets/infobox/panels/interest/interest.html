@@ -10,7 +10,10 @@
         {{parameters.interest.name}}
         <div flex></div>
         <md-button class="md-raised md-primary"
-                   ng-show="checkSelected('interest')"
+                   ng-click="selectAll('interest')"
+        >Выделить всё</md-button>
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!checkSelected('interest')"
                    ng-click="clearSelection('interest')"
         >Сбросить</md-button>
     </h1>

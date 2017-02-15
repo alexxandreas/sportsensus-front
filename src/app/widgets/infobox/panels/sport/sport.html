@@ -5,7 +5,7 @@
         {{parameters.sport.name}}
         <div flex></div>
         <md-button class="md-raised md-primary"
-                   ng-show="checkSelected('sport')"
+                   ng-disabled="!checkSelected('sport')"
                    ng-click="clearSelection('sport')"
         >Сбросить</md-button>
     </h1>

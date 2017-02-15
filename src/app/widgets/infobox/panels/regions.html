@@ -5,7 +5,7 @@
         География
         <div flex></div>
         <md-button class="md-raised md-primary"
-                   ng-show="checkSelected('regions')"
+                   ng-disabled="!checkSelected('regions')"
                    ng-click="clearSelection('regions')"
         >Сбросить</md-button>
     </h1>

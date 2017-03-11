@@ -526,6 +526,104 @@ md-switch.md-checked .md-thumb-container {
   border-style: solid;
 }
 
+.site-header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  height: 78px;
+  line-height: 78px;
+  padding: 0 30px;
+  background: #fff;
+}
+.site-header .header-menu {
+  margin: 0 0 0 100px;
+  padding: 0;
+  list-style-type: none;
+}
+.site-header .header-menu .header-menu-item {
+  margin-right: 40px;
+}
+.site-header .header-menu .header-menu-item:last-child {
+  margin-right: 0;
+}
+.site-header .header-menu .header-menu-item .header-menu-item-link {
+  padding-bottom: 2px;
+  font-size: 16px;
+  font-family: NOKIAPUREHEADLINE_BOLD;
+  text-decoration: none;
+  color: #000;
+  white-space: pre;
+  border-bottom: 3px solid transparent;
+}
+.site-header .header-menu .header-menu-item .header-menu-item-link:hover {
+  border-bottom-color: #9fd9db;
+}
+.site-header .header-logo-image {
+  vertical-align: middle;
+}
+.site-header .button-logout {
+  margin-left: 20px;
+}
+/*
+
+.b-header{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    height: @panel-height;
+    line-height: @panel-height;
+    padding: 0 30px;
+    background: #fff;
+
+    .b-header__logout{
+        float: right;
+    }
+
+    .b-header__logo{
+        float: left;
+    }
+
+    .b-header__logo-image{
+        vertical-align: middle;
+    }
+
+    .b-header__menu{
+        float: left;
+        margin: 0 0 0 100px;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    .b-header__menu-item{
+        float: left;
+        margin-right: 40px;
+
+        &:last-child{
+            margin-right: 0;
+        }
+    }
+
+    .b-header__menu-link{
+        padding-bottom: 2px;
+        font-size: 16px;
+        font-family: NOKIAPUREHEADLINE_BOLD;
+        text-decoration: none;
+        color: #000;
+
+        border-bottom: 3px solid transparent;
+
+        &:hover{
+            border-bottom-color: #9fd9db;
+        }
+    }
+
+}
+*/
+
 /*@import "../../../static/fonts/style.css";      */
 .l-home {
   background: #fff;
@@ -716,164 +814,6 @@ md-switch.md-checked .md-thumb-container {
   line-height: 50px;
   border: 1px solid;
   color: #fff;
-}
-
-.site-header {
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  z-index: 10;
-  height: 78px;
-  line-height: 78px;
-  padding: 0 30px;
-  background: #fff;
-}
-.site-header .header-menu {
-  margin: 0 0 0 100px;
-  padding: 0;
-  list-style-type: none;
-}
-.site-header .header-menu .header-menu-item {
-  margin-right: 40px;
-}
-.site-header .header-menu .header-menu-item:last-child {
-  margin-right: 0;
-}
-.site-header .header-menu .header-menu-item .header-menu-item-link {
-  padding-bottom: 2px;
-  font-size: 16px;
-  font-family: NOKIAPUREHEADLINE_BOLD;
-  text-decoration: none;
-  color: #000;
-  white-space: pre;
-  border-bottom: 3px solid transparent;
-}
-.site-header .header-menu .header-menu-item .header-menu-item-link:hover {
-  border-bottom-color: #9fd9db;
-}
-.site-header .header-logo-image {
-  vertical-align: middle;
-}
-.site-header .button-logout {
-  margin-left: 20px;
-}
-/*
-
-.b-header{
-    position: fixed;
-    left: 0;
-    top: 0;
-    right: 0;
-    z-index: 10;
-    height: @panel-height;
-    line-height: @panel-height;
-    padding: 0 30px;
-    background: #fff;
-
-    .b-header__logout{
-        float: right;
-    }
-
-    .b-header__logo{
-        float: left;
-    }
-
-    .b-header__logo-image{
-        vertical-align: middle;
-    }
-
-    .b-header__menu{
-        float: left;
-        margin: 0 0 0 100px;
-        padding: 0;
-        list-style-type: none;
-    }
-
-    .b-header__menu-item{
-        float: left;
-        margin-right: 40px;
-
-        &:last-child{
-            margin-right: 0;
-        }
-    }
-
-    .b-header__menu-link{
-        padding-bottom: 2px;
-        font-size: 16px;
-        font-family: NOKIAPUREHEADLINE_BOLD;
-        text-decoration: none;
-        color: #000;
-
-        border-bottom: 3px solid transparent;
-
-        &:hover{
-            border-bottom-color: #9fd9db;
-        }
-    }
-
-}
-*/
-
-.l-login {
-  margin: 150px auto 0 auto;
-  width: 500px;
-  padding: 20px;
-  background: #fff;
-  box-sizing: border-box;
-  border: 1px solid #D1D2D4;
-  border-top: 4px solid #9FD9DB;
-  font-size: 15px;
-}
-.l-login h3 {
-  margin: 0 0 50px 0;
-  font-size: 20px;
-}
-.l-login__head-column {
-  width: 100px;
-  line-height: 35px;
-  padding-right: 15px;
-  text-align: right;
-}
-.l-login__column {
-  padding-bottom: 15px;
-  padding-left: 0;
-}
-.l-login__input {
-  width: 100%;
-  height: 35px;
-  padding: 0 15px;
-  box-sizing: border-box;
-  border: none;
-  border-bottom: 1px dashed #626365;
-  background: #E6E7E8;
-}
-.l-login__input:focus {
-  outline: none;
-}
-.l-login__checkbox {
-  display: none;
-}
-.l-login__checkbox-label {
-  display: inline-block;
-  padding-left: 30px;
-  cursor: pointer;
-  height: 20px;
-  line-height: 20px;
-  background: url('/static/img/l-login/checkbox.svg') no-repeat left top;
-}
-.l-login__checkbox:checked + .l-login__checkbox-label {
-  background-image: url("/static/img/l-login/checkbox-checked.svg");
-}
-.l-login__button {
-  display: inline-block;
-  height: 35px;
-  padding: 0 20px;
-  border-radius: 35px;
-  border: 1px solid #000;
-  background: none;
-  margin-right: 20px;
 }
 
 .infobox .menu {
@@ -1526,6 +1466,84 @@ div > svg > circle:nth-child(5n) {
   background: #73dfd6;
 }
 
+.l-login {
+  margin: 150px auto 0 auto;
+  width: 500px;
+  padding: 20px;
+  background: #fff;
+  box-sizing: border-box;
+  border: 1px solid #D1D2D4;
+  border-top: 4px solid #9FD9DB;
+  font-size: 15px;
+}
+.l-login h3 {
+  margin: 0 0 50px 0;
+  font-size: 20px;
+}
+.l-login__head-column {
+  width: 100px;
+  line-height: 35px;
+  padding-right: 15px;
+  text-align: right;
+}
+.l-login__column {
+  padding-bottom: 15px;
+  padding-left: 0;
+}
+.l-login__input {
+  width: 100%;
+  height: 35px;
+  padding: 0 15px;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 1px dashed #626365;
+  background: #E6E7E8;
+}
+.l-login__input:focus {
+  outline: none;
+}
+.l-login__checkbox {
+  display: none;
+}
+.l-login__checkbox-label {
+  display: inline-block;
+  padding-left: 30px;
+  cursor: pointer;
+  height: 20px;
+  line-height: 20px;
+  background: url('/static/img/l-login/checkbox.svg') no-repeat left top;
+}
+.l-login__checkbox:checked + .l-login__checkbox-label {
+  background-image: url("/static/img/l-login/checkbox-checked.svg");
+}
+.l-login__button {
+  display: inline-block;
+  height: 35px;
+  padding: 0 20px;
+  border-radius: 35px;
+  border: 1px solid #000;
+  background: none;
+  margin-right: 20px;
+}
+
+.profiles-panel .profiles-table {
+  width: 100%;
+  font-size: 12px;
+}
+.profiles-panel .profiles-table td,
+.profiles-panel .profiles-table th {
+  padding: 5px;
+}
+.profiles-panel .profiles-table > tbody > tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+.profiles-panel .profiles-table .switch {
+  width: 40px;
+  margin: auto;
+}
+
 .download-panel {
   color: white;
 }
@@ -1567,37 +1585,6 @@ div > svg > circle:nth-child(5n) {
 }
 .download-panel .download-md-button .download-send {
   background-image: url("../static/static/img/mail.png");
-}
-
-.profiles-panel .profiles-table {
-  width: 100%;
-  font-size: 12px;
-}
-.profiles-panel .profiles-table td,
-.profiles-panel .profiles-table th {
-  padding: 5px;
-}
-.profiles-panel .profiles-table > tbody > tr:nth-of-type(odd) {
-  background-color: #f9f9f9;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-}
-.profiles-panel .profiles-table .switch {
-  width: 40px;
-  margin: auto;
-}
-
-.chart-map {
-  position: relative;
-  width: 800px;
-}
-.chart-map path {
-  fill: #EBF1F3;
-  stroke: #D4D8DA;
-}
-.chart-map .marker-wrapper {
-  position: absolute;
-  pointer-events: none;
 }
 
 .chart-legend {
@@ -1649,6 +1636,19 @@ div > svg > circle:nth-child(5n) {
 }
 .chart-legend .sublegend {
   margin-left: 15px;
+}
+
+.chart-map {
+  position: relative;
+  width: 800px;
+}
+.chart-map path {
+  fill: #EBF1F3;
+  stroke: #D4D8DA;
+}
+.chart-map .marker-wrapper {
+  position: absolute;
+  pointer-events: none;
 }
 
 .infobox-panel {

@@ -94,6 +94,39 @@
 
 // расчет видимости выбранных рекламных конструкций на площадке (0.0 - 1.0)
 		$scope.calcVisibility = function(){
+			
+			var data =  {
+				playgroundOnline: 		$scope.calcSectors($scope.playgroundData, 'Online'),
+				playgroundOffline:		$scope.calcSectors($scope.playgroundData, 'Offline'),
+				// uniformOnline:	 		$scope.calcSectors($scope.uniformData, 'Online'),
+				// uniformOffline: 		$scope.calcSectors($scope.uniformData, 'Offline'),
+				// videoOfflineOnline: 	$scope.calcSectors($scope.videoOfflineData, 'Online'),
+				// videoOfflineOffline: 	$scope.calcSectors($scope.videoOfflineData, 'Offline'),
+				// videoOnlineOnline: 		$scope.calcSectors($scope.videoOnlineData, 'Online'),
+				// videoOnlineOffline: 	$scope.calcSectors($scope.videoOnlineData, 'Offline')
+			};
+			var dataEff = {
+				playgroundOnline: 		$scope.calcSectors($scope.playgroundData, 'Online', true),
+				playgroundOffline:		$scope.calcSectors($scope.playgroundData, 'Offline', true),
+				// uniformOnline:	 		$scope.calcSectors($scope.uniformData, 'Online', true),
+				// uniformOffline: 		$scope.calcSectors($scope.uniformData, 'Offline', true),
+				// videoOfflineOnline: 	$scope.calcSectors($scope.videoOfflineData, 'Online', true),
+				// videoOfflineOffline: 	$scope.calcSectors($scope.videoOfflineData, 'Offline', true),
+				// videoOnlineOnline: 		$scope.calcSectors($scope.videoOnlineData, 'Online', true),
+				// videoOnlineOffline: 	$scope.calcSectors($scope.videoOnlineData, 'Offline', true)
+			};
+			
+			
+			var result = {
+				online: Math.max(data.playgroundOnline),
+				offline: Math.max(data.playgroundOffline),
+				onlineEff: Math.max(dataEff.playgroundOnline),
+				offlineEff: Math.max(dataEff.playgroundOffline)
+			};
+			return result;
+			
+			/*
+			
 			var result = {
 				playgroundOnline: 		calcSectors($scope.playgroundData, 'visibilityOnline'),
 				playgroundOffline:		calcSectors($scope.playgroundData, 'visibilityOffline')
@@ -119,7 +152,7 @@
 					sum += sectors[index];
 				});
 				return Math.min(sum, 1);
-			}
+			}*/
 
 		};
 		

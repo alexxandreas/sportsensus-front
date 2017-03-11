@@ -202,7 +202,7 @@ gulp.task('live-server', function () {
 		root: debugMode ? distDebug : distRelease,
 		fallback: (debugMode ? distDebug : distRelease)+'index.html',
 		livereload: true,
-		port:9087
+		port:8081
 	});
 });
  

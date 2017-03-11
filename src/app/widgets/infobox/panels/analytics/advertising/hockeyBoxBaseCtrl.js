@@ -276,7 +276,12 @@
 
 			$scope.calcParams = {
 				onlineTotalAll: allTmp.onlineTotalFederal + allTmp.onlineTotalLocal, // в тысячах
-				offlineTotalAll: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000, // в тысячах
+				//onlineTotalLocal: allTmp.onlineTotalLocal, // в тысячах
+				
+				offlineTotalAll: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000, // в тысячах, полная аудитория дома и в гостях
+				offlineTotalHome: (homeTmp.offlineTotal)/1000, // в тысячах, полная аудитория дома
+				offlineUniqueHome: homeTmp.offlineTotal/walkAvg/1000, // в тысячах, уникальная аудитория дома
+				
 				onlineUniqueAll: (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)/watchAvg, // в тысячах
 				offlineUniqueAll: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000/walkAvg,  // в тысячах
 				// OTSOffline: (homeTmp.offlineTotal + guestTmp.offlineTotal)*avgEffFreqOffline/1000, // в тысячах
@@ -300,7 +305,8 @@
 			//data.peopleAllOnline = Math.round($scope.clubInfo.onlineTotalAll * visibility.online * audiencePercent);
 			//data.peopleAllOffline = Math.round($scope.clubInfo.offlineTotalAll * visibility.offline * audiencePercent);
 			data.peopleAllOnline = Math.round($scope.calcParams.onlineTotalAll * visibility.online * audiencePercent);
-			data.peopleAllOffline = Math.round($scope.calcParams.offlineTotalAll * visibility.offline * audiencePercent);
+			//data.peopleAllOffline = Math.round($scope.calcParams.offlineTotalAll * visibility.offline * audiencePercent);
+			data.peopleAllOffline = Math.round($scope.calcParams.offlineTotalHome * visibility.offline * audiencePercent);
 
 			// кол-во уникальных онлайн, тысяч шт
 			// var uniqueOnline = $scope.clubInfo.onlineUniqueAll * visibility.online * audiencePercent;
@@ -337,24 +343,24 @@
 		$scope.calcVisibility = function(){
 
 			var data =  {
-				playgroundOnline: 		calcSectors($scope.playgroundData, 'Online'),
-				playgroundOffline:		calcSectors($scope.playgroundData, 'Offline'),
-				uniformOnline:	 		calcSectors($scope.uniformData, 'Online'),
-				uniformOffline: 		calcSectors($scope.uniformData, 'Offline'),
-				videoOfflineOnline: 	calcSectors($scope.videoOfflineData, 'Online'),
-				videoOfflineOffline: 	calcSectors($scope.videoOfflineData, 'Offline'),
-				videoOnlineOnline: 		calcSectors($scope.videoOnlineData, 'Online'),
-				videoOnlineOffline: 	calcSectors($scope.videoOnlineData, 'Offline')
+				playgroundOnline: 		$scope.calcSectors($scope.playgroundData, 'Online'),
+				playgroundOffline:		$scope.calcSectors($scope.playgroundData, 'Offline'),
+				uniformOnline:	 		$scope.calcSectors($scope.uniformData, 'Online'),
+				uniformOffline: 		$scope.calcSectors($scope.uniformData, 'Offline'),
+				videoOfflineOnline: 	$scope.calcSectors($scope.videoOfflineData, 'Online'),
+				videoOfflineOffline: 	$scope.calcSectors($scope.videoOfflineData, 'Offline'),
+				videoOnlineOnline: 		$scope.calcSectors($scope.videoOnlineData, 'Online'),
+				videoOnlineOffline: 	$scope.calcSectors($scope.videoOnlineData, 'Offline')
 			};
 			var dataEff = {
-				playgroundOnline: 		calcSectors($scope.playgroundData, 'Online', true),
-				playgroundOffline:		calcSectors($scope.playgroundData, 'Offline', true),
-				uniformOnline:	 		calcSectors($scope.uniformData, 'Online', true),
-				uniformOffline: 		calcSectors($scope.uniformData, 'Offline', true),
-				videoOfflineOnline: 	calcSectors($scope.videoOfflineData, 'Online', true),
-				videoOfflineOffline: 	calcSectors($scope.videoOfflineData, 'Offline', true),
-				videoOnlineOnline: 		calcSectors($scope.videoOnlineData, 'Online', true),
-				videoOnlineOffline: 	calcSectors($scope.videoOnlineData, 'Offline', true)
+				playgroundOnline: 		$scope.calcSectors($scope.playgroundData, 'Online', true),
+				playgroundOffline:		$scope.calcSectors($scope.playgroundData, 'Offline', true),
+				uniformOnline:	 		$scope.calcSectors($scope.uniformData, 'Online', true),
+				uniformOffline: 		$scope.calcSectors($scope.uniformData, 'Offline', true),
+				videoOfflineOnline: 	$scope.calcSectors($scope.videoOfflineData, 'Online', true),
+				videoOfflineOffline: 	$scope.calcSectors($scope.videoOfflineData, 'Offline', true),
+				videoOnlineOnline: 		$scope.calcSectors($scope.videoOnlineData, 'Online', true),
+				videoOnlineOffline: 	$scope.calcSectors($scope.videoOnlineData, 'Offline', true)
 			};
 
 			// var result = {
@@ -375,7 +381,11 @@
 			};
 			return result;
 
-			function calcSectors(data, type, useFreq){ //} dataKey, freqKey){
+			
+
+		};
+		
+		$scope.calcSectors = function(data, type, useFreq){ //} dataKey, freqKey){
 				var sectors = {};
 				var sectorsEff = {};
 				var effFreq = 0;
@@ -412,8 +422,6 @@
 				//return Math.min(sum, 1);
 				return useFreq ? sumEff : sum;
 			}
-
-		};
 		
 
 	}

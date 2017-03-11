@@ -17,6 +17,9 @@
     "gulp-rename": "",
     "gulp-htmlmin": ""
   },
+  "scripts": {
+    "serve-debug": "gulp serve-debug"
+  },
   "private": true,
   "license": "proprietary",
   "dependencies": {}

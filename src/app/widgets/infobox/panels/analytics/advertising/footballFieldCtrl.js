@@ -120,39 +120,22 @@
 			var result = {
 				online: Math.max(data.playgroundOnline),
 				offline: Math.max(data.playgroundOffline),
+				
+				// дома учитывается площадка, форма и видео, в гостях - форма
+				offlineHome: Math.max(data.playgroundOffline),
+				offlineGuest: Math.max(0),
+				
+				
 				onlineEff: Math.max(dataEff.playgroundOnline),
-				offlineEff: Math.max(dataEff.playgroundOffline)
+				offlineEff: Math.max(dataEff.playgroundOffline),
+				
+				// дома учитывается площадка, форма и видео, в гостях - форма
+				offlineEffHome: Math.max(dataEff.playgroundOffline),
+				offlineEffGuest: Math.max(0)
 			};
 			return result;
 			
-			/*
 			
-			var result = {
-				playgroundOnline: 		calcSectors($scope.playgroundData, 'visibilityOnline'),
-				playgroundOffline:		calcSectors($scope.playgroundData, 'visibilityOffline')
-			};
-			result.online = Math.max(result.playgroundOnline);
-			result.offline = Math.max(result.playgroundOffline);
-
-			return result;
-
-			function calcSectors(data, dataKey){
-				var sectors = {};
-				Object.keys(data.placesSelection).forEach(function(key){
-					if (!data.placesSelection[key].selected) return;
-					var placeA = data[dataKey][key];
-					if (!placeA) return;
-					placeA.forEach(function(val, index){
-						sectors[index] = Math.max(sectors[index] || 0, val || 0);
-					});
-				});
-
-				var sum = 0;
-				Object.keys(sectors).forEach(function(index){
-					sum += sectors[index];
-				});
-				return Math.min(sum, 1);
-			}*/
 
 		};
 		

@@ -91,6 +91,47 @@
 
 			var gamesCount = $scope.championship.data.championship.length;
 
+
+
+			$scope.calcParams = {
+				/***** OFFLINE *****/
+				
+				offlineTotalHome: allTmp.offlineTotal/1000, // в тысячах, полная аудитория дома
+				offlineTotalGuest: 0,
+				offlineTotalAll: allTmp.offlineTotal/1000, // в тысячах
+				
+				
+				offlineUniqueHome: allTmp.offlineTotal/1000/walkAvg, // в тысячах, уникальная аудитория дома
+				offlineUniqueGuest: 0,
+				offlineUniqueAll:  allTmp.offlineTotal/1000/walkAvg,  // в тысячах
+				
+				
+				/***** ONLINE *****/
+				
+				onlineTotalFederal: allTmp.onlineTotalFederal, // в тысячах
+				onlineTotalLocal: allTmp.onlineTotalLocal, // в тысячах
+				//onlineTotalAll: allTmp.onlineTotalFederal + allTmp.onlineTotalLocal, // в тысячах
+				onlineTotalAll: allTmp.onlineTotalFederal + allTmp.onlineTotalLocal, // в тысячах
+				
+				
+				
+				onlineUniqueFederal: allTmp.onlineTotalFederal/watchAvg, // в тысячах
+				onlineUniqueLocal: allTmp.onlineTotalLocal/watchAvg, // в тысячах
+				onlineUniqueAll: (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)/watchAvg, // в тысячах
+				
+				
+				
+				// OTSOffline: (homeTmp.offlineTotal + guestTmp.offlineTotal)*avgEffFreqOffline/1000, // в тысячах
+				// OTSOnline:  (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*avgEffFreqOnline // в тысячах
+				
+				OTSOfflineHome: (allTmp.offlineTotal)/1000, // в тысячах без коэфф.
+				OTSOfflineGuest: 0, // в тысячах без коэфф.
+				OTSOfflineAll: (allTmp.offlineTotal)/1000, // в тысячах без коэфф. 
+				
+				OTSOnlineAll:  (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal) // в тысячах без коэфф.
+			}	
+
+
 			$scope.leagueInfo = {
 				name: league.name,
 				//playgrounds: ['playground1', 'playground2'],
@@ -107,44 +148,47 @@
 				gamesCount: gamesCount,
 
 
-				// offlineAVGHome: Math.round(homeTmp.occupancy / homeGames.length * 100),
-				// offlineAVGGuest: Math.round(guestTmp.occupancy / guestGames.length * 100),
-				//
 				offlineAVGAll: Math.round(allTmp.occupancy / gamesCount * 100),
-				//
-				// offlineTotalHome: Math.round(homeTmp.offlineTotal/100)/10,
-				// offlineTotalGuest: Math.round(guestTmp.offlineTotal/100)/10,
-				offlineTotalAll: Math.round((allTmp.offlineTotal)/100)/10,
-				//
-				// offlineUniqueHome: Math.round(homeTmp.offlineTotal/100/walkAvg)/10,
-				// offlineUniqueGuest: Math.round(guestTmp.offlineTotal/100/walkAvg)/10,
-				offlineUniqueAll: Math.round((allTmp.offlineTotal)/100/walkAvg)/10,
-				//
+				
+				//offlineTotalAll: Math.round((allTmp.offlineTotal)/100)/10,
+				
+				//offlineUniqueAll: Math.round((allTmp.offlineTotal)/100/walkAvg)/10,
+				
 				onlineRatings: Math.round(allTmp.onlineRatings*10)/10,
-				//
-				// onlineTotalFederal: Math.round(allTmp.onlineTotalFederal*10)/10, // в тысячах
-				// onlineTotalLocal: Math.round(allTmp.onlineTotalLocal*10)/10, // в тысячах
-				onlineTotalAll: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10)/10, // в тысячах
-				//
-				// onlineUniqueFederal: Math.round(allTmp.onlineTotalFederal*10/watchAvg)/10, // в тысячах
-				// onlineUniqueLocal: Math.round(allTmp.onlineTotalLocal*10/watchAvg)/10, // в тысячах
-				onlineUniqueAll: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10/watchAvg)/10, // в тысячах
+				
+				//onlineTotalAll: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10)/10, // в тысячах
+				
+				//onlineUniqueAll: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10/watchAvg)/10, // в тысячах
 				//
 				reachOffline: Math.round((allTmp.offlineTotal)/100/walkAvg)/10, // offlineUniqueAll
 				reachOnline: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10/watchAvg)/10, // onlineUniqueAll
-				OTSOffline: Math.round((allTmp.offlineTotal)/100*avgEffFreqOffline)/10, // // offlineTotalAll * onlineFreq * 3
-				OTSOnline:  Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10*avgEffFreqOnline)/10 // onlineTotalAll * onlineFreq
+				
+				OTSOffline: Math.round($scope.calcParams.OTSOfflineAll*avgEffFreqOffline*10)/10, // // offlineTotalAll * onlineFreq * 3
+				OTSOnline:  Math.round($scope.calcParams.OTSOnlineAll*avgEffFreqOnline*10)/10 // onlineTotalAll * onlineFreq
 			};
 
 
-			$scope.calcParams = {
-				onlineTotalAll: allTmp.onlineTotal, // в тысячах
-				offlineTotalAll: allTmp.offlineTotal/1000, // в тысячах
-				onlineUniqueAll: allTmp.onlineTotal/watchAvg, // в тысячах
-				offlineUniqueAll:  allTmp.offlineTotal/1000/walkAvg,  // в тысячах
-				OTSOnline:  allTmp.onlineTotal*avgEffFreqOnline, // в тысячах
-				OTSOffline: allTmp.offlineTotal*avgEffFreqOffline/1000 // в тысячах
-			}
+			[
+				//'offlineTotalHome',
+				//'offlineTotalGuest',
+				'offlineTotalAll',
+				
+				//'offlineUniqueHome',
+				//'offlineUniqueGuest',
+				'offlineUniqueAll',
+				
+				//'onlineTotalFederal',
+				//'onlineTotalLocal',
+				'onlineTotalAll',
+				
+				//'onlineUniqueFederal',
+				//'onlineUniqueLocal',
+				'onlineUniqueAll'
+			].forEach(function(param){
+				$scope.leagueInfo[param] = Math.round($scope.calcParams[param]*10)/10
+			});
+
+		
 
 		};
 
@@ -240,6 +284,45 @@
 			});
 
 
+			$scope.calcParams = {
+				/***** OFFLINE *****/
+				
+				offlineTotalHome: homeTmp.offlineTotal/1000, // в тысячах, полная аудитория дома
+				offlineTotalGuest: guestTmp.offlineTotal/1000,
+				offlineTotalAll: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000, // в тысячах, полная аудитория дома и в гостях
+				
+				
+				offlineUniqueHome: homeTmp.offlineTotal/walkAvg/1000, // в тысячах, уникальная аудитория дома
+				offlineUniqueGuest: guestTmp.offlineTotal/1000/walkAvg,
+				offlineUniqueAll: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000/walkAvg,  // в тысячах
+				
+				
+				/***** ONLINE *****/
+				
+				onlineTotalFederal: allTmp.onlineTotalFederal, // в тысячах
+				onlineTotalLocal: allTmp.onlineTotalLocal, // в тысячах
+				onlineTotalAll: allTmp.onlineTotalFederal + allTmp.onlineTotalLocal, // в тысячах
+				
+				
+				onlineUniqueFederal: allTmp.onlineTotalFederal/watchAvg, // в тысячах
+				onlineUniqueLocal: allTmp.onlineTotalLocal/watchAvg, // в тысячах
+				onlineUniqueAll: (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)/watchAvg, // в тысячах
+
+				
+				
+				// OTSOffline: (homeTmp.offlineTotal + guestTmp.offlineTotal)*avgEffFreqOffline/1000, // в тысячах
+				// OTSOnline:  (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*avgEffFreqOnline // в тысячах
+				
+				OTSOfflineHome: (homeTmp.offlineTotal)/1000, // в тысячах без коэфф.
+				OTSOfflineGuest: (guestTmp.offlineTotal)/1000, // в тысячах без коэфф.
+				OTSOfflineAll: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000, // в тысячах без коэфф.
+				
+				OTSOnlineAll:  (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal) // в тысячах без коэфф.
+			}
+
+
+			
+
 			$scope.clubInfo = {
 				name: club.name,
 				//playgrounds: ['playground1', 'playground2'],
@@ -250,51 +333,74 @@
 				offlineAVGHome: Math.round(homeTmp.occupancy / homeGames.length * 100),
 				offlineAVGGuest: Math.round(guestTmp.occupancy / guestGames.length * 100),
 
-				offlineTotalHome: Math.round(homeTmp.offlineTotal/100)/10,
-				offlineTotalGuest: Math.round(guestTmp.offlineTotal/100)/10,
-				offlineTotalAll: Math.round((homeTmp.offlineTotal + guestTmp.offlineTotal)/100)/10,
+				
+				// offlineTotalHome: Math.round($scope.calcParams.offlineTotalHome*10)/10,
+				// offlineTotalGuest: Math.round($scope.calcParams.offlineTotalGuest*10)/10,
+				// offlineTotalAll: Math.round($scope.calcParams.offlineTotalAll*10)/10,
 
-				offlineUniqueHome: Math.round(homeTmp.offlineTotal/100/walkAvg)/10,
-				offlineUniqueGuest: Math.round(guestTmp.offlineTotal/100/walkAvg)/10,
-				offlineUniqueAll: Math.round((homeTmp.offlineTotal + guestTmp.offlineTotal)/100/walkAvg)/10,
+
+				// offlineUniqueHome: Math.round($scope.calcParams.offlineUniqueHome*10)/10,
+				// offlineUniqueGuest: Math.round($scope.calcParams.offlineUniqueGuest*10)/10,
+				// offlineUniqueAll: Math.round($scope.calcParams.offlineUniqueAll*10)/10,
+
 
 				onlineRatings: Math.round(allTmp.onlineRatings*10)/10,
 
-				onlineTotalFederal: Math.round(allTmp.onlineTotalFederal*10)/10, // в тысячах
-				onlineTotalLocal: Math.round(allTmp.onlineTotalLocal*10)/10, // в тысячах
-				onlineTotalAll: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10)/10, // в тысячах
 
-				onlineUniqueFederal: Math.round(allTmp.onlineTotalFederal*10/watchAvg)/10, // в тысячах
-				onlineUniqueLocal: Math.round(allTmp.onlineTotalLocal*10/watchAvg)/10, // в тысячах
-				onlineUniqueAll: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10/watchAvg)/10, // в тысячах
+				// onlineTotalFederal: Math.round($scope.calcParams.onlineTotalFederal*10)/10, // в тысячах
+				// onlineTotalLocal: Math.round($scope.calcParams.onlineTotalLocal*10)/10, // в тысячах
+				// onlineTotalAll: Math.round($scope.calcParams.onlineTotalAll*10)/10, // в тысячах
+
+				// onlineUniqueFederal: Math.round($scope.calcParams.onlineUniqueFederal*10)/10, // в тысячах
+				// onlineUniqueLocal: Math.round($scope.calcParams.onlineUniqueLocal*10)/10, // в тысячах
+				// onlineUniqueAll: Math.round($scope.calcParams.onlineUniqueAll*10)/10, // в тысячах
+
 
 				reachOffline: Math.round((homeTmp.offlineTotal + guestTmp.offlineTotal)/100/walkAvg)/10, // offlineUniqueAll
 				reachOnline: Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10/watchAvg)/10, // onlineUniqueAll
-				OTSOffline: Math.round((homeTmp.offlineTotal + guestTmp.offlineTotal)/100*avgEffFreqOffline)/10, // // offlineTotalAll * onlineFreq * 3
-				OTSOnline:  Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10*avgEffFreqOnline)/10 // onlineTotalAll * onlineFreq
+				
+				
+				// OTSOffline: Math.round((homeTmp.offlineTotal + guestTmp.offlineTotal)/100*avgEffFreqOffline)/10, // // offlineTotalAll * onlineFreq * 3
+				OTSOffline: Math.round($scope.calcParams.OTSOfflineAll*avgEffFreqOffline*10)/10, // // offlineTotalAll * onlineFreq * 3
+				// OTSOnline:  Math.round((allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*10*avgEffFreqOnline)/10 // onlineTotalAll * onlineFreq
+				OTSOnline:  Math.round($scope.calcParams.OTSOnlineAll*avgEffFreqOnline*10)/10 // onlineTotalAll * onlineFreq
 			};
-
-			$scope.calcParams = {
-				onlineTotalAll: allTmp.onlineTotalFederal + allTmp.onlineTotalLocal, // в тысячах
-				//onlineTotalLocal: allTmp.onlineTotalLocal, // в тысячах
-				
-				offlineTotalAll: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000, // в тысячах, полная аудитория дома и в гостях
-				offlineTotalHome: (homeTmp.offlineTotal)/1000, // в тысячах, полная аудитория дома
-				offlineUniqueHome: homeTmp.offlineTotal/walkAvg/1000, // в тысячах, уникальная аудитория дома
-				
-				onlineUniqueAll: (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)/watchAvg, // в тысячах
-				offlineUniqueAll: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000/walkAvg,  // в тысячах
-				// OTSOffline: (homeTmp.offlineTotal + guestTmp.offlineTotal)*avgEffFreqOffline/1000, // в тысячах
-				// OTSOnline:  (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal)*avgEffFreqOnline // в тысячах
-				OTSOffline: (homeTmp.offlineTotal + guestTmp.offlineTotal)/1000, // в тысячах без коэфф.
-				OTSOnline:  (allTmp.onlineTotalFederal + allTmp.onlineTotalLocal) // в тысячах без коэфф.
-			}
 			
+			[
+				'offlineTotalHome',
+				'offlineTotalGuest',
+				'offlineTotalAll',
+				
+				'offlineUniqueHome',
+				'offlineUniqueGuest',
+				'offlineUniqueAll',
+				
+				'onlineTotalFederal',
+				'onlineTotalLocal',
+				'onlineTotalAll',
+				
+				'onlineUniqueFederal',
+				'onlineUniqueLocal',
+				'onlineUniqueAll'
+			].forEach(function(param){
+				$scope.clubInfo[param] = Math.round($scope.calcParams[param]*10)/10
+			})
+
+						
 		};
 
 
 
-
+		/*
+			Для Offline (ходили):	
+				Если выбрана только площадка - значит учитывается только домашняя аудитория
+				Если выбрана только форма - учитывается и домашняя и гостевая аудитория
+				Если выбрано только видео на площадке - учитывается только домашняя аудитория 
+				Видео по ТВ не учитывается
+			Для Online (смотрели):
+				хз)
+			
+		*/
 		$scope.calc = function(){
 
 			var visibility = $scope.calcVisibility();
@@ -302,30 +408,59 @@
 
 			var data = {};
 			// Аудитория клуба
-			//data.peopleAllOnline = Math.round($scope.clubInfo.onlineTotalAll * visibility.online * audiencePercent);
-			//data.peopleAllOffline = Math.round($scope.clubInfo.offlineTotalAll * visibility.offline * audiencePercent);
+			//data.people
+			
+			
+			/***** ВСЕ ЛЮДИ *****/
+			
+			/***** OFFLINE *****/
+			
+			var peopleHomeOffline = $scope.calcParams.offlineTotalHome * visibility.offlineHome * audiencePercent;
+			var peopleGuestOffline= $scope.calcParams.offlineTotalGuest * visibility.offlineGuest * audiencePercent;
+			// data.peopleAllOffline = Math.round($scope.calcParams.offlineTotalHome * visibility.offline * audiencePercent);
+			data.peopleAllOffline = Math.round(peopleHomeOffline + peopleGuestOffline);
+			
+			/***** ONLINE *****/
+			
 			data.peopleAllOnline = Math.round($scope.calcParams.onlineTotalAll * visibility.online * audiencePercent);
 			//data.peopleAllOffline = Math.round($scope.calcParams.offlineTotalAll * visibility.offline * audiencePercent);
-			data.peopleAllOffline = Math.round($scope.calcParams.offlineTotalHome * visibility.offline * audiencePercent);
-
-			// кол-во уникальных онлайн, тысяч шт
-			// var uniqueOnline = $scope.clubInfo.onlineUniqueAll * visibility.online * audiencePercent;
-			// var uniqueOffline = $scope.clubInfo.offlineUniqueAll * visibility.offline * audiencePercent;
+			
+			
+			/***** УНИКАЛЬНЫЕ *****/
+		
+			/***** OFFLINE *****/
+			var peopleUniqueHomeOffline = $scope.calcParams.offlineUniqueHome * visibility.offlineHome * audiencePercent;
+			var peopleUniqueGuestOffline = $scope.calcParams.offlineUniqueGuest * visibility.offlineGuest * audiencePercent;
+			// var uniqueOffline = $scope.calcParams.offlineUniqueAll * visibility.offline * audiencePercent;
+			var uniqueOffline = peopleUniqueHomeOffline + peopleUniqueGuestOffline;
+			
+			
+			/***** ONLINE *****/
 			var uniqueOnline = $scope.calcParams.onlineUniqueAll * visibility.online * audiencePercent;
-			var uniqueOffline = $scope.calcParams.offlineUniqueAll * visibility.offline * audiencePercent;
-
+			
+			/***** CPT от УНИКАЛЬНЫХ *****/
+			
 			data.CPTUniqueOnline = $scope.totalCost && uniqueOnline ? Math.round($scope.totalCost / uniqueOnline * 10)/10 : '';
 			data.CPTUniqueOffline = $scope.totalCost && uniqueOffline ? Math.round($scope.totalCost / uniqueOffline * 10)/10 : '';
 
+
+			/***** OTS *****/
+			var peopleOTSHomeOffline = $scope.calcParams.OTSOfflineHome * visibility.offlineEffHome * audiencePercent;
+			var peopleOTSGuestOffline = $scope.calcParams.OTSOfflineGuest * visibility.offlineEffGuest * audiencePercent;
+
+			// var OTSOffline = $scope.calcParams.OTSOffline * visibility.offlineEff * audiencePercent;
+			var OTSOffline = peopleOTSHomeOffline + peopleOTSGuestOffline;
+
+
 			// OTS, штук
-			var OTSOnline = $scope.calcParams.OTSOnline * visibility.onlineEff * audiencePercent;
+			var OTSOnline = $scope.calcParams.OTSOnlineAll * visibility.onlineEff * audiencePercent;
 
 
 			// (onlineTotalFederal + onlineTotalLocal) * avgEffFreqOnline * visibility.online * audiencePercent;
 			// audiencePercent - процент выбранной аудитории (0..1)
 			// visibility.online - процент видимости выбранных рекламных конструкций (0..1)
 
-			var OTSOffline = $scope.calcParams.OTSOffline * visibility.offlineEff * audiencePercent;
+			
 
 			data.CPTOTSOnline = $scope.totalCost && OTSOnline ? Math.round($scope.totalCost / OTSOnline * 10)/10 : '';
 			data.CPTOTSOffline = $scope.totalCost && OTSOffline ? Math.round($scope.totalCost / OTSOffline * 10)/10 : '';
@@ -363,21 +498,21 @@
 				videoOnlineOffline: 	$scope.calcSectors($scope.videoOnlineData, 'Offline', true)
 			};
 
-			// var result = {
-			// 	playgroundOnline: 		calcSectors($scope.playgroundData, 'Online'),
-			// 	playgroundOffline:		calcSectors($scope.playgroundData, 'Offline'),
-			// 	uniformOnline:	 		calcSectors($scope.uniformData, 'Online'),
-			// 	uniformOffline: 		calcSectors($scope.uniformData, 'Offline'),
-			// 	videoOfflineOnline: 	calcSectors($scope.videoOfflineData, 'Online'),
-			// 	videoOfflineOffline: 	calcSectors($scope.videoOfflineData, 'Offline'),
-			// 	videoOnlineOnline: 		calcSectors($scope.videoOnlineData, 'Online'),
-			// 	videoOnlineOffline: 	calcSectors($scope.videoOnlineData, 'Offline')
-			// };
+		
 			var result = {
 				online: Math.max(data.playgroundOnline, data.uniformOnline, data.videoOfflineOnline, data.videoOnlineOnline),
 				offline: Math.max(data.playgroundOffline, data.uniformOffline, data.videoOfflineOffline, data.videoOnlineOffline),
+				
+				// дома учитывается площадка, форма и видео, в гостях - форма
+				offlineHome: Math.max(data.playgroundOffline, data.uniformOffline, data.videoOfflineOffline),
+				offlineGuest: Math.max(data.uniformOffline),
+				
 				onlineEff: Math.max(dataEff.playgroundOnline, dataEff.uniformOnline, dataEff.videoOfflineOnline, dataEff.videoOnlineOnline),
-				offlineEff: Math.max(dataEff.playgroundOffline, dataEff.uniformOffline, dataEff.videoOfflineOffline, dataEff.videoOnlineOffline)
+				offlineEff: Math.max(dataEff.playgroundOffline, dataEff.uniformOffline, dataEff.videoOfflineOffline, dataEff.videoOnlineOffline),
+				
+				// дома учитывается площадка, форма и видео, в гостях - форма
+				offlineEffHome: Math.max(dataEff.playgroundOffline, dataEff.uniformOffline, dataEff.videoOfflineOffline),
+				offlineEffGuest: Math.max(dataEff.uniformOffline)
 			};
 			return result;
 

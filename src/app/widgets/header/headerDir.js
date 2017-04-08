@@ -41,11 +41,11 @@
                     $scope.loggedIn = false;
                     $scope.isAdmin = false;
                     
-                    $scope.menu = [{
+                    $scope.menu = [/*{
                             'name': 'О проекте',
                             visible: function(){return !$scope.loggedIn;},
                             onClick: function(){$scope.scrollTo('about');}
-                        }, {
+                        },*/ {
                             'name': 'Зарегистрироваться',
                             visible: function(){return !$scope.loggedIn;},
                             onClick: function(){$scope.scrollTo('registration');}
@@ -53,11 +53,11 @@
                             'name': 'Войти',
                             visible: function(){return !$scope.loggedIn;},
                             onClick: function(){$scope.setPath('/login/');}
-                        },{
+                        },/*{
                             'name': 'Техническая поддержка',
                             visible: function(){return !$scope.loggedIn;},
                             onClick: function(){$scope.setPath('/infobox/');}
-                        },
+                        },*/
                         {
                             'name': 'Получить информацию',
                             visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
@@ -100,9 +100,6 @@
                     };
 
                     $scope.scrollTo = function(id) {
-                        // $location.hash(id);
-                        // $anchorScroll();
-
                         var old = $location.hash();
                         $location.hash(id);
                         $anchorScroll();

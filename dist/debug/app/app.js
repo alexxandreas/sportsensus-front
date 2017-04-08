@@ -1375,6 +1375,98 @@ angular
      * @example
      */
     angular.module('SportsensusApp')
+        .directive('homeDir', homeDir);
+
+    homeDir.$inject = [
+        '$rootScope'
+    ];
+
+    function homeDir(
+        $rootScope
+    )    {
+        return {
+            restrict: 'E',
+            scope: {
+            },
+            templateUrl: '/views/widgets/home/home.html',
+            link: function ($scope, $el, attrs) {},
+
+            controller: [
+                '$scope',
+                '$routeParams',
+                '$location',
+                '$anchorScroll',
+                '$window',
+                'ApiSrv',
+                function(
+                    $scope,
+                    $routeParams,
+                    $location,
+                    $anchorScroll,
+                    $window,
+                    ApiSrv
+                ){
+                    
+                    $scope.regData = {
+                        first_name:  '',
+                        last_name: '',
+                        company_name: '',
+                        phone: '',
+                        login: '',
+                        company_type: null, // 0 - спонсор, 1 - правообладатель, 2 - агенство
+                        legal_status: 0, // 0 - физ, 1 - юр
+                        lang: "ru"
+                    };
+
+                    $scope.companyTypes = [
+                        //{value: null, name: 'Тип компании', selected:true},
+                        {value: 0, name: 'Спонсор'},
+                        {value: 1, name: 'Правообладатель'},
+                        {value: 2, name: 'Агенство'}
+                    ];
+                    
+                    $scope.companyTypeFiz = function(fiz) {
+                        if (arguments.length)
+                            return $scope.regData.legal_status  = fiz ? 0 : 1;
+                        else
+                            return $scope.regData.legal_status  == 0 ? true : false;
+                    };
+
+                    $scope.companyTypeYur = function(yur) {
+                        if (arguments.length)
+                            return $scope.regData.legal_status  = yur ? 1 : 0;
+                        else
+                            return $scope.regData.legal_status  == 0 ? false : true;
+                    };
+
+                    
+                    $scope.register = function(){
+                        ApiSrv.register($scope.regData);
+                    }
+                    
+                    $scope.scrollToRegistration = function(){
+                        $scope.scrollTo('registration'); 
+                    }
+                    
+                    $scope.scrollTo = function(id) {
+                        var old = $location.hash();
+                        $location.hash(id);
+                        $anchorScroll();
+                        //reset to old to keep any additional routing logic from kicking in
+                        $location.hash(old);
+                    }
+                }]
+        };
+    }
+}());
+
+(function () {
+    "use strict";
+    /**
+     * @desc
+     * @example
+     */
+    angular.module('SportsensusApp')
         .directive('headerDir', headerDir);
 
     headerDir.$inject = [
@@ -1411,11 +1503,11 @@ angular
                     $scope.loggedIn = false;
                     $scope.isAdmin = false;
                     
-                    $scope.menu = [{
+                    $scope.menu = [/*{
                             'name': 'О проекте',
                             visible: function(){return !$scope.loggedIn;},
                             onClick: function(){$scope.scrollTo('about');}
-                        }, {
+                        },*/ {
                             'name': 'Зарегистрироваться',
                             visible: function(){return !$scope.loggedIn;},
                             onClick: function(){$scope.scrollTo('registration');}
@@ -1423,11 +1515,11 @@ angular
                             'name': 'Войти',
                             visible: function(){return !$scope.loggedIn;},
                             onClick: function(){$scope.setPath('/login/');}
-                        },{
+                        },/*{
                             'name': 'Техническая поддержка',
                             visible: function(){return !$scope.loggedIn;},
                             onClick: function(){$scope.setPath('/infobox/');}
-                        },
+                        },*/
                         {
                             'name': 'Получить информацию',
                             visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
@@ -1470,9 +1562,6 @@ angular
                     };
 
                     $scope.scrollTo = function(id) {
-                        // $location.hash(id);
-                        // $anchorScroll();
-
                         var old = $location.hash();
                         $location.hash(id);
                         $anchorScroll();
@@ -1491,20 +1580,20 @@ angular
      * @example
      */
     angular.module('SportsensusApp')
-        .directive('homeDir', homeDir);
+        .directive('loginDir', loginDir);
 
-    homeDir.$inject = [
+    loginDir.$inject = [
         '$rootScope'
     ];
 
-    function homeDir(
+    function loginDir(
         $rootScope
     )    {
         return {
             restrict: 'E',
             scope: {
             },
-            templateUrl: '/views/widgets/home/home.html',
+            templateUrl: '/views/widgets/login/login.html',
             link: function ($scope, $el, attrs) {},
 
             controller: [
@@ -1520,48 +1609,27 @@ angular
                     $window,
                     ApiSrv
                 ){
-                    
-                    $scope.regData = {
-                        first_name:  '',
-                        last_name: '',
-                        company_name: '',
-                        phone: '',
-                        login: '',
-                        company_type: null, // 0 - спонсор, 1 - правообладатель, 2 - агенство
-                        legal_status: 0, // 0 - физ, 1 - юр
-                        lang: "ru"
+                    $scope.vm={
+                        login: null,
+                        password: null,
+                        error: null
                     };
 
-                    $scope.companyTypes = [
-                        //{value: null, name: 'Тип компании', selected:true},
-                        {value: 0, name: 'Спонсор'},
-                        {value: 1, name: 'Правообладатель'},
-                        {value: 2, name: 'Агенство'}
-                    ];
-                    
-                    $scope.companyTypeFiz = function(fiz) {
-                        if (arguments.length)
-                            return $scope.regData.legal_status  = fiz ? 0 : 1;
-                        else
-                            return $scope.regData.legal_status  == 0 ? true : false;
+                    $scope.login = function() {
+                        $scope.vm.dataLoading = true;
+                        $scope.vm.error = null;
+                        ApiSrv.auth($scope.vm).then(function(){
+                            $location.path('/infobox/');
+                            $scope.vm.dataLoading = false;
+                        }, function(){
+                            $scope.vm.dataLoading = false;
+                            $scope.vm.error = 'Неправильный логин или пароль';
+                        });
                     };
-
-                    $scope.companyTypeYur = function(yur) {
-                        if (arguments.length)
-                            return $scope.regData.legal_status  = yur ? 1 : 0;
-                        else
-                            return $scope.regData.legal_status  == 0 ? false : true;
-                    };
-
-                    
-                    $scope.register = function(){
-                        ApiSrv.register($scope.regData);
-                    }
                 }]
         };
     }
 }());
-
 (function () {
 	"use strict";
 	angular.module('SportsensusApp')
@@ -2028,63 +2096,6 @@ angular
     }
 }());
 
-(function () {
-    "use strict";
-    /**
-     * @desc
-     * @example
-     */
-    angular.module('SportsensusApp')
-        .directive('loginDir', loginDir);
-
-    loginDir.$inject = [
-        '$rootScope'
-    ];
-
-    function loginDir(
-        $rootScope
-    )    {
-        return {
-            restrict: 'E',
-            scope: {
-            },
-            templateUrl: '/views/widgets/login/login.html',
-            link: function ($scope, $el, attrs) {},
-
-            controller: [
-                '$scope',
-                '$routeParams',
-                '$location',
-                '$window',
-                'ApiSrv',
-                function(
-                    $scope,
-                    $routeParams,
-                    $location,
-                    $window,
-                    ApiSrv
-                ){
-                    $scope.vm={
-                        login: null,
-                        password: null,
-                        error: null
-                    };
-
-                    $scope.login = function() {
-                        $scope.vm.dataLoading = true;
-                        $scope.vm.error = null;
-                        ApiSrv.auth($scope.vm).then(function(){
-                            $location.path('/infobox/');
-                            $scope.vm.dataLoading = false;
-                        }, function(){
-                            $scope.vm.dataLoading = false;
-                            $scope.vm.error = 'Неправильный логин или пароль';
-                        });
-                    };
-                }]
-        };
-    }
-}());
 (function () {
     "use strict";
     /**
@@ -3371,99 +3382,6 @@ angular
      * @example
      */
     angular.module('SportsensusApp')
-        .directive('legendDir', legendDir);
-
-    legendDir.$inject = [
-        '$rootScope'
-    ];
-
-    function legendDir(
-        $rootScope
-    )    {
-        return {
-            restrict: 'E',
-            scope: {
-                legend: '=',
-                columnsCount: '@',
-                selectable: '=?',
-                highlightable: '=?',
-                selectedColor: '=?',
-                highlightedColor: '=?',
-                disabled: '=?'
-            },
-            templateUrl: '/views/widgets/charts/legend/legend.html',
-            link: function ($scope, $el, attrs) {
-                //if (angular.isUndefined($scope.selectable))
-                //   $scope.selectable = true;
-            },
-
-            controller: [
-                '$scope',
-                '$routeParams',
-                '$location',
-                '$window',
-                'ApiSrv',
-                function(
-                    $scope
-                ){
-
-                    
-                    $scope.legends = [];
-                    $scope.$watch('legend', function(){
-                        if (!$scope.legend || !$scope.legend.length) return;
-                        $scope.columnsCount = Number.parseInt($scope.columnsCount) || 1;
-                        var count = $scope.legend.length;
-                        for (var col=1; col <= $scope.columnsCount; col++){
-                            $scope.legends.push($scope.legend.slice(Math.ceil(count/$scope.columnsCount*(col-1)),Math.ceil(count/$scope.columnsCount*col)));
-                        }
-                    });
-
-                    $scope.getPointStyles = function(item){
-                        var selectedColor = item.selected || !$scope.selectable ? ($scope.selectedColor || item.color || item.chartColor) : null;
-                        var highlightedColor = item.highlighted && $scope.highlightable ? ($scope.highlightedColor || item.color || item.chartColor) : null;
-                        
-                        // if (highlightedColor)
-                        //     return  {'background-color': highlightedColor};
-                        // else if (selectedColor)
-                        //     return  {'background-color': selectedColor};
-                        if (selectedColor)
-                            return  {'background-color': selectedColor};
-                        else if (highlightedColor)
-                            return  {'background-color': highlightedColor};
-                        else 
-                            return {'background-color': 'none'};
-                        
-                        //        return {'background-color': item.selected || !selectable ? (item.color || item.chartColor) : 'none'}
-                    };
-
-                    $scope.getParam = function(param){
-                      return $scope[param];
-                    };
-
-
-                    
-                    $scope.itemClick = function(item){
-                        item.selected = !item.selected;
-                    };
-
-                    $scope.highlightItem = function(item){
-                        item.highlighted = true;
-                    };
-                    $scope.unhighlightItem = function(item){
-                        item.highlighted = false;
-                    };
-
-                }]
-        };
-    }
-}());
-(function () {
-    "use strict";
-    /**
-     * @desc
-     * @example
-     */
-    angular.module('SportsensusApp')
         .directive('mapDir', mapDir);
 
     mapDir.$inject = [
@@ -4535,6 +4453,99 @@ angular
 
 
 
+(function () {
+    "use strict";
+    /**
+     * @desc
+     * @example
+     */
+    angular.module('SportsensusApp')
+        .directive('legendDir', legendDir);
+
+    legendDir.$inject = [
+        '$rootScope'
+    ];
+
+    function legendDir(
+        $rootScope
+    )    {
+        return {
+            restrict: 'E',
+            scope: {
+                legend: '=',
+                columnsCount: '@',
+                selectable: '=?',
+                highlightable: '=?',
+                selectedColor: '=?',
+                highlightedColor: '=?',
+                disabled: '=?'
+            },
+            templateUrl: '/views/widgets/charts/legend/legend.html',
+            link: function ($scope, $el, attrs) {
+                //if (angular.isUndefined($scope.selectable))
+                //   $scope.selectable = true;
+            },
+
+            controller: [
+                '$scope',
+                '$routeParams',
+                '$location',
+                '$window',
+                'ApiSrv',
+                function(
+                    $scope
+                ){
+
+                    
+                    $scope.legends = [];
+                    $scope.$watch('legend', function(){
+                        if (!$scope.legend || !$scope.legend.length) return;
+                        $scope.columnsCount = Number.parseInt($scope.columnsCount) || 1;
+                        var count = $scope.legend.length;
+                        for (var col=1; col <= $scope.columnsCount; col++){
+                            $scope.legends.push($scope.legend.slice(Math.ceil(count/$scope.columnsCount*(col-1)),Math.ceil(count/$scope.columnsCount*col)));
+                        }
+                    });
+
+                    $scope.getPointStyles = function(item){
+                        var selectedColor = item.selected || !$scope.selectable ? ($scope.selectedColor || item.color || item.chartColor) : null;
+                        var highlightedColor = item.highlighted && $scope.highlightable ? ($scope.highlightedColor || item.color || item.chartColor) : null;
+                        
+                        // if (highlightedColor)
+                        //     return  {'background-color': highlightedColor};
+                        // else if (selectedColor)
+                        //     return  {'background-color': selectedColor};
+                        if (selectedColor)
+                            return  {'background-color': selectedColor};
+                        else if (highlightedColor)
+                            return  {'background-color': highlightedColor};
+                        else 
+                            return {'background-color': 'none'};
+                        
+                        //        return {'background-color': item.selected || !selectable ? (item.color || item.chartColor) : 'none'}
+                    };
+
+                    $scope.getParam = function(param){
+                      return $scope[param];
+                    };
+
+
+                    
+                    $scope.itemClick = function(item){
+                        item.selected = !item.selected;
+                    };
+
+                    $scope.highlightItem = function(item){
+                        item.highlighted = true;
+                    };
+                    $scope.unhighlightItem = function(item){
+                        item.highlighted = false;
+                    };
+
+                }]
+        };
+    }
+}());
 /////////////////////////////////////////////////////////
 /////////////// The Radar Chart Function ////////////////
 /////////////// Written by Nadieh Bremer ////////////////
@@ -10136,84 +10147,6 @@ function RadarChart(id, data, options) {
 	 * @example
 	 */
 	angular.module('SportsensusApp')
-		.directive('clubInfoTableDir', clubInfoTableDir);
-
-	clubInfoTableDir.$inject = [
-		'$rootScope'
-	];
-
-	function clubInfoTableDir(
-		$rootScope
-	)    {
-		return {
-			restrict: 'E',
-			scope: {
-				//results: '=',
-				//price: '='
-				clubInfo: '='
-			},
-			templateUrl: '/views/widgets/infobox/panels/analytics/clubInfoTable/clubInfoTable.html',
-			link: function ($scope, $el, attrs) {
-
-			},
-
-			controller: [
-				'$scope',
-				function(
-					$scope
-				){
-					$scope.showed = true;
-				}
-			]
-
-		};
-	}
-}());
-(function () {
-	"use strict";
-	/**
-	 * @desc
-	 * @example
-	 */
-	angular.module('SportsensusApp')
-		.directive('leagueInfoTableDir', leagueInfoTableDir);
-
-	leagueInfoTableDir.$inject = [
-		'$rootScope'
-	];
-
-	function leagueInfoTableDir(
-		$rootScope
-	)    {
-		return {
-			restrict: 'E',
-			scope: {
-				leagueInfo: '='
-			},
-			templateUrl: '/views/widgets/infobox/panels/analytics/clubInfoTable/leagueInfoTable.html',
-			link: function ($scope, $el, attrs) {
-
-			},
-
-			controller: [
-				'$scope',
-				function(
-					$scope
-				){
-					$scope.showed = true;
-				}
-			]
-
-		};
-	}
-}());
-(function () {
-	"use strict";
-	/**
-	 * @desc
-	 * @example
-	 */
-	angular.module('SportsensusApp')
 		.directive('hockeyBoxInfoTableDir', hockeyBoxInfoTableDir);
 
 	hockeyBoxInfoTableDir.$inject = [
@@ -10279,6 +10212,84 @@ function RadarChart(id, data, options) {
 					}
 
 
+				}
+			]
+
+		};
+	}
+}());
+(function () {
+	"use strict";
+	/**
+	 * @desc
+	 * @example
+	 */
+	angular.module('SportsensusApp')
+		.directive('clubInfoTableDir', clubInfoTableDir);
+
+	clubInfoTableDir.$inject = [
+		'$rootScope'
+	];
+
+	function clubInfoTableDir(
+		$rootScope
+	)    {
+		return {
+			restrict: 'E',
+			scope: {
+				//results: '=',
+				//price: '='
+				clubInfo: '='
+			},
+			templateUrl: '/views/widgets/infobox/panels/analytics/clubInfoTable/clubInfoTable.html',
+			link: function ($scope, $el, attrs) {
+
+			},
+
+			controller: [
+				'$scope',
+				function(
+					$scope
+				){
+					$scope.showed = true;
+				}
+			]
+
+		};
+	}
+}());
+(function () {
+	"use strict";
+	/**
+	 * @desc
+	 * @example
+	 */
+	angular.module('SportsensusApp')
+		.directive('leagueInfoTableDir', leagueInfoTableDir);
+
+	leagueInfoTableDir.$inject = [
+		'$rootScope'
+	];
+
+	function leagueInfoTableDir(
+		$rootScope
+	)    {
+		return {
+			restrict: 'E',
+			scope: {
+				leagueInfo: '='
+			},
+			templateUrl: '/views/widgets/infobox/panels/analytics/clubInfoTable/leagueInfoTable.html',
+			link: function ($scope, $el, attrs) {
+
+			},
+
+			controller: [
+				'$scope',
+				function(
+					$scope
+				){
+					$scope.showed = true;
 				}
 			]
 

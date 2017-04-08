@@ -25,12 +25,14 @@
                 '$scope',
                 '$routeParams',
                 '$location',
+                '$anchorScroll',
                 '$window',
                 'ApiSrv',
                 function(
                     $scope,
                     $routeParams,
                     $location,
+                    $anchorScroll,
                     $window,
                     ApiSrv
                 ){
@@ -70,6 +72,18 @@
                     
                     $scope.register = function(){
                         ApiSrv.register($scope.regData);
+                    }
+                    
+                    $scope.scrollToRegistration = function(){
+                        $scope.scrollTo('registration'); 
+                    }
+                    
+                    $scope.scrollTo = function(id) {
+                        var old = $location.hash();
+                        $location.hash(id);
+                        $anchorScroll();
+                        //reset to old to keep any additional routing logic from kicking in
+                        $location.hash(old);
                     }
                 }]
         };

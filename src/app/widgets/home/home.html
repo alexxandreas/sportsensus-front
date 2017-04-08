@@ -8,7 +8,8 @@
             Потому что болеем<br/>
             за эффективность
             <div class="l-home__promo-button-box">
-                <a href="/#!/" class="l-home__promo-button">Демо версия</a>
+                <a href="" class="l-home__promo-button" ng-click="scrollToRegistration();">зарегистрироваться</a>
+                <!--<span class="l-home__promo-button" ng-click="scrollToRegistration();">зарегистрироваться</span>-->
             </div>
         </div>
     </div>
@@ -35,7 +36,8 @@
 
 
     <div class="l-home__info">
-        <img src="static/img/l-home/logo2.png" class="l-home__info-image"/>
+        <!--<img src="static/img/l-home/logo2.png" class="l-home__info-image"/>-->
+        <img src="static/img/l-home/home-logo.svg" class="l-home__info-image"/>
 
         <div>
             <div class="l-home__info-box">
@@ -122,13 +124,15 @@
                 </label>
             </div>
             <div class="l-home__registration-button-box">
-                <button class="l-home__registration-button" ng-click="register()">Получить демо</button>
+                <!--<button class="l-home__registration-button" ng-click="register()">Получить демо</button>-->
+                <button class="l-home__registration-button" ng-click="scrollToRegistration()">получить презентацию</button> 
             </div>
         </form>
     </div>
 
     <div class="l-home__footer">
-        <a href="/">Демо версия</a>
+        <a href="" ng-click="scrollToRegistration();">зарегистрироваться</a>
+        <!--<span class="l-home__promo-button" ng-click="scrollToRegistration();">Демо версия</span>-->
     </div>
 
 </div>

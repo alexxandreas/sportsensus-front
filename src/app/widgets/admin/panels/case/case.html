@@ -1,0 +1,119 @@
+<div layout="row" flex class="admin-case">
+    
+    <admin-menu-dir></admin-menu-dir>
+    
+	<md-content class="md-padding" layout="column" flex preloader-dir="showPreloader">
+
+        <div layout="row" layout-align="start center">
+          <h2 class="md-display-1">Редактирование кейса</h2>
+          <div flex></div>
+      		<!--<md-button class="md-raised md-primary" ng-click="creareArticle()">Новый кейс</md-button>-->
+      		<md-button class="md-raised md-warn"
+                       ng-click="removeArticle(selectedArticle)"
+            >Удалить</md-button>
+            
+            <md-button class="md-raised md-primary"
+                       ng-click="cancelEdit()"
+            >Отмена</md-button>
+            
+            <md-button class="md-raised md-primary"
+                       ng-click="saveArticle()"
+            >Сохранить</md-button>
+        </div>
+    
+    
+    	<div layout="column">
+    	    <md-input-container class="md-block">
+                <h3 class="infobox-panel-header3">
+            		Заголовок
+            	</h3>
+                <input ng-model="article.title"/>
+            </md-input-container>
+            
+            
+            <choose-file layout="row">
+                <input id="fileInput" type="file" class="ng-hide" />
+                <md-input-container flex class="md-block">
+                    <h3 class="infobox-panel-header3">
+                		Изображение
+                    </h3> 
+                    <div layout="column" layout-align="start start">
+                        <img ng-src="{{article.image}}" ng-show="article.image" class="article-image"></img>
+                        <div layout="row">
+                            <md-button class="md-raised md-warn"
+                                ng-click="removeImage()"
+                                ng-show="article.image"
+                            >Удалить</md-button>
+                            
+                            <md-button class="md-raised md-primary"
+                                ng-click="openFileDialog()"
+                            >Выбрать</md-button>
+                        </div>
+                    </div>
+                </md-input-container>
+            </choose-file>  
+            
+            <!-- Теги спорт-->
+            <md-input-container class="md-block">
+                <h3 class="infobox-panel-header3">
+            		Теги для спорта
+            	</h3>
+            	<!--md-transform-chip="transformSportTag($chip)"-->
+                <md-chips ng-model="article.groupedTags.sport" md-autocomplete-snap
+                  md-require-match="false"
+                  >
+                  <md-autocomplete
+                      md-selected-item="selectedTag"
+                      md-search-text="searchTagText"
+                      md-items="item in querySportTagSearch(searchTagText)"
+                      md-item-text="item"
+                      >
+                    <span md-highlight-text="searchTagText">{{item}}</span>
+                  </md-autocomplete>
+                  <md-chip-template>
+                    <span>
+                      <strong>{{$chip}}</strong>
+                    </span>
+                  </md-chip-template>
+                </md-chips>
+            </md-input-container>
+            
+            <!-- Теги товарная категория -->
+            <md-input-container class="md-block">
+                <h3 class="infobox-panel-header3">
+            		Теги для товарной категории
+            	</h3>
+                <md-chips ng-model="article.groupedTags.category" md-autocomplete-snap
+                  md-require-match="false"
+                  >
+                  <md-autocomplete
+                      md-selected-item="selectedTag"
+                      md-search-text="searchTagText"
+                      md-items="item in queryCategoryTagSearch(searchTagText)"
+                      md-item-text="item"
+                      >
+                    <span md-highlight-text="searchTagText">{{item}}</span>
+                  </md-autocomplete>
+                  <md-chip-template>
+                    <span>
+                      <strong>{{$chip}}</strong>
+                    </span>
+                  </md-chip-template>
+                </md-chips>
+            </md-input-container>
+            
+            <!--Текст-->
+            <md-input-container class="md-block">
+                <h3 class="infobox-panel-header3">
+            		Текст
+            	</h3>
+                <div>
+                    <div ckeditor="options" ng-model="article.content" ></div>
+                </div>
+            </md-input-container>
+        </div>
+        
+    </md-content>
+    
+
+</div>

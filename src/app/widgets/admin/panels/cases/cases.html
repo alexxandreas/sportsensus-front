@@ -1,0 +1,40 @@
+<div layout="row" flex class="admin-cases">
+    <header-dir></header-dir> 
+    
+    <admin-menu-dir></admin-menu-dir>
+    
+	  <md-content class="md-padding" layout="column" flex preloader-dir="showPreloader">
+
+      
+        <div layout="row" layout-align="start center">
+          <h2 class="md-display-1">Кейсы</h2>
+          <div flex></div>
+      		<md-button class="md-raised md-primary" ng-click="creareArticle()">Новый кейс</md-button>
+        </div>
+        
+      	
+      	<div layout="row" layout-wrap="wrap">
+          	<div ng-repeat="article in articles | orderBy:'created':true"
+          	  flex="100" flex-gt-md="50" >
+          	  <md-card >
+                  <md-card-title>
+                    <md-card-title-text class="article-title">
+                      <span class="md-headline">{{article.title}}</span>
+                      <!--<span class="md-subhead">Medium</span>-->
+                    </md-card-title-text>
+                    <md-card-title-media>
+                      <!--<div class="md-media-md card-media"></div>-->
+                      <img ng-src="{{article.image}}" ng-show="article.image" class="article-image"></img>
+                    </md-card-title-media>
+                  </md-card-title>
+                  <md-card-actions layout="row" layout-align="end center">
+                    <md-button class="md-raised md-primary" ng-click="showArticle(article)">Посмотреть</md-button>
+                    <md-button class="md-raised md-primary" ng-click="editArticle(article)">Редактировать</md-button>
+                    <md-button class="md-raised md-warn" ng-click="removeArticle(article)">Удалить</md-button>
+                  </md-card-actions>
+              </md-card>
+            </div>
+      	</div>
+     
+  </md-content>
+</div>

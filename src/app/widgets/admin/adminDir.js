@@ -46,28 +46,32 @@
 
 					$scope.menu = [{
 						id:'profiles',
-						text:'Пользователи'
+						text:'Пользователи',
+						visible: function(){return $scope.loggedIn && $scope.isAdmin;},
+                        onClick: function(){$scope.setPath('/account/');}
 					},{
 						id:'leagues',
-						text:'Лиги'
+						text:'Лиги',
+						visible: function(){return $scope.loggedIn && $scope.isAdmin;},
+                        onClick: function(){$scope.setPath('/account/');}
 					},{
 						id:'email',
-						text:'Шаблоны писем'
+						text:'Шаблоны писем',
+						visible: function(){return $scope.loggedIn && $scope.isAdmin;},
+                        onClick: function(){$scope.setPath('/account/');}
 					},{
 						id:'other',
-						text:'Другое'
+						text:'Другое',
+						visible: function(){return $scope.loggedIn && $scope.isAdmin;},
+                        onClick: function(){$scope.setPath('/account/');}
+					},{
+					    
 					}];
 
-
-					$scope.pages = {};
-					[
-						'profiles',
-						'leagues',
-						'email',
-						'other'
-					].forEach(function(page){
-						$scope.pages[page] = {id:page};
-					});
+                    $scope.selectMenuItem = function(item) {
+                        
+                    }
+					
 
 					ApiSrv.getProfilesList().then(function(profiles){
 						$scope.profiles = profiles;
@@ -94,11 +98,7 @@
 						});
 
 					};
-					// ParamsSrv.getParams().then(function(params){
-					// 	$scope.parameters = params;
-					// 	//$scope.regionsLegend = {};
-					// });
-
+				
 
 					$scope.activePage = null;
 					$scope.activeMenuItem = null;
@@ -110,19 +110,6 @@
 
 					$scope.setActiveMenuItem($scope.menu[0]);
 
-
-					$scope.checkButtonClick = function(){
-						$scope.activePage = $scope.pages[$scope.checkButtonPage];
-					};
-
-
-					/*$scope.init = function(){
-						if ($scope.type == 'infobox'){
-							$scope.bottomMenu = $scope.sportinfoMenu;
-						} else if ($scope.type == 'analytics'){
-							$scope.bottomMenu = $scope.analyticsMenu;
-						}
-					}*/
 
 				}]
 		};

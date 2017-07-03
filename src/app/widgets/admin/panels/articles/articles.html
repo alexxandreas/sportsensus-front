@@ -1,0 +1,28 @@
+<div>
+	<header-dir></header-dir>
+
+	<div class="infobox">
+
+		<div class="menu" >
+			<ul>
+				<li class="menu-section">
+					<ul class="left-menu">
+						<li
+							ng-repeat="item in menu"
+							class="left-menu-item"
+							ng-class="{'active': item == activeMenuItem}"
+							ng-click="setActiveMenuItem(item)">
+							{{item.text}}
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		<div>
+			<div ng-if="activePage" style="padding-bottom: 94px;" class="infobox-body" ng-include="'/views/widgets/admin/panels/'+activePage.id+'.html'"></div>
+		</div>
+
+
+	</div>
+</div>

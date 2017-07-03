@@ -497,6 +497,26 @@ md-switch.md-checked .md-thumb-container {
 }
 
 
+.article-panel .article {
+  min-height: 200px;
+}
+
+.articles-panel .articles-container .article {
+  width: 400px;
+  /*height: 400px;*/
+  margin: 20px;
+}
+.articles-panel .articles-container .article .article-image {
+  max-height: 100%;
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+}
+.articles-panel .articles-container .article .article-title {
+  margin-top: 10px;
+  text-align: center;
+}
+
 .chartjs-tooltip {
   position: absolute;
   background: rgba(0, 0, 0, 0.7);
@@ -525,6 +545,104 @@ md-switch.md-checked .md-thumb-container {
   border-width: 1px;
   border-style: solid;
 }
+
+.site-header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  height: 78px;
+  line-height: 78px;
+  padding: 0 30px;
+  background: #fff;
+}
+.site-header .header-menu {
+  margin: 0 0 0 100px;
+  padding: 0;
+  list-style-type: none;
+}
+.site-header .header-menu .header-menu-item {
+  margin-right: 40px;
+}
+.site-header .header-menu .header-menu-item:last-child {
+  margin-right: 0;
+}
+.site-header .header-menu .header-menu-item .header-menu-item-link {
+  padding-bottom: 2px;
+  font-size: 16px;
+  font-family: NOKIAPUREHEADLINE_BOLD;
+  text-decoration: none;
+  color: #000;
+  white-space: pre;
+  border-bottom: 3px solid transparent;
+}
+.site-header .header-menu .header-menu-item .header-menu-item-link:hover {
+  border-bottom-color: #9fd9db;
+}
+.site-header .header-logo-image {
+  vertical-align: middle;
+}
+.site-header .button-logout {
+  margin-left: 20px;
+}
+/*
+
+.b-header{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    height: @panel-height;
+    line-height: @panel-height;
+    padding: 0 30px;
+    background: #fff;
+
+    .b-header__logout{
+        float: right;
+    }
+
+    .b-header__logo{
+        float: left;
+    }
+
+    .b-header__logo-image{
+        vertical-align: middle;
+    }
+
+    .b-header__menu{
+        float: left;
+        margin: 0 0 0 100px;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    .b-header__menu-item{
+        float: left;
+        margin-right: 40px;
+
+        &:last-child{
+            margin-right: 0;
+        }
+    }
+
+    .b-header__menu-link{
+        padding-bottom: 2px;
+        font-size: 16px;
+        font-family: NOKIAPUREHEADLINE_BOLD;
+        text-decoration: none;
+        color: #000;
+
+        border-bottom: 3px solid transparent;
+
+        &:hover{
+            border-bottom-color: #9fd9db;
+        }
+    }
+
+}
+*/
 
 /*@import "../../../static/fonts/style.css";      */
 .l-home {
@@ -717,104 +835,6 @@ md-switch.md-checked .md-thumb-container {
   border: 1px solid;
   color: #fff;
 }
-
-.site-header {
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  z-index: 10;
-  height: 78px;
-  line-height: 78px;
-  padding: 0 30px;
-  background: #fff;
-}
-.site-header .header-menu {
-  margin: 0 0 0 100px;
-  padding: 0;
-  list-style-type: none;
-}
-.site-header .header-menu .header-menu-item {
-  margin-right: 40px;
-}
-.site-header .header-menu .header-menu-item:last-child {
-  margin-right: 0;
-}
-.site-header .header-menu .header-menu-item .header-menu-item-link {
-  padding-bottom: 2px;
-  font-size: 16px;
-  font-family: NOKIAPUREHEADLINE_BOLD;
-  text-decoration: none;
-  color: #000;
-  white-space: pre;
-  border-bottom: 3px solid transparent;
-}
-.site-header .header-menu .header-menu-item .header-menu-item-link:hover {
-  border-bottom-color: #9fd9db;
-}
-.site-header .header-logo-image {
-  vertical-align: middle;
-}
-.site-header .button-logout {
-  margin-left: 20px;
-}
-/*
-
-.b-header{
-    position: fixed;
-    left: 0;
-    top: 0;
-    right: 0;
-    z-index: 10;
-    height: @panel-height;
-    line-height: @panel-height;
-    padding: 0 30px;
-    background: #fff;
-
-    .b-header__logout{
-        float: right;
-    }
-
-    .b-header__logo{
-        float: left;
-    }
-
-    .b-header__logo-image{
-        vertical-align: middle;
-    }
-
-    .b-header__menu{
-        float: left;
-        margin: 0 0 0 100px;
-        padding: 0;
-        list-style-type: none;
-    }
-
-    .b-header__menu-item{
-        float: left;
-        margin-right: 40px;
-
-        &:last-child{
-            margin-right: 0;
-        }
-    }
-
-    .b-header__menu-link{
-        padding-bottom: 2px;
-        font-size: 16px;
-        font-family: NOKIAPUREHEADLINE_BOLD;
-        text-decoration: none;
-        color: #000;
-
-        border-bottom: 3px solid transparent;
-
-        &:hover{
-            border-bottom-color: #9fd9db;
-        }
-    }
-
-}
-*/
 
 .l-login {
   margin: 150px auto 0 auto;
@@ -1651,6 +1671,18 @@ div > svg > circle:nth-child(5n) {
   margin-left: 15px;
 }
 
+.articles-carousel .carousel-cell {
+  width: 400px;
+  height: 300px;
+}
+.articles-carousel .article-image {
+  max-height: 250px;
+  max-width: 250px;
+}
+.articles-carousel .article-title {
+  text-align: center;
+}
+
 .infobox-panel {
   padding: 15px 20px 120px 20px;
   border-top: 5px solid #ccace3;
@@ -1859,6 +1891,35 @@ div > svg > circle:nth-child(5n) {
   z-index: 2;
 }
 
+.admin-menu {
+  width: 300px;
+  margin-right: 20px;
+}
+.admin-menu .active-item {
+  background-color: #82b1ff;
+}
+
+.admin-case .md-errors-spacer {
+  display: none;
+}
+.admin-case md-input-container {
+  margin: 0;
+}
+.admin-case .article-image {
+  margin: 10px;
+  width: inherit;
+  max-width: 150px;
+  max-height: 150px;
+}
+
+.admin-cases .article-title {
+  margin-right: 10px;
+}
+.admin-cases .article-image {
+  max-width: 150px;
+  max-height: 150px;
+}
+
 .express-sport .walk-icon {
   background-image: url("../static/static/img/walk.png");
   background-repeat: no-repeat;
@@ -1960,113 +2021,6 @@ div > svg > circle:nth-child(5n) {
   width: 472px;
 }
 
-.analyticsResults .result-card .header {
-  padding: 10px;
-  border-top: 5px solid;
-  border-color: inherit;
-  height: 50px;
-  font-size: 20px;
-  text-align: center;
-}
-.analyticsResults .result-card .header2 {
-  padding: 10px;
-  border-top: 1px solid;
-  border-color: inherit;
-  height: 50px;
-  font-size: 20px;
-}
-.analyticsResults .result-card .footer {
-  padding: 10px;
-  border-top: 1px dotted;
-  border-color: inherit;
-  height: 60px;
-  font-size: 32px;
-}
-.analyticsResults .result-card .header3 {
-  padding: 10px;
-  border-top: 1px solid;
-  border-color: inherit;
-  height: 40px;
-  font-size: 15px;
-  text-align: center;
-}
-.analyticsResults .result-card .footer3 {
-  padding: 10px;
-  border-top: 1px dotted;
-  border-color: inherit;
-  height: 40px;
-  font-size: 20px;
-}
-.analyticsResults .result-card .header4 {
-  padding: 10px;
-  border-right: 1px dotted;
-  border-top: 1px solid;
-  border-color: inherit;
-  height: 50px;
-  font-size: 15px;
-  text-align: center;
-}
-.analyticsResults .result-card .footer4 {
-  padding: 10px;
-  border-top: 1px solid;
-  border-color: inherit;
-  height: 50px;
-  font-size: 20px;
-}
-.analyticsResults .result-card .currencyBlock {
-  margin: 0 20px;
-}
-
-.hockeyBoxInfoTable {
-  max-width: 800px;
-  border-color: #006b99;
-}
-.hockeyBoxInfoTable div {
-  border-bottom-color: inherit !important;
-  border-left-color: inherit !important;
-  border-right-color: inherit !important;
-  border-top-color: inherit !important;
-}
-.hockeyBoxInfoTable > .header {
-  padding: 10px;
-  border-top: 4px solid;
-  height: 30px;
-  font-size: 15px;
-  background-color: #01a8e4;
-}
-.hockeyBoxInfoTable > .header .showHideButton {
-  outline: none;
-  cursor: pointer;
-  font-size: 11px;
-}
-.hockeyBoxInfoTable .card {
-  margin-top: 5px;
-  border-color: inherit;
-}
-.hockeyBoxInfoTable .card .header {
-  padding: 10px;
-  border-top: 4px solid;
-  border-color: inherit;
-  height: 27px;
-  font-size: 15px;
-  background-color: #01a8e4;
-}
-.hockeyBoxInfoTable .card .item {
-  padding: 5px;
-  border-top: 1px solid;
-  border-color: inherit;
-  font-size: 13px;
-}
-.hockeyBoxInfoTable .card .title {
-  border-right: 1px dotted;
-  text-align: center;
-  background-color: #99e4ff;
-}
-.hockeyBoxInfoTable .card .info {
-  background-color: #ccf1ff;
-  text-align: center;
-}
-
 .clubInfoTable,
 .leagueInfoTable {
   max-width: 800px;
@@ -2141,6 +2095,63 @@ div > svg > circle:nth-child(5n) {
   text-align: center;
 }
 
+.analyticsResults .result-card .header {
+  padding: 10px;
+  border-top: 5px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 20px;
+  text-align: center;
+}
+.analyticsResults .result-card .header2 {
+  padding: 10px;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 20px;
+}
+.analyticsResults .result-card .footer {
+  padding: 10px;
+  border-top: 1px dotted;
+  border-color: inherit;
+  height: 60px;
+  font-size: 32px;
+}
+.analyticsResults .result-card .header3 {
+  padding: 10px;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 40px;
+  font-size: 15px;
+  text-align: center;
+}
+.analyticsResults .result-card .footer3 {
+  padding: 10px;
+  border-top: 1px dotted;
+  border-color: inherit;
+  height: 40px;
+  font-size: 20px;
+}
+.analyticsResults .result-card .header4 {
+  padding: 10px;
+  border-right: 1px dotted;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 15px;
+  text-align: center;
+}
+.analyticsResults .result-card .footer4 {
+  padding: 10px;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 20px;
+}
+.analyticsResults .result-card .currencyBlock {
+  margin: 0 20px;
+}
+
 .playgroundParamsTable {
   max-width: 600px;
 }
@@ -2152,6 +2163,56 @@ div > svg > circle:nth-child(5n) {
 .playgroundParamsTable .playground-table-row {
   min-height: 35px;
   padding: 0 10px;
+}
+
+.hockeyBoxInfoTable {
+  max-width: 800px;
+  border-color: #006b99;
+}
+.hockeyBoxInfoTable div {
+  border-bottom-color: inherit !important;
+  border-left-color: inherit !important;
+  border-right-color: inherit !important;
+  border-top-color: inherit !important;
+}
+.hockeyBoxInfoTable > .header {
+  padding: 10px;
+  border-top: 4px solid;
+  height: 30px;
+  font-size: 15px;
+  background-color: #01a8e4;
+}
+.hockeyBoxInfoTable > .header .showHideButton {
+  outline: none;
+  cursor: pointer;
+  font-size: 11px;
+}
+.hockeyBoxInfoTable .card {
+  margin-top: 5px;
+  border-color: inherit;
+}
+.hockeyBoxInfoTable .card .header {
+  padding: 10px;
+  border-top: 4px solid;
+  border-color: inherit;
+  height: 27px;
+  font-size: 15px;
+  background-color: #01a8e4;
+}
+.hockeyBoxInfoTable .card .item {
+  padding: 5px;
+  border-top: 1px solid;
+  border-color: inherit;
+  font-size: 13px;
+}
+.hockeyBoxInfoTable .card .title {
+  border-right: 1px dotted;
+  text-align: center;
+  background-color: #99e4ff;
+}
+.hockeyBoxInfoTable .card .info {
+  background-color: #ccf1ff;
+  text-align: center;
 }
 
 .parameter-widget {

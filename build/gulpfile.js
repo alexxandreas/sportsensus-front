@@ -5,12 +5,15 @@ var runSequence = require('run-sequence');
 //var templateCache = require('gulp-angular-templatecache');
 var del = require('del');
 
-var appJs = ['../src/app/**/_*.js','../src/app/**/*.js']; // not include config.js 
+var appJs = ['../src/app/**/_*.js','../src/app/**/*.js', '../src/app/**/!*.js']; // not include config.js 
 var appCss = ['../src/app/**/_*.less', '../src/app/**/*.less'];
 var appViews = ['../src/app/**/*.html']; // not include index.html 
 
 //var watchStatic_ = ['../src/**/*.{html,scss,less,css,svg}'];
-var statics = ['../src/static/**/*']; // статика
+var statics = [
+	'../src/static/**/*',
+	'../libs/ckeditor*/**/*' // ckeditor загружает свою статику сам - переносим всю папку в static
+]; // статика
 var index = '../src/index.html';
 var debugConfig = '../src/config_debug.js';
 var releaseConfig = '../src/config_release.js';
@@ -42,6 +45,13 @@ var libJs = [
 	'../libs/canvg/StackBlur.js',
 	'../libs/canvg/canvg.js',
 
+	'../libs/ckeditor/ckeditor.js',
+	'../libs/ckeditor/lang/ru.js',
+	
+	'../libs/angular-ckeditor/angular-ckeditor.js',
+	
+	'../libs/flickity/dist/flickity.pkgd.min.js'
+	
 	// '../libs/html2canvas/src/Core.js',
 	// '../libs/html2canvas/src/Font.js',
 	// '../libs/html2canvas/src/Generate.js',
@@ -56,7 +66,9 @@ var libJs = [
 
 ];
 var libCss = [
-	'../libs/angular-material/angular-material.css'
+	'../libs/angular-material/angular-material.css',
+	// '../libs/ckeditor/contents.css',
+	'../libs/flickity/dist/flickity.min.css'
 ];
 
 

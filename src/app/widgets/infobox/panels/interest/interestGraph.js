@@ -243,7 +243,9 @@
                 scaleLabel: function(obj){return $scope.formatValue(obj.value);},
                 barWidth: 40,
                 barHeight: 300,
-                barValueSpacing: 30
+                barValueSpacing: 30,
+                barsInOneLine: true
+                
             }};
             combineChart.data.labels = sports.map(function(item){return item.name.replace(' ','\n');});
             interests.forEach(function(interest){

@@ -1,0 +1,17 @@
+<div class="articles-carousel">
+   <!--data-flickity='{ }'-->
+    <div class="main-carousel articles-carousel-flickity">
+        <div class="carousel-cell" ng-repeat="article in articles">
+            <div layout="column" layout-align="end stretch">
+                <div class="article-image-wrapper" flex
+                    layout="column" layout-align="center center">
+                    <img ng-src="{{article.image}}" ng-show="article.image" 
+                        class="article-image"></img>
+                </div>
+                <div class="article-title" flex="none">
+                    {{article.title}}    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -100,13 +100,18 @@
 							offset = +offset + +datasets[i].bars[barIndex].value;
 						}
 					}
-
+					
+					if (options.barsInOneLine) {
+						offset = 0;
+					}
+					
 					if(options.relativeBars) {
 						offset = offset / sum * 100;
 					}
 
 					return this.calculateY(offset);
 				},
+				
 				calculateBaseWidth : function(){
 					if (options.barWidth)
 						return options.barWidth;

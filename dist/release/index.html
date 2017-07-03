@@ -8,55 +8,15 @@
 
 	<link rel="stylesheet" href="app/libs.css"/>
 	<link rel="stylesheet" href="app/app.css"/>
-
+	
+	<script type="text/javascript" src="config.js"></script>
 	<script type="text/javascript" src="app/libs.js"></script>
 	<script type="text/javascript" src="app/app.js"></script>
 	<script type="text/javascript" src="app/views.js"></script>
-	<script type="text/javascript" src="config.js"></script>
 
 </head>
 
 <body ng-app="SportsensusApp" >
-
-	<!--<header-dir></header-dir>-->
-
-	<!--<div class="body {% if IS_LEFT_BAR %}body_left-bar{% endif %} {% if IS_BOTTOM_BAR %}body_bottom-bar{% endif %}">
-		{% block body %}{% endblock %}
-	</div>-->
-
 	<div class="body body_left-bar" ng-view>
-<!--</div>-->
-
 </body>
 </html>
-
-<!--
-
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8"/>
-	<title>{{ title }}</title>
-
-	<link rel="stylesheet" href="{{ url_for('static', filename="css/app.css") }}"/>
-	&lt;!&ndash; D3.js &ndash;&gt;
-	&lt;!&ndash;<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>&ndash;&gt;
-	<script src="{{ url_for('static', filename="js/d3-3.5.6.min.js") }}" charset="utf-8"></script>
-	&lt;!&ndash; RadarChart.js &ndash;&gt;
-	<script src="{{ url_for('static', filename="js/radarChart.js") }}" charset="utf-8"></script>
-
-</head>
-<body>
-
-{% include 'b-header/b-header.html' %}
-
-<div class="body {% if IS_LEFT_BAR %}body_left-bar{% endif %} {% if IS_BOTTOM_BAR %}body_bottom-bar{% endif %}">
-	{% block body %}{% endblock %}
-</div>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.min.js"></script>
-<script src="{{ url_for('static', filename="js/app.js") }}"></script>
-</body>
-</html>
--->

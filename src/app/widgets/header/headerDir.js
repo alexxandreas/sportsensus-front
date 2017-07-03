@@ -73,10 +73,17 @@
                             'name': 'Оценить',
                             visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
                         },{
+                            'name': 'Кейсы',
+                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
+                            onClick: function(){$scope.setPath('/articles/');}
+                        },{
                             'name': 'Личный кабинет',
                             visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
                             onClick: function(){$scope.setPath('/account/');}
-                        },{
+                        },
+                        
+                        
+                        {
                             'name': 'Панель администрирования',
                             visible: function(){return $scope.isAdmin;},
                             onClick: function(){$scope.setPath('/admin/');}

@@ -1,16 +1,69 @@
-angular
+(function () {
+
+    "use strict";
+    
+    angular
 	.module('SportsensusApp', [
 		'ngMaterial',
 		'ngRoute',
 		'ngCookies',
-		'Views' 
+		'Views',
+		'ckeditor'
 	])
 	// .config(function($mdThemingProvider) {
 	// 	$mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
 	// })
-	.config(['$locationProvider', '$routeProvider',
-		function config($locationProvider, $routeProvider) {
-			$locationProvider.hashPrefix('!');
+	.config(['$locationProvider', function($locationProvider){
+		$locationProvider.hashPrefix('!');
+	}])
+	.config(['$routeProvider', configRoutes])
+	.factory('routeSrv', ['$rootScope', '$location', function($rootScope, $location){
+		$rootScope.$on("$routeChangeError", 
+             function (event, current, previous, rejection) {
+        		//console.log("failed to change routes");
+        		$location.path('/');
+             }
+		)
+		return {};
+	}])
+	.run(['routeSrv', function(routeSrv) {}])
+	.controller('ActivateController', function($scope, $routeParams) {
+		var init = function () {
+			alert($routeParams.code)
+		};
+
+		// fire on controller loaded
+		init();
+	})
+	.config(function($mdThemingProvider) {
+		// $mdThemingProvider.theme('blue')
+		// 	.primaryPalette('blue');
+		$mdThemingProvider.theme('default')
+			.primaryPalette('blue')
+			.warnPalette('red')
+			.accentPalette('blue');
+	})
+	.run(['ConfigSrv', function (ConfigSrv) {
+		var config = window.appConfig;
+		ConfigSrv.set(config);
+	}]);
+	
+	
+	configRoutes.$inject = [
+        '$routeProvider',
+        '$q'
+    ];
+	
+	function getUserAuthResolver() {
+		return {
+			userAuthResolver: ['ApiSrv', function(ApiSrv) {
+				return ApiSrv.getUserAuthPromise()
+			}]
+		};
+	}
+	
+	function configRoutes($routeProvider) {
+			
 
 			$routeProvider
 			// when('/phones', {
@@ -25,6 +78,7 @@ angular
 			})
 			.when('/infobox/', { 
 				template: '<infobox-dir type="infobox"></infobox-dir>',
+				resolve: getUserAuthResolver(),
 				controller: function($scope, $location, ApiSrv) {
 					if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
 						$location.path('/');
@@ -33,6 +87,23 @@ angular
 			.when('/analytics/', {
 				//template: '<infobox-dir type="analytics"></infobox-dir>',
 				template: '<analytics-dir></analytics-dir>',
+				resolve: getUserAuthResolver(),
+				controller: function($scope, $location, ApiSrv) {
+					if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
+						$location.path('/');
+				}
+			})
+			.when('/articles/', { 
+				template: '<articles-dir></articles-dir>',
+				resolve: getUserAuthResolver(),
+				controller: function($scope, $location, ApiSrv) {
+					if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
+						$location.path('/');
+				}
+			})
+			.when('/articles/:articleId', { 
+				template: '<article-dir></article-dir>',
+				resolve: getUserAuthResolver(),
 				controller: function($scope, $location, ApiSrv) {
 					if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
 						$location.path('/');
@@ -81,57 +152,66 @@ angular
 					}
 				}
 			})
+			
 			.when('/admin/', {
 				template: '<admin-dir></admin-dir>',
+				resolve: getUserAuthResolver(),
 				controller: function($scope, $location, ApiSrv) {
 					if (!ApiSrv.getUser().userRights || !ApiSrv.getUser().userRights.admin)
 						$location.path('/');
 				}
 			})
+			
+			.when('/admin/articles/', {
+				template: '<admin-articles-dir></admin-articles-dir>',
+				resolve: getUserAuthResolver(),
+				controller: function($scope, $location, ApiSrv) {
+					if (!ApiSrv.getUser().userRights || !ApiSrv.getUser().userRights.admin)
+						$location.path('/');
+				}
+			})
+			
+			.when('/admin/profiles/', {
+				template: '<admin-profiles-dir></admin-profiles-dir>',
+				resolve: getUserAuthResolver(),
+				controller: function($scope, $location, ApiSrv) {
+					if (!ApiSrv.getUser().userRights || !ApiSrv.getUser().userRights.admin)
+						$location.path('/');
+				}
+			})
+			
+			.when('/admin/cases/', {
+				template: '<admin-cases-dir></admin-cases-dir>',
+				resolve: getUserAuthResolver(),
+				controller: function($scope, $location, ApiSrv) {
+					if (!ApiSrv.getUser().userRights || !ApiSrv.getUser().userRights.admin)
+						$location.path('/');
+				}
+			})
+			
+			.when('/admin/cases/:caseId', {
+				template: '<admin-case-dir></admin-case-dir>',
+				resolve: getUserAuthResolver(),
+				controller: function($scope, $location, ApiSrv) {
+					if (!ApiSrv.getUser().userRights || !ApiSrv.getUser().userRights.admin)
+						$location.path('/');
+				}
+			})
+			
 			.when('/account/', {
 				template: '<account-dir></account-dir>',
+				resolve: getUserAuthResolver(),
 				controller: function($scope, $location, ApiSrv) {
 					if (!ApiSrv.getUser().userRights)
 						$location.path('/');
 				}
 			})
-			/*.when('/hotel/:hotelId', {
-				template: '<hotel-dir></hotel-dir>'
-			})
-			.when('/hotel/:hotelId/event/:eventId', {
-				template: '<event-dir></event-dir>'
-			})
-			.when('/hotel/:hotelId/service/:serviceId', {
-				template: '<service-dir></service-dir>'
-			})
-			.when('/hotel/:hotelId/poi/:poiId', {
-				template: '<poi-dir></poi-dir>'
-			})*/
-			.otherwise('/');
+			
+			
+			//.otherwise('/');
 			
 		}
-	])
-	.controller('ActivateController', function($scope, $routeParams) {
-		var init = function () {
-			alert($routeParams.code)
-		};
-
-		// fire on controller loaded
-		init();
-	})
-	.config(function($mdThemingProvider) {
-		// $mdThemingProvider.theme('blue')
-		// 	.primaryPalette('blue');
-		$mdThemingProvider.theme('default')
-			.primaryPalette('blue')
-			.accentPalette('blue');
-	})
-	.run(['ConfigSrv', function (ConfigSrv) {
-		var config = window.appConfig;
-		ConfigSrv.set(config);
-	}]);
-	
 	// .config(function($mdIconProvider) {
 	// });
 	
-	
+}());

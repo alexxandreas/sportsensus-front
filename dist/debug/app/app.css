@@ -497,34 +497,103 @@ md-switch.md-checked .md-thumb-container {
 }
 
 
-.chartjs-tooltip {
-  position: absolute;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 3px;
-  border-radius: 3px;
-  -webkit-transition: all .1s ease;
-  transition: all .1s ease;
-  pointer-events: none;
-  -webkit-transform: translate(-50%, 0);
-  transform: translate(-50%, 0);
+.site-header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  height: 78px;
+  line-height: 78px;
+  padding: 0 30px;
+  background: #fff;
 }
-.chartjs-tooltip .line {
-  color: white;
-  font-size: 13px;
-  padding: 2px;
+.site-header .header-menu {
+  margin: 0 0 0 100px;
+  padding: 0;
+  list-style-type: none;
 }
-.chartjs-tooltip .line .color {
+.site-header .header-menu .header-menu-item {
+  margin-right: 40px;
+}
+.site-header .header-menu .header-menu-item:last-child {
+  margin-right: 0;
+}
+.site-header .header-menu .header-menu-item .header-menu-item-link {
+  padding-bottom: 2px;
+  font-size: 16px;
+  font-family: NOKIAPUREHEADLINE_BOLD;
+  text-decoration: none;
+  color: #000;
+  white-space: pre;
+  border-bottom: 3px solid transparent;
+}
+.site-header .header-menu .header-menu-item .header-menu-item-link:hover {
+  border-bottom-color: #9fd9db;
+}
+.site-header .header-logo-image {
   vertical-align: middle;
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  margin-right: 8px;
-  border-radius: 2px;
-  border-color: gray;
-  border-width: 1px;
-  border-style: solid;
 }
+.site-header .button-logout {
+  margin-left: 20px;
+}
+/*
+
+.b-header{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    height: @panel-height;
+    line-height: @panel-height;
+    padding: 0 30px;
+    background: #fff;
+
+    .b-header__logout{
+        float: right;
+    }
+
+    .b-header__logo{
+        float: left;
+    }
+
+    .b-header__logo-image{
+        vertical-align: middle;
+    }
+
+    .b-header__menu{
+        float: left;
+        margin: 0 0 0 100px;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    .b-header__menu-item{
+        float: left;
+        margin-right: 40px;
+
+        &:last-child{
+            margin-right: 0;
+        }
+    }
+
+    .b-header__menu-link{
+        padding-bottom: 2px;
+        font-size: 16px;
+        font-family: NOKIAPUREHEADLINE_BOLD;
+        text-decoration: none;
+        color: #000;
+
+        border-bottom: 3px solid transparent;
+
+        &:hover{
+            border-bottom-color: #9fd9db;
+        }
+    }
+
+}
+*/
 
 /*@import "../../../static/fonts/style.css";      */
 .l-home {
@@ -718,104 +787,6 @@ md-switch.md-checked .md-thumb-container {
   color: #fff;
 }
 
-.site-header {
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  z-index: 10;
-  height: 78px;
-  line-height: 78px;
-  padding: 0 30px;
-  background: #fff;
-}
-.site-header .header-menu {
-  margin: 0 0 0 100px;
-  padding: 0;
-  list-style-type: none;
-}
-.site-header .header-menu .header-menu-item {
-  margin-right: 40px;
-}
-.site-header .header-menu .header-menu-item:last-child {
-  margin-right: 0;
-}
-.site-header .header-menu .header-menu-item .header-menu-item-link {
-  padding-bottom: 2px;
-  font-size: 16px;
-  font-family: NOKIAPUREHEADLINE_BOLD;
-  text-decoration: none;
-  color: #000;
-  white-space: pre;
-  border-bottom: 3px solid transparent;
-}
-.site-header .header-menu .header-menu-item .header-menu-item-link:hover {
-  border-bottom-color: #9fd9db;
-}
-.site-header .header-logo-image {
-  vertical-align: middle;
-}
-.site-header .button-logout {
-  margin-left: 20px;
-}
-/*
-
-.b-header{
-    position: fixed;
-    left: 0;
-    top: 0;
-    right: 0;
-    z-index: 10;
-    height: @panel-height;
-    line-height: @panel-height;
-    padding: 0 30px;
-    background: #fff;
-
-    .b-header__logout{
-        float: right;
-    }
-
-    .b-header__logo{
-        float: left;
-    }
-
-    .b-header__logo-image{
-        vertical-align: middle;
-    }
-
-    .b-header__menu{
-        float: left;
-        margin: 0 0 0 100px;
-        padding: 0;
-        list-style-type: none;
-    }
-
-    .b-header__menu-item{
-        float: left;
-        margin-right: 40px;
-
-        &:last-child{
-            margin-right: 0;
-        }
-    }
-
-    .b-header__menu-link{
-        padding-bottom: 2px;
-        font-size: 16px;
-        font-family: NOKIAPUREHEADLINE_BOLD;
-        text-decoration: none;
-        color: #000;
-
-        border-bottom: 3px solid transparent;
-
-        &:hover{
-            border-bottom-color: #9fd9db;
-        }
-    }
-
-}
-*/
-
 .l-login {
   margin: 150px auto 0 auto;
   width: 500px;
@@ -874,6 +845,35 @@ md-switch.md-checked .md-thumb-container {
   border: 1px solid #000;
   background: none;
   margin-right: 20px;
+}
+
+.chartjs-tooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 3px;
+  border-radius: 3px;
+  -webkit-transition: all .1s ease;
+  transition: all .1s ease;
+  pointer-events: none;
+  -webkit-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+}
+.chartjs-tooltip .line {
+  color: white;
+  font-size: 13px;
+  padding: 2px;
+}
+.chartjs-tooltip .line .color {
+  vertical-align: middle;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-right: 8px;
+  border-radius: 2px;
+  border-color: gray;
+  border-width: 1px;
+  border-style: solid;
 }
 
 .infobox .menu {
@@ -1526,24 +1526,6 @@ div > svg > circle:nth-child(5n) {
   background: #73dfd6;
 }
 
-.profiles-panel .profiles-table {
-  width: 100%;
-  font-size: 12px;
-}
-.profiles-panel .profiles-table td,
-.profiles-panel .profiles-table th {
-  padding: 5px;
-}
-.profiles-panel .profiles-table > tbody > tr:nth-of-type(odd) {
-  background-color: #f9f9f9;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-}
-.profiles-panel .profiles-table .switch {
-  width: 40px;
-  margin: auto;
-}
-
 .download-panel {
   color: white;
 }
@@ -1585,6 +1567,24 @@ div > svg > circle:nth-child(5n) {
 }
 .download-panel .download-md-button .download-send {
   background-image: url("../static/static/img/mail.png");
+}
+
+.profiles-panel .profiles-table {
+  width: 100%;
+  font-size: 12px;
+}
+.profiles-panel .profiles-table td,
+.profiles-panel .profiles-table th {
+  padding: 5px;
+}
+.profiles-panel .profiles-table > tbody > tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+.profiles-panel .profiles-table .switch {
+  width: 40px;
+  margin: auto;
 }
 
 .chart-map {
@@ -1903,63 +1903,6 @@ div > svg > circle:nth-child(5n) {
   color: gray !important;
 }
 
-.footballField .footballFieldImage {
-  background-image: url("../static/static/img/ad/footballField.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  height: 308px;
-  width: 519px;
-}
-.hockeyBox32 .hockeyBox32Image {
-  background-image: url("../static/static/img/ad/hockeyBox32.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-right: 30px;
-  height: 612px;
-  width: 424px;
-}
-.hockeyForm {
-  background-image: url("../static/static/img/ad/hockeyForm.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-right: 30px;
-  height: 303px;
-  width: 424px;
-}
-.hockeyVideoOffline {
-  background-image: url("../static/static/img/ad/hockeyVideoOffline.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-right: 30px;
-  height: 259px;
-  width: 469px;
-}
-.hockeyVideoOnline {
-  background-image: url("../static/static/img/ad/hockeyVideoOnline.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-right: 30px;
-  height: 283px;
-  width: 409px;
-}
-.playground-checkboxes-table {
-  margin: 0 10px;
-}
-.playground-checkboxes-table .playground-table-row {
-  height: 35px;
-  width: 85px;
-  padding-left: 7px;
-  padding-right: 0px;
-}
-.hockeyBox40 .hockeyBox40Image {
-  background-image: url("../static/static/img/ad/hockeyBox40.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-right: 30px;
-  height: 266px;
-  width: 472px;
-}
-
 .analyticsResults .result-card .header {
   padding: 10px;
   border-top: 5px solid;
@@ -2017,54 +1960,61 @@ div > svg > circle:nth-child(5n) {
   margin: 0 20px;
 }
 
-.hockeyBoxInfoTable {
-  max-width: 800px;
-  border-color: #006b99;
+.footballField .footballFieldImage {
+  background-image: url("../static/static/img/ad/footballField.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 308px;
+  width: 519px;
 }
-.hockeyBoxInfoTable div {
-  border-bottom-color: inherit !important;
-  border-left-color: inherit !important;
-  border-right-color: inherit !important;
-  border-top-color: inherit !important;
+.hockeyBox32 .hockeyBox32Image {
+  background-image: url("../static/static/img/ad/hockeyBox32.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 30px;
+  height: 612px;
+  width: 424px;
 }
-.hockeyBoxInfoTable > .header {
-  padding: 10px;
-  border-top: 4px solid;
-  height: 30px;
-  font-size: 15px;
-  background-color: #01a8e4;
+.hockeyForm {
+  background-image: url("../static/static/img/ad/hockeyForm.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 30px;
+  height: 303px;
+  width: 424px;
 }
-.hockeyBoxInfoTable > .header .showHideButton {
-  outline: none;
-  cursor: pointer;
-  font-size: 11px;
+.hockeyVideoOffline {
+  background-image: url("../static/static/img/ad/hockeyVideoOffline.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 30px;
+  height: 259px;
+  width: 469px;
 }
-.hockeyBoxInfoTable .card {
-  margin-top: 5px;
-  border-color: inherit;
+.hockeyVideoOnline {
+  background-image: url("../static/static/img/ad/hockeyVideoOnline.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 30px;
+  height: 283px;
+  width: 409px;
 }
-.hockeyBoxInfoTable .card .header {
-  padding: 10px;
-  border-top: 4px solid;
-  border-color: inherit;
-  height: 27px;
-  font-size: 15px;
-  background-color: #01a8e4;
+.playground-checkboxes-table {
+  margin: 0 10px;
 }
-.hockeyBoxInfoTable .card .item {
-  padding: 5px;
-  border-top: 1px solid;
-  border-color: inherit;
-  font-size: 13px;
+.playground-checkboxes-table .playground-table-row {
+  height: 35px;
+  width: 85px;
+  padding-left: 7px;
+  padding-right: 0px;
 }
-.hockeyBoxInfoTable .card .title {
-  border-right: 1px dotted;
-  text-align: center;
-  background-color: #99e4ff;
-}
-.hockeyBoxInfoTable .card .info {
-  background-color: #ccf1ff;
-  text-align: center;
+.hockeyBox40 .hockeyBox40Image {
+  background-image: url("../static/static/img/ad/hockeyBox40.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 30px;
+  height: 266px;
+  width: 472px;
 }
 
 .clubInfoTable,
@@ -2152,6 +2102,56 @@ div > svg > circle:nth-child(5n) {
 .playgroundParamsTable .playground-table-row {
   min-height: 35px;
   padding: 0 10px;
+}
+
+.hockeyBoxInfoTable {
+  max-width: 800px;
+  border-color: #006b99;
+}
+.hockeyBoxInfoTable div {
+  border-bottom-color: inherit !important;
+  border-left-color: inherit !important;
+  border-right-color: inherit !important;
+  border-top-color: inherit !important;
+}
+.hockeyBoxInfoTable > .header {
+  padding: 10px;
+  border-top: 4px solid;
+  height: 30px;
+  font-size: 15px;
+  background-color: #01a8e4;
+}
+.hockeyBoxInfoTable > .header .showHideButton {
+  outline: none;
+  cursor: pointer;
+  font-size: 11px;
+}
+.hockeyBoxInfoTable .card {
+  margin-top: 5px;
+  border-color: inherit;
+}
+.hockeyBoxInfoTable .card .header {
+  padding: 10px;
+  border-top: 4px solid;
+  border-color: inherit;
+  height: 27px;
+  font-size: 15px;
+  background-color: #01a8e4;
+}
+.hockeyBoxInfoTable .card .item {
+  padding: 5px;
+  border-top: 1px solid;
+  border-color: inherit;
+  font-size: 13px;
+}
+.hockeyBoxInfoTable .card .title {
+  border-right: 1px dotted;
+  text-align: center;
+  background-color: #99e4ff;
+}
+.hockeyBoxInfoTable .card .info {
+  background-color: #ccf1ff;
+  text-align: center;
 }
 
 .parameter-widget {

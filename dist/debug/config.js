@@ -1,8 +1,10 @@
 var CKEDITOR_BASEPATH = '/static/ckeditor/';
 var appConfig = {
 
-    apiUrl: 'http://sportsensus.ru:8080/api',
-    proxyURL: 'https://cors-anywhere.herokuapp.com/',
+    // apiUrl: 'http://sportsensus.ru:8080/api',
+    apiUrl: 'http://sportsensus.ru/api',
+    imageUploadUrl: 'http://sportsensus.ru/api/ckupload'
+    //: 'https://cors-anywhere.herokuapp.com/',
     
     
 };

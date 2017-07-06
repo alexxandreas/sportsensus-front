@@ -79,7 +79,10 @@
 								.textContent('Невозможно применить изменения')
 								.ok('OK'));
 						});
-
+					};
+					
+					$scope.openProfile = function(profile){
+						$location.path('/admin/profiles/' + profile.user_id);
 					};
 					
 				}]

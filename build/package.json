@@ -18,7 +18,8 @@
     "gulp-htmlmin": ""
   },
   "scripts": {
-    "serve-debug": "gulp serve-debug"
+    "serve-debug": "gulp serve-debug",
+    "build": "gulp build"
   },
   "private": true,
   "license": "proprietary",

@@ -33,6 +33,7 @@
 				'$mdDialog',
 				'ParamsSrv',
 				'ArticlesSrv',
+				'ConfigSrv',
 				function(
 					$scope,
 					$routeParams,
@@ -40,11 +41,22 @@
 					$window,
 					$mdDialog,
 					ParamsSrv,
-					ArticlesSrv
+					ArticlesSrv,
+					ConfigSrv
 				) {
+	
+	                var proxyURL = /*ConfigSrv.get().proxyURL || */ '';
+	                var url = proxyURL + ConfigSrv.get().imageUploadUrl;
 	
                     // Editor options.
                     $scope.options = {
+                        //uploadUrl: '/uploadddd.php',
+                        filebrowserUploadUrl: url,
+                        // extraPlugins: 'uploadimage',
+                        // uploadUrl: url + '?type=Images',
+                        // imageUploadUrl: url + '?type=Images',
+                        
+                        
                         language: 'ru',
                         uiColor: '#1e88e5',
                         customConfig: false,

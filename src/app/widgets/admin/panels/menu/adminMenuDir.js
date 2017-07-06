@@ -96,8 +96,8 @@
                         if (item.path && path.indexOf(item.path) >= 0)
                             $scope.activeMenuItem = item;
                     })
-                    if (!$scope.activeMenuItem)
-                        $scope.selectItem($scope.menu[0]);
+                    // if (!$scope.activeMenuItem)
+                        // $scope.selectItem($scope.menu[0]);
                         
                     
 				}]

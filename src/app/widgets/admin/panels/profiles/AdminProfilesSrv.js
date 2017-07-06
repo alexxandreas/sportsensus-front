@@ -54,9 +54,22 @@
             
             return profilesDefer.promise;
         }
+        
+        
+        function getProfile(id) {
+            return getProfiles().then(function(profiles){
+                var profile = profiles.find(function(profile){
+                    return profile.user_id == id;
+                });
+                if (profile)
+                    return profile;
+                return $q.reject();
+            })
+        }
        
         var me = {
-            getProfiles: getProfiles
+            getProfiles: getProfiles,
+            getProfile: getProfile
         };
 
 

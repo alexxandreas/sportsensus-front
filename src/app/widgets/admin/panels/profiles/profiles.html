@@ -27,7 +27,7 @@
 			<tbody>
 				<tr ng-repeat="profile in profiles">
 					<td>{{profile.user_id}}</td>
-					<td>{{profile.login}}</td>
+					<td ng-click="openProfile(profile)">{{profile.login}}</td>
 					<!--<td>{{profile.admin_role}}</td>-->
 					<td><md-switch class="switch" ng-model="profile.admin_role" ng-change="profile.dirty = true;" aria-label="Выбрано" ></md-switch></td>
 					<!--<td>{{profile.demo_role}}</td>-->

@@ -1,0 +1,64 @@
+<div layout="row" flex class="admin-profile">
+    <header-dir></header-dir> 
+    
+    <admin-menu-dir></admin-menu-dir>
+    
+	<md-content class="md-padding" layout="column" flex preloader-dir="showPreloader">
+
+        <div layout="row" layout-align="start center">
+            <h2 class="md-display-1">Параметры пользователя&nbsp;<b>{{profile.login}}</b></h2>
+            <div flex></div>
+      		<md-button class="md-raised md-warn" ng-click="removeArticle(selectedArticle)">
+      		    Удалить
+      	    </md-button>
+            
+            <md-button class="md-raised md-primary" ng-click="saveArticle()">
+                Сохранить
+            </md-button>
+        </div>
+    
+    
+    	<div layout="column">
+    	    <p class="md-title">
+                Права доступа
+            </p>
+          
+    	    <div layout="row">
+        	    <md-input-container class="md-block acl-checkbox">
+                    <md-checkbox name="demo_role" ng-model="profile.demo_role" ng-change="profile.dirty = true;">
+                       Демо
+                    </md-checkbox>
+                 </md-input-container>
+                 <md-input-container class="md-block acl-checkbox">
+                    <md-checkbox name="admin_role" ng-model="profile.admin_role" ng-change="profile.dirty = true;">
+                       Админ
+                    </md-checkbox>
+                 </md-input-container>
+                 <md-input-container class="md-block acl-checkbox">
+                    <md-checkbox name="sponsor_role" ng-model="profile.sponsor_role" ng-change="profile.dirty = true;">
+                       Спонсор
+                    </md-checkbox>
+                 </md-input-container>
+        	     <md-input-container class="md-block acl-checkbox">
+                    <md-checkbox name="rightholder_role" ng-model="profile.rightholder_role" ng-change="profile.dirty = true;">
+                       Правообладатель
+                    </md-checkbox>
+                 </md-input-container>
+    	    </div>
+    	    
+    	  <p class="md-title" style="margin-bottom:30px;">
+            Информация о пользователе
+          </p>
+    	    
+    	    
+    	    <md-input-container ng-repeat="field in fieldsMap">
+                <label>{{field.title}}</label>
+                <input ng-model="field.value" ng-model-options="{ getterSetter: true }">
+            </md-input-container>
+    	    
+            
+        </div>
+        
+    </md-content>
+    
+</div>

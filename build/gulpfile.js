@@ -5,7 +5,7 @@ var runSequence = require('run-sequence');
 //var templateCache = require('gulp-angular-templatecache');
 var del = require('del');
 
-var appJs = ['../src/app/**/_*.js','../src/app/**/*.js', '../src/app/**/!*.js']; // not include config.js 
+var appJs = ['../src/app/**/_*.js','../src/app/**/*.js', '!../src/app/**/!*.js']; // not include config.js 
 var appCss = ['../src/app/**/_*.less', '../src/app/**/*.less'];
 var appViews = ['../src/app/**/*.html']; // not include index.html 
 

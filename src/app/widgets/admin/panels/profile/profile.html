@@ -12,7 +12,7 @@
       		    Удалить
       	    </md-button>
             
-            <md-button class="md-raised md-primary" ng-click="saveArticle()">
+            <md-button class="md-raised md-primary" ng-disabled="!profile.dirty" ng-click="saveProfile()">
                 Сохранить
             </md-button>
         </div>
@@ -46,16 +46,27 @@
                  </md-input-container>
     	    </div>
     	    
-    	  <p class="md-title" style="margin-bottom:30px;">
-            Информация о пользователе
-          </p>
+    	    <p class="md-title" style="margin-bottom:30px;">
+                Тарифный план
+            </p>
     	    
+            <md-input-container>
+                <md-select ng-model="profile.tariffId" ng-change="onTariffChanged();">
+                    <md-option ng-repeat="tariff in tariffs" ng-value="{{tariff.id}}">
+                        <b>{{tariff.name}}</b>&nbsp;{{tariff.description}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            
+            
+            <p class="md-title" style="margin-bottom:30px;">
+                Информация о пользователе
+            </p>
     	    
-    	    <md-input-container ng-repeat="field in fieldsMap">
+            <md-input-container ng-repeat="field in fieldsMap">
                 <label>{{field.title}}</label>
                 <input ng-model="field.value" ng-model-options="{ getterSetter: true }">
             </md-input-container>
-    	    
             
         </div>
         

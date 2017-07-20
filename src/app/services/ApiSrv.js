@@ -36,32 +36,36 @@
     ) {
 
         var proxyURL = ConfigSrv.get().proxyURL || '';
-
         var url = proxyURL + ConfigSrv.get().apiUrl;
         
-
-        var sidCookieName = 'sportsensus_sid';
-        function readSidCookie(){ return  $cookies.get(sidCookieName); }
-        function writeSidCookie(sid){ $cookies.put(sidCookieName, sid); }
-
         var sid = null;
-        var userRights;
         
-        // промис, который показывает, что данные пользователя загружены (всегда резолвится)
-        var userAuthPromise = checkSession(readSidCookie()).catch(function(){
-            return null;
-        });
-
+        function setSid(_sid){
+            sid = _sid;
+        }
         
-        function request(data, responsePath){
+        function request(method, params, responsePath){
+            var data = {
+                jsonrpc: "2.0",
+                method: method,
+                params: angular.extend({sid:sid}, params),
+                id: "id"
+            };
+            
             return $http.post(url, data).then(function(response){
+                var error = response.data && response.data.error;
+                if (error){
+                    $rootScope.$broadcast('ApiSrv.requestError', error);
+                    return $q.reject(response);
+                }
+                
                 var value = get(response, responsePath);
                 if (typeof value == "undefined")
                     return $q.reject(response);
                 else
                     return(value);
             }, function(response){
-                $q.reject(response);
+                return $q.reject(response);
             });
 
 
@@ -72,270 +76,157 @@
             }
         }
 
-        function clearUser(){
-            sid = null;
-            userRights = null;
-        }
 
-        function setUser(_sid, rights){
-            sid = _sid;
-            userRights = rights;
-            
-            angular.extend(userRights, {
-                tariff:{
-                    id:100,
-                    name:'Тариф 100',
-                    description: 'Описание',
-                    duration:3,
-                    sessionCount:4,
-                    sessionDuration: 1000,
-                    accessCases: true,
-                    accessInfoblock: true,
-                    accessAnalytics: true,
-                    accessScheduler: true
-                },
-                tariffActivationTime: (new Date()).toISOString(),
-                loginTime: (new Date()).toISOString(),
-                remainingTime: 500,
-                sessionsCount: 2
-            })
-            
-            writeSidCookie(sid);
-            // getEnums();
-            getTranslations();
-            updateTotalCount();
+        function register(params){
+            return request('register', params, 'data.result.created');
         }
-        
-        function getUser(){
-            return {
-                sid: sid,
-                userRights: userRights
-            };
-        }
-        
-        function getUserAuthPromise(){
-            return userAuthPromise;
-        }
-
-
-        function prepareRequestData(method, params){
-            var data = {
-                jsonrpc: "2.0",
-                method: method,
-                params: params,
-                id: "id"
-            };
-            return data;
-        }
-
-        function register(par){
-            var params = par;
-            var data = prepareRequestData("register", params);
-            return request(data, 'data.result.created');
-        }
-
 
         function activate(secret){
-            var params = {
-                secret: secret
-            };
-            var data = prepareRequestData("activateProfile", params);
-            return request(data, 'data.result.acl');
+            return request('activateProfile', {secret: secret}, 'data.result');
         }
 
-
-
-        function auth(par){
-
-            var params = {
-                // login: "dashtrih@gmail.com",
-                // password: "mqPaCYtz"
-                login: par.login,
-                password: par.password
-            };
-            var data = prepareRequestData("auth", params);
-
-            return request(data, 'data.result').then(function(result){
-                setUser(result.sid, result.acl);
-                return result;
-            }, function(result){
-                clearUser();
-                return $q.reject();
-            });
+        function auth(params){
+            return request('auth', params, 'data.result');
         }
 
         function checkSession(_sid){ 
-            var checkedSid = _sid || sid;
-            var params = {
-                sid: checkedSid
-            };
-            var data = prepareRequestData("check_session", params);
-
-            return request(data, 'data.result').then(function(result){
-                if (result.exist){
-                    setUser(checkedSid, result.acl);
-                    return result;
-                } else {
-                    clearUser();
-                    return $q.reject();
-                }
-            }, function(result){
-                clearUser();
-                return $q.reject();
-            });
+            return request('check_session', {sid: _sid || sid}, 'data.result');
+            // return request('check_session', {sid: _sid || sid}, 'data.result').then(function(data){
+                
+            // })
         }
 
         function logout(){
-
-            var params = {
-                sid: sid
-            };
-            var data = prepareRequestData("logout", params);
-
-            return request(data, 'data.result.deleted').then(function(result){
-                clearUser();
-                return result;
-            }, function(result){
-                clearUser();
-                return $q.reject(result);
-            });
+            return request('logout', null, 'data.result.deleted');
         }
 
-
-        var staticDefers = {};
-        var staticLoaded = {};// загружались ли когда-нибудь перечисления
         function getStatic(type){
-
-            if (!staticDefers[type]){
-                staticDefers[type] = $q.defer();
-            }
-            if (!staticLoaded[type] && sid)
-                loadStatic(type);
-
-            return staticDefers[type].promise;
-
-            function loadStatic(){
-                var data = prepareRequestData("get_static", {sid: sid, type:type});
-                request(data, 'data.result.data').then(function(data){
-                    staticDefers[type].resolve(data);
-                }, function(){
-                    staticDefers[type].reject();
-                });
-            }
+            return request('get_static', {type:type}, 'data.result.data');
         }
-
-
-        var translationsDefer;
-        var translationsLoaded = false;// загружались ли когда-нибудь перечисления
+        
         function getTranslations(){
-            if (!translationsDefer){
-                translationsDefer = $q.defer();
-            }
-
-            if (!translationsLoaded && sid)
-                loadTranslations();
-
-            return translationsDefer.promise;
-
-            function loadTranslations(){
-                var data = prepareRequestData("get_translations", {sid: sid});
-                request(data, 'data.result.data').then(function(data){
-                    translationsDefer.resolve(data);
-                }, function(){
-                    translationsDefer.reject();
-                });
-            }
+            return request('get_translations', null, 'data.result.data');
         }
 
-        var totalCount = 0;
-        // events:
-        // 'ApiSrv.totalCountLoaded'
-        function updateTotalCount(){
-            getCount({}, true).then(function(result){
-                totalCount = result.audience_count;
-                $rootScope.$broadcast('ApiSrv.totalCountLoaded', totalCount);
-            });
+        function getAudienceCount(audience){
+            return request('audienceCount', {audience:audience}, 'data.result')
         }
-        function getTotalCount(){ return totalCount; }
-
-        var lastCountResult = null;
-        function getLastCountResult(){ return lastCountResult; }
-        // events:
-        // 'ApiSrv.countLoading'
-        // 'ApiSrv.countLoaded'
-        // 'ApiSrv.countError'
-        function getCount(audience, silent){
-            !silent && $rootScope.$broadcast('ApiSrv.countLoading');
-            var data = prepareRequestData("audienceCount", {sid: sid, audience:audience});
-            return request(data, 'data.result').then(function(result){
-                var percent = totalCount ? result.audience_count / totalCount * 100 : 0;
-                result.audiencePercent = percent;
-                lastCountResult = result;
-                //d.resolve(response.data.result);
-                !silent && $rootScope.$broadcast('ApiSrv.countLoaded', result);
-                return result;
-            }, function(result){
-                lastCountResult = null;
-                //d.reject(response);
-                !silent && $rootScope.$broadcast('ApiSrv.countError');
-                return $q.reject(result);
-            });
-        }
-
-
-
+        
         function getImageGraph(audience, sportimage){
-            var data = prepareRequestData("info_sportimage", {sid: sid, audience:audience, sportimage:sportimage});
-            return request(data, 'data.result.graph');
+            return request('info_sportimage', {audience:audience, sportimage:sportimage}, 'data.result.graph');
         }
 
         function getInterestGraph(audience, sportinterest){
-            var data = prepareRequestData("info_sportinterest", {sid: sid, audience:audience, sportinterest:sportinterest});
-            return request(data, 'data.result.graph');
+            return request('info_sportinterest', {audience:audience, sportinterest:sportinterest}, 'data.result.graph');
         }
 
         function getInvolveGraph(audience, involve){
-            var data = prepareRequestData("info_fan_involvment", {sid: sid, audience:audience, involve:involve});
-            return request(data, 'data.result.graph');
+            return request('info_fan_involvment', {audience:audience, involve:involve}, 'data.result.graph');
         }
-
-
 
         function getRootingGraph(audience, sport, rooting){
-            var data = prepareRequestData("info_sportrooting", {sid: sid, audience:audience, sportrooting:{sport: sport, rooting: rooting}});
-            return request(data, 'data.result.graph');
+            return request('info_sportrooting',  {audience:audience, sportrooting:{sport: sport, rooting: rooting}}, 'data.result.graph');
         }
 
-
         function getRootingWatchGraph(audience, sport, rooting){
-            var data = prepareRequestData("info_sportrooting", {sid: sid, audience:audience, sportrooting:{sport: sport, rooting_watch: rooting}});
-            return request(data, 'data.result.graph');
+            return request('info_sportrooting', {audience:audience, sportrooting:{sport: sport, rooting_watch: rooting}}, 'data.result.graph');
         }
 
         function getRootingWalkGraph(audience, sport, rooting){
-            var data = prepareRequestData("info_sportrooting", {sid: sid, audience:audience, sportrooting:{sport: sport, rooting_walk: rooting}});
-            return request(data, 'data.result.graph');
+            return request('info_sportrooting', {audience:audience, sportrooting:{sport: sport, rooting_walk: rooting}}, 'data.result.graph');
         }
 
-
         function getExpressSport(audience, sport, clubs){
-            var data = prepareRequestData("info_express_sport", {
-                sid: sid,
-                audience: audience,
-                sport: sport,
-                clubs: clubs
-            });
-            return request(data, 'data.result');
+            return request('info_express_sport', {audience: audience, sport: sport, clubs: clubs}, 'data.result');
         }
 
         function getExpressAudience(audience){
-            var data = prepareRequestData("info_express_audience", {
-                sid: sid,
-                audience: audience
-            });
-            return request(data, 'data.result');
+            return request('info_express_audience', {audience: audience}, 'data.result');
         }
 
+        function getProfilesList(){
+            return request('get_profiles_list', null, 'data.result.profiles');
+        }
+
+        function addRole(uid, acl){
+            return request('addProfileRole', {uid:uid, acl:acl}, 'data.result');
+        }
+
+        function getProfile(){
+            return request('getProfile', null, 'data.result');
+        }
+
+        function editProfile(params){
+            return request('editProfile', params, 'data.result.edit_result');
+        }
+
+        function changePassword(password){
+            return request('change_pass', {password: password}, 'data.result.changed');
+        }
+
+        function getArticles(){
+            return request('cms.get_articles', null, 'data.result.articles');
+        }
+        
+        function createArticle(article) {
+            return request('cms.create_article', article, 'data.result.article');
+        }
+        
+        function editArticle(article){
+            return request('cms.update_article', article, 'data.result.article');
+        }
+        
+        function getArticle(id){
+            return request('cms.get_article', {id: id}, 'data.result.article');
+        }
+        
+        function removeArticle(id){
+            return request('cms.delete_article', {id: id}, 'data.result.deleted');
+        }
+        
+        function getTariffs(){
+            return request('get_tariffs', null, 'data.result.tariffs');
+            
+            var d = $q.defer();
+            
+            var tariffs = [{
+                id:1,
+                name:'tariff 1',
+                description: 'описание тарифа',
+                duration:3, // продолжительность подписки (3-12 мес) - хз, в каких единицах. наверное в месяцах
+                sessionCount:2, // количество (часовых) сессий, доступное на тарифе
+                sessionDuration:3600, // продолжительность каждой сессии (час) - в секундах
+                accessCases:true, // доступ к кейсам ??? доступно на всех тарифах - надо ли делать поле?
+                accessInfoblock:true, // доступ к инфоблоку ??? доступно на всех тарифах - надо ли делать поле?
+                accessAnalytics:false, // доступ к аналитике
+                accessScheduler:false // доступ к планировщику
+            },{
+                id:2,
+                name:'tariff 2',
+                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                duration:3, // продолжительность подписки (3-12 мес) - хз, в каких единицах. наверное в месяцах
+                sessionCount:2, // количество (часовых) сессий, доступное на тарифе
+                sessionDuration:3600, // продолжительность каждой сессии (час) - в секундах
+                accessCases:true, // доступ к кейсам ??? доступно на всех тарифах - надо ли делать поле?
+                accessInfoblock:true, // доступ к инфоблоку ??? доступно на всех тарифах - надо ли делать поле?
+                accessAnalytics:false, // доступ к аналитике
+                accessScheduler:false // доступ к планировщику
+            },{
+                id:3,
+                name:'tariff 3',
+                description: 'описание тарифа',
+                duration:3, // продолжительность подписки (3-12 мес) - хз, в каких единицах. наверное в месяцах
+                sessionCount:2, // количество (часовых) сессий, доступное на тарифе
+                sessionDuration:3600, // продолжительность каждой сессии (час) - в секундах
+                accessCases:true, // доступ к кейсам ??? доступно на всех тарифах - надо ли делать поле?
+                accessInfoblock:true, // доступ к инфоблоку ??? доступно на всех тарифах - надо ли делать поле?
+                accessAnalytics:false, // доступ к аналитике
+                accessScheduler:false // доступ к планировщику
+            }];
+            d.resolve(tariffs);
+            return d.promise;
+        }
+        
         function sendEmail(options) {
             // var a = {
             //     "sid": "UMoEnDBCLNsXXbTEiPmcjGSjpnswnD7W04VzBBHvdNudOJHEPuaKT9Xzb4aYrFhH",
@@ -346,72 +237,19 @@
             //     "message": "hi",
             //     "attachments": [{"filename": "1.txt", "data": "YXNkcw=="}]
             // };
-            var data = prepareRequestData("send_email", {
-                sid: sid,
+            var params = {
+                //sid: sid,
                 address: options.address,
                 theme: options.theme,
                 message: options.message,
                 attachments: options.attachments // [{"filename": "1.txt", "data": "YXNkcw=="}]
-            });
-            return request(data, 'data.result.sent');
-        }
-
-        function getProfilesList(){
-            var data = prepareRequestData("get_profiles_list", {sid: sid});
-            return request(data, 'data.result.profiles');
-        }
-
-        function addRole(uid, acl){
-            var data = prepareRequestData("addProfileRole", {sid: sid, uid:uid, acl:acl});
-            return request(data, 'data.result');
-        }
-
-        function getProfile(){
-            var data = prepareRequestData("getProfile", {sid: sid});
-            return request(data, 'data.result');
-        }
-
-        function editProfile(params){
-            var data = prepareRequestData("editProfile", angular.extend({sid: sid}, params));
-            return request(data, 'data.result.edit_result');
-        }
-
-        function changePassword(password){
-            var data = prepareRequestData("change_pass", {sid: sid, password: password});
-            return request(data, 'data.result.changed');
-        }
-
-
-      
-        function getArticles(){
-            var data = prepareRequestData("cms.get_articles", {sid: sid});
-            return request(data, 'data.result.articles');
-            
-        }
-        
-        function createArticle(article) {
-            var data = prepareRequestData("cms.create_article", angular.extend({sid: sid}, article));
-            return request(data, 'data.result.article');
-        }
-        
-        function editArticle(article){
-            var data = prepareRequestData("cms.update_article", angular.extend({sid: sid}, article));
-            return request(data, 'data.result.article');
-        }
-        
-        function getArticle(id){
-            var data = prepareRequestData("cms.get_article", {sid: sid, id: id});
-            return request(data, 'data.result.article');
-        }
-        
-        function removeArticle(id){
-            var data = prepareRequestData("cms.delete_article", {sid: sid, id: id});
-            return request(data, 'data.result.deleted');
+            };
+            return request('send_email', params, 'data.result.sent');
         }
 
         var me = {
-            getUser: getUser,
-            getUserAuthPromise: getUserAuthPromise,
+            setSid: setSid,
+
             register: register,
             activate: activate,
             auth: auth,
@@ -419,10 +257,7 @@
             logout: logout,
             getStatic: getStatic,
             getTranslations: getTranslations,
-            //getEnums: getEnums
-            getCount: getCount,
-            getLastCountResult: getLastCountResult,
-            getTotalCount: getTotalCount,
+            getAudienceCount: getAudienceCount,
             getImageGraph: getImageGraph,
             getInterestGraph: getInterestGraph,
             getInvolveGraph: getInvolveGraph,
@@ -432,7 +267,6 @@
             
             getExpressSport: getExpressSport,
             getExpressAudience: getExpressAudience,
-
 
             sendEmail: sendEmail,
 
@@ -446,7 +280,8 @@
             getArticle: getArticle,
             createArticle: createArticle,
             editArticle: editArticle,
-            removeArticle: removeArticle
+            removeArticle: removeArticle,
+            getTariffs: getTariffs
         };
 
 

@@ -7,24 +7,26 @@
 		'$scope',
 		'$controller',
 		'ParamsSrv',
-		'ApiSrv'
+		'ApiSrv',
+		'AudienceCountSrv'
 	];
 
 	function baseFooterCtrl(
 		$scope,
 		$controller,
 		ParamsSrv,
-		ApiSrv
+		ApiSrv,
+		AudienceCountSrv
 	) {
 		
 
-		$scope.$on('ApiSrv.countError', function(){
+		$scope.$on('AudienceCountSrv.countError', function(){
 			setAudienceCount(0);
 		});
-		$scope.$on('ApiSrv.countLoaded', readCount);
+		$scope.$on('AudienceCountSrv.countLoaded', readCount);
 
 		function readCount(){
-			var result = ApiSrv.getLastCountResult();
+			var result = AudienceCountSrv.getLastCountResult();
 			if (result && result.is_valid_count)
 				setAudienceCount(result.audience_count);
 			else

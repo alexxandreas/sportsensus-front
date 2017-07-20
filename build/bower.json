@@ -22,6 +22,7 @@
     "jspdf": "latest",
     "canvg": "https://github.com/canvg/canvg.git#v1.4",
     "angular-ckeditor": "1.0.3",
-    "flickity": "2.0.8"
+    "flickity": "2.0.8",
+    "angular-ui-tinymce": "0.0.19"
   }
 }

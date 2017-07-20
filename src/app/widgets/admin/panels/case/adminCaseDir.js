@@ -30,38 +30,110 @@
 				'$routeParams',
 				'$location',
 				'$window',
+				'$compile',
 				'$mdDialog',
 				'ParamsSrv',
 				'ArticlesSrv',
 				'ConfigSrv',
+				'UserSrv',
+				'UploadFileSrv',
 				function(
 					$scope,
 					$routeParams,
 					$location,
 					$window,
+					$compile,
 					$mdDialog,
 					ParamsSrv,
 					ArticlesSrv,
-					ConfigSrv
+					ConfigSrv,
+					UserSrv,
+					UploadFileSrv
 				) {
 	
 	                var proxyURL = /*ConfigSrv.get().proxyURL || */ '';
-	                var url = proxyURL + ConfigSrv.get().imageUploadUrl;
+	                var imageUploadUrl = proxyURL + ConfigSrv.get().imageUploadUrl + '?sid=' + UserSrv.getSid() + '&format=json';
 	
-                    // Editor options.
-                    $scope.options = {
-                        //uploadUrl: '/uploadddd.php',
-                        filebrowserUploadUrl: url,
-                        // extraPlugins: 'uploadimage',
-                        // uploadUrl: url + '?type=Images',
-                        // imageUploadUrl: url + '?type=Images',
+	                $scope.tinymceUploadFile = null;
+	                
+                    
+                    
+                    $scope.tinymceOptions = {
+                        selector: '#case_editor',
+                        height: 700,
+                        plugins: [
+                            'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                            'searchreplace wordcount visualblocks visualchars code fullscreen',
+                            'insertdatetime media nonbreaking save table contextmenu directionality',
+                            'emoticons template paste textcolor colorpicker textpattern imagetools codesample'
+                        ],
+                        toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+                        toolbar2: 'print preview media | forecolor backcolor emoticons | codesample help',
+                        image_advtab: true,
+                        file_browser_callback: function(field_name, url, type, win) {
+                            if(type=='image') {
+                                $scope.$broadcast('tinymceUploadFileEvent');
+                            }
+                        },
+                        file_picker_callback: function(cb, value, meta) {
+                            if (meta.filetype == 'image'){
+                                $scope.$broadcast('tinymceUploadFileEvent');
+                            }
+                        }
+                    }
+                    
+                    $scope.$watch('tinymceUploadFile', function(newValue, oldValue){
+                        if (!newValue) return;
+                        var file = newValue;
                         
+                        $scope.showUploadPreloader();
+                        UploadFileSrv.uploadFile(file, imageUploadUrl, 'upload').then(function(response){
+                            $scope.hideUploadPreloader();
+                            
+                            var url = response.data && response.data.url;
+                            if (!url) return;
+                            
+                            $scope.setImageUrl(url);
+                        }, function(){
+                            $scope.hideUploadPreloader();
+                        });
+                    });
+                    
+                    $scope.setImageUrl = function(url){
+                        var openBtn = document.querySelectorAll('.mce-btn.mce-open')[0];
+                        var textBox = openBtn.parentElement.querySelector('.mce-textbox');
+                        var textBoxEl = angular.element(textBox)
+                        textBoxEl.val(url);
                         
-                        language: 'ru',
-                        uiColor: '#1e88e5',
-                        customConfig: false,
-                        stylesSet: false
-                    };
+                        var closeBtn = openBtn.closest('.mce-window').querySelector('.mce-primary');
+                        var closeBtnEl = angular.element(closeBtn)[0];
+                        closeBtn.click();
+                    }
+                    
+                    var buttonContainer = null;
+                    var hiddenButton = null;
+                    var preloader = null;
+                    $scope.showUploadPreloader = function(){
+                        hiddenButton = angular.element(document.querySelectorAll('.mce-btn.mce-open button')[0]);
+                        hiddenButton.remove();
+                        buttonContainer = angular.element(document.querySelectorAll('.mce-btn.mce-open')[0]);
+            
+                        var tpl = '<md-progress-circular md-mode="indeterminate" md-diameter="26" style="padding:1px;"></md-progress-circular>'
+                        preloader = angular.element(tpl);
+                        $compile(preloader)($scope);
+                        buttonContainer.append(preloader);
+                    }
+                    
+                    $scope.hideUploadPreloader = function(){
+                        preloader.remove();
+                        buttonContainer.append(hiddenButton);
+                    }
+              
+                    
+                    
+                    
+
+
               
                     $scope.caseId = Number.parseInt($routeParams.caseId);
                     if (Number.isNaN($scope.caseId)){
@@ -87,7 +159,7 @@
                             });
                         })
                     }
-                    
+                     
                     function setArticle(article){
                         article.tags = article.tags || [];
                         article.groupedTags = article.groupedTags || {};
@@ -95,7 +167,12 @@
                         article.groupedTags.category = article.groupedTags.category || [];
                         
                         $scope.article = article;   
+                        
                     }
+                    
+                    $scope.$on("$destroy", function() {
+                        tinymce.remove("#case_editor");
+                    });
              
                     ArticlesSrv.getTags().then(function(tags){
                         $scope.allTags = tags;
@@ -145,6 +222,18 @@
                     
                     
                     
+                    $scope.openKDPVFileDialog = function(){
+                        $scope.$broadcast('imageUploadFileEvent');
+                    }
+                    
+                    $scope.$watch('imageUploadFile', function(newValue, oldValue){
+                        if (!newValue) return;
+                        var file = newValue;
+                        
+                        $scope.setFile(file);
+                        
+                        
+                    });
                     
                     $scope.removeImage = function(){
                         $scope.article.image = null;
@@ -166,17 +255,6 @@
                                 
                                 var k = Math.max(width / MAX_WIDTH, height / MAX_HEIGHT, 1);
                                 
-                                // if (width > height) {
-                                //   if (width > MAX_WIDTH) {
-                                //     height *= MAX_WIDTH / width;
-                                //     width = MAX_WIDTH;
-                                //   }
-                                // } else {
-                                //   if (height > MAX_HEIGHT) {
-                                //     width *= MAX_HEIGHT / height;
-                                //     height = MAX_HEIGHT;
-                                //   }
-                                // }
                                 height /= k;
                                 width /= k;
                                 
@@ -185,10 +263,27 @@
                                 var ctx = canvas.getContext("2d");
                                 ctx.drawImage(img, 0, 0, width, height);
                                 
-                                var dataurl = canvas.toDataURL("image/png");
+                                var dataURL = canvas.toDataURL("image/png");
                                 
+                                var blobBin = atob(dataURL.split(',')[1]);
+                                var array = [];
+                                for(var i = 0; i < blobBin.length; i++) {
+                                    array.push(blobBin.charCodeAt(i));
+                                }
+                                var newfile=new Blob([new Uint8Array(array)], {type: 'image/png'});
+
                                 $scope.$apply(function(){
-                                    $scope.article.image = dataurl;
+                                    UploadFileSrv.uploadFile(newfile, imageUploadUrl, 'upload', file.name).then(function(response){
+                                        var url = response.data && response.data.url;
+                                        if (!url) return;
+                                        
+                                        
+                                        $scope.article.image = url;
+                                        // $scope.article.image = 'http://sportsensus.ru' + encodeURI(url);
+                                    }, function(){
+                                        
+                                    });
+                                    
                                 })
                                 
                             }

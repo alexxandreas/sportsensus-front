@@ -30,13 +30,15 @@
                 '$window',
                 '$anchorScroll',
                 'ApiSrv',
+                'UserSrv',
                 function(
                     $scope,
                     $routeParams,
                     $location,
                     $window,
                     $anchorScroll,
-                    ApiSrv
+                    ApiSrv,
+                    UserSrv
                 ) {
                     $scope.loggedIn = false;
                     $scope.isAdmin = false;
@@ -90,20 +92,30 @@
                         }
                     ];
 
+                    $scope.$on('UserSrv.login', updateUser);
+                    $scope.$on('UserSrv.logout', updateUser);
+                    updateUser();
                     
-                    $scope.$watch( function () { return ApiSrv.getUser().sid; }, function (sid) {
-                        $scope.loggedIn = !!sid;
-                        $scope.isAdmin = ApiSrv.getUser().userRights && !!ApiSrv.getUser().userRights.admin;
-
-                    }, true);
+                    function updateUser(){
+                        var user = UserSrv.getUser();
+                        $scope.loggedIn = !!(user && user.sid);
+                        $scope.isAdmin = !!(user && user.userRights && user.userRights.admin);
+                    }
+                    
+                    // $scope.$watch( function () { return ApiSrv.getUser().sid; }, function (sid) {
+                    //     $scope.loggedIn = !!sid;
+                    //     $scope.isAdmin = ApiSrv.getUser().userRights && !!ApiSrv.getUser().userRights.admin;
+                    // }, true);
                     
                     $scope.setPath = function(path){
                         $location.path(path);
                     };
                 
                     $scope.logout = function(){
-                        ApiSrv.logout();
-                        $scope.setPath('/');
+                        UserSrv.logout().finally(function(){
+                            $scope.setPath('/');
+                        });
+                        
                     };
 
                     $scope.scrollTo = function(id) {

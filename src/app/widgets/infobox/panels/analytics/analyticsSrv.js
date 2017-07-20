@@ -5,14 +5,11 @@
 		.factory('analyticsSrv', analyticsSrv);
 
 	// инициализируем сервис
-	angular.module('SportsensusApp').run(['analyticsSrv', function(analyticsSrv) {
-
-	}]);
+	// angular.module('SportsensusApp').run(['analyticsSrv', function(analyticsSrv) { }]);
 	
 	analyticsSrv.$inject = [
 		'$rootScope',
-		'ApiSrv',
-		'ParamsSrv'
+		'ApiSrv'
 	];
 
 /**
@@ -21,8 +18,7 @@
  */
 	function analyticsSrv(
 		$rootScope,
-		ApiSrv,
-		ParamsSrv
+		ApiSrv
 	) {
 
 		var selected = {

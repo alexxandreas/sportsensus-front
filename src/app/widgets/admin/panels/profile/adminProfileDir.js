@@ -29,40 +29,64 @@
 				'$routeParams',
 				'$location',
 				'$window',
+				'$q',
 				'$mdDialog',
 				'ParamsSrv',
 				'ApiSrv',
 				'AdminProfilesSrv',
+				'TariffsSrv',
 				function(
 					$scope,
 					$routeParams,
 					$location,
 					$window,
+					$q,
 					$mdDialog,
 					ParamsSrv,
 					ApiSrv,
-					AdminProfilesSrv
-				) {
+					AdminProfilesSrv,
+					TariffsSrv
+				) { 
 	
-	                    $scope.userId = Number.parseInt($routeParams.userId);
+                    $scope.userId = Number.parseInt($routeParams.userId);
+                
+                    $scope.showPreloader = true;
                     
-                        $scope.showPreloader = true;
-                        AdminProfilesSrv.getProfile($scope.userId).then(function(profile){
-                            $scope.profile = profile;
-                            $scope.showPreloader = false;
-                        }, function(){
-                            $scope.showPreloader = false;
-                            $mdDialog.show(
-                              $mdDialog.alert()
-                                .clickOutsideToClose(false)
-                                .title('Ошибка')
-                                .textContent('Ошибка загрузки данных с сервера')
-                                .ok('OK')
-                            ).then(function(){
-                                $location.path('/admin/profiles/');
-                            });
-                        })
+                    $q.all({
+                    	profile: AdminProfilesSrv.getProfile($scope.userId),
+                    	tariffs: TariffsSrv.getTariffs()
+                    }).then(function(result){
+                    	$scope.profile = result.profile;
+                    	$scope.tariffs = result.tariffs;
+                        $scope.showPreloader = false;
+                    }, function(){
+                    	$scope.showPreloader = false;
+                        $mdDialog.show(
+                          $mdDialog.alert()
+                            .clickOutsideToClose(false)
+                            .title('Ошибка')
+                            .textContent('Ошибка загрузки данных с сервера')
+                            .ok('OK')
+                        ).then(function(){
+                            $location.path('/admin/profiles/');
+                        });
+                    });
                     
+                    
+                    // $scope.getTariffTitle = function(){
+                    // 	if (!$scope.profile) return;
+                    	
+                    // 	var tariffId = $scope.profile.tariffId;
+                    // 	if (tariffId == null) return;
+                    	
+                    // 	var selectedTariff = $scope.tariffs.find(function(tariff){
+                    // 		return tariff.id == tariffId;
+                    // 	});
+                    // 	if (!selectedTariff) return;
+                    	
+                    // 	return selectedTariff.name;
+                    // }
+                   
 	                
 	                $scope.fieldsMap = [
 	                    {field: "login", title: "Логин"},
@@ -96,19 +120,29 @@
 	
 				
 
-					$scope.saveProfile = function(profile){
+					$scope.onTariffChanged = function(){
+						$scope.profile.dirty = true;
+						$scope.profile.setTariff = true;
+					};
+					
+					$scope.saveProfile = function(){
 						var acl = {
-							"admin": profile.admin_role,
-							"sponsor":  profile.sponsor_role,
-							"rightholder":  profile.rightholder_role,
-							"demo":  profile.demo_role
+							"admin": $scope.profile.admin_role,
+							"sponsor":  $scope.profile.sponsor_role,
+							"rightholder":  $scope.profile.rightholder_role,
+							"demo":  $scope.profile.demo_role
 						};
-						ApiSrv.addRole(profile.user_id, acl).then(function(acl){
-							profile.admin_role = acl.admin;
-							profile.sponsor_role = acl.sponsor;
-							profile.rightholder_role = acl.rightholder;
-							profile.demo_role = acl.demo;
-							profile.dirty = false;
+						if ($scope.profile.setTariff){
+							var tariffId = $scope.profile.tariffId;
+							acl.tariff_id = tariffId;
+						}
+						
+						ApiSrv.addRole($scope.profile.user_id, acl).then(function(acl){
+							$scope.profile.admin_role = acl.admin;
+							$scope.profile.sponsor_role = acl.sponsor;
+							$scope.profile.rightholder_role = acl.rightholder;
+							$scope.profile.demo_role = acl.demo;
+							$scope.profile.dirty = false;
 						}, function(){
 							$mdDialog.show($mdDialog.alert()
 								.title('Ошибка')

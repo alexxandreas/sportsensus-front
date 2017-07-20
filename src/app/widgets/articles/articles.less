@@ -1,11 +1,26 @@
 .articles-panel {
     
+    .tags-menu {
+        min-width: 150px;
+        
+        .selected-tag {
+            background-color: #d7ece8;
+        }
+    }
+    
     .articles-container {
+        
+        padding: 20px;
         
         .article {
             width: 400px;
             /*height: 400px;*/
-            margin: 20px;
+            padding: 20px;
+            cursor: pointer;
+            
+            &:hover {
+                background-color: rgba(158,158,158,0.2);
+            }
             
             .article-image-wrapper {
         

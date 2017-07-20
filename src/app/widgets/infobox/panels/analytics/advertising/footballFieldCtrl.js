@@ -11,7 +11,9 @@
 		'$controller',
 		'$q',
 		'ParamsSrv',
-		'ApiSrv'
+		'ApiSrv',
+		'StaticSrv',
+		'AudienceCountSrv'
 	];
 
 	function footballFieldCtrl(
@@ -19,12 +21,14 @@
 		$controller,
 		$q,
 		ParamsSrv,
-		ApiSrv
+		ApiSrv,
+		StaticSrv,
+		AudienceCountSrv
 	) {
 		$controller('hockeyBoxBaseCtrl', {$scope: $scope});
 		
 		var promises = [];
-		promises.push(ApiSrv.getStatic('football').then(function(hockeyData){
+		promises.push(StaticSrv.getStatic('football').then(function(hockeyData){
 			hockeyData.forEach(function(item) {
 				if (item.type == 'championship') {
 					$scope.championship = item;
@@ -72,11 +76,11 @@
 				$scope.playgroundPlacesA.push(arr.map(function(key){ return $scope.playgroundData.placesSelection[key]; }));
 			}
 
-			$scope.$on('ApiSrv.countLoaded', readCount);
+			$scope.$on('AudienceCountSrv.countLoaded', readCount);
 			readCount();
 
 			function readCount(){
-				var result = ApiSrv.getLastCountResult();
+				var result = AudienceCountSrv.getLastCountResult();
 				$scope.audiencePercent = result.audiencePercent / 100;
 				$scope.calc();
 			}

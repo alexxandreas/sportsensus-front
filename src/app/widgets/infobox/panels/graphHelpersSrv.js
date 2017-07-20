@@ -4,13 +4,11 @@
 	angular.module('SportsensusApp')
 		.factory('graphHelpersSrv', graphHelpersSrv);
 
-	// инициализируем сервис
-	// angular.module('SportsensusApp').run(['graphHelpersSrv', function(graphHelpersSrv) {
-	// 	//graphHelpersSrv.init();
-	// 	//graphHelpersSrv.logout();
-	// }]);
 
-	angular.module('SportsensusApp').run(['graphHelpersSrv', function(graphHelpersSrv) {}]);
+
+
+	// инициализируем сервис
+	// angular.module('SportsensusApp').run(['graphHelpersSrv', function(graphHelpersSrv) {}]);
 
 	graphHelpersSrv.$inject = [
 		'$rootScope',

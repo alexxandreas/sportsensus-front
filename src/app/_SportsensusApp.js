@@ -8,7 +8,8 @@
 		'ngRoute',
 		'ngCookies',
 		'Views',
-		'ckeditor'
+		//'ckeditor',
+		'ui.tinymce'
 	])
 	// .config(function($mdThemingProvider) {
 	// 	$mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
@@ -43,6 +44,9 @@
 			.warnPalette('red')
 			.accentPalette('blue');
 	})
+	// .config(function($mdIconProvider) {
+	// 	$mdIconProvider.defaultIconSet('static/core-icons.svg', 24);
+	// })
 	.run(['ConfigSrv', function (ConfigSrv) {
 		var config = window.appConfig;
 		ConfigSrv.set(config);
@@ -56,9 +60,10 @@
 	
 	function getUserAuthResolver(options) {
 		return {
-			userAuthResolver: ['ApiSrv', '$location', '$q', function(ApiSrv, $location, $q) {
-				return ApiSrv.getUserAuthPromise().then(function(){
-					var userRights = ApiSrv.getUser().userRights || {};
+			userAuthResolver: ['ApiSrv', 'UserSrv', '$location', '$q', function(ApiSrv, UserSrv, $location, $q) {
+				return UserSrv.getUserCheckPromise().then(function(user){
+				// return UserSrv.getUserAuthPromise().then(function(user){
+					var userRights = user.userRights || {};
 					if (!userRights) {
 						$location.path('/');
 						return $q.reject();
@@ -94,6 +99,9 @@
 						}
 					}
 					
+				}, function(){
+					$location.path('/');
+					return $q.reject();
 				})
 			}]
 		};
@@ -112,36 +120,36 @@
 			
 			.when('/infobox/', { 
 				template: '<infobox-dir type="infobox"></infobox-dir>',
-				resolve: getUserAuthResolver({type: 'infobox'}),
-				controller: function($scope, $location, ApiSrv) {
-					if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
-						$location.path('/');
-				}
+				resolve: getUserAuthResolver({type: 'infobox'})
+				// controller: function($scope, $location, ApiSrv) {
+				// 	if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
+				// 		$location.path('/');
+				// }
 			})
 			.when('/analytics/', {
 				//template: '<infobox-dir type="analytics"></infobox-dir>',
 				template: '<analytics-dir></analytics-dir>',
-				resolve: getUserAuthResolver({type: 'analytics'}),
-				controller: function($scope, $location, ApiSrv) {
-					if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
-						$location.path('/');
-				}
+				resolve: getUserAuthResolver({type: 'analytics'})
+				// controller: function($scope, $location, ApiSrv) {
+				// 	if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
+				// 		$location.path('/');
+				// }
 			})
 			.when('/articles/', { 
 				template: '<articles-dir></articles-dir>',
-				resolve: getUserAuthResolver({type: 'cases'}),
-				controller: function($scope, $location, ApiSrv) {
-					if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
-						$location.path('/');
-				}
+				resolve: getUserAuthResolver({type: 'cases'})
+				// controller: function($scope, $location, ApiSrv) {
+				// 	if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
+				// 		$location.path('/');
+				// }
 			})
 			.when('/articles/:articleId', { 
 				template: '<article-dir></article-dir>',
-				resolve: getUserAuthResolver({type: 'cases'}),
-				controller: function($scope, $location, ApiSrv) {
-					if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
-						$location.path('/');
-				}
+				resolve: getUserAuthResolver({type: 'cases'})
+				// controller: function($scope, $location, ApiSrv) {
+				// 	if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
+				// 		$location.path('/');
+				// }
 			})
 			.when('/login/', { 
 				template: '<login-dir></login-dir>'
@@ -178,11 +186,11 @@
 			
 			.when('/account/', {
 				template: '<account-dir></account-dir>',
-				resolve: getUserAuthResolver({type: 'auth'}),
-				controller: function($scope, $location, ApiSrv) {
-					if (!ApiSrv.getUser().userRights)
-						$location.path('/');
-				}
+				resolve: getUserAuthResolver({type: 'auth'})
+				// controller: function($scope, $location, ApiSrv) {
+				// 	if (!ApiSrv.getUser().userRights)
+				// 		$location.path('/');
+				// }
 			})
 			
 			

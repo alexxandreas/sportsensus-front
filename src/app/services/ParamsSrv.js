@@ -5,9 +5,7 @@
         .factory('ParamsSrv', ParamsSrv);
 
     // инициализируем сервис
-    angular.module('SportsensusApp').run(['ParamsSrv', function(ParamsSrv) {
-
-    }]);
+    // angular.module('SportsensusApp').run(['ParamsSrv', function(ParamsSrv) { }]);
 
     // angula
     // r.module('SportsensusApp').run(ParamsSrv.init);
@@ -17,7 +15,9 @@
         '$http',
         '$q',
         'ApiSrv',
-        'ConfigSrv'
+        'AudienceCountSrv',
+        'ConfigSrv',
+        'TranslationsSrv'
     ];
 
 
@@ -30,7 +30,9 @@
         $http,
         $q,
         ApiSrv,
-        ConfigSrv
+        AudienceCountSrv,
+        ConfigSrv,
+        TranslationsSrv
     ) {
 
         var padamsDefer = $q.defer();
@@ -52,7 +54,7 @@
         });*/
 
         var translations = null; // {pages, translates}
-        ApiSrv.getTranslations().then(function(data){
+        TranslationsSrv.getTranslations().then(function(data){
             translations = data;
             extendTranslations();
             prepareParams();
@@ -109,10 +111,13 @@
                 $rootScope.$watch(function(){return parameters[type]; }, function(newValue, oldValue){
                     selected[type] = getSelectedParamsRec(newValue);
 
-                    $rootScope.$broadcast('ParamsSrv.paramsChanged', type, selected[type]);
-
-                    if (['demography','consume','regions'].indexOf(type) >= 0){
-                        ApiSrv.getCount(getSelectedAudience());
+                    // игнорируем первый вызов $watch
+                    if (newValue != oldValue) {
+                        $rootScope.$broadcast('ParamsSrv.paramsChanged', type, selected[type]);
+    
+                        if (['demography','consume','regions'].indexOf(type) >= 0){
+                            AudienceCountSrv.getCount(getSelectedAudience());
+                        }
                     }
                 }, true);
             });

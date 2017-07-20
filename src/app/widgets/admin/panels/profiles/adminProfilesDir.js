@@ -60,26 +60,26 @@
 						}
 					);
 
-					$scope.saveProfile = function(profile){
-						var acl = {
-							"admin": profile.admin_role,
-							"sponsor":  profile.sponsor_role,
-							"rightholder":  profile.rightholder_role,
-							"demo":  profile.demo_role
-						};
-						ApiSrv.addRole(profile.user_id, acl).then(function(acl){
-							profile.admin_role = acl.admin;
-							profile.sponsor_role = acl.sponsor;
-							profile.rightholder_role = acl.rightholder;
-							profile.demo_role = acl.demo;
-							profile.dirty = false;
-						}, function(){
-							$mdDialog.show($mdDialog.alert()
-								.title('Ошибка')
-								.textContent('Невозможно применить изменения')
-								.ok('OK'));
-						});
-					};
+					// $scope.saveProfile = function(profile){
+					// 	var acl = {
+					// 		"admin": profile.admin_role,
+					// 		"sponsor":  profile.sponsor_role,
+					// 		"rightholder":  profile.rightholder_role,
+					// 		"demo":  profile.demo_role
+					// 	};
+					// 	ApiSrv.addRole(profile.user_id, acl).then(function(acl){
+					// 		profile.admin_role = acl.admin;
+					// 		profile.sponsor_role = acl.sponsor;
+					// 		profile.rightholder_role = acl.rightholder;
+					// 		profile.demo_role = acl.demo;
+					// 		profile.dirty = false;
+					// 	}, function(){
+					// 		$mdDialog.show($mdDialog.alert()
+					// 			.title('Ошибка')
+					// 			.textContent('Невозможно применить изменения')
+					// 			.ok('OK'));
+					// 	});
+					// };
 					
 					$scope.openProfile = function(profile){
 						$location.path('/admin/profiles/' + profile.user_id);

@@ -14,46 +14,51 @@
     AdminProfilesSrv.$inject = [
         '$rootScope',
         '$q',
-        'ApiSrv'
+        'ApiSrv',
+        'UserSrv'
     ];
 
 
     function AdminProfilesSrv(
         $rootScope,
         $q,
-        ApiSrv
+        ApiSrv,
+        UserSrv
     ) {
         
-        var profile = [];
+        // var profile = [];
         //var allTags = [];
         
-        var tags = {
-            // ungrouped: []
-        };
+       
         
-        var profilesLoaded = false;
-        var profilesDefer = $q.defer();
-
         
-        function getProfiles(){
-            if (!profilesLoaded){
-                profilesLoaded = true;
-                //var allTags = [];
+        // var profilesLoaded = false;
+        // var profilesDefer = $q.defer();
+        // function getProfiles(){
+        //     if (!profilesLoaded){
+        //         profilesLoaded = true;
+        //         //var allTags = [];
                 
-                ApiSrv.getUserAuthPromise().then(function(){
-                    ApiSrv.getProfilesList().then(function(profiles){
-                        //angular.forEach(articles, loadArticleTags);
+        //         UserSrv.getUserAuthPromise().then(function(user){
+        //             ApiSrv.getProfilesList().then(function(profiles){
+        //                 //angular.forEach(articles, loadArticleTags);
                         
-                        profilesDefer.resolve(profiles);
-                    }, function(){
-                        profilesDefer.reject();
-                    }); 
-                });
+        //                 profilesDefer.resolve(profiles);
+        //             }, function(){
+        //                 profilesDefer.reject();
+        //             }); 
+        //         });
                 
-            }
+        //     }
             
-            return profilesDefer.promise;
-        }
+        //     return profilesDefer.promise;
+        // }
+        
+        
+     
+        var getProfiles = UserSrv.loadWhenAuth(function(resolve, reject){
+            ApiSrv.getProfilesList().then(resolve, reject);
+        }, true);
         
         
         function getProfile(id) {

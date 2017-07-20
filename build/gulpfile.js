@@ -12,7 +12,8 @@ var appViews = ['../src/app/**/*.html']; // not include index.html
 //var watchStatic_ = ['../src/**/*.{html,scss,less,css,svg}'];
 var statics = [
 	'../src/static/**/*',
-	'../libs/ckeditor*/**/*' // ckeditor загружает свою статику сам - переносим всю папку в static
+	'../libs/ckeditor*/**/*', // ckeditor загружает свою статику сам - переносим всю папку в static
+	'../libs/tinymce*/**/*' // tinymce загружает свою статику сам - переносим всю папку в static
 ]; // статика
 var index = '../src/index.html';
 var debugConfig = '../src/config_debug.js';
@@ -45,12 +46,17 @@ var libJs = [
 	'../libs/canvg/StackBlur.js',
 	'../libs/canvg/canvg.js',
 
-	'../libs/ckeditor/ckeditor.js',
-	'../libs/ckeditor/lang/ru.js',
+	//'../libs/ckeditor/ckeditor.js',
+	//'../libs/ckeditor/lang/ru.js',
 	
-	'../libs/angular-ckeditor/angular-ckeditor.js',
+	//'../libs/angular-ckeditor/angular-ckeditor.js',
 	
-	'../libs/flickity/dist/flickity.pkgd.min.js'
+	'../libs/flickity/dist/flickity.pkgd.min.js',
+	
+	//'../libs/tinymce/tinymce.min.js',
+	'../libs/angular-ui-tinymce/dist/tinymce.min.js',
+	
+	
 	
 	// '../libs/html2canvas/src/Core.js',
 	// '../libs/html2canvas/src/Font.js',

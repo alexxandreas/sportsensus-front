@@ -32,6 +32,8 @@
 				'$mdDialog',
 				'ParamsSrv',
 				'ApiSrv',
+				'UserSrv',
+				
 				function(
 					$scope,
 					$routeParams,
@@ -39,7 +41,8 @@
 					$window,
 					$mdDialog,
 					ParamsSrv,
-					ApiSrv
+					ApiSrv,
+					UserSrv
 				) {
 
                     $scope.loggedIn = false;
@@ -47,11 +50,16 @@
                     
                     
                     
-                    $scope.$watch( function () { return ApiSrv.getUser().sid; }, function (sid) {
-                        $scope.loggedIn = !!sid;
-                        $scope.isAdmin = ApiSrv.getUser().userRights && !!ApiSrv.getUser().userRights.admin;
-
-                    }, true);
+                    
+                    
+                    $scope.$on('UserSrv.login', updateUser);
+                    $scope.$on('UserSrv.logout', updateUser);
+                    
+                    function updateUser(){
+                        var user = UserSrv.getUser();
+                        $scope.loggedIn = !!(user && user.sid);
+                        $scope.isAdmin = !!(user && user.userRights && user.userRights.admin);
+                    }
 
                     $scope.selectItem = function(item){
                         $scope.activeMenuItem = item;
@@ -96,8 +104,8 @@
                         if (item.path && path.indexOf(item.path) >= 0)
                             $scope.activeMenuItem = item;
                     })
-                    // if (!$scope.activeMenuItem)
-                        // $scope.selectItem($scope.menu[0]);
+                    if (!$scope.activeMenuItem)
+                        $scope.selectItem($scope.menu[0]);
                         
                     
 				}]

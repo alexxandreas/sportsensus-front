@@ -12,6 +12,8 @@
 		'$q',
 		'ParamsSrv',
 		'ApiSrv',
+		'StaticSrv',
+		'AudienceCountSrv',
 		'analyticsSrv',
 		'graphHelpersSrv'
 	];
@@ -22,6 +24,8 @@
 		$q,
 		ParamsSrv,
 		ApiSrv,
+		StaticSrv,
+		AudienceCountSrv,
 		analyticsSrv,
 		graphHelpersSrv
 	) {
@@ -29,7 +33,7 @@
 
 		
 		var promises = [];
-		promises.push(ApiSrv.getStatic('hockey').then(function(hockeyData){
+		promises.push(StaticSrv.getStatic('hockey').then(function(hockeyData){
 			hockeyData.forEach(function(item){
 				if (item.type == 'championship'){
 					$scope.championship = item;
@@ -67,11 +71,11 @@
 			});
 
 
-			$scope.$on('ApiSrv.countLoaded', readCount);
+			$scope.$on('AudienceCountSrv.countLoaded', readCount);
 			readCount();
 			
 			function readCount(){
-				var result = ApiSrv.getLastCountResult();
+				var result = AudienceCountSrv.getLastCountResult();
 				$scope.audiencePercent = result.audiencePercent / 100;
 				$scope.calc();
 			}

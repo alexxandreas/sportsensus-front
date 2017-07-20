@@ -5,52 +5,56 @@
         .factory('ArticlesSrv', ArticlesSrv);
 
     // инициализируем сервис
-    angular.module('SportsensusApp').run(['ArticlesSrv', function(ArticlesSrv) {
-
-    }]);
-
-    // angula
-    // r.module('SportsensusApp').run(ArticlesSrv.init);
+    // angular.module('SportsensusApp').run(['ArticlesSrv', function(ArticlesSrv) { }]);
 
     ArticlesSrv.$inject = [
         '$rootScope',
         '$q',
-        'ApiSrv'
+        'ApiSrv',
+        'UserSrv'
     ];
 
 
     function ArticlesSrv(
         $rootScope,
         $q,
-        ApiSrv
+        ApiSrv,
+        UserSrv
     ) {
-        
-        //var articles = [];
-        //var allTags = [];
         
         var tags = {
             // ungrouped: []
         };
         
-        var articlesLoaded = false;
-        var articlesDefer = $q.defer();
-
+        function decodeTag(tag){
+            var parts = tag.split('::');
+            var group = null;
+            
+            if (parts.length > 1) {
+                tag = parts.slice(1).join('::');
+                group = parts[0];
+            } else {
+                group = 'ungrouped'
+            }
+            
+            return {
+                tag: tag,
+                group: group
+            }
+        }
+        
+        function encodeTag(group, tag) {
+            return group + '::' + tag;
+        }
+        
         function addTags(newTags, allTags){
             angular.forEach(newTags, function(tag){
-                var parts = tag.split('::');
-                var group = null;
+                var decoded = decodeTag(tag);
                 
-                if (parts.length > 1) {
-                    tag = parts.slice(1).join('::');
-                    group = parts[0];
-                } else {
-                    group = 'ungrouped'
-                }
+                allTags[decoded.group] = allTags[decoded.group] || [];
                 
-                allTags[group] = allTags[group] || [];
-                
-                if (allTags[group].indexOf(tag) < 0)
-                    allTags[group].push(tag);
+                if (allTags[decoded.group].indexOf(decoded.tag) < 0)
+                    allTags[decoded.group].push(decoded.tag);
             });
         }
     
@@ -61,25 +65,7 @@
             });
         }
         
-        function getArticles(){
-            if (!articlesLoaded){
-                articlesLoaded = true;
-                
-                ApiSrv.getUserAuthPromise().then(function(){
-                    ApiSrv.getArticles().then(function(articles){
-                        //articles = newArticles;
-                        angular.forEach(articles, loadArticleTags);
-                        
-                        articlesDefer.resolve(articles);
-                        return articles;
-                    }, function(){
-                        articlesDefer.reject();
-                    }); 
-                });
-            }
-            
-            return articlesDefer.promise;
-        }
+        
         
         // загрузка тегов из tags в groupedTags
         function loadArticleTags(article) {
@@ -102,17 +88,7 @@
         
         function getArticle(id) {
     
-            //return ApiSrv.getArticle(id);
-            
             return getArticles().then(function(articles){
-                
-                // var oldArticle = articles.filter(function(art){
-                //     return art.id == id;
-                // })[0];
-                // return oldArticle;
-            
-               
-                
                 return ApiSrv.getArticle(id).then(function(article){
                     loadArticleTags(article);
                     return article;
@@ -158,13 +134,26 @@
                 });
             });
         }
-
+        
+  
+        var getArticles = UserSrv.loadWhenAuth(function(resolve, reject){
+            ApiSrv.getArticles().then(function(articles){
+                tags = {}; // очищаем каждый раз, когда загружаем заново статьи
+                angular.forEach(articles, loadArticleTags);
+                resolve(articles);
+            }, reject);
+        });
+        
+        
+        
         var me = {
             getArticles: getArticles,
             getArticle: getArticle,
             setArticle: setArticle,
             removeArticle: removeArticle,
-            getTags: getTags
+            getTags: getTags,
+            decodeTag: decodeTag,
+            encodeTag: encodeTag
         };
 
 

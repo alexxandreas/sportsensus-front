@@ -589,6 +589,44 @@ md-switch.md-checked .md-thumb-container {
   text-align: center;
 }
 
+.chartjs-tooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 3px;
+  border-radius: 3px;
+  -webkit-transition: all .1s ease;
+  transition: all .1s ease;
+  pointer-events: none;
+  -webkit-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+}
+.chartjs-tooltip .line {
+  color: white;
+  font-size: 13px;
+  padding: 2px;
+}
+.chartjs-tooltip .line .color {
+  vertical-align: middle;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-right: 8px;
+  border-radius: 2px;
+  border-color: gray;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.check-access-panel .access-denied {
+  background-color: rgba(49, 37, 37, 0.2);
+  top: 78px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+}
+
 .site-header {
   position: fixed;
   left: 0;
@@ -686,35 +724,6 @@ md-switch.md-checked .md-thumb-container {
 
 }
 */
-
-.chartjs-tooltip {
-  position: absolute;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 3px;
-  border-radius: 3px;
-  -webkit-transition: all .1s ease;
-  transition: all .1s ease;
-  pointer-events: none;
-  -webkit-transform: translate(-50%, 0);
-  transform: translate(-50%, 0);
-}
-.chartjs-tooltip .line {
-  color: white;
-  font-size: 13px;
-  padding: 2px;
-}
-.chartjs-tooltip .line .color {
-  vertical-align: middle;
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  margin-right: 8px;
-  border-radius: 2px;
-  border-color: gray;
-  border-width: 1px;
-  border-style: solid;
-}
 
 /*@import "../../../static/fonts/style.css";      */
 .l-home {
@@ -1878,6 +1887,10 @@ div > svg > circle:nth-child(5n) {
 }
 .admin-profiles .profiles-table .profiles-table-cell-center {
   text-align: center;
+}
+
+.admin-send-mail md-input-container {
+  margin: 0;
 }
 
 .map-marker {

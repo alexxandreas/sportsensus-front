@@ -232,14 +232,14 @@
             //     "sid": "UMoEnDBCLNsXXbTEiPmcjGSjpnswnD7W04VzBBHvdNudOJHEPuaKT9Xzb4aYrFhH",
             //     "demo": false,
             //     "ttl": "03/03/2018 02:03:04",
-            //     "address": "redvsice@gmail.com",
+            //     "address": ["redvsice@gmail.com"],
             //     "theme": "hello",
             //     "message": "hi",
             //     "attachments": [{"filename": "1.txt", "data": "YXNkcw=="}]
             // };
             var params = {
                 //sid: sid,
-                address: options.address,
+                address: angular.isArray(options.address) ? options.address : [options.address],
                 theme: options.theme,
                 message: options.message,
                 attachments: options.attachments // [{"filename": "1.txt", "data": "YXNkcw=="}]

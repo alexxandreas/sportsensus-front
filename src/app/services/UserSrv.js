@@ -14,6 +14,7 @@
 
     UserSrv.$inject = [
         '$rootScope',
+        '$timeout',
         '$q',
         '$cookies',
         'ApiSrv'
@@ -36,6 +37,7 @@
      */
     function UserSrv(
         $rootScope,
+        $timeout,
         $q,
         $cookies,
         ApiSrv
@@ -123,24 +125,18 @@
         
 
         function setUser(sid, userRights){
-            angular.extend(userRights, {
-                tariff:{
-                    id:100,
-                    name:'Тариф 100',
-                    description: 'Описание',
-                    duration:3,
-                    sessionCount:4,
-                    sessionDuration: 1000,
-                    accessCases: true,
-                    accessInfoblock: true,
-                    accessAnalytics: true,
-                    accessScheduler: true
-                },
-                tariffActivationTime: (new Date()).toISOString(),
-                loginTime: (new Date()).toISOString(),
-                remainingTime: 500,
-                sessionsCount: 2
-            })
+            userRights.tariff = userRights.tariff || {};
+            angular.extend(userRights.tariff, {
+                access_cases: true,
+                access_infoblock: true,
+                access_admin: true,
+                updateTime: Date.now()
+            });
+            //     tariffActivationTime: (new Date()).toISOString(),
+            //     loginTime: (new Date()).toISOString(),
+            //     remainingTime: 500,
+            //     sessionsCount: 2
+            // })
             
             user = {
                 sid: sid,
@@ -157,6 +153,7 @@
             $rootScope.$broadcast('UserSrv.login', user);
             // $scope.$on('UserSrv.login', function(event, user){})
             
+            startCheckSessionTimer();
             // getTranslations();
             
             // updateTotalCount();
@@ -191,6 +188,7 @@
             
             $rootScope.$broadcast('UserSrv.logout');
             
+            stopCheckSessionTimer();
             // sid = null;
             // userRights = null;
         }
@@ -208,6 +206,40 @@
         }
         
         
+        var checkSessionTimer = null;
+        var checkSessionTimeout = 60*1000; // ms
+        
+        function startCheckSessionTimer(){
+            checkSessionTimer = $timeout(function(){
+                stopCheckSessionTimer();
+                checkSession();
+            }, checkSessionTimeout)
+        }
+        
+        function stopCheckSessionTimer(){
+            checkSessionTimer && $timeout.cancel(checkSessionTimer);
+            checkSessionTimer = null;
+        }
+        
+        function getTariff(){
+            var tariff = user && user.userRights && user.userRights.tariff;
+            if (tariff) {
+                tariff.realRemainingTime = tariff.remaining_time 
+                    ? tariff.remaining_time - Math.round((Date.now() - tariff.updateTime)/1000)
+                    : null
+            }
+            return tariff || {};
+            
+        }
+        
+        function hasAccess(type){
+            //return true;
+            var tariff = getTariff();
+            
+            var access = tariff['access_' + type];
+            return !!access || false;
+           
+        }
         
         // fn(resolve, reject)
         /**
@@ -266,7 +298,9 @@
             getUser: getUser,
             auth: auth,
             logout: logout,
-            loadWhenAuth: loadWhenAuth
+            loadWhenAuth: loadWhenAuth,
+            hasAccess: hasAccess,
+            getTariff: getTariff // возвращает тариф пользователя либо {} 
             
             
         };

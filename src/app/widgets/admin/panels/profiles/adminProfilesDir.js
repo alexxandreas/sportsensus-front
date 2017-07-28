@@ -29,57 +29,66 @@
 				'$routeParams',
 				'$location',
 				'$window',
+				'$q',
 				'$mdDialog',
 				'ParamsSrv',
 				'ApiSrv',
 				'AdminProfilesSrv',
+				'TariffsSrv',
 				function(
 					$scope,
 					$routeParams,
 					$location,
 					$window,
+					$q,
 					$mdDialog,
 					ParamsSrv,
 					ApiSrv,
-					AdminProfilesSrv
+					AdminProfilesSrv,
+					TariffsSrv
 				) {
 	
-					$scope.showPreloader = true;
-					AdminProfilesSrv.getProfiles().then(function(profiles){
-							$scope.showPreloader = false;	
-							$scope.profiles = profiles;
-						}, function(){
-							$scope.showPreloader = false;
-                            $mdDialog.show(
-                              $mdDialog.alert()
-                                .clickOutsideToClose(false)
-                                .title('Ошибка')
-                                .textContent('Ошибка загрузки данных')
-                                .ok('OK')
-                            );
-						}
-					);
-
-					// $scope.saveProfile = function(profile){
-					// 	var acl = {
-					// 		"admin": profile.admin_role,
-					// 		"sponsor":  profile.sponsor_role,
-					// 		"rightholder":  profile.rightholder_role,
-					// 		"demo":  profile.demo_role
-					// 	};
-					// 	ApiSrv.addRole(profile.user_id, acl).then(function(acl){
-					// 		profile.admin_role = acl.admin;
-					// 		profile.sponsor_role = acl.sponsor;
-					// 		profile.rightholder_role = acl.rightholder;
-					// 		profile.demo_role = acl.demo;
-					// 		profile.dirty = false;
+					// $scope.showPreloader = true;
+					// AdminProfilesSrv.getProfiles().then(function(profiles){
+					// 		$scope.showPreloader = false;	
+					// 		$scope.profiles = profiles;
 					// 	}, function(){
-					// 		$mdDialog.show($mdDialog.alert()
-					// 			.title('Ошибка')
-					// 			.textContent('Невозможно применить изменения')
-					// 			.ok('OK'));
-					// 	});
-					// };
+					// 		$scope.showPreloader = false;
+     //                       $mdDialog.show(
+     //                         $mdDialog.alert()
+     //                           .clickOutsideToClose(false)
+     //                           .title('Ошибка')
+     //                           .textContent('Ошибка загрузки данных')
+     //                           .ok('OK')
+     //                       );
+					// 	}
+					// );
+					
+					$scope.showPreloader = true;
+                    $q.all({
+                    	profiles: AdminProfilesSrv.getProfiles(),
+                    	tariffs: TariffsSrv.getTariffs()
+                    }).then(function(result){
+                    	$scope.profiles = result.profiles;
+                    	$scope.tariffs = result.tariffs;
+                        $scope.showPreloader = false;
+                    }, function(){
+                    	$scope.showPreloader = false;
+                        $mdDialog.show(
+                          $mdDialog.alert()
+                            .clickOutsideToClose(false)
+                            .title('Ошибка')
+                            .textContent('Ошибка загрузки данных с сервера')
+                            .ok('OK')
+                        ).then(function(){
+                            //$location.path('/admin/profiles/');
+                        });
+                    });
+                    
+                    $scope.getTariff = function(id){
+                    	return TariffsSrv.getTariff(id);
+                    }
+
 					
 					$scope.openProfile = function(profile){
 						$location.path('/admin/profiles/' + profile.user_id);

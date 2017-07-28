@@ -1,5 +1,5 @@
 <div layout="row" flex class="admin-profiles">
-    <header-dir></header-dir> 
+    <!--<header-dir></header-dir> -->
     
     <admin-menu-dir></admin-menu-dir>
     
@@ -61,7 +61,7 @@
 					
 					<!--<td>{{profile.corr_account || 'None'}}</td>-->
 					
-					<td class="profiles-table-cell profiles-table-cell-center">{{profile.tariff && profile.tariff.name || 'None'}}</td>
+					<td class="profiles-table-cell profiles-table-cell-center">{{getTariff(profile.tariff.id).name || 'None'}}</td>
 					
 					<!--<td><md-button class="md-raised md-primary" ng-disabled="!profile.dirty" ng-click="saveProfile(profile)">Сохранить</md-button></td>-->
 				</tr>

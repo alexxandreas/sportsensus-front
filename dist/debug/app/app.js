@@ -62,42 +62,53 @@
 		return {
 			userAuthResolver: ['ApiSrv', 'UserSrv', '$location', '$q', function(ApiSrv, UserSrv, $location, $q) {
 				return UserSrv.getUserCheckPromise().then(function(user){
-				// return UserSrv.getUserAuthPromise().then(function(user){
-					var userRights = user.userRights || {};
-					if (!userRights) {
-						$location.path('/');
-						return $q.reject();
-					}
+					return;
 					
-					if (options.type == 'admin' && !userRights.admin) {
-						$location.path('/');
-						return $q.reject();
-					}
+					// return UserSrv.getUserAuthPromise().then(function(user){
+					// if (!options) return;
 					
-					if (options.type == 'infobox') {
-						if (!userRights.tariff || !userRights.tariff.accessInfoblock) {
-							$location.path('/');
-							return $q.reject();
-						}
-					}
-					if (options.type == 'analytics') {
-						if (!userRights.tariff || !userRights.tariff.accessAnalytics) {
-							$location.path('/');
-							return $q.reject();
-						}
-					}
-					if (options.type == 'cases') {
-						if (!userRights.tariff || !userRights.tariff.accessCases) {
-							$location.path('/');
-							return $q.reject();
-						}
-					}
-					if (options.type == 'scheduler') {
-						if (!userRights.tariff || !userRights.tariff.accessScheduler) {
-							$location.path('/');
-							return $q.reject();
-						}
-					}
+					// var userRights = user.userRights || {};
+					
+					// if (options.type == 'admin' && !userRights.admin) {
+					// 	$location.path('/');
+					// 	return $q.reject();
+					// }
+
+					
+					// return;
+					
+					
+					// var hasAccess = UserSrv.hasAccess(options.type);
+					// if (!hasAccess){
+					// 	$location.path('/');
+					// 	return $q.reject();
+					// }
+					
+					
+					// if (options.type == 'infobox') {
+					// 	if (!userRights.tariff || !userRights.tariff.accessInfoblock) {
+					// 		$location.path('/');
+					// 		return $q.reject();
+					// 	}
+					// }
+					// if (options.type == 'analytics') {
+					// 	if (!userRights.tariff || !userRights.tariff.accessAnalytics) {
+					// 		$location.path('/');
+					// 		return $q.reject();
+					// 	}
+					// }
+					// if (options.type == 'cases') {
+					// 	if (!userRights.tariff || !userRights.tariff.accessCases) {
+					// 		$location.path('/');
+					// 		return $q.reject();
+					// 	}
+					// }
+					// if (options.type == 'scheduler') {
+					// 	if (!userRights.tariff || !userRights.tariff.accessScheduler) {
+					// 		$location.path('/');
+					// 		return $q.reject();
+					// 	}
+					// }
 					
 				}, function(){
 					$location.path('/');
@@ -106,6 +117,41 @@
 			}]
 		};
 	}
+	
+	
+	function getCheckAccessTemplate(type, defaultTemplate){
+		return '<check-access-dir type="' + (type || '') + '">' + defaultTemplate + '</check-access-dir>'
+	}
+	
+	
+	function activateController($scope, $location, $mdDialog, ApiSrv) {
+		var code = $location.search().code;
+		if (code){
+			ApiSrv.activate(code).then(function(){
+				showAlert('Учётная запись успешно активирована');
+				$location.search('code', undefined);
+				$location.path('/');
+			}, function(){
+				showAlert('Ошибка активации учётной записи');
+				$location.search('code', undefined);
+				$location.path('/');
+			})
+		} else {
+			$location.path('/');
+		}
+
+		function showAlert(text) {
+			$mdDialog.show(
+				$mdDialog.alert()
+					.title('Активация учетной записи')
+					.textContent(text)
+					.ok('OK')
+			);
+		}
+	}
+	activateController.$inject = ['$scope', '$location', '$mdDialog', 'ApiSrv'];
+	
+	
 	
 	
 	
@@ -118,142 +164,94 @@
 				template: '<home-dir></home-dir>'
 			})
 			
-			.when('/infobox/', { 
-				template: '<infobox-dir type="infobox"></infobox-dir>',
-				resolve: getUserAuthResolver({type: 'infobox'})
-				// controller: function($scope, $location, ApiSrv) {
-				// 	if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
-				// 		$location.path('/');
-				// }
-			})
-			.when('/analytics/', {
-				//template: '<infobox-dir type="analytics"></infobox-dir>',
-				template: '<analytics-dir></analytics-dir>',
-				resolve: getUserAuthResolver({type: 'analytics'})
-				// controller: function($scope, $location, ApiSrv) {
-				// 	if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
-				// 		$location.path('/');
-				// }
-			})
-			.when('/articles/', { 
-				template: '<articles-dir></articles-dir>',
-				resolve: getUserAuthResolver({type: 'cases'})
-				// controller: function($scope, $location, ApiSrv) {
-				// 	if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
-				// 		$location.path('/');
-				// }
-			})
-			.when('/articles/:articleId', { 
-				template: '<article-dir></article-dir>',
-				resolve: getUserAuthResolver({type: 'cases'})
-				// controller: function($scope, $location, ApiSrv) {
-				// 	if (!ApiSrv.getUser().sid || ApiSrv.getUser().userRights.admin)
-				// 		$location.path('/');
-				// }
-			})
 			.when('/login/', { 
 				template: '<login-dir></login-dir>'
 			})
+			
 			.when('/activate/', {
 				template: ' ',
-				controller: function($scope, $location, $mdDialog, ApiSrv) {
-					var code = $location.search().code;
-					if (code){
-						ApiSrv.activate(code).then(function(){
-							showAlert('Учётная запись успешно активирована');
-							$location.search('code', undefined);
-							$location.path('/');
-						}, function(){
-							showAlert('Ошибка активации учётной записи');
-							$location.search('code', undefined);
-							$location.path('/');
-						})
-					} else {
-						$location.path('/');
-					}
-
-					function showAlert(text) {
-						$mdDialog.show(
-							$mdDialog.alert()
-								.title('Активация учетной записи')
-								.textContent(text)
-								.ok('OK')
-						);
-					}
-				}
+				controller: activateController
 			})
 			
 			
+			// можно без getCheckAccessTemplate, т.к. доступ открыт всем залогиненным
+			.when('/infobox/', { 
+				// template: '<infobox-dir type="infobox"></infobox-dir>',
+				template: getCheckAccessTemplate('infoblock', '<infobox-dir type="infobox"></infobox-dir>'),
+				resolve: getUserAuthResolver()
+				
+			})
+			
+			.when('/analytics/', {
+				// template: '<analytics-dir></analytics-dir>',
+				template: getCheckAccessTemplate('rightholder', '<analytics-dir></analytics-dir>'),
+				resolve: getUserAuthResolver()
+			})
+			
+			.when('/articles/', { 
+				// template: '<articles-dir></articles-dir>',
+				template: getCheckAccessTemplate('cases', '<articles-dir></articles-dir>'),
+				resolve: getUserAuthResolver()
+			})
+			
+			.when('/articles/:articleId', { 
+				// template: '<article-dir></article-dir>',
+				template: getCheckAccessTemplate('cases', '<article-dir></article-dir>'),
+				resolve: getUserAuthResolver()
+			})
+			
+			
+			
+			
 			.when('/account/', {
-				template: '<account-dir></account-dir>',
-				resolve: getUserAuthResolver({type: 'auth'})
-				// controller: function($scope, $location, ApiSrv) {
-				// 	if (!ApiSrv.getUser().userRights)
-				// 		$location.path('/');
-				// }
+				// template: '<account-dir></account-dir>',
+				template: getCheckAccessTemplate(null, '<account-dir></account-dir>'),
+				resolve: getUserAuthResolver()
 			})
 			
 			
 			/** ADMIN **/
 			
 			.when('/admin/', {
-				template: '<admin-dir></admin-dir>',
-				resolve: getUserAuthResolver({type: 'admin'})
-				//controller: AdminCtrl
-				// controller: function($scope, $location, ApiSrv) {
-				// 	if (!ApiSrv.getUser().userRights || !ApiSrv.getUser().userRights.admin)
-				// 		$location.path('/');
-				// }
+				//template: '<admin-dir></admin-dir>',
+				template: getCheckAccessTemplate('admin', '<admin-dir></admin-dir>'),
+				resolve: getUserAuthResolver()
 			})
 			
 			.when('/admin/articles/', {
-				template: '<admin-articles-dir></admin-articles-dir>',
-				resolve: getUserAuthResolver({type: 'admin'})
-				//controller: AdminCtrl
-				// controller: function($scope, $location, ApiSrv) {
-				// 	if (!ApiSrv.getUser().userRights || !ApiSrv.getUser().userRights.admin)
-				// 		$location.path('/');
-				// }
+				// template: '<admin-articles-dir></admin-articles-dir>',
+				template: getCheckAccessTemplate('admin', '<admin-articles-dir></admin-articles-dir>'),
+				resolve: getUserAuthResolver()
 			})
 			
 			.when('/admin/profiles/', {
-				template: '<admin-profiles-dir></admin-profiles-dir>',
-				resolve: getUserAuthResolver({type: 'admin'})
-				//controller: AdminCtrl
-				// controller: function($scope, $location, ApiSrv) {
-				// 	if (!ApiSrv.getUser().userRights || !ApiSrv.getUser().userRights.admin)
-				// 		$location.path('/');
-				// }
+				//template: '<admin-profiles-dir></admin-profiles-dir>',
+				template: getCheckAccessTemplate('admin', '<admin-profiles-dir></admin-profiles-dir>'),
+				resolve: getUserAuthResolver()
 			})
 			
 			.when('/admin/profiles/:userId', {
-				template: '<admin-profile-dir></admin-profile-dir>',
-				resolve: getUserAuthResolver({type: 'admin'})
-				//controller: AdminCtrl
-				// controller: function($scope, $location, ApiSrv) {
-				// 	if (!ApiSrv.getUser().userRights || !ApiSrv.getUser().userRights.admin)
-				// 		$location.path('/');
-				// }
+				// template: '<admin-profile-dir></admin-profile-dir>',
+				template: getCheckAccessTemplate('admin', '<admin-profile-dir></admin-profile-dir>'),
+				resolve: getUserAuthResolver()
+			})
+			
+			.when('/admin/sendMail/:userId?', {
+				// template: '<admin-send-mail-dir></admin-send-mail-dir>',
+				template: getCheckAccessTemplate('admin', '<admin-send-mail-dir></admin-send-mail-dir>'),
+				resolve: getUserAuthResolver()
 			})
 			
 			.when('/admin/cases/', {
-				template: '<admin-cases-dir></admin-cases-dir>',
-				resolve: getUserAuthResolver({type: 'admin'})
-				//controller: AdminCtrl
-				// controller: function($scope, $location, ApiSrv) {
-				// 	if (!ApiSrv.getUser().userRights || !ApiSrv.getUser().userRights.admin)
-				// 		$location.path('/');
-				// }
+				// template: '<admin-cases-dir></admin-cases-dir>',
+				template: getCheckAccessTemplate('admin', '<admin-cases-dir></admin-cases-dir>'),
+				resolve: getUserAuthResolver()
 			})
 			
 			.when('/admin/cases/:caseId', {
-				template: '<admin-case-dir></admin-case-dir>',
-				resolve: getUserAuthResolver({type: 'admin'})
-				// controller: AdminCtrl
-				// controller: function($scope, $location, ApiSrv) {
-				// 	if (!ApiSrv.getUser().userRights || !ApiSrv.getUser().userRights.admin)
-				// 		$location.path('/');
-				// }
+				// template: '<admin-case-dir></admin-case-dir>',
+				template: getCheckAccessTemplate('admin', '<admin-case-dir></admin-case-dir>'),
+				resolve: getUserAuthResolver()
 			})
 			
 			
@@ -262,6 +260,20 @@
 		}
 	// .config(function($mdIconProvider) {
 	// });
+
+
+
+
+	
+	
+	
+	
+	
+	
+
+
+
+
 
 	
 }());
@@ -366,6 +378,155 @@
     			});
 			
 			}
+		};
+	}
+}());
+
+(function () {
+	"use strict";
+	/**
+	 * @desc
+	 * @example
+	 */
+	angular.module('SportsensusApp')
+		.directive('tinyDir', tinyDir);
+
+	tinyDir.$inject = [
+		'$rootScope'
+	];
+
+	function tinyDir(
+		$rootScope
+	)    {
+		return {
+			restrict: 'E',
+			scope: {
+				tinyOptions: '=',
+				tinyModel: '='
+			},
+			//templateUrl: '/views/widgets/admin/panels/case/case.html',
+			template: '<div>'+
+                '<input type="file" class="ng-hide" file-model-dir="tinymceUploadFile" file-model-open-event="tinymceUploadFileEvent"/>'+
+                '<textarea ui-tinymce="tinymceOptions" ng-model="tinyModel"></textarea>'+
+            '</div>',
+			link: function ($scope, $el, attrs) {
+				//$scope.init();
+				$scope.el = $el;
+			},
+
+			controller: [
+				'$scope',
+				'$routeParams',
+				'$location',
+				'$window',
+				'$compile',
+				'$mdDialog',
+				'ParamsSrv',
+				'ArticlesSrv',
+				'ConfigSrv',
+				'UserSrv',
+				'UploadFileSrv',
+				function(
+					$scope,
+					$routeParams,
+					$location,
+					$window,
+					$compile,
+					$mdDialog,
+					ParamsSrv,
+					ArticlesSrv,
+					ConfigSrv,
+					UserSrv,
+					UploadFileSrv
+				) {
+	
+	                var proxyURL = /*ConfigSrv.get().proxyURL || */ '';
+	                var imageUploadUrl = proxyURL + ConfigSrv.get().imageUploadUrl + '?sid=' + UserSrv.getSid() + '&format=json';
+	
+	                $scope.tinymceUploadFile = null;
+	                
+                    //$scope.tinyOptions
+                    $scope.tinymceOptions = angular.extend({}, $scope.tinyOptions, {
+                        // selector: '#case_editor',
+                        // height: 700,
+                        // plugins: [
+                        //     'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                        //     'searchreplace wordcount visualblocks visualchars code fullscreen',
+                        //     'insertdatetime media nonbreaking save table contextmenu directionality',
+                        //     'emoticons template paste textcolor colorpicker textpattern imagetools codesample'
+                        // ],
+                        // toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+                        // toolbar2: 'print preview media | forecolor backcolor emoticons | codesample help',
+                        // image_advtab: true,
+                        file_browser_callback: function(field_name, url, type, win) {
+                            if(type=='image') {
+                                $scope.$broadcast('tinymceUploadFileEvent');
+                            }
+                        },
+                        file_picker_callback: function(cb, value, meta) {
+                            if (meta.filetype == 'image'){
+                                $scope.$broadcast('tinymceUploadFileEvent');
+                            }
+                        }
+                    });
+                    
+                    $scope.$watch('tinymceUploadFile', function(newValue, oldValue){
+                        if (!newValue) return;
+                        var file = newValue;
+                        
+                        $scope.showUploadPreloader();
+                        UploadFileSrv.uploadFile(file, imageUploadUrl, 'upload').then(function(response){
+                            $scope.hideUploadPreloader();
+                            
+                            var url = response.data && response.data.url;
+                            if (!url) return;
+                            
+                            $scope.setImageUrl(url);
+                        }, function(){
+                            $scope.hideUploadPreloader();
+                        });
+                    });
+                    
+                    $scope.setImageUrl = function(url){
+                        var openBtn = document.querySelectorAll('.mce-btn.mce-open')[0];
+                        var textBox = openBtn.parentElement.querySelector('.mce-textbox');
+                        var textBoxEl = angular.element(textBox)
+                        textBoxEl.val(url);
+                        
+                        var closeBtn = openBtn.closest('.mce-window').querySelector('.mce-primary');
+                        var closeBtnEl = angular.element(closeBtn)[0];
+                        closeBtn.click();
+                    }
+                    
+                    var buttonContainer = null;
+                    var hiddenButton = null;
+                    var preloader = null;
+                    
+                    $scope.showUploadPreloader = function(){
+                        hiddenButton = angular.element(document.querySelectorAll('.mce-btn.mce-open button')[0]);
+                        hiddenButton.remove();
+                        buttonContainer = angular.element(document.querySelectorAll('.mce-btn.mce-open')[0]);
+            
+                        var tpl = '<md-progress-circular md-mode="indeterminate" md-diameter="26" style="padding:1px;"></md-progress-circular>'
+                        preloader = angular.element(tpl);
+                        $compile(preloader)($scope);
+                        buttonContainer.append(preloader);
+                    }
+                    
+                    $scope.hideUploadPreloader = function(){
+                        preloader.remove();
+                        buttonContainer.append(hiddenButton);
+                    }
+              
+                    
+                    
+                    
+
+                    $scope.$on("$destroy", function() {
+                        tinymce.remove("#case_editor");
+                    });
+
+				}]
 		};
 	}
 }());
@@ -604,14 +765,14 @@
             //     "sid": "UMoEnDBCLNsXXbTEiPmcjGSjpnswnD7W04VzBBHvdNudOJHEPuaKT9Xzb4aYrFhH",
             //     "demo": false,
             //     "ttl": "03/03/2018 02:03:04",
-            //     "address": "redvsice@gmail.com",
+            //     "address": ["redvsice@gmail.com"],
             //     "theme": "hello",
             //     "message": "hi",
             //     "attachments": [{"filename": "1.txt", "data": "YXNkcw=="}]
             // };
             var params = {
                 //sid: sid,
-                address: options.address,
+                address: angular.isArray(options.address) ? options.address : [options.address],
                 theme: options.theme,
                 message: options.message,
                 attachments: options.attachments // [{"filename": "1.txt", "data": "YXNkcw=="}]
@@ -1317,6 +1478,25 @@
 (function () {
 
     "use strict";
+    var cases = [2, 0, 1, 1, 1, 2];  
+    
+    /** 
+     * Использование:
+     * PluralSrv(['1 штука','2 штуки','5 штук'], число); 
+     * 
+     * PluralSrv(['Яблоко','Яблока','Яблок'], 0); // Яблок
+     * PluralSrv(['Яблоко','Яблока','Яблок'], 1); // Яблоко
+     * PluralSrv(['Яблоко','Яблока','Яблок'], 2); // Яблока
+     */
+    angular.module('SportsensusApp').factory('PluralSrv', function(){
+        return function (titles, number) {  
+            return titles[ (number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5] ];  
+        }
+    });
+}());
+(function () {
+
+    "use strict";
     angular.module('SportsensusApp')
         .factory('PreloaderSrv', PreloaderSrv);
 
@@ -1463,14 +1643,112 @@
         UserSrv
     ) {
         
+        var tariffs = null;
+        
         var getTariffs = UserSrv.loadWhenAuth(function(resolve, reject){
-            ApiSrv.getTariffs().then(resolve, reject);
+            //ApiSrv.getTariffs().then(resolve, reject);
+            ApiSrv.getTariffs().then(function(_tariffs){
+                tariffs = _tariffs;
+                resolve(_tariffs);
+            }, function(data){
+                tariffs = null;
+                reject(data);
+            });
         });
+        
+        
+        
+        function getTariff(id){
+            getTariffs(); // на всякий случай загружаем тарифы, если они еще не загружены
+            if (!tariffs) return null;
+            return tariffs.find(function(tariff){
+                return tariff.id == id;
+            });
+        }
         
 
         var me = {
-            getTariffs: getTariffs
+            getTariffs: getTariffs,
+            // Функция должна вызываться при уже загруженных тарифах. в противном случае будет возвращать null
+            getTariff: getTariff
         };
+
+        return me;
+    }
+}());
+(function () {
+
+    "use strict";
+    angular.module('SportsensusApp')
+        .factory('TimeSrv', TimeSrv);
+
+    // инициализируем сервис
+    // angular.module('SportsensusApp').run(['TimeSrv', function(TimeSrv) { }]);
+
+    TimeSrv.$inject = [
+        // '$rootScope',
+        // '$q',
+        // 'ApiSrv',
+        // 'UserSrv'
+        'PluralSrv'
+    ];
+
+
+    function TimeSrv(
+        // $rootScope,
+        // $q,
+        // ApiSrv,
+        // UserSrv
+        PluralSrv
+    ) {
+        
+        function secondsToDateTime(sec){
+            //var sec = parseInt(this, 10); // don't forget the second param
+            var secInMin = 60;
+            var secInHour = secInMin * 60;
+            var secInDay = secInHour * 24;
+            var secInMonth = secInDay * 31;
+            var secInYear = secInDay * 365;
+            
+            var years = Math.floor(sec / secInYear);
+            sec = sec - years * secInYear;
+        
+            var months = Math.floor(sec / secInMonth);
+            sec = sec - months * secInMonth;
+            
+            
+            var days = Math.floor(sec / secInDay);
+            sec = sec - days * secInDay;
+    
+            var hours   = Math.floor(sec / secInHour);
+            sec = sec - hours * secInHour;
+            
+            var minutes = Math.floor(sec / secInMin);
+            sec = sec - minutes * secInMin;
+            
+            var seconds = sec;
+            
+            var result = [];
+            if (years){
+                result.push(years + PluralSrv([' год',' года',' лет'], years));
+            }
+            if (months){
+                result.push(months + PluralSrv([' месяц',' месяца',' месяцев'], months));
+            }
+            if (days){
+                result.push(days + PluralSrv([' день',' дня',' дней'], days));
+            }
+            result.push(hours + PluralSrv([' час',' часа',' часов'], hours));
+            result.push(minutes + PluralSrv([' мин',' мин',' мин'], minutes));
+            result.push(seconds + PluralSrv([' сек',' сек',' сек'], seconds));
+            
+            return result.join(' ');
+        }
+        
+        var me = {
+            secondsToDateTime: secondsToDateTime
+        };
+
 
         return me;
     }
@@ -1527,6 +1805,7 @@
 
     UserSrv.$inject = [
         '$rootScope',
+        '$timeout',
         '$q',
         '$cookies',
         'ApiSrv'
@@ -1549,6 +1828,7 @@
      */
     function UserSrv(
         $rootScope,
+        $timeout,
         $q,
         $cookies,
         ApiSrv
@@ -1636,24 +1916,18 @@
         
 
         function setUser(sid, userRights){
-            angular.extend(userRights, {
-                tariff:{
-                    id:100,
-                    name:'Тариф 100',
-                    description: 'Описание',
-                    duration:3,
-                    sessionCount:4,
-                    sessionDuration: 1000,
-                    accessCases: true,
-                    accessInfoblock: true,
-                    accessAnalytics: true,
-                    accessScheduler: true
-                },
-                tariffActivationTime: (new Date()).toISOString(),
-                loginTime: (new Date()).toISOString(),
-                remainingTime: 500,
-                sessionsCount: 2
-            })
+            userRights.tariff = userRights.tariff || {};
+            angular.extend(userRights.tariff, {
+                access_cases: true,
+                access_infoblock: true,
+                access_admin: true,
+                updateTime: Date.now()
+            });
+            //     tariffActivationTime: (new Date()).toISOString(),
+            //     loginTime: (new Date()).toISOString(),
+            //     remainingTime: 500,
+            //     sessionsCount: 2
+            // })
             
             user = {
                 sid: sid,
@@ -1670,6 +1944,7 @@
             $rootScope.$broadcast('UserSrv.login', user);
             // $scope.$on('UserSrv.login', function(event, user){})
             
+            startCheckSessionTimer();
             // getTranslations();
             
             // updateTotalCount();
@@ -1704,6 +1979,7 @@
             
             $rootScope.$broadcast('UserSrv.logout');
             
+            stopCheckSessionTimer();
             // sid = null;
             // userRights = null;
         }
@@ -1721,6 +1997,40 @@
         }
         
         
+        var checkSessionTimer = null;
+        var checkSessionTimeout = 60*1000; // ms
+        
+        function startCheckSessionTimer(){
+            checkSessionTimer = $timeout(function(){
+                stopCheckSessionTimer();
+                checkSession();
+            }, checkSessionTimeout)
+        }
+        
+        function stopCheckSessionTimer(){
+            checkSessionTimer && $timeout.cancel(checkSessionTimer);
+            checkSessionTimer = null;
+        }
+        
+        function getTariff(){
+            var tariff = user && user.userRights && user.userRights.tariff;
+            if (tariff) {
+                tariff.realRemainingTime = tariff.remaining_time 
+                    ? tariff.remaining_time - Math.round((Date.now() - tariff.updateTime)/1000)
+                    : null
+            }
+            return tariff || {};
+            
+        }
+        
+        function hasAccess(type){
+            //return true;
+            var tariff = getTariff();
+            
+            var access = tariff['access_' + type];
+            return !!access || false;
+           
+        }
         
         // fn(resolve, reject)
         /**
@@ -1779,7 +2089,9 @@
             getUser: getUser,
             auth: auth,
             logout: logout,
-            loadWhenAuth: loadWhenAuth
+            loadWhenAuth: loadWhenAuth,
+            hasAccess: hasAccess,
+            getTariff: getTariff // возвращает тариф пользователя либо {} 
             
             
         };
@@ -1822,18 +2134,24 @@
 				'$routeParams',
 				'$location',
 				'$window',
+				'$interval',
 				'$mdDialog',
 				'ParamsSrv',
 				'ApiSrv',
+				'UserSrv',
+				'TimeSrv',
 				function(
 					$scope,
 					$controller,
 					$routeParams,
 					$location,
 					$window,
+					$interval,
 					$mdDialog,
 					ParamsSrv,
-					ApiSrv
+					ApiSrv,
+					UserSrv,
+					TimeSrv
 				) {
 
 					$controller('baseInfoboxCtrl', {$scope: $scope});
@@ -1860,6 +2178,12 @@
 						id:'password',
 						tpl:'password',
 						text:'Смена пароля'
+						// isSelected: $scope.checkSelected.bind(null, 'consume'),
+						//footer: 'analytics'
+					},{
+						id:'tariff',
+						tpl:'tariff',
+						text:'Тарифный план'
 						// isSelected: $scope.checkSelected.bind(null, 'consume'),
 						//footer: 'analytics'
 					}];
@@ -1931,6 +2255,58 @@
 					};
 
 
+					
+					var tariff =  UserSrv.getTariff();
+		
+					$scope.tariffParams = [
+						{title: 'Тариф', value: tariff.name},
+						{title: 'Описание', value: tariff.description},
+						
+						//{title: 'Продолжительность подписки', value: TimeSrv.secondsToDateTime(tariff.duration), visible:!!tariff.duration},
+						{
+							title: 'Количество сессий', 
+							value: tariff.sessions_count.toString() + ' (Осталось ' + tariff.remaining_sessions + ')', 
+							visible:!!tariff.sessions_count
+							
+						}, {
+							id: 'session_duration',
+							title: 'Длительность одной сессии', 
+							value: '',
+							visible: !!tariff.session_duration
+						},
+						{title: 'Ограниченный доступ к данным', value: 'Да', visible: tariff.limit_access},
+						
+						{title: 'Доступ к инфоблоку', value: 'Да', visible: tariff.access_infobox},
+						{title: 'Доступ к блоку правообладателя', value: 'Да', visible: tariff.access_rightholder},
+						{title: 'Доступ к блоку спонсона', value: 'Да', visible: tariff.access_sponsor},
+						{title: 'Доступ к планировщику', value: 'Да', visible: tariff.access_scheduler},
+						{title: 'Доступ к кейсам', value: 'Да', visible: tariff.access_cases},
+						{title: 'Доступ к административной панели', value: 'Да', visible: tariff.access_admin},
+						{title: 'Доступ к обновлению данных', value: 'Да', visible: tariff.access_data_update},
+						{title: 'Доступ к обновлению главной страницы', value: 'Да', visible: tariff.access_homepage_update},
+						
+
+
+					]
+					
+					function updateTariffParams(){
+						var tariff = UserSrv.getTariff();
+						
+						var sessionDurationParam = $scope.tariffParams.find(function(param) { return param.id === 'session_duration'});
+						if (tariff.session_duration && tariff.realRemainingTime){
+						sessionDurationParam.value = TimeSrv.secondsToDateTime(tariff.session_duration) + 
+							' (Осталось ' + 
+							TimeSrv.secondsToDateTime(tariff.realRemainingTime) +
+							')'
+						} else {
+							sessionDurationParam.value = null;
+						}
+					}
+					
+					var updateTariffParamsInterval = $interval(updateTariffParams, 1000);
+                    updateTariffParams();
+
+				
 					getProfile();
 
 					function getProfile(){
@@ -1975,7 +2351,53 @@
 						})
 
 					}
+					
+					$scope.$on("$destroy", function() {
+                        if (updateTariffParamsInterval) {
+                            $interval.cancel(updateTariffParamsInterval);
+                        }
+                    });
 
+				}]
+		};
+	}
+}());
+
+(function () {
+	"use strict";
+	/**
+	 * @desc
+	 * @example
+	 */
+	angular.module('SportsensusApp')
+		.directive('adminDir', adminDir);
+
+	adminDir.$inject = [
+		'$rootScope'
+	];
+
+	function adminDir(
+		$rootScope
+	)    {
+		return {
+			restrict: 'E',
+			scope: {
+				type: '@'
+			},
+			templateUrl: '/views/widgets/admin/admin.html',
+			link: function ($scope, $el, attrs) {
+				//$scope.init();
+			},
+
+			controller: [
+				'$scope',
+				'$routeParams',
+				function(
+					$scope,
+					$routeParams
+				) {
+
+					
 				}]
 		};
 	}
@@ -2089,46 +2511,6 @@
 
 					
 
-				}]
-		};
-	}
-}());
-
-(function () {
-	"use strict";
-	/**
-	 * @desc
-	 * @example
-	 */
-	angular.module('SportsensusApp')
-		.directive('adminDir', adminDir);
-
-	adminDir.$inject = [
-		'$rootScope'
-	];
-
-	function adminDir(
-		$rootScope
-	)    {
-		return {
-			restrict: 'E',
-			scope: {
-				type: '@'
-			},
-			templateUrl: '/views/widgets/admin/admin.html',
-			link: function ($scope, $el, attrs) {
-				//$scope.init();
-			},
-
-			controller: [
-				'$scope',
-				'$routeParams',
-				function(
-					$scope,
-					$routeParams
-				) {
-
-					
 				}]
 		};
 	}
@@ -2343,6 +2725,80 @@
 }());
 
 (function () {
+	"use strict";
+	/**
+	 * Директива, проверяющая права пользователя для доступа к указанной странице
+	 */
+	angular.module('SportsensusApp')
+		.directive('checkAccessDir', checkAccessDir);
+
+	checkAccessDir.$inject = [
+		'$rootScope'
+	];
+
+	function checkAccessDir(
+		$rootScope
+	)    {
+		return {
+			restrict: 'E',
+			transclude: true,
+			scope: {
+				type: '@'
+				//articleId: $routeParams.articleId
+			},
+			templateUrl: '/views/widgets/checkAccess/checkAccess.html',
+			//template: '<div>'+
+			//	'<div ng-if="access">'
+			link: function ($scope, $el, attrs) {
+
+			},
+
+			controller: [
+				'$scope',
+				'UserSrv',
+				function(
+					$scope,
+					UserSrv
+				) {
+				    
+				    if (!$scope.type) {
+				    	showContent();
+				    } else {
+					    UserSrv.getUserCheckPromise().then(function(){
+					        if (UserSrv.hasAccess($scope.type)){
+						        showContent();
+					        } else {
+					            showAccessDenied();        
+					        }
+					    }, function(){
+					        showAccessDenied();
+					    })
+					}
+					
+					
+					function showContent(){
+						$scope.showAccessDenied = false;
+						$scope.showContent = true;
+						
+						$scope.$on('UserSrv.logout', onUserLogout);
+					}
+					
+					function showAccessDenied(){
+						$scope.showContent = false;
+						$scope.showAccessDenied = true;
+					}
+					
+					function onUserLogout(){
+						showAccessDenied();
+					}
+					
+					
+				}]
+		};
+	}
+}());
+
+(function () {
     "use strict";
     /**
      * @desc
@@ -2372,20 +2828,34 @@
                 '$routeParams',
                 '$location',
                 '$window',
+                '$interval',
                 '$anchorScroll',
                 'ApiSrv',
                 'UserSrv',
+                'TimeSrv',
                 function(
                     $scope,
                     $routeParams,
                     $location,
                     $window,
+                    $interval,
                     $anchorScroll,
                     ApiSrv,
-                    UserSrv
+                    UserSrv,
+                    TimeSrv
                 ) {
                     $scope.loggedIn = false;
                     $scope.isAdmin = false;
+                    
+                    function checkHasAccess(type) {
+                        return function(){
+                            return UserSrv.hasAccess(type);
+					    }
+                    }
+                    
+                    function isLoggedIn(){return $scope.loggedIn};
+                    function isNotLoggedIn(){return !$scope.loggedIn};
+                    
                     
                     $scope.menu = [/*{
                             'name': 'О проекте',
@@ -2393,11 +2863,11 @@
                             onClick: function(){$scope.scrollTo('about');}
                         },*/ {
                             'name': 'Зарегистрироваться',
-                            visible: function(){return !$scope.loggedIn;},
+                            visible: isNotLoggedIn,
                             onClick: function(){$scope.scrollTo('registration');}
                         },{
                             'name': 'Войти',
-                            visible: function(){return !$scope.loggedIn;},
+                            visible: isNotLoggedIn,
                             onClick: function(){$scope.setPath('/login/');}
                         },/*{
                             'name': 'Техническая поддержка',
@@ -2406,25 +2876,29 @@
                         },*/
                         {
                             'name': 'Получить информацию',
-                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
+                            visible: isLoggedIn,
                             onClick: function(){$scope.setPath('/infobox/');}
                         },{
                             'name': 'Проанализировать',
-                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
+                            // visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
+                            visible: isLoggedIn,
                             onClick: function(){$scope.setPath('/analytics/');}
                         },{
                             'name': 'Спланировать',
-                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
-                        },{
+                            // visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
+                            visible: isLoggedIn
+                            // visible: checkHasAccess('scheduler'),
+                        },/*{
                             'name': 'Оценить',
                             visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
-                        },{
+                        },*/{
                             'name': 'Кейсы',
-                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
+                            // visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
+                            visible: isLoggedIn,
                             onClick: function(){$scope.setPath('/articles/');}
                         },{
                             'name': 'Личный кабинет',
-                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
+                            visible: isLoggedIn,
                             onClick: function(){$scope.setPath('/account/');}
                         },
                         
@@ -2444,12 +2918,48 @@
                         var user = UserSrv.getUser();
                         $scope.loggedIn = !!(user && user.sid);
                         $scope.isAdmin = !!(user && user.userRights && user.userRights.admin);
+                        
+                        // оствшееся время на момент обновления (в секундах)
+                        // $scope.updateRemainingTime = null;
+                        
+                        
+                        //var tariff = user && user.userRights && user.userRights.tariff;
+                        // var tariff = UserSrv.getTariff();
+                        
+                        // if (!tariff){
+                        //     return;
+                        // }
+                        
+                        // var remainingTime = Number.parseInt(tariff.remaining_time);
+                        // if (!isNaN(remainingTime) && remainingTime){
+                        //     $scope.updateRemainingTime = remainingTime; //Math.round(remainingTime);
+                        // }
+                        
+                        // // момент обновления
+                        // $scope.updateTime = tariff.updateTime;
                     }
                     
-                    // $scope.$watch( function () { return ApiSrv.getUser().sid; }, function (sid) {
-                    //     $scope.loggedIn = !!sid;
-                    //     $scope.isAdmin = ApiSrv.getUser().userRights && !!ApiSrv.getUser().userRights.admin;
-                    // }, true);
+                    
+
+                    var updateTimeoutInterval = $interval(updateTimeout, 1000);
+                    updateTimeout();
+                    
+                    function updateTimeout(){
+                        var tariff = UserSrv.getTariff();
+                        if (!tariff.realRemainingTime || tariff.realRemainingTime <= 0){
+                        // if (!$scope.updateRemainingTime){
+                            $scope.timeoutStr = null;
+                            return;
+                        }
+                        // var remainingTime = $scope.updateRemainingTime - Math.round((Date.now() - $scope.updateTime)/1000);
+                        // if (remainingTime <= 0){
+                        //     $scope.timeoutStr = null;
+                        //     return;
+                        // }
+                        $scope.timeoutStr = TimeSrv.secondsToDateTime(tariff.realRemainingTime);
+                    }
+
+                    
                     
                     $scope.setPath = function(path){
                         $location.path(path);
@@ -2469,6 +2979,12 @@
                         //reset to old to keep any additional routing logic from kicking in
                         $location.hash(old);
                     }
+                    
+                    $scope.$on("$destroy", function() {
+                        if (updateTimeoutInterval) {
+                            $interval.cancel(updateTimeoutInterval);
+                        }
+                    });
                 }]
         };
     }
@@ -3263,99 +3779,6 @@
                             });
                         }
                     }
-
-                }]
-        };
-    }
-}());
-(function () {
-    "use strict";
-    /**
-     * @desc
-     * @example
-     */
-    angular.module('SportsensusApp')
-        .directive('legendDir', legendDir);
-
-    legendDir.$inject = [
-        '$rootScope'
-    ];
-
-    function legendDir(
-        $rootScope
-    )    {
-        return {
-            restrict: 'E',
-            scope: {
-                legend: '=',
-                columnsCount: '@',
-                selectable: '=?',
-                highlightable: '=?',
-                selectedColor: '=?',
-                highlightedColor: '=?',
-                disabled: '=?'
-            },
-            templateUrl: '/views/widgets/charts/legend/legend.html',
-            link: function ($scope, $el, attrs) {
-                //if (angular.isUndefined($scope.selectable))
-                //   $scope.selectable = true;
-            },
-
-            controller: [
-                '$scope',
-                '$routeParams',
-                '$location',
-                '$window',
-                'ApiSrv',
-                function(
-                    $scope
-                ){
-
-                    
-                    $scope.legends = [];
-                    $scope.$watch('legend', function(){
-                        if (!$scope.legend || !$scope.legend.length) return;
-                        $scope.columnsCount = Number.parseInt($scope.columnsCount) || 1;
-                        var count = $scope.legend.length;
-                        for (var col=1; col <= $scope.columnsCount; col++){
-                            $scope.legends.push($scope.legend.slice(Math.ceil(count/$scope.columnsCount*(col-1)),Math.ceil(count/$scope.columnsCount*col)));
-                        }
-                    });
-
-                    $scope.getPointStyles = function(item){
-                        var selectedColor = item.selected || !$scope.selectable ? ($scope.selectedColor || item.color || item.chartColor) : null;
-                        var highlightedColor = item.highlighted && $scope.highlightable ? ($scope.highlightedColor || item.color || item.chartColor) : null;
-                        
-                        // if (highlightedColor)
-                        //     return  {'background-color': highlightedColor};
-                        // else if (selectedColor)
-                        //     return  {'background-color': selectedColor};
-                        if (selectedColor)
-                            return  {'background-color': selectedColor};
-                        else if (highlightedColor)
-                            return  {'background-color': highlightedColor};
-                        else 
-                            return {'background-color': 'none'};
-                        
-                        //        return {'background-color': item.selected || !selectable ? (item.color || item.chartColor) : 'none'}
-                    };
-
-                    $scope.getParam = function(param){
-                      return $scope[param];
-                    };
-
-
-                    
-                    $scope.itemClick = function(item){
-                        item.selected = !item.selected;
-                    };
-
-                    $scope.highlightItem = function(item){
-                        item.highlighted = true;
-                    };
-                    $scope.unhighlightItem = function(item){
-                        item.highlighted = false;
-                    };
 
                 }]
         };
@@ -4474,6 +4897,99 @@
      * @example
      */
     angular.module('SportsensusApp')
+        .directive('legendDir', legendDir);
+
+    legendDir.$inject = [
+        '$rootScope'
+    ];
+
+    function legendDir(
+        $rootScope
+    )    {
+        return {
+            restrict: 'E',
+            scope: {
+                legend: '=',
+                columnsCount: '@',
+                selectable: '=?',
+                highlightable: '=?',
+                selectedColor: '=?',
+                highlightedColor: '=?',
+                disabled: '=?'
+            },
+            templateUrl: '/views/widgets/charts/legend/legend.html',
+            link: function ($scope, $el, attrs) {
+                //if (angular.isUndefined($scope.selectable))
+                //   $scope.selectable = true;
+            },
+
+            controller: [
+                '$scope',
+                '$routeParams',
+                '$location',
+                '$window',
+                'ApiSrv',
+                function(
+                    $scope
+                ){
+
+                    
+                    $scope.legends = [];
+                    $scope.$watch('legend', function(){
+                        if (!$scope.legend || !$scope.legend.length) return;
+                        $scope.columnsCount = Number.parseInt($scope.columnsCount) || 1;
+                        var count = $scope.legend.length;
+                        for (var col=1; col <= $scope.columnsCount; col++){
+                            $scope.legends.push($scope.legend.slice(Math.ceil(count/$scope.columnsCount*(col-1)),Math.ceil(count/$scope.columnsCount*col)));
+                        }
+                    });
+
+                    $scope.getPointStyles = function(item){
+                        var selectedColor = item.selected || !$scope.selectable ? ($scope.selectedColor || item.color || item.chartColor) : null;
+                        var highlightedColor = item.highlighted && $scope.highlightable ? ($scope.highlightedColor || item.color || item.chartColor) : null;
+                        
+                        // if (highlightedColor)
+                        //     return  {'background-color': highlightedColor};
+                        // else if (selectedColor)
+                        //     return  {'background-color': selectedColor};
+                        if (selectedColor)
+                            return  {'background-color': selectedColor};
+                        else if (highlightedColor)
+                            return  {'background-color': highlightedColor};
+                        else 
+                            return {'background-color': 'none'};
+                        
+                        //        return {'background-color': item.selected || !selectable ? (item.color || item.chartColor) : 'none'}
+                    };
+
+                    $scope.getParam = function(param){
+                      return $scope[param];
+                    };
+
+
+                    
+                    $scope.itemClick = function(item){
+                        item.selected = !item.selected;
+                    };
+
+                    $scope.highlightItem = function(item){
+                        item.highlighted = true;
+                    };
+                    $scope.unhighlightItem = function(item){
+                        item.highlighted = false;
+                    };
+
+                }]
+        };
+    }
+}());
+(function () {
+    "use strict";
+    /**
+     * @desc
+     * @example
+     */
+    angular.module('SportsensusApp')
         .directive('mapDir', mapDir);
 
     mapDir.$inject = [
@@ -5545,397 +6061,6 @@
 
 
 
-/////////////////////////////////////////////////////////
-/////////////// The Radar Chart Function ////////////////
-/////////////// Written by Nadieh Bremer ////////////////
-////////////////// VisualCinnamon.com ///////////////////
-/////////// Inspired by the code of alangrafu ///////////
-/////////////////////////////////////////////////////////
-
-function RadarChart(id, data, options) {
-    var cfg = {
-        w: 600,				//Width of the circle
-        h: 600,				//Height of the circle
-        margin: {top: 20, right: 20, bottom: 20, left: 20}, //The margins of the SVG
-        levels: 3,				//How many levels or inner circles should there be drawn
-        maxValue: 0, 			//What is the value that the biggest circle will represent
-        labelFactor: 1.25, 	//How much farther than the radius of the outer circle should the labels be placed
-        wrapWidth: 60, 		//The number of pixels after which a label needs to be given a new line
-        opacityArea: 0.35, 	//The opacity of the area of the blob
-        dotRadius: 4, 			//The size of the colored circles of each blog
-        opacityCircles: 0.1, 	//The opacity of the circles of each blob
-        strokeWidth: 2, 		//The width of the stroke around each blob
-        roundStrokes: false,	//If true the area and stroke will follow a round path (cardinal-closed)
-        color: d3.scale.category10()	//Color function
-    };
-
-    //Put all of the options into a variable called cfg
-    if('undefined' !== typeof options){
-        for(var i in options){
-            if('undefined' !== typeof options[i]){ cfg[i] = options[i]; }
-        }//for i
-    }//if
-
-    //If the supplied maxValue is smaller than the actual one, replace by the max in the data
-    var maxValue = Math.max(cfg.maxValue, d3.max(data, function(i){return d3.max(i.map(function(o){return o.value;}))}));
-
-    var allAxis = (data[0].map(function(i, j){return i.axis})),	//Names of each axis
-        total = allAxis.length,					//The number of different axes
-        radius = Math.min(cfg.w/2, cfg.h/2), 	//Radius of the outermost circle
-        //Format = d3.format('%'),			 	//Percentage formatting
-        //Format = d3.format('.1f'),			 	
-        Format = cfg.format,			 	
-        angleSlice = Math.PI * 2 / total;		//The width in radians of each "slice"
-
-    //Scale for the radius
-    var rScale = d3.scale.linear()
-        .range([0, radius])
-        .domain([0, maxValue]);
-
-    /////////////////////////////////////////////////////////
-    //////////// Create the container SVG and g /////////////
-    /////////////////////////////////////////////////////////
-
-    //Remove whatever chart with the same id/class was present before
-    d3.select(id).select("svg").remove();
-
-    //Initiate the radar chart SVG
-    var svg = d3.select(id).append("svg")
-        .attr("width",  cfg.w + cfg.margin.left + cfg.margin.right)
-        .attr("height", cfg.h + cfg.margin.top + cfg.margin.bottom)
-        .attr("class", "radar"+id);
-    //Append a g element		
-    var g = svg.append("g")
-        .attr("transform", "translate(" + (cfg.w/2 + cfg.margin.left) + "," + (cfg.h/2 + cfg.margin.top) + ")");
-
-    /////////////////////////////////////////////////////////
-    ////////// Glow filter for some extra pizzazz ///////////
-    /////////////////////////////////////////////////////////
-
-    //Filter for the outside glow
-    var filter = g.append('defs').append('filter').attr('id','glow'),
-        feGaussianBlur = filter.append('feGaussianBlur').attr('stdDeviation','2.5').attr('result','coloredBlur'),
-        feMerge = filter.append('feMerge'),
-        feMergeNode_1 = feMerge.append('feMergeNode').attr('in','coloredBlur'),
-        feMergeNode_2 = feMerge.append('feMergeNode').attr('in','SourceGraphic');
-
-
-
-    /////////////////////////////////////////////////////////
-    /////////////// Draw the Circular grid //////////////////
-    /////////////////////////////////////////////////////////
-
-    //Wrapper for the grid & axes
-    var axisGrid = g.append("g").attr("class", "axisWrapper");
-
-    //Draw the background circles
-    axisGrid.selectAll(".levels")
-        .data(d3.range(1,(cfg.levels+1)).reverse())
-        .enter()
-        .append("circle")
-        .attr("class", "gridCircle")
-        .attr("r", function(d, i){return radius/cfg.levels*d;})
-        .style("fill", "#CDCDCD")
-        .style("stroke", "#CDCDCD")
-        .style("fill-opacity", cfg.opacityCircles)
-        .style("filter" , "url(#glow)");
-
-    //Text indicating at what % each level is
-    axisGrid.selectAll(".axisLabel")
-        .data(d3.range(1,(cfg.levels+1)).reverse())
-        .enter().append("text")
-        .attr("class", "axisLabel")
-        .attr("x", 4)
-        .attr("y", function(d){return -d*radius/cfg.levels;})
-        .attr("dy", "0.4em")
-        .style("font-size", "10px")
-        .attr("fill", "#737373")
-        .text(function(d,i) { return Format(maxValue * d/cfg.levels); });
-
-    /////////////////////////////////////////////////////////
-    //////////////////// Draw the axes //////////////////////
-    /////////////////////////////////////////////////////////
-
-    //Create the straight lines radiating outward from the center
-    var axis = axisGrid.selectAll(".axis")
-        .data(allAxis)
-        .enter()
-        .append("g")
-        .attr("class", "axis");
-    //Append the lines
-    axis.append("line")
-        .attr("x1", 0)
-        .attr("y1", 0)
-        .attr("x2", function(d, i){ return rScale(maxValue*1.1) * Math.cos(angleSlice*i - Math.PI/2); })
-        .attr("y2", function(d, i){ return rScale(maxValue*1.1) * Math.sin(angleSlice*i - Math.PI/2); })
-        .attr("class", "line")
-        .style("stroke", "white")
-        .style("stroke-width", "2px");
-
-    //Append the labels at each axis
-    axis.append("text")
-        .attr("class", "legend")
-        .style("font-size", "11px")
-        .attr("text-anchor", "middle")
-        .attr("dy", "0.35em")
-        .attr("x", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice*i - Math.PI/2); })
-        .attr("y", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice*i - Math.PI/2); })
-        .text(function(d){return d})
-        .call(wrap, cfg.wrapWidth);
-
-    /////////////////////////////////////////////////////////
-    ///////////// Draw the radar chart blobs ////////////////
-    /////////////////////////////////////////////////////////
-
-    //The radial line function
-    var radarLine = d3.svg.line.radial()
-        .interpolate("linear-closed")
-        .radius(function(d) { return rScale(d.value); })
-        .angle(function(d,i) {	return i*angleSlice; });
-
-    if(cfg.roundStrokes) {
-        radarLine.interpolate("cardinal-closed");
-    }
-
-    //Create a wrapper for the blobs	
-    var blobWrapper = g.selectAll(".radarWrapper")
-        .data(data)
-        .enter().append("g")
-        .attr("class", "radarWrapper");
-
-    //Append the backgrounds	
-    blobWrapper
-        .append("path")
-        .attr("class", "radarArea")
-        .attr("d", function(d,i) { return radarLine(d); })
-        .style("fill", function(d,i) { return cfg.color(i); })
-        .style("fill-opacity", cfg.opacityArea)
-        .on('mouseover', function (d,i){
-            //Dim all blobs
-            d3.selectAll(".radarArea")
-                .transition().duration(200)
-                .style("fill-opacity", 0.1);
-            //Bring back the hovered over blob
-            d3.select(this)
-                .transition().duration(200)
-                .style("fill-opacity", 0.7);
-        })
-        .on('mouseout', function(){
-            //Bring back all blobs
-            d3.selectAll(".radarArea")
-                .transition().duration(200)
-                .style("fill-opacity", cfg.opacityArea);
-        });
-
-    //Create the outlines	
-    blobWrapper.append("path")
-        .attr("class", "radarStroke")
-        .attr("d", function(d,i) { return radarLine(d); })
-        .style("stroke-width", cfg.strokeWidth + "px")
-        .style("stroke", function(d,i) { return cfg.color(i); })
-        .style("fill", "none")
-        .style("filter" , "url(#glow)");
-
-    //Append the circles
-    blobWrapper.selectAll(".radarCircle")
-        .data(function(d,i) { return d; })
-        .enter().append("circle")
-        .attr("class", "radarCircle")
-        .attr("r", cfg.dotRadius)
-        .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
-        .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
-        .style("fill", function(d,i,j) { return cfg.color(j); })
-        .style("fill-opacity", 0.8);
-
-    /////////////////////////////////////////////////////////
-    //////// Append invisible circles for tooltip ///////////
-    /////////////////////////////////////////////////////////
-
-    //Wrapper for the invisible circles on top
-    var blobCircleWrapper = g.selectAll(".radarCircleWrapper")
-        .data(data)
-        .enter().append("g")
-        .attr("class", "radarCircleWrapper");
-
-    //Append a set of invisible circles on top for the mouseover pop-up
-    blobCircleWrapper.selectAll(".radarInvisibleCircle")
-        .data(function(d,i) { return d; })
-        .enter().append("circle")
-        .attr("class", "radarInvisibleCircle")
-        .attr("r", cfg.dotRadius*1.5)
-        .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
-        .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
-        .style("fill", "none")
-        .style("pointer-events", "all")
-        .on("mouseover", function(d,i) {
-            newX =  parseFloat(d3.select(this).attr('cx')) - 10;
-            newY =  parseFloat(d3.select(this).attr('cy')) - 10;
-
-            tooltip
-                .attr('x', newX)
-                .attr('y', newY)
-                // .text(Format(d.value))
-                .text(d.tooltip)
-                //.transition().duration(200)
-                //.style('opacity', 1);
-                 .style('display', 'initial');
-
-            var bbox = tooltip.node().getBBox();
-            var chartW = (cfg.w + cfg.margin.left + cfg.margin.right)/2;
-
-            if (bbox.x + bbox.width > chartW){
-                newX = chartW - bbox.width - 10;
-                tooltip.attr('x', newX);
-                bbox = tooltip.node().getBBox();
-            }
-
-            var padding = 3;
-            tooltipRect
-                .attr("x", bbox.x - padding - 15 - 8)
-                .attr("y", bbox.y - padding)
-                .attr("width", bbox.width + (padding*2) + 15 + 8)
-                .attr("height", bbox.height + (padding*2))
-                .style('display', 'initial');
-            tooltipColor
-                .attr("x", bbox.x - 15 - 8)
-                .attr("y", bbox.y + (bbox.height - 15)/2)
-                .style('fill', d.tooltipColor)
-                .style('display', 'initial');
-        })
-        .on("mouseout", function(){
-            tooltip
-                //.transition().duration(200)
-                 // .style("opacity", 0);
-                .style('display', 'none');
-            tooltipColor
-                .style('display', 'none');
-            tooltipRect
-                //.transition().duration(200)
-                //.style('fill', 'rgba(0, 0, 0, 0.7)')
-                .style('display', 'none');
-        });
-
-    //Set up the small tooltip for when you hover over a circle
-    var tooltipRect = g.append('rect')
-        .style('fill', 'rgba(0, 0, 0, 0.7)')
-        .attr('rx', '2')
-        .attr('ry', '2')
-       // .attr('class', 'chartjs-tooltip')
-        .style('display', 'none');
-
-    var tooltipColor = g.append('rect')
-        //.style('fill', 'rgba(0, 0, 0, 0.7)')
-        .attr('rx', '2')
-        .attr('ry', '2')
-        .attr("width", 15)
-        .attr("height", 15)
-        .attr('stroke', 'gray')
-        // .attr('class', 'chartjs-tooltip')
-        .style('display', 'none');
-
-    var tooltip = g.append("text")
-        //.attr("class", "tooltip")
-        //.style("opacity", 0);
-        .style("fill", 'white')
-        .style('font-size', '13px')
-        .style('display', 'none');
-
-
-
-
-
-    /////////////////////////////////////////////////////////
-    /////////////////// Helper Function /////////////////////
-    /////////////////////////////////////////////////////////
-
-    //Taken from http://bl.ocks.org/mbostock/7555321
-    //Wraps SVG text	
-    function wrap(text, width) {
-        text.each(function() {
-            var text = d3.select(this),
-                words = text.text().split(/\s+/).reverse(),
-                word,
-                line = [],
-                lineNumber = 0,
-                lineHeight = 1.4, // ems
-                y = text.attr("y"),
-                x = text.attr("x"),
-                dy = parseFloat(text.attr("dy")),
-                tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-
-            while (word = words.pop()) {
-                line.push(word);
-                tspan.text(line.join(" "));
-                if (tspan.node().getComputedTextLength() > width) {
-                    line.pop();
-                    tspan.text(line.join(" "));
-                    line = [word];
-                    tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-                }
-            }
-        });
-    }//wrap	
-
-}//RadarChart
-(function () {
-    "use strict";
-    /**
-     * @desc
-     * @example
-     */
-    angular.module('SportsensusApp')
-        .directive('radarDir', radarDir);
-
-    radarDir.$inject = [
-        '$rootScope'
-    ];
-
-    function radarDir(
-        $rootScope
-    )    {
-        return {
-            restrict: 'E',
-            scope: {
-                chart: '='
-            },
-            templateUrl: '/views/widgets/charts/radar/radar.html',
-            link: function ($scope, $el, attrs) {
-                $scope.el = $el;
-                $scope.$watch('chart', $scope.redrawChart);
-            },
-
-            controller: [
-                '$scope',
-                function(
-                    $scope
-                ){
-
-                    
-                    $scope.redrawChart = function(){
-                        if (!$scope.chart || !$scope.chart.data || !$scope.chart.options) {
-                            $scope.el.empty();
-                            return;
-                        }
-
-                        var margin = {top: 50, right: 120, bottom: 100, left: 120};
-                        var width = 700 - margin.left - margin.right;
-                        var height = 700 - margin.top - margin.bottom;
-
-                        
-                        var options = {
-                            w: width,
-                            h: height,
-                            margin: margin
-                        };
-                        options = angular.extend({},$scope.chart.options, options);
-                        
-                        RadarChart($scope.el[0], $scope.chart.data, options);
-                    }
-                    
-                }]
-        };
-    }
-}());
 (function (factory) {
 	"use strict";
 	if (typeof define === 'function' && define.amd) {
@@ -6748,6 +6873,397 @@ function RadarChart(id, data, options) {
                         
                     }
 
+                }]
+        };
+    }
+}());
+/////////////////////////////////////////////////////////
+/////////////// The Radar Chart Function ////////////////
+/////////////// Written by Nadieh Bremer ////////////////
+////////////////// VisualCinnamon.com ///////////////////
+/////////// Inspired by the code of alangrafu ///////////
+/////////////////////////////////////////////////////////
+
+function RadarChart(id, data, options) {
+    var cfg = {
+        w: 600,				//Width of the circle
+        h: 600,				//Height of the circle
+        margin: {top: 20, right: 20, bottom: 20, left: 20}, //The margins of the SVG
+        levels: 3,				//How many levels or inner circles should there be drawn
+        maxValue: 0, 			//What is the value that the biggest circle will represent
+        labelFactor: 1.25, 	//How much farther than the radius of the outer circle should the labels be placed
+        wrapWidth: 60, 		//The number of pixels after which a label needs to be given a new line
+        opacityArea: 0.35, 	//The opacity of the area of the blob
+        dotRadius: 4, 			//The size of the colored circles of each blog
+        opacityCircles: 0.1, 	//The opacity of the circles of each blob
+        strokeWidth: 2, 		//The width of the stroke around each blob
+        roundStrokes: false,	//If true the area and stroke will follow a round path (cardinal-closed)
+        color: d3.scale.category10()	//Color function
+    };
+
+    //Put all of the options into a variable called cfg
+    if('undefined' !== typeof options){
+        for(var i in options){
+            if('undefined' !== typeof options[i]){ cfg[i] = options[i]; }
+        }//for i
+    }//if
+
+    //If the supplied maxValue is smaller than the actual one, replace by the max in the data
+    var maxValue = Math.max(cfg.maxValue, d3.max(data, function(i){return d3.max(i.map(function(o){return o.value;}))}));
+
+    var allAxis = (data[0].map(function(i, j){return i.axis})),	//Names of each axis
+        total = allAxis.length,					//The number of different axes
+        radius = Math.min(cfg.w/2, cfg.h/2), 	//Radius of the outermost circle
+        //Format = d3.format('%'),			 	//Percentage formatting
+        //Format = d3.format('.1f'),			 	
+        Format = cfg.format,			 	
+        angleSlice = Math.PI * 2 / total;		//The width in radians of each "slice"
+
+    //Scale for the radius
+    var rScale = d3.scale.linear()
+        .range([0, radius])
+        .domain([0, maxValue]);
+
+    /////////////////////////////////////////////////////////
+    //////////// Create the container SVG and g /////////////
+    /////////////////////////////////////////////////////////
+
+    //Remove whatever chart with the same id/class was present before
+    d3.select(id).select("svg").remove();
+
+    //Initiate the radar chart SVG
+    var svg = d3.select(id).append("svg")
+        .attr("width",  cfg.w + cfg.margin.left + cfg.margin.right)
+        .attr("height", cfg.h + cfg.margin.top + cfg.margin.bottom)
+        .attr("class", "radar"+id);
+    //Append a g element		
+    var g = svg.append("g")
+        .attr("transform", "translate(" + (cfg.w/2 + cfg.margin.left) + "," + (cfg.h/2 + cfg.margin.top) + ")");
+
+    /////////////////////////////////////////////////////////
+    ////////// Glow filter for some extra pizzazz ///////////
+    /////////////////////////////////////////////////////////
+
+    //Filter for the outside glow
+    var filter = g.append('defs').append('filter').attr('id','glow'),
+        feGaussianBlur = filter.append('feGaussianBlur').attr('stdDeviation','2.5').attr('result','coloredBlur'),
+        feMerge = filter.append('feMerge'),
+        feMergeNode_1 = feMerge.append('feMergeNode').attr('in','coloredBlur'),
+        feMergeNode_2 = feMerge.append('feMergeNode').attr('in','SourceGraphic');
+
+
+
+    /////////////////////////////////////////////////////////
+    /////////////// Draw the Circular grid //////////////////
+    /////////////////////////////////////////////////////////
+
+    //Wrapper for the grid & axes
+    var axisGrid = g.append("g").attr("class", "axisWrapper");
+
+    //Draw the background circles
+    axisGrid.selectAll(".levels")
+        .data(d3.range(1,(cfg.levels+1)).reverse())
+        .enter()
+        .append("circle")
+        .attr("class", "gridCircle")
+        .attr("r", function(d, i){return radius/cfg.levels*d;})
+        .style("fill", "#CDCDCD")
+        .style("stroke", "#CDCDCD")
+        .style("fill-opacity", cfg.opacityCircles)
+        .style("filter" , "url(#glow)");
+
+    //Text indicating at what % each level is
+    axisGrid.selectAll(".axisLabel")
+        .data(d3.range(1,(cfg.levels+1)).reverse())
+        .enter().append("text")
+        .attr("class", "axisLabel")
+        .attr("x", 4)
+        .attr("y", function(d){return -d*radius/cfg.levels;})
+        .attr("dy", "0.4em")
+        .style("font-size", "10px")
+        .attr("fill", "#737373")
+        .text(function(d,i) { return Format(maxValue * d/cfg.levels); });
+
+    /////////////////////////////////////////////////////////
+    //////////////////// Draw the axes //////////////////////
+    /////////////////////////////////////////////////////////
+
+    //Create the straight lines radiating outward from the center
+    var axis = axisGrid.selectAll(".axis")
+        .data(allAxis)
+        .enter()
+        .append("g")
+        .attr("class", "axis");
+    //Append the lines
+    axis.append("line")
+        .attr("x1", 0)
+        .attr("y1", 0)
+        .attr("x2", function(d, i){ return rScale(maxValue*1.1) * Math.cos(angleSlice*i - Math.PI/2); })
+        .attr("y2", function(d, i){ return rScale(maxValue*1.1) * Math.sin(angleSlice*i - Math.PI/2); })
+        .attr("class", "line")
+        .style("stroke", "white")
+        .style("stroke-width", "2px");
+
+    //Append the labels at each axis
+    axis.append("text")
+        .attr("class", "legend")
+        .style("font-size", "11px")
+        .attr("text-anchor", "middle")
+        .attr("dy", "0.35em")
+        .attr("x", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice*i - Math.PI/2); })
+        .attr("y", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice*i - Math.PI/2); })
+        .text(function(d){return d})
+        .call(wrap, cfg.wrapWidth);
+
+    /////////////////////////////////////////////////////////
+    ///////////// Draw the radar chart blobs ////////////////
+    /////////////////////////////////////////////////////////
+
+    //The radial line function
+    var radarLine = d3.svg.line.radial()
+        .interpolate("linear-closed")
+        .radius(function(d) { return rScale(d.value); })
+        .angle(function(d,i) {	return i*angleSlice; });
+
+    if(cfg.roundStrokes) {
+        radarLine.interpolate("cardinal-closed");
+    }
+
+    //Create a wrapper for the blobs	
+    var blobWrapper = g.selectAll(".radarWrapper")
+        .data(data)
+        .enter().append("g")
+        .attr("class", "radarWrapper");
+
+    //Append the backgrounds	
+    blobWrapper
+        .append("path")
+        .attr("class", "radarArea")
+        .attr("d", function(d,i) { return radarLine(d); })
+        .style("fill", function(d,i) { return cfg.color(i); })
+        .style("fill-opacity", cfg.opacityArea)
+        .on('mouseover', function (d,i){
+            //Dim all blobs
+            d3.selectAll(".radarArea")
+                .transition().duration(200)
+                .style("fill-opacity", 0.1);
+            //Bring back the hovered over blob
+            d3.select(this)
+                .transition().duration(200)
+                .style("fill-opacity", 0.7);
+        })
+        .on('mouseout', function(){
+            //Bring back all blobs
+            d3.selectAll(".radarArea")
+                .transition().duration(200)
+                .style("fill-opacity", cfg.opacityArea);
+        });
+
+    //Create the outlines	
+    blobWrapper.append("path")
+        .attr("class", "radarStroke")
+        .attr("d", function(d,i) { return radarLine(d); })
+        .style("stroke-width", cfg.strokeWidth + "px")
+        .style("stroke", function(d,i) { return cfg.color(i); })
+        .style("fill", "none")
+        .style("filter" , "url(#glow)");
+
+    //Append the circles
+    blobWrapper.selectAll(".radarCircle")
+        .data(function(d,i) { return d; })
+        .enter().append("circle")
+        .attr("class", "radarCircle")
+        .attr("r", cfg.dotRadius)
+        .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
+        .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
+        .style("fill", function(d,i,j) { return cfg.color(j); })
+        .style("fill-opacity", 0.8);
+
+    /////////////////////////////////////////////////////////
+    //////// Append invisible circles for tooltip ///////////
+    /////////////////////////////////////////////////////////
+
+    //Wrapper for the invisible circles on top
+    var blobCircleWrapper = g.selectAll(".radarCircleWrapper")
+        .data(data)
+        .enter().append("g")
+        .attr("class", "radarCircleWrapper");
+
+    //Append a set of invisible circles on top for the mouseover pop-up
+    blobCircleWrapper.selectAll(".radarInvisibleCircle")
+        .data(function(d,i) { return d; })
+        .enter().append("circle")
+        .attr("class", "radarInvisibleCircle")
+        .attr("r", cfg.dotRadius*1.5)
+        .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
+        .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        .on("mouseover", function(d,i) {
+            newX =  parseFloat(d3.select(this).attr('cx')) - 10;
+            newY =  parseFloat(d3.select(this).attr('cy')) - 10;
+
+            tooltip
+                .attr('x', newX)
+                .attr('y', newY)
+                // .text(Format(d.value))
+                .text(d.tooltip)
+                //.transition().duration(200)
+                //.style('opacity', 1);
+                 .style('display', 'initial');
+
+            var bbox = tooltip.node().getBBox();
+            var chartW = (cfg.w + cfg.margin.left + cfg.margin.right)/2;
+
+            if (bbox.x + bbox.width > chartW){
+                newX = chartW - bbox.width - 10;
+                tooltip.attr('x', newX);
+                bbox = tooltip.node().getBBox();
+            }
+
+            var padding = 3;
+            tooltipRect
+                .attr("x", bbox.x - padding - 15 - 8)
+                .attr("y", bbox.y - padding)
+                .attr("width", bbox.width + (padding*2) + 15 + 8)
+                .attr("height", bbox.height + (padding*2))
+                .style('display', 'initial');
+            tooltipColor
+                .attr("x", bbox.x - 15 - 8)
+                .attr("y", bbox.y + (bbox.height - 15)/2)
+                .style('fill', d.tooltipColor)
+                .style('display', 'initial');
+        })
+        .on("mouseout", function(){
+            tooltip
+                //.transition().duration(200)
+                 // .style("opacity", 0);
+                .style('display', 'none');
+            tooltipColor
+                .style('display', 'none');
+            tooltipRect
+                //.transition().duration(200)
+                //.style('fill', 'rgba(0, 0, 0, 0.7)')
+                .style('display', 'none');
+        });
+
+    //Set up the small tooltip for when you hover over a circle
+    var tooltipRect = g.append('rect')
+        .style('fill', 'rgba(0, 0, 0, 0.7)')
+        .attr('rx', '2')
+        .attr('ry', '2')
+       // .attr('class', 'chartjs-tooltip')
+        .style('display', 'none');
+
+    var tooltipColor = g.append('rect')
+        //.style('fill', 'rgba(0, 0, 0, 0.7)')
+        .attr('rx', '2')
+        .attr('ry', '2')
+        .attr("width", 15)
+        .attr("height", 15)
+        .attr('stroke', 'gray')
+        // .attr('class', 'chartjs-tooltip')
+        .style('display', 'none');
+
+    var tooltip = g.append("text")
+        //.attr("class", "tooltip")
+        //.style("opacity", 0);
+        .style("fill", 'white')
+        .style('font-size', '13px')
+        .style('display', 'none');
+
+
+
+
+
+    /////////////////////////////////////////////////////////
+    /////////////////// Helper Function /////////////////////
+    /////////////////////////////////////////////////////////
+
+    //Taken from http://bl.ocks.org/mbostock/7555321
+    //Wraps SVG text	
+    function wrap(text, width) {
+        text.each(function() {
+            var text = d3.select(this),
+                words = text.text().split(/\s+/).reverse(),
+                word,
+                line = [],
+                lineNumber = 0,
+                lineHeight = 1.4, // ems
+                y = text.attr("y"),
+                x = text.attr("x"),
+                dy = parseFloat(text.attr("dy")),
+                tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+
+            while (word = words.pop()) {
+                line.push(word);
+                tspan.text(line.join(" "));
+                if (tspan.node().getComputedTextLength() > width) {
+                    line.pop();
+                    tspan.text(line.join(" "));
+                    line = [word];
+                    tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                }
+            }
+        });
+    }//wrap	
+
+}//RadarChart
+(function () {
+    "use strict";
+    /**
+     * @desc
+     * @example
+     */
+    angular.module('SportsensusApp')
+        .directive('radarDir', radarDir);
+
+    radarDir.$inject = [
+        '$rootScope'
+    ];
+
+    function radarDir(
+        $rootScope
+    )    {
+        return {
+            restrict: 'E',
+            scope: {
+                chart: '='
+            },
+            templateUrl: '/views/widgets/charts/radar/radar.html',
+            link: function ($scope, $el, attrs) {
+                $scope.el = $el;
+                $scope.$watch('chart', $scope.redrawChart);
+            },
+
+            controller: [
+                '$scope',
+                function(
+                    $scope
+                ){
+
+                    
+                    $scope.redrawChart = function(){
+                        if (!$scope.chart || !$scope.chart.data || !$scope.chart.options) {
+                            $scope.el.empty();
+                            return;
+                        }
+
+                        var margin = {top: 50, right: 120, bottom: 100, left: 120};
+                        var width = 700 - margin.left - margin.right;
+                        var height = 700 - margin.top - margin.bottom;
+
+                        
+                        var options = {
+                            w: width,
+                            h: height,
+                            margin: margin
+                        };
+                        options = angular.extend({},$scope.chart.options, options);
+                        
+                        RadarChart($scope.el[0], $scope.chart.data, options);
+                    }
+                    
                 }]
         };
     }
@@ -7597,10 +8113,6 @@ function RadarChart(id, data, options) {
 	
 	                var proxyURL = /*ConfigSrv.get().proxyURL || */ '';
 	                var imageUploadUrl = proxyURL + ConfigSrv.get().imageUploadUrl + '?sid=' + UserSrv.getSid() + '&format=json';
-	
-	                $scope.tinymceUploadFile = null;
-	                
-                    
                     
                     $scope.tinymceOptions = {
                         selector: '#case_editor',
@@ -7613,68 +8125,10 @@ function RadarChart(id, data, options) {
                         ],
                         toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
                         toolbar2: 'print preview media | forecolor backcolor emoticons | codesample help',
-                        image_advtab: true,
-                        file_browser_callback: function(field_name, url, type, win) {
-                            if(type=='image') {
-                                $scope.$broadcast('tinymceUploadFileEvent');
-                            }
-                        },
-                        file_picker_callback: function(cb, value, meta) {
-                            if (meta.filetype == 'image'){
-                                $scope.$broadcast('tinymceUploadFileEvent');
-                            }
-                        }
+                        image_advtab: true
                     }
                     
-                    $scope.$watch('tinymceUploadFile', function(newValue, oldValue){
-                        if (!newValue) return;
-                        var file = newValue;
-                        
-                        $scope.showUploadPreloader();
-                        UploadFileSrv.uploadFile(file, imageUploadUrl, 'upload').then(function(response){
-                            $scope.hideUploadPreloader();
-                            
-                            var url = response.data && response.data.url;
-                            if (!url) return;
-                            
-                            $scope.setImageUrl(url);
-                        }, function(){
-                            $scope.hideUploadPreloader();
-                        });
-                    });
-                    
-                    $scope.setImageUrl = function(url){
-                        var openBtn = document.querySelectorAll('.mce-btn.mce-open')[0];
-                        var textBox = openBtn.parentElement.querySelector('.mce-textbox');
-                        var textBoxEl = angular.element(textBox)
-                        textBoxEl.val(url);
-                        
-                        var closeBtn = openBtn.closest('.mce-window').querySelector('.mce-primary');
-                        var closeBtnEl = angular.element(closeBtn)[0];
-                        closeBtn.click();
-                    }
-                    
-                    var buttonContainer = null;
-                    var hiddenButton = null;
-                    var preloader = null;
-                    $scope.showUploadPreloader = function(){
-                        hiddenButton = angular.element(document.querySelectorAll('.mce-btn.mce-open button')[0]);
-                        hiddenButton.remove();
-                        buttonContainer = angular.element(document.querySelectorAll('.mce-btn.mce-open')[0]);
-            
-                        var tpl = '<md-progress-circular md-mode="indeterminate" md-diameter="26" style="padding:1px;"></md-progress-circular>'
-                        preloader = angular.element(tpl);
-                        $compile(preloader)($scope);
-                        buttonContainer.append(preloader);
-                    }
-                    
-                    $scope.hideUploadPreloader = function(){
-                        preloader.remove();
-                        buttonContainer.append(hiddenButton);
-                    }
-              
-                    
-                    
+                   
                     
 
 
@@ -7714,9 +8168,7 @@ function RadarChart(id, data, options) {
                         
                     }
                     
-                    $scope.$on("$destroy", function() {
-                        tinymce.remove("#case_editor");
-                    });
+                  
              
                     ArticlesSrv.getTags().then(function(tags){
                         $scope.allTags = tags;
@@ -8012,6 +8464,11 @@ function RadarChart(id, data, options) {
 						path: '/admin/profiles/',
 						visible: function(){return $scope.loggedIn && $scope.isAdmin;}
 					},{
+						id:'sendMail',
+						text:'Рассылка писем',
+						path: '/admin/sendMail/',
+						visible: function(){return $scope.loggedIn && $scope.isAdmin;}
+					},/*{
 						id:'leagues',
 						text:'Лиги',
 						path: '/leagues/',
@@ -8026,7 +8483,7 @@ function RadarChart(id, data, options) {
 						text:'Другое',
 						path: '/other/',
 						visible: function(){return $scope.loggedIn && $scope.isAdmin;}
-					},{
+					},*/{
 					    id:'other',
 						text:'Редактор кейсов',
 						path: '/admin/cases/',
@@ -8109,6 +8566,11 @@ function RadarChart(id, data, options) {
                     }).then(function(result){
                     	$scope.profile = result.profile;
                     	$scope.tariffs = result.tariffs;
+                    	
+                    	if ($scope.profile.tariff){
+                    		var tariff =  TariffsSrv.getTariff($scope.profile.tariff.id);
+                    		$scope.profile.tariffId = tariff ? tariff.id : null;
+                    	}
                         $scope.showPreloader = false;
                     }, function(){
                     	$scope.showPreloader = false;
@@ -8123,20 +8585,6 @@ function RadarChart(id, data, options) {
                         });
                     });
                     
-                    
-                    // $scope.getTariffTitle = function(){
-                    // 	if (!$scope.profile) return;
-                    	
-                    // 	var tariffId = $scope.profile.tariffId;
-                    // 	if (tariffId == null) return;
-                    	
-                    // 	var selectedTariff = $scope.tariffs.find(function(tariff){
-                    // 		return tariff.id == tariffId;
-                    // 	});
-                    // 	if (!selectedTariff) return;
-                    	
-                    // 	return selectedTariff.name;
-                    // }
                    
 	                
 	                $scope.fieldsMap = [
@@ -8177,6 +8625,7 @@ function RadarChart(id, data, options) {
 					};
 					
 					$scope.saveProfile = function(){
+						$scope.showPreloader = true;
 						var acl = {
 							"admin": $scope.profile.admin_role,
 							"sponsor":  $scope.profile.sponsor_role,
@@ -8189,19 +8638,49 @@ function RadarChart(id, data, options) {
 						}
 						
 						ApiSrv.addRole($scope.profile.user_id, acl).then(function(acl){
+							$scope.showPreloader = false;
 							$scope.profile.admin_role = acl.admin;
 							$scope.profile.sponsor_role = acl.sponsor;
 							$scope.profile.rightholder_role = acl.rightholder;
 							$scope.profile.demo_role = acl.demo;
 							$scope.profile.dirty = false;
-						}, function(){
-							$mdDialog.show($mdDialog.alert()
-								.title('Ошибка')
-								.textContent('Невозможно применить изменения')
-								.ok('OK'));
-						});
-
+							showSaveSuccess();
+						}, showSaveError);
 					};
+					
+				
+					$scope.updateTafiff = function(){
+						$scope.showPreloader = true;
+						var acl = {
+							tariff_id: $scope.profile.tariffId
+						}
+						
+						ApiSrv.addRole($scope.profile.user_id, acl).then(function(){
+							$scope.showPreloader = false;
+							showSaveSuccess();
+						}, function(){
+							$scope.showPreloader = false;
+							showSaveError();
+						});
+					}
+					
+					function showSaveSuccess(){
+						$mdDialog.show($mdDialog.alert()
+							.title('Сохранение данных')
+							.textContent('Изменения успешно сохранены')
+							.ok('OK'));
+					}
+					
+					function showSaveError(){
+						$mdDialog.show($mdDialog.alert()
+							.title('Ошибка')
+							.textContent('Невозможно применить изменения')
+							.ok('OK'));
+					}
+					
+					$scope.sendMail = function(){
+						$location.path('/admin/sendMail/' + $scope.profile.user_id);
+					}
 					
 				}]
 		};
@@ -8324,61 +8803,218 @@ function RadarChart(id, data, options) {
 				'$routeParams',
 				'$location',
 				'$window',
+				'$q',
 				'$mdDialog',
 				'ParamsSrv',
 				'ApiSrv',
 				'AdminProfilesSrv',
+				'TariffsSrv',
 				function(
 					$scope,
 					$routeParams,
 					$location,
 					$window,
+					$q,
 					$mdDialog,
 					ParamsSrv,
 					ApiSrv,
-					AdminProfilesSrv
+					AdminProfilesSrv,
+					TariffsSrv
 				) {
 	
-					$scope.showPreloader = true;
-					AdminProfilesSrv.getProfiles().then(function(profiles){
-							$scope.showPreloader = false;	
-							$scope.profiles = profiles;
-						}, function(){
-							$scope.showPreloader = false;
-                            $mdDialog.show(
-                              $mdDialog.alert()
-                                .clickOutsideToClose(false)
-                                .title('Ошибка')
-                                .textContent('Ошибка загрузки данных')
-                                .ok('OK')
-                            );
-						}
-					);
-
-					// $scope.saveProfile = function(profile){
-					// 	var acl = {
-					// 		"admin": profile.admin_role,
-					// 		"sponsor":  profile.sponsor_role,
-					// 		"rightholder":  profile.rightholder_role,
-					// 		"demo":  profile.demo_role
-					// 	};
-					// 	ApiSrv.addRole(profile.user_id, acl).then(function(acl){
-					// 		profile.admin_role = acl.admin;
-					// 		profile.sponsor_role = acl.sponsor;
-					// 		profile.rightholder_role = acl.rightholder;
-					// 		profile.demo_role = acl.demo;
-					// 		profile.dirty = false;
+					// $scope.showPreloader = true;
+					// AdminProfilesSrv.getProfiles().then(function(profiles){
+					// 		$scope.showPreloader = false;	
+					// 		$scope.profiles = profiles;
 					// 	}, function(){
-					// 		$mdDialog.show($mdDialog.alert()
-					// 			.title('Ошибка')
-					// 			.textContent('Невозможно применить изменения')
-					// 			.ok('OK'));
-					// 	});
-					// };
+					// 		$scope.showPreloader = false;
+     //                       $mdDialog.show(
+     //                         $mdDialog.alert()
+     //                           .clickOutsideToClose(false)
+     //                           .title('Ошибка')
+     //                           .textContent('Ошибка загрузки данных')
+     //                           .ok('OK')
+     //                       );
+					// 	}
+					// );
+					
+					$scope.showPreloader = true;
+                    $q.all({
+                    	profiles: AdminProfilesSrv.getProfiles(),
+                    	tariffs: TariffsSrv.getTariffs()
+                    }).then(function(result){
+                    	$scope.profiles = result.profiles;
+                    	$scope.tariffs = result.tariffs;
+                        $scope.showPreloader = false;
+                    }, function(){
+                    	$scope.showPreloader = false;
+                        $mdDialog.show(
+                          $mdDialog.alert()
+                            .clickOutsideToClose(false)
+                            .title('Ошибка')
+                            .textContent('Ошибка загрузки данных с сервера')
+                            .ok('OK')
+                        ).then(function(){
+                            //$location.path('/admin/profiles/');
+                        });
+                    });
+                    
+                    $scope.getTariff = function(id){
+                    	return TariffsSrv.getTariff(id);
+                    }
+
 					
 					$scope.openProfile = function(profile){
 						$location.path('/admin/profiles/' + profile.user_id);
 					};
+					
+				}]
+		};
+	}
+}());
+
+(function () {
+	"use strict";
+	/**
+	 * @desc
+	 * @example
+	 */
+	angular.module('SportsensusApp')
+		.directive('adminSendMailDir', adminSendMailDir);
+
+	adminSendMailDir.$inject = [
+		'$rootScope'
+	];
+
+	function adminSendMailDir(
+		$rootScope
+	)    {
+		return {
+			restrict: 'E',
+			scope: {
+				type: '@'
+			},
+			templateUrl: '/views/widgets/admin/panels/sendMail/sendMail.html', 
+			link: function ($scope, $el, attrs) {
+				//$scope.init();
+			},
+
+			controller: [
+				'$scope',
+				'$routeParams',
+				'$location',
+				'$window',
+				'$q',
+				'$mdDialog',
+				'ParamsSrv',
+				'ApiSrv',
+				'AdminProfilesSrv',
+				'TariffsSrv',
+				function(
+					$scope,
+					$routeParams,
+					$location,
+					$window,
+					$q,
+					$mdDialog,
+					ParamsSrv,
+					ApiSrv,
+					AdminProfilesSrv,
+					TariffsSrv
+				) { 
+	
+	                $scope.tinyOptions = {
+                        selector: '#case_editor',
+                        height: 700,
+                        plugins: [
+                            'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                            'searchreplace wordcount visualblocks visualchars code fullscreen',
+                            'insertdatetime media nonbreaking save table contextmenu directionality',
+                            'emoticons template paste textcolor colorpicker textpattern imagetools codesample'
+                        ],
+                        toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+                        toolbar2: 'print preview media | forecolor backcolor emoticons | codesample help',
+                        image_advtab: true
+                    }
+	
+	                $scope.theme = 'Информационное письмо от sportsensus.ru';
+	
+                    var userId = Number.parseInt($routeParams.userId);
+                    
+                    $scope.selectedProfiles = [];
+                    
+                    
+                    $scope.showPreloader = true;
+                    AdminProfilesSrv.getProfiles().then(function(profiles){
+						$scope.showPreloader = false;	
+						$scope.profiles = profiles;
+						
+						if (isNaN(userId)) {
+                            $scope.usersSelectable = true;
+                        } else {
+                            $scope.selectedProfiles = $scope.profiles.filter(function(profile){
+                                return profile.user_id == userId;
+                            });
+                            
+                            $scope.usersSelectable = !$scope.selectedProfiles.length;
+                            
+                            // if ($scope.selectedProfiles.length)
+                            //     $scope.selectedProfiles = $scope.selectedProfiles[0];
+                            // else
+                            //     $scope.selectedProfiles = null;
+                            // $scope.usersSelectable = true;
+                            
+                        }
+                    
+					}, function(){
+						$scope.showPreloader = false;
+                        $mdDialog.show(
+                          $mdDialog.alert()
+                            .clickOutsideToClose(false)
+                            .title('Ошибка')
+                            .textContent('Ошибка загрузки данных')
+                            .ok('OK')
+                        );
+					});
+                    
+                    
+                    $scope.sendMail = function(){
+                        var addresses = $scope.selectedProfiles.map(function(profile){
+                            return profile.login;
+                        });
+                        if (!addresses) {
+                            $mdDialog.show($mdDialog.alert()
+                                .title('Отправка на почту')
+                                .textContent('Не указан получатель письма')
+                                .ok('OK'));   
+                            return;
+                        }
+                        
+                        $scope.showPreloader = true;
+                        ApiSrv.sendEmail({
+                            address: addresses,
+                            theme: $scope.theme,
+                            message: $scope.message
+                            // attachments: [{
+                            //     filename: options && options.filename ? options.filename + '.pdf' : 'sportsensus-report.pdf',
+                            //     data: data
+                            // }]
+                        }).then(function(){
+                            $scope.showPreloader = false;
+                            $mdDialog.show($mdDialog.alert()
+                                .title('Отправка на почту')
+                                // .textContent('Письмо успешно отправлено на \n' + addresses.join(''))
+                                .textContent('Письмо успешно отправлено')
+                                .ok('OK'));
+                        }, function(){
+                            $scope.showPreloader = false;
+                            $mdDialog.show($mdDialog.alert()
+                                .title('Отправка на почту')
+                                .textContent('Ошибка отправки письма')
+                                .ok('OK'));
+                        });
+                    }
+
 					
 				}]
 		};

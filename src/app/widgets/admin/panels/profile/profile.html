@@ -1,12 +1,15 @@
 <div layout="row" flex class="admin-profile">
-    <header-dir></header-dir> 
+    <!--<header-dir></header-dir> -->
     
     <admin-menu-dir></admin-menu-dir>
     
 	<md-content class="md-padding" layout="column" flex preloader-dir="showPreloader">
 
         <div layout="row" layout-align="start center">
-            <h2 class="md-display-1">Параметры пользователя&nbsp;<b>{{profile.login}}</b></h2>
+            
+            <div class="md-display-1">Параметры пользователя</hdiv>
+                
+            </div>
             <div flex></div>
       		<md-button class="md-raised md-warn" ng-click="removeArticle(selectedArticle)">
       		    Удалить
@@ -15,8 +18,13 @@
             <md-button class="md-raised md-primary" ng-disabled="!profile.dirty" ng-click="saveProfile()">
                 Сохранить
             </md-button>
+            
+            <md-button class="md-raised md-primary" ng-click="sendMail()">
+                Написать письмо
+            </md-button>
         </div>
     
+        <div class="md-display-2">{{profile.login}}</div>
     
     	<div layout="column">
     	    <p class="md-title">
@@ -50,13 +58,19 @@
                 Тарифный план
             </p>
     	    
-            <md-input-container>
-                <md-select ng-model="profile.tariffId" ng-change="onTariffChanged();">
-                    <md-option ng-repeat="tariff in tariffs" ng-value="{{tariff.id}}">
-                        <b>{{tariff.name}}</b>&nbsp;{{tariff.description}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
+    	    <div layout="row" layout-align="start center">
+                <md-input-container flex>
+                    <md-select ng-model="profile.tariffId" ng-change="onTariffChanged();"
+                        placeholder="Выберите тариф для пользователя">
+                        <md-option ng-repeat="tariff in tariffs" ng-value="{{tariff.id}}">
+                            <b>{{tariff.name}}</b>&nbsp;{{tariff.description}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <md-button class="md-raised md-primary" ng-disabled="profile.tariffId == undefined" ng-click="updateTafiff()">
+                    Обновить тариф
+                </md-button>
+            </div>
             
             
             <p class="md-title" style="margin-bottom:30px;">

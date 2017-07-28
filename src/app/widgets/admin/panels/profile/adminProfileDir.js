@@ -58,6 +58,11 @@
                     }).then(function(result){
                     	$scope.profile = result.profile;
                     	$scope.tariffs = result.tariffs;
+                    	
+                    	if ($scope.profile.tariff){
+                    		var tariff =  TariffsSrv.getTariff($scope.profile.tariff.id);
+                    		$scope.profile.tariffId = tariff ? tariff.id : null;
+                    	}
                         $scope.showPreloader = false;
                     }, function(){
                     	$scope.showPreloader = false;
@@ -72,20 +77,6 @@
                         });
                     });
                     
-                    
-                    // $scope.getTariffTitle = function(){
-                    // 	if (!$scope.profile) return;
-                    	
-                    // 	var tariffId = $scope.profile.tariffId;
-                    // 	if (tariffId == null) return;
-                    	
-                    // 	var selectedTariff = $scope.tariffs.find(function(tariff){
-                    // 		return tariff.id == tariffId;
-                    // 	});
-                    // 	if (!selectedTariff) return;
-                    	
-                    // 	return selectedTariff.name;
-                    // }
                    
 	                
 	                $scope.fieldsMap = [
@@ -126,6 +117,7 @@
 					};
 					
 					$scope.saveProfile = function(){
+						$scope.showPreloader = true;
 						var acl = {
 							"admin": $scope.profile.admin_role,
 							"sponsor":  $scope.profile.sponsor_role,
@@ -138,19 +130,49 @@
 						}
 						
 						ApiSrv.addRole($scope.profile.user_id, acl).then(function(acl){
+							$scope.showPreloader = false;
 							$scope.profile.admin_role = acl.admin;
 							$scope.profile.sponsor_role = acl.sponsor;
 							$scope.profile.rightholder_role = acl.rightholder;
 							$scope.profile.demo_role = acl.demo;
 							$scope.profile.dirty = false;
-						}, function(){
-							$mdDialog.show($mdDialog.alert()
-								.title('Ошибка')
-								.textContent('Невозможно применить изменения')
-								.ok('OK'));
-						});
-
+							showSaveSuccess();
+						}, showSaveError);
 					};
+					
+				
+					$scope.updateTafiff = function(){
+						$scope.showPreloader = true;
+						var acl = {
+							tariff_id: $scope.profile.tariffId
+						}
+						
+						ApiSrv.addRole($scope.profile.user_id, acl).then(function(){
+							$scope.showPreloader = false;
+							showSaveSuccess();
+						}, function(){
+							$scope.showPreloader = false;
+							showSaveError();
+						});
+					}
+					
+					function showSaveSuccess(){
+						$mdDialog.show($mdDialog.alert()
+							.title('Сохранение данных')
+							.textContent('Изменения успешно сохранены')
+							.ok('OK'));
+					}
+					
+					function showSaveError(){
+						$mdDialog.show($mdDialog.alert()
+							.title('Ошибка')
+							.textContent('Невозможно применить изменения')
+							.ok('OK'));
+					}
+					
+					$scope.sendMail = function(){
+						$location.path('/admin/sendMail/' + $scope.profile.user_id);
+					}
 					
 				}]
 		};

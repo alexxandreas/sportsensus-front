@@ -77,6 +77,11 @@
 						path: '/admin/profiles/',
 						visible: function(){return $scope.loggedIn && $scope.isAdmin;}
 					},{
+						id:'sendMail',
+						text:'Рассылка писем',
+						path: '/admin/sendMail/',
+						visible: function(){return $scope.loggedIn && $scope.isAdmin;}
+					},/*{
 						id:'leagues',
 						text:'Лиги',
 						path: '/leagues/',
@@ -91,7 +96,7 @@
 						text:'Другое',
 						path: '/other/',
 						visible: function(){return $scope.loggedIn && $scope.isAdmin;}
-					},{
+					},*/{
 					    id:'other',
 						text:'Редактор кейсов',
 						path: '/admin/cases/',

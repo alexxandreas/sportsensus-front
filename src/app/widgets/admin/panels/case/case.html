@@ -1,5 +1,5 @@
 <div layout="row" flex class="admin-case">
-    <header-dir></header-dir> 
+    <!--<header-dir></header-dir> -->
     
     <admin-menu-dir></admin-menu-dir>
     
@@ -53,28 +53,7 @@
                     </div>
                 </md-input-container>
             </div>  
-            
-            <!--<choose-file layout="row">-->
-            <!--    <input id="fileInput" type="file" class="ng-hide" />-->
-            <!--    <md-input-container flex class="md-block">-->
-            <!--        <h3 class="infobox-panel-header3">-->
-            <!--    		Изображение-->
-            <!--        </h3> -->
-            <!--        <div layout="column" layout-align="start start">-->
-            <!--            <img ng-src="{{article.image}}" ng-show="article.image" class="article-image"></img>-->
-            <!--            <div layout="row">-->
-            <!--                <md-button class="md-raised md-warn"-->
-            <!--                    ng-click="removeImage()"-->
-            <!--                    ng-show="article.image"-->
-            <!--                >Удалить</md-button>-->
-                            
-            <!--                <md-button class="md-raised md-primary"-->
-            <!--                    ng-click="openFileDialog()"-->
-            <!--                >Выбрать</md-button>-->
-            <!--            </div>-->
-            <!--        </div>-->
-            <!--    </md-input-container>-->
-            <!--</choose-file>  -->
+           
             
             <!-- Теги спорт-->
             <md-input-container class="md-block">
@@ -124,31 +103,12 @@
                   </md-chip-template>
                 </md-chips>
             </md-input-container>
-            
-            <!--Текст-->
-            <!--<md-input-container class="md-block">-->
-            <!--    <h3 class="infobox-panel-header3">-->
-            <!--		Текст-->
-            <!--	</h3>-->
-            <!--    <div>-->
-            <!--        <div ckeditor="options" ng-model="article.content" ></div>-->
-            <!--    </div>-->
-            <!--</md-input-container>-->
-            
-            <!--<choose-file layout="row">-->
+          
             <div>
-                <input type="file" class="ng-hide" file-model-dir="tinymceUploadFile" file-model-open-event="tinymceUploadFileEvent"/>
-                <md-input-container class="md-block">
-                    <h3 class="infobox-panel-header3">
+                <h3 class="infobox-panel-header3">
                 		Текст
-                	</h3>
-                	
-                    <div>
-                        <!--<textarea id="case_editor" ng-model="article.content" >555</textarea>-->
-                        <textarea ui-tinymce="tinymceOptions" ng-model="article.content"></textarea>
-                    </div>
-                </md-input-container>
-            <!--</choose-file>-->
+            	</h3>
+                <tiny-dir tiny-options="tinymceOptions" tiny-model="article.content"></tiny-dir>
             </div>
         </div>
         

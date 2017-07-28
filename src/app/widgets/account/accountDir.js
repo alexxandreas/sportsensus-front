@@ -32,18 +32,24 @@
 				'$routeParams',
 				'$location',
 				'$window',
+				'$interval',
 				'$mdDialog',
 				'ParamsSrv',
 				'ApiSrv',
+				'UserSrv',
+				'TimeSrv',
 				function(
 					$scope,
 					$controller,
 					$routeParams,
 					$location,
 					$window,
+					$interval,
 					$mdDialog,
 					ParamsSrv,
-					ApiSrv
+					ApiSrv,
+					UserSrv,
+					TimeSrv
 				) {
 
 					$controller('baseInfoboxCtrl', {$scope: $scope});
@@ -70,6 +76,12 @@
 						id:'password',
 						tpl:'password',
 						text:'Смена пароля'
+						// isSelected: $scope.checkSelected.bind(null, 'consume'),
+						//footer: 'analytics'
+					},{
+						id:'tariff',
+						tpl:'tariff',
+						text:'Тарифный план'
 						// isSelected: $scope.checkSelected.bind(null, 'consume'),
 						//footer: 'analytics'
 					}];
@@ -141,6 +153,58 @@
 					};
 
 
+					
+					var tariff =  UserSrv.getTariff();
+		
+					$scope.tariffParams = [
+						{title: 'Тариф', value: tariff.name},
+						{title: 'Описание', value: tariff.description},
+						
+						//{title: 'Продолжительность подписки', value: TimeSrv.secondsToDateTime(tariff.duration), visible:!!tariff.duration},
+						{
+							title: 'Количество сессий', 
+							value: tariff.sessions_count.toString() + ' (Осталось ' + tariff.remaining_sessions + ')', 
+							visible:!!tariff.sessions_count
+							
+						}, {
+							id: 'session_duration',
+							title: 'Длительность одной сессии', 
+							value: '',
+							visible: !!tariff.session_duration
+						},
+						{title: 'Ограниченный доступ к данным', value: 'Да', visible: tariff.limit_access},
+						
+						{title: 'Доступ к инфоблоку', value: 'Да', visible: tariff.access_infobox},
+						{title: 'Доступ к блоку правообладателя', value: 'Да', visible: tariff.access_rightholder},
+						{title: 'Доступ к блоку спонсона', value: 'Да', visible: tariff.access_sponsor},
+						{title: 'Доступ к планировщику', value: 'Да', visible: tariff.access_scheduler},
+						{title: 'Доступ к кейсам', value: 'Да', visible: tariff.access_cases},
+						{title: 'Доступ к административной панели', value: 'Да', visible: tariff.access_admin},
+						{title: 'Доступ к обновлению данных', value: 'Да', visible: tariff.access_data_update},
+						{title: 'Доступ к обновлению главной страницы', value: 'Да', visible: tariff.access_homepage_update},
+						
+
+
+					]
+					
+					function updateTariffParams(){
+						var tariff = UserSrv.getTariff();
+						
+						var sessionDurationParam = $scope.tariffParams.find(function(param) { return param.id === 'session_duration'});
+						if (tariff.session_duration && tariff.realRemainingTime){
+						sessionDurationParam.value = TimeSrv.secondsToDateTime(tariff.session_duration) + 
+							' (Осталось ' + 
+							TimeSrv.secondsToDateTime(tariff.realRemainingTime) +
+							')'
+						} else {
+							sessionDurationParam.value = null;
+						}
+					}
+					
+					var updateTariffParamsInterval = $interval(updateTariffParams, 1000);
+                    updateTariffParams();
+
+				
 					getProfile();
 
 					function getProfile(){
@@ -185,6 +249,12 @@
 						})
 
 					}
+					
+					$scope.$on("$destroy", function() {
+                        if (updateTariffParamsInterval) {
+                            $interval.cancel(updateTariffParamsInterval);
+                        }
+                    });
 
 				}]
 		};

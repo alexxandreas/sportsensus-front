@@ -1,39 +1,19 @@
+<div class="infobox">
+    <!--<header-dir></header-dir>-->
 
-<div class="l-board">
-   <!-- <script>
-        window.trl = {
-            trl: {{ data.translates|tojson }},
-        other: {
-            interest: 'Интерес к спорту',
-                    involvment: 'Вовлеченность',
-                    clubs_known: 'Спонтанное знание о клубах',
-                    clubs_known_help: 'Подсказанное знание о клубах',
-                    watch: 'Cмотрениe клубов',
-                    walk: 'Посещение клубов'
-        }
-        };
-    </script>-->
+    <!--<div class="infobox">-->
 
+        <!--<div ng-include="'/views/widgets/infobox/panels/footer/'+footer+'.html'"></div>-->
+        <div ng-include="'/views/widgets/infobox/panels/footer/'+activeFooter+'.html'"></div>
+        <!--<div class="infoboxFooterDir"></div>-->
+        <!--<div ng-class="{{activeFooter}}"></div>-->
 
-    <div class="l-board__chek-button">
-        <!--<span class="l-board__chek-button-text">Найдено болельщиков - 1 901 297</span>-->
-        <span class="l-board__chek-button-text">{{audienceCountText}}</span>
-        <span class="l-board__chek-button-inner" ng-click="checkButtonClick()">Показать результат</span>
-    </div>
+        <div class="menu" ng-include="'/views/widgets/infobox/infoboxMenu.html'"></div>
 
-    <div class="l-board__menu" ng-include="'/views/widgets/infobox/infoboxMenu.html'">
-    </div>
-
-
-
-    <form >
-       <!-- <div class="l-board__body">
-            &lt;!&ndash;{% include 'l-board/l-board__view.html' %}&ndash;&gt;
-            <div ></div>
-        </div>-->
-        <div ng-if="activeMenuItem" class="l-board__body" ng-include="'/views/widgets/infobox/panels/'+activeMenuItem.id+'.html'">
+        <div>
+            <div ng-if="activePage" style="padding-bottom: 94px;" class="infobox-body" ng-include="'/views/widgets/infobox/panels/'+activePage.tpl+'.html'"></div>
         </div>
-    </form>
 
-    <div class="l-board__express"></div>
+        <!--<div class=" infobox-express"></div>-->
+    <!--</div>-->
 </div>

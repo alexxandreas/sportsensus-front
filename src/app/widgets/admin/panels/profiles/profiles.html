@@ -1,0 +1,73 @@
+<div layout="row" flex class="admin-profiles">
+    <!--<header-dir></header-dir> -->
+    
+    <admin-menu-dir></admin-menu-dir>
+    
+	  <md-content class="md-padding" layout="column" flex preloader-dir="showPreloader">
+
+		<div layout="row" layout-align="start center">
+          <h2 class="md-display-1">Профили пользователей</h2>
+        </div>
+	
+		<table class="profiles-table" ng-show="profiles">
+			<thead>
+				<tr>
+					<!--<th>Id</th>-->
+					<th class="profiles-table-header">Login</th>
+					<th class="profiles-table-header">Админ</th>
+					<th class="profiles-table-header">Демо</th>
+					<th class="profiles-table-header">Спонсор</th>
+					<th class="profiles-table-header">Правообладатель</th>
+					<!--<th>Тип компании</th>-->
+					<!--<th>Юр. статус</th>-->
+					<!--<th>Корр. счет</th>-->
+					<th class="profiles-table-header">Тариф</th>
+					
+					<!--<th></th>-->
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="profile in profiles" ng-click="openProfile(profile)" class="profiles-table-row">
+					<!--<td>{{profile.user_id}}</td>-->
+					<td class="profiles-table-cell">{{profile.login}}</td>
+					
+					<!--<td class="profiles-table-cell"><md-switch class="switch" ng-model="profile.admin_role" ng-change="profile.dirty = true;" aria-label="Выбрано" ></md-switch></td>-->
+					<td class="profiles-table-cell profiles-table-cell-center">
+						<md-icon ng-show="profile.admin_role" class="material-icons md-accent">done</md-icon>
+						<md-icon ng-show="!profile.admin_role" class="material-icons">remove</md-icon>
+					</td>
+
+					<!--<td class="profiles-table-cell profiles-table-cell-center"><md-switch class="switch" ng-model="profile.demo_role" ng-change="profile.dirty = true;" aria-label="Выбрано" ></md-switch></td>-->
+					<td class="profiles-table-cell profiles-table-cell-center">
+						<md-icon ng-show="profile.demo_role" class="material-icons md-accent">done</md-icon>
+						<md-icon ng-show="!profile.demo_role" class="material-icons">remove</md-icon>
+					</td>
+					
+					<!--<td class="profiles-table-cell profiles-table-cell-center"><md-switch class="switch" ng-model="profile.sponsor_role" ng-change="profile.dirty = true;" aria-label="Выбрано" ></md-switch></td>-->
+					<td class="profiles-table-cell profiles-table-cell-center">
+						<md-icon ng-show="profile.sponsor_role" class="material-icons md-accent">done</md-icon>
+						<md-icon ng-show="!profile.sponsor_role" class="material-icons">remove</md-icon>
+					</td>
+					
+					<!--<td class="profiles-table-cell profiles-table-cell-center"><md-switch class="switch" ng-model="profile.rightholder_role" ng-change="profile.dirty = true;" aria-label="Выбрано" ></md-switch></td>-->
+					<td class="profiles-table-cell profiles-table-cell-center">
+						<md-icon ng-show="profile.rightholder_role" class="material-icons md-accent">done</md-icon>
+						<md-icon ng-show="!profile.rightholder_role" class="material-icons">remove</md-icon>
+					</td>
+					
+					<!--<td>{{profile.company_type == 0 ? 'Спонсор' : profile.company_type == 1 ? 'Правообладатель' : profile.company_type == 2 ? 'Агенство' : 'None'}}</td>-->
+					
+					<!--<td>{{profile.legal_status == 0 ? 'Физ. лицо' : profile.legal_status == 1 ? 'Юр. лицо' : 'None' }}</td>-->
+					
+					<!--<td>{{profile.corr_account || 'None'}}</td>-->
+					
+					<td class="profiles-table-cell profiles-table-cell-center">{{getTariff(profile.tariff.id).name || 'None'}}</td>
+					
+					<!--<td><md-button class="md-raised md-primary" ng-disabled="!profile.dirty" ng-click="saveProfile(profile)">Сохранить</md-button></td>-->
+				</tr>
+			</tbody>
+		</table>
+		
+	</md-content>
+
+</div>

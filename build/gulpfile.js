@@ -5,12 +5,16 @@ var runSequence = require('run-sequence');
 //var templateCache = require('gulp-angular-templatecache');
 var del = require('del');
 
-var appJs = ['../src/app/**/_*.js','../src/app/**/*.js']; // not include config.js 
-var appCss = ['../src/app/**/*.less'];
+var appJs = ['../src/app/**/_*.js','../src/app/**/*.js', '!../src/app/**/!*.js']; // not include config.js 
+var appCss = ['../src/app/**/_*.less', '../src/app/**/*.less'];
 var appViews = ['../src/app/**/*.html']; // not include index.html 
 
 //var watchStatic_ = ['../src/**/*.{html,scss,less,css,svg}'];
-var statics = ['../src/static/**/*']; // статика
+var statics = [
+	'../src/static/**/*',
+	'../libs/ckeditor*/**/*', // ckeditor загружает свою статику сам - переносим всю папку в static
+	'../libs/tinymce*/**/*' // tinymce загружает свою статику сам - переносим всю папку в static
+]; // статика
 var index = '../src/index.html';
 var debugConfig = '../src/config_debug.js';
 var releaseConfig = '../src/config_release.js';
@@ -23,15 +27,54 @@ var distRelease = '../dist/release/';
 var libJs = [
 	//'../libs/leaflet/dist/leaflet-src.js',
 	'../libs/angular/angular.js',
-	//'../libs/angular-animate/angular-animate.js',
-	//'../libs/angular-aria/angular-aria.js',
-	//'../libs/angular-material/angular-material.js',
+	'../libs/angular-animate/angular-animate.js',
+	'../libs/angular-aria/angular-aria.js',
+	'../libs/angular-material/angular-material.js',
 	'../libs/angular-route/angular-route.js',
-	'../libs/angular-cookies/angular-cookies.js'
+	'../libs/angular-cookies/angular-cookies.js',
+	'../libs/d3-3.5.6.min.js',
+	'../libs/Chart.1.1.1.js',
+	
+	// '../libs/html2canvas/dist/html2canvas.js',
+	// '../libs/html2canvas/dist/html2canvas.svg.js',
+	//'../libs/html2canvas.0.4.1.js',
+	// '../libs/jspdf/dist/jspdf.debug.js',
+	'../libs/jspdf/dist/jspdf.min.js',
+
+	// '../libs/canvg/dist/canvg.bundle.js'
+	'../libs/canvg/rgbcolor.js',
+	'../libs/canvg/StackBlur.js',
+	'../libs/canvg/canvg.js',
+
+	//'../libs/ckeditor/ckeditor.js',
+	//'../libs/ckeditor/lang/ru.js',
+	
+	//'../libs/angular-ckeditor/angular-ckeditor.js',
+	
+	'../libs/flickity/dist/flickity.pkgd.min.js',
+	
+	//'../libs/tinymce/tinymce.min.js',
+	'../libs/angular-ui-tinymce/dist/tinymce.min.js',
+	
+	
+	
+	// '../libs/html2canvas/src/Core.js',
+	// '../libs/html2canvas/src/Font.js',
+	// '../libs/html2canvas/src/Generate.js',
+	// '../libs/html2canvas/src/Queue.js',
+	// '../libs/html2canvas/src/Parse.js',
+	// '../libs/html2canvas/src/Preload.js',
+	// '../libs/html2canvas/src/Renderer.js',
+	// '../libs/html2canvas/src/Support.js',
+	// '../libs/html2canvas/src/Util.js',
+	// '../libs/html2canvas/src/renderers/Canvas.js'
+
 
 ];
 var libCss = [
-	//'../libs/angular-material/angular-material.css'
+	'../libs/angular-material/angular-material.css',
+	// '../libs/ckeditor/contents.css',
+	'../libs/flickity/dist/flickity.min.css'
 ];
 
 
@@ -177,7 +220,7 @@ gulp.task('live-server', function () {
 		root: debugMode ? distDebug : distRelease,
 		fallback: (debugMode ? distDebug : distRelease)+'index.html',
 		livereload: true,
-		port:9087
+		port:8081
 	});
 });
  

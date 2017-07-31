@@ -1,24 +1,28 @@
-<div class="l-board__body-box">
-    <h1 class="l-board__header">
-        <!--<img src="/static/img/l-board/soc-dem.png" />-->
-        <!--Социальная демография-->
+<div class="infobox-panel"
+layout="column" layout-align="start stretch">
+
+    <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
         {{parameters.demography.name}}
+        <div flex></div>
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!checkSelected('demography')"
+                    ng-click="clearSelection('demography')"
+        >Сбросить</md-button>
     </h1>
 
-    <div class="l-board__body-box-list" ng-repeat="collection in parameters.demography.lists">
-        <h3>
-            <!--<img ng-show="collection.img" ng-src="{{collection.img}}">-->
-            {{collection.name}}
-        </h3>
-        <ul>
-            <!--ng-click="selectCheckbox(collection, item)"-->
-            <li ng-repeat="item in collection.lists">
-                <input type="checkbox" name="{{collection.id}}" id="{{collection.id+'_'+item.id}}"
-                       ng-model="item.selected"
-                       ng-click="selectCheckbox(collection, item)">
-                <label for="{{collection.id+'_'+item.id}}">{{item.name}}</label>
-            </li>
-        </ul>
+    <div layout="row" layout-align="start start" layout-wrap>
+        <div  ng-repeat="collection in parameters.demography.lists"
+        layout="column" layout-align="start start" flex="30"
+              style="margin: 5px;">
+            <div class="infobox-panel-header3" >
+                {{collection.name}}
+            </div>
+
+            <legend-dir legend="collection.lists" columns-count="1"
+                        selectable="true" highlightable="false"
+                        highlighted-color="'#bfebff'" selected-color="'#777777'"
+                        ></legend-dir>
+        </div>
     </div>
     
 </div>

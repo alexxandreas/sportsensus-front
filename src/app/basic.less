@@ -1,0 +1,44 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.no-outline {
+  outline: none;
+}
+
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently                                 not supported by any browser */
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+
+md-switch .md-thumb {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url(../static/static/img/md-thumb.png);
+  background-color: transparent;
+  box-shadow: none;
+  //background-color: red;
+}
+
+ md-switch.md-checked .md-thumb {
+  background-color: transparent;
+   background-image: url(../static/static/img/md-thumb-selected.png);
+
+}
+
+md-switch.md-checked .md-thumb-container {
+  transform: none;
+  //transform: translateX(100%)
+  //transform: translateX(10px);
+
+  left: 16px;
+}

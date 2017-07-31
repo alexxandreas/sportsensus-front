@@ -1,0 +1,74 @@
+<div class="infobox-panel" ng-controller="expressAudienceCtrl"
+     layout="column" layout-align="start stretch"
+     save-as-pdf-dir>
+
+    <div layout="row" layout-align="space-between center"
+         style="margin: 5px 0;">
+        <h1 class="infobox-panel-header" layout="row" layout-align="start center">
+            Экспресс-результат по аудитории
+        </h1>
+        <download-dir title="Экспресс-результат по аудитории" subtitle="{{caption}}"></download-dir>
+    </div>
+
+
+    <h2 class="infobox-panel-header2" ng-show="caption"
+        layout="row" layout-align="start center" ng-bind-html="caption | trustAsHtmlFltr">
+    </h2>
+
+
+
+    <div layout="row" layout-align="start start" layout-wrap
+     style="margin-top: 8px;">
+        <div layout="column" layout-align="start start"
+             style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-3 вида спорта по интересу</div>
+            <legend-dir legend="graphs.interest.legends.interest" columns-count="1" selectable="false"></legend-dir>
+
+            <horisontal-bar-dir chart="graphs.interest.chartData2" ></horisontal-bar-dir>
+        </div>
+
+        <div layout="column" layout-align="start start"
+             style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-3 вида спорта по вовлеченности</div>
+            <legend-dir legend="graphs.involve.legends.involve" columns-count="1" selectable="false"></legend-dir>
+            <div layout="row" layout-align="start start">
+                <doughnut-dir ng-repeat="chart in graphs.involve.charts" chart="chart"></doughnut-dir>
+
+            </div>
+            <!--<stacked-bar-dir chart="graphs.involve.chartData" ></stacked-bar-dir>-->
+        </div>
+
+        <div layout="column" layout-align="start start"
+             style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-5 спонтанное знание клубов</div>
+            <!--<legend-dir legend="graphs.known.legends.known" columns-count="1" selectable="false"></legend-dir>-->
+
+            <horisontal-bar-dir chart="graphs.known.chartData2" ></horisontal-bar-dir>
+        </div>
+        <div layout="column" layout-align="start start"
+             style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-5 подсказанное знание клубов</div>
+            <!--<legend-dir legend="graphs.involve.legends.involve" columns-count="1" selectable="false"></legend-dir>-->
+
+            <horisontal-bar-dir chart="graphs.knownHelp.chartData2" ></horisontal-bar-dir>
+        </div>
+
+        <div layout="column" layout-align="start start"
+             style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-3 клуба по смотрению</div>
+            <legend-dir legend="graphs.watch.legends.watch" columns-count="1" selectable="false"></legend-dir>
+
+            <horisontal-bar-dir chart="graphs.watch.chartData2" ></horisontal-bar-dir>
+        </div>
+
+        <div layout="column" layout-align="start start"
+             style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-3 клуба по посещению</div>
+            <legend-dir legend="graphs.walk.legends.walk" columns-count="1" selectable="false"></legend-dir>
+
+            <horisontal-bar-dir chart="graphs.walk.chartData2" ></horisontal-bar-dir>
+        </div>
+    </div>
+
+
+</div>

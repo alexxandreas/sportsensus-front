@@ -1,44 +1,10 @@
+var CKEDITOR_BASEPATH = '/static/ckeditor/';
 var appConfig = {
 
-    apiUrl: 'https://sportsensus.ru:8080/api',
-    proxyURL: 'https://cors-anywhere.herokuapp.com/',
+    // apiUrl: 'http://sportsensus.ru:8080/api',
+    apiUrl: 'http://sportsensus.ru/api',
+    imageUploadUrl: 'http://sportsensus.ru/ckupload'
+    // proxyURL: 'https://cors-anywhere.herokuapp.com/',
     
-    parameters:{
-        interest:[{
-                id: 1,
-                text: 'совершенно неинтересен'
-            }, {
-                id: 2,
-                text: 'скорее неинтересен'
-            }, {
-                id: 3,
-                text: 'ни то, ни другое'
-            }, { 
-                id: 4,
-                text: 'скорее интересен'
-            }, {
-                id: 5,
-                text: 'очень интересен'
-            }],
-        involve:[{
-                id: 1,
-                text: 'Занимаюсь спортом сам(а)'
-            }, {
-                id: 2,
-                text: 'Занимаются спортом члены семьи, друзья'
-            }, {
-                id: 3,
-                text: 'Смотрю спортивные трансляции по телевизору'
-            }, {
-                id: 4,
-                text: 'Читаю спортивные новости в интернете или в газетах/журналах'
-            }, {
-                id: 5,
-                text: 'Хожу на матчи, посещаю соревнования'
-            }, {
-                id: 6,
-                text: 'Не слежу, но к этому спорту отношусь позитивно'
-            }]
-    }
-  
+    
 };

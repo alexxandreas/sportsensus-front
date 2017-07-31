@@ -1,0 +1,92 @@
+<div class="infobox-panel"
+	 layout="column" layout-align="start stretch" ng-controller="sportAnalyticsCtrl">
+
+	<h1 class="infobox-panel-header" layout="row" layout-align="start center" >
+		{{parameters.sport.name}}
+		<div flex></div>
+		<md-button class="md-raised md-primary"
+				   ng-show="checkSelected()"
+				   ng-click="clearSelection()"
+		>Сбросить</md-button>
+	</h1>
+
+	<div layout="row" layout-align="start start" layout-wrap>
+		<div  ng-repeat="sport in sports"
+			  layout="column" layout-align="start stretch"
+			  style="margin: 5px;"
+			  flex="30">
+
+			<div class="infobox-panel-header2 infobox-panel-header2-checkbox no-outline no-select"
+				 layout="row" layout-align="start center"
+				 style="margin-left: 5px;"
+				 ng-click="selectSport(sport);">
+				<div flex="none" class="radio-color"
+					 ng-style="{'background-color': sport == selected.sport && !selected.league && !selected.club ? '#777777' : 'none'}"></div>
+				<div class="legend-item-text">{{sport.name}}</div>
+			</div>
+
+
+			<!-- Лиги -->
+			<div layout="column" layout-align="start start" class="chart-legend"
+			ng-if="sport.leagues && sport.leagues.length">
+				<div layout="column" layout-align="start start"
+					 ng-repeat="league in sport.leagues | filter:{showInAnalytics:true}">
+
+					<div layout="row" layout-align="start center">
+						<div class="legend-item selectable no-outline no-select"
+							 layout="row" layout-align="start center"
+							 ng-click="selectLeague(league, sport);">
+							<div flex="none" class="legend-item-color-radio"
+								 ng-style="{'background-color': league == selected.league && !selected.club ? '#777777' : 'none'}"
+							></div>
+							<div class="legend-item-text">{{league.name}}</div>
+						</div>
+						<div class="legend-item-hide-text" ng-click="league.analyticsExpanded = !league.analyticsExpanded;">{{league.analyticsExpanded ? 'Скрыть': 'Развернуть'}}</div>
+					</div>
+
+					<!-- Клубы в лигах -->
+					<div ng-if="league.clubs"
+						 class="sublegend"
+						ng-show="league.analyticsExpanded">
+						<div layout="column" layout-align="start start" class="chart-legend">
+							<div layout="column" layout-align="start start"
+								 ng-repeat="club in league.clubs">
+								<div class="legend-item selectable no-outline no-select"
+									 layout="row" layout-align="start center"
+
+									 ng-click="selectClub(club, league, sport);">
+									<div flex="none" class="legend-item-color-radio"
+										 ng-style="{'background-color': (club == selected.club || (league == selected.league && !selected.club)) ? '#777777' : 'none'}"
+									></div>
+									<div class="legend-item-text">{{club.name}}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+
+			<!-- Клубы при отсутствии лиг -->
+			<div layout="column" layout-align="start start" class="chart-legend"
+				 ng-if="!(sport.leagues && sport.leagues.length)">
+				<div layout="column" layout-align="start start"
+					 ng-repeat="club in sport.clubs">
+					<div class="legend-item selectable no-outline no-select"
+						 layout="row" layout-align="start center"
+						 class="selectable"
+						 ng-click="selectClub(club, null, sport);">
+						<div flex="none" class="legend-item-color-radio"
+							 ng-style="{'background-color': club == selected.club ? '#777777' : 'none'}"
+						></div>
+						<div class="legend-item-text">{{club.name}}</div>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+
+</div>

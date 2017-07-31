@@ -27,12 +27,14 @@
                 '$location',
                 '$window',
                 'ApiSrv',
+                'UserSrv',
                 function(
                     $scope,
                     $routeParams,
                     $location,
                     $window,
-                    ApiSrv
+                    ApiSrv,
+                    UserSrv
                 ){
                     $scope.vm={
                         login: null,
@@ -43,9 +45,13 @@
                     $scope.login = function() {
                         $scope.vm.dataLoading = true;
                         $scope.vm.error = null;
-                        ApiSrv.auth($scope.vm).then(function(){
-                            $location.path('/infobox/');
+                        UserSrv.auth($scope.vm).then(function(user){
                             $scope.vm.dataLoading = false;
+                            if (!user.userRights.admin)
+                                $location.path('/infobox/');
+                            else 
+                                $location.path('/admin/');
+                            
                         }, function(){
                             $scope.vm.dataLoading = false;
                             $scope.vm.error = 'Неправильный логин или пароль';

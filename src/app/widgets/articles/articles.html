@@ -1,0 +1,58 @@
+<div flex class="articles-panel">
+	<!--<header-dir></header-dir>-->
+
+	<div class="articles" flex preloader-dir="showPreloader">
+
+		<!--<div class="menu" ng-include="'/views/widgets/infobox/infoboxMenu.html'"></div>-->
+
+		<!--<div>-->
+		<!--	<div ng-if="activePage" style="padding-bottom: 94px;" class="infobox-body" ng-include="'/views/widgets/infobox/panels/'+activePage.tpl+'.html'"></div>-->
+		<!--</div>-->
+		
+		<div layout="row" layout-align="start start">
+			
+			<div layout="column" class="tags-menu">
+				<!--<md-chips ng-model="sportTags" readonly="true" md-removable="false" md-on-select="onTagClick($chip)">-->
+				<!--	<md-chip-template>-->
+			 <!--         <strong>{{$chip}}</strong>-->
+			 <!--         <em>(fruit)</em>-->
+			 <!--       </md-chip-template>-->
+				<!--</md-chips>-->
+				<md-list-item ng-click="clearSelectedTags()"
+		        	ng-class="getTagClass()">
+		          	Все статьи
+		        </md-list-item>
+				<md-list flex ng-repeat="tagType in tags">
+			        <md-subheader class="md-no-sticky">{{tagType.title}}</md-subheader>
+			        <md-list-item ng-repeat="tag in tagType.tags" ng-click="onTagClick(tagType.group, tag)"
+			        	ng-class="getTagClass(tagType.group, tag)">
+			          	{{tag}}
+			        </md-list-item>
+		        </md-list>
+			</div>
+		
+		
+		
+			<div layout="row" layout-align="start end" layout-wrap flex
+				class="articles-container">
+				
+				<div layout="row" layout-align="center end" flex-xs="100" flex-sm="100" flex-md="50" flex="33"
+					ng-repeat="article in filteredArticles">
+					<div class="article" layout="column" layout-align="end stretch" ng-click="openArticle(article)">
+		                <div class="article-image-wrapper" flex
+		                    layout="column" layout-align="end center">
+		                    <img ng-src="{{article.image}}" ng-show="article.image" 
+		                        class="article-image"></img>
+		                </div>
+		                <div class="article-title" flex="none">
+		                    {{article.title}}    
+		                </div>
+					</div>	
+				</div>
+			</div>
+		
+		</div>
+		
+
+	</div>
+</div>

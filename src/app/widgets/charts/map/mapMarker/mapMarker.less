@@ -1,0 +1,182 @@
+
+.map-marker{
+
+  background-repeat: no-repeat;
+
+  &.blue {
+    background-image: url("../static/static/img/map-marker-blue.png");
+  }
+  &.green {
+    background-image: url("../static/static/img/map-marker-green.png");
+  }
+
+  .map-marker-bg{
+    //background-color: red;
+    position: relative;
+    border-radius: 200px;
+    height: 110px;
+    width: 110px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top: 16px;
+
+    //background: none;
+    &.blue{
+      background-color: #2972DB;
+    }
+    &.green {
+      background-color: #4CB7AE;
+    }
+  }
+
+  .map-marker-ring{
+    border: 3px solid rgba(255,255,255,0.5);
+    position: absolute;
+    height: 97px;
+    width: 97px;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 200px;
+    z-index: 6;
+  }
+
+  .map-marker-progress-wrapper {
+    overflow: hidden;
+    position: absolute;
+    border-radius: 200px;
+    height: 105px;
+    width: 105px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    background-color: inherit;
+    /* margin-top: 30px; */
+    //top: 18px;
+    //&.blue{
+    //  background-color: #2972DB;
+    //}
+    //&.green {
+    //  background-color: #4CB7AE;
+    //}
+
+    .map-marker-progress-mask {
+
+      position: absolute;
+      left: 0px;
+      right: 0px;
+      top: 0px;
+      bottom: 0px;
+      z-index: 5;
+      margin: 5px;
+      border-radius: 100%;
+      color: white;
+
+      //background: none;
+      &.blue{
+        background-color: #2972DB;
+      }
+      &.green {
+        background-color: #4CB7AE;
+      }
+    }
+
+    .map-marker-progress {
+      position: absolute;
+      top: -9999px;
+      bottom: -9999px;
+      left: -9999px;
+      right: -9999px;
+      margin: auto;
+      //position: relative;
+      //margin: 40px auto;
+      //background: white;
+
+      background-color: inherit;
+      width: 250px;
+      height: 250px;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+
+      & * {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      .map-marker-canvas {
+        width: 105px;
+        height: 105px;
+      }
+      .map-marker-progress, .map-marker-progress * {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      .map-marker-progress-pie {
+        width: 50%;
+        height: 100%;
+        transform-origin: 100% 50%;
+        position: absolute;
+        background: white;
+        border: 5px solid rgba(0, 0, 0, 1.0);
+      }
+
+      .map-marker-progress-spinner {
+        border-radius: ~"100% 0 0 100% / 50% 0 0 50%";
+        //z-index: 200;
+        z-index: 1;
+        border-right: none;
+        //transform: rotate(45deg);
+        //animation: rota 5s linear infinite;
+      }
+
+      .map-marker-progress-filler {
+        border-radius: ~"0 100% 100% 0 / 0 50% 50% 0";
+        left: 50%;
+        //opacity: 0; /* 0: <50%, 1: >50%*/
+        //z-index: 100;
+        z-index: 3;
+        //animation: opa 5s steps(1, end) infinite reverse;
+        border-left: none;
+      }
+
+      /*.map-marker-progress-mask {
+        width: 50%;
+        height: 100%;
+        position: absolute;
+        background: inherit;
+        //opacity: 1; !* 0: > 50%, 1: < 50% *!
+        z-index: 300;
+        //animation: opa 5s steps(1, end) infinite;
+      }*/
+      .map-marker-progress-mask-l {
+        width: 50%;
+        height: 100%;
+        position: absolute;
+        background: inherit;
+        //opacity: 1; /* 0: > 50%, 1: < 50% */
+        z-index: 4;
+        //animation: opa 5s steps(1, end) infinite;
+      }
+      .map-marker-progress-mask-r {
+        right: 0;
+        width: 50%;
+        height: 100%;
+        position: absolute;
+        background: inherit;
+        //opacity: 1; /* 0: > 50%, 1: < 50% */
+        z-index: 2;
+        //animation: opa 5s steps(1, end) infinite;
+      }
+    }
+  }
+}

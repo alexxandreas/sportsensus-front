@@ -1,0 +1,35 @@
+<div class="infobox-panel" ng-controller="interestGraphCrtl"
+     layout="column" layout-align="start stretch"
+     save-as-pdf-dir>
+
+    <div layout="row" layout-align="space-between center"
+         style="margin: 5px 0;">
+        <h1 class="infobox-panel-header" layout="row" layout-align="start center">
+            Степень интереса
+        </h1>
+        <download-dir title="Степень интереса"></download-dir>
+    </div>
+
+    <div layout="column" layout-align="start stretch" >
+        <div layout="row" layout-align="start start" layout-wrap>
+            <legend-dir legend="interestLegend" selectable="true"></legend-dir>
+            <legend-dir legend="sportLegend" selectable="true" columns-count="2"></legend-dir>
+        </div>
+        <div layout="row" layout-align="start start" layout-wrap ng-if="showCharts">
+            <!--<radar-dir chart="chart"></radar-dir>-->
+            <div ng-repeat="chart in charts"
+            layout="column" layout-align="start start"
+            style="margin: 10px;">
+                <div class="bar-chart-caption" layout="row" layout-align="center center" >{{chart.sport.name}}</div>
+                <stacked-bar-dir chart="chart.chartData" ></stacked-bar-dir>
+            </div>
+        </div>
+        <div ng-if="combineChart && showCharts" style="margin: 10px;">
+            <!--<stacked-bar-dir chart="combineChart" style="height: 100%;" ng-style="{'width': ((combineChart.data.labels.length+1) * 50)+'px'}"></stacked-bar-dir>-->
+            <stacked-bar-dir chart="combineChart" ></stacked-bar-dir>
+        </div>
+        <map-dir ng-if="regionsChart" regions="regionsChart" style="width:100%; margin-top: 30px;"
+                 highlighted-color="'#bfebff'" selectable="false" selected-color="'#4ac0b6'"></map-dir>
+    </div>
+
+</div>

@@ -1,0 +1,54 @@
+<div layout="row" flex class="admin-send-mail">
+    <!--<header-dir></header-dir> -->
+    
+    <admin-menu-dir></admin-menu-dir>
+    
+	<md-content class="md-padding" layout="column" flex preloader-dir="showPreloader">
+
+
+        <div layout="row" layout-align="start center">
+            <h2 class="md-display-1">Отправка письма</h2>
+            <div flex></div>
+            
+            <md-button class="md-raised md-primary" ng-disabled="!selectedProfiles || !selectedProfiles.length" ng-click="sendMail()">
+                Отправить
+            </md-button>
+        </div>
+    
+    
+    	<div layout="column">
+
+    	    <md-input-container class="md-block">
+                <h3 class="infobox-panel-header3">
+            		Кому
+            	</h3>
+            	 <!--multiple="true"-->
+                <md-select ng-model="selectedProfiles" multiple="true" ng-change="onTariffChanged();" 
+                    ng-disabled="!usersSelectable" ng-model-options="{trackBy: '$value.user_id'}">
+                    <md-option ng-repeat="profile in profiles" ng-value="{{profile}}">
+                        <!--{{profile.login}}&nbsp;<i>{{profile.last_name}}&nbsp{{profile.first_name}}</i>-->
+                        {{profile.login}}&nbsp;<i>{{profile.last_name}}&nbsp{{profile.first_name}}</i>
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            
+            <md-input-container class="md-block">
+                <h3 class="infobox-panel-header3">
+            		Тема
+            	</h3>
+                <input ng-model="theme"/>
+            </md-input-container>
+            
+    	    <div>
+                <h3 class="infobox-panel-header3">
+            		Текст
+            	</h3>
+                <tiny-dir tiny-options="tinyOptions" tiny-model="message"></tiny-dir>
+            </div>
+            
+           
+        </div>
+        
+    </md-content>
+    
+</div>

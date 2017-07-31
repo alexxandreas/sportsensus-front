@@ -1,0 +1,56 @@
+<div class="infobox-panel" ng-controller="consumeCtrl"
+     layout="column" layout-align="start stretch">
+
+    <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
+        {{parameters.consume.name}}
+        <div flex></div>
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!checkSelected('consume')"
+                   ng-click="clearSelection('consume')"
+        >Сбросить</md-button>
+    </h1>
+
+    <div layout="column" layout-align="start stretch"
+        ng-repeat="block in blocks"
+        style="margin-bottom: 40px;">
+        <div class="infobox-panel-header2" >
+            {{block.name}}
+        </div>
+
+        <div layout="row" layout-align="start start" layout-wrap>
+            <div ng-repeat="list in block.lists"
+                 layout="column" layout-align="start start" flex="30"
+                 style="margin: 5px;"
+                ng-show="list.visibleFn ? list.visibleFn() : true">
+                <div class="infobox-panel-header3" ng-show="list.name" >
+                    {{list.name}}
+                </div>
+                <legend-dir legend="list.lists" columns-count="1"
+                            selectable="true" highlightable="false"
+                            highlighted-color="'#bfebff'" selected-color="'#777777'"
+                ></legend-dir>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!--<div layout="row" layout-align="start start" layout-wrap>
+
+        <div ng-repeat="collection in getAllSubchildren(parameters && parameters.consume)"
+             layout="column" layout-align="start start" flex="30"
+             style="margin: 5px;">
+            <div class="infobox-panel-header3" >
+                {{collection.name}}
+            </div>
+            <legend-dir legend="collection.lists" columns-count="1"
+                        selectable="true" highlightable="false"
+                        highlighted-color="'#bfebff'" selected-color="'#777777'"
+            ></legend-dir>
+        </div>
+    </div>-->
+</div>
+

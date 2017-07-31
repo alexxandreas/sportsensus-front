@@ -1,151 +1,23 @@
-<div class="l-board__body-box l-board__region" data-id="regions">
+<div class="infobox-panel"
+    layout="column" layout-align="start stretch">
 
-    <h1 class="l-board__header" style="width: auto; position: absolute">
-        <img src="/static/img/l-board/region.png" />
+    <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
         География
+        <div flex></div>
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!checkSelected('regions')"
+                   ng-click="clearSelection('regions')"
+        >Сбросить</md-button>
     </h1>
 
-    <div class="l-board__map" ng-include="'/views/widgets/infobox/map.html'">
-        <!--{% include 'map.svg' %}-->
-    </div>
 
 
-    <div class="l-board__body-box-list" style="display: inline-flex; width: auto; max-width: none;">
-        <div class="pull-left">
-            <input type="checkbox" name="regions[region][]" value="15" id="regions_15">
-            <label for="regions_15">Москва</label>
+    <map-dir regions="parameters.region.lists" style="width:100%;"
+             highlighted-color="'#bfebff'" selected-color="'#A4DEF4'"></map-dir>
 
-            <input type="checkbox" name="regions[region][]" value="30" id="regions_30">
-            <label for="regions_30">Санкт-Петербург</label>
+    <legend-dir legend="parameters.region.lists" columns-count="4"
+                selectable="true" highlightable="true"
+                highlighted-color="'#bfebff'" selected-color="'#A4DEF4'"></legend-dir>
 
-            <input type="checkbox" name="regions[region][]" value="3" id="regions_3">
-            <label for="regions_3">Белгородская область</label>
 
-            <input type="checkbox" name="regions[region][]" value="4" id="regions_4">
-            <label for="regions_4">Брянская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="5" id="regions_5">
-            <label for="regions_5">Владимирская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="8" id="regions_8">
-            <label for="regions_8">Воронежская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="17" id="regions_17">
-            <label for="regions_17">Нижегородская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="21" id="regions_21">
-            <label for="regions_21">Пензенская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="34" id="regions_34">
-            <label for="regions_34">Тверская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="35" id="regions_35">
-            <label for="regions_35">Тульская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="44" id="regions_44">
-            <label for="regions_44">Ярославская область</label>
-        </div>
-        <div class="pull-left">
-            <input type="checkbox" name="regions[region][]" value="16" id="regions_16">
-            <label for="regions_16">Московская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="22" id="regions_22">
-            <label for="regions_22">Пермский край</label>
-
-            <input type="checkbox" name="regions[region][]" value="27" id="regions_27">
-            <label for="regions_27">Республика Татарстан</label>
-
-            <input type="checkbox" name="regions[region][]" value="11" id="regions_11">
-            <label for="regions_11">Кировская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="6" id="regions_6">
-            <label for="regions_6">Волгоградская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="20" id="regions_20">
-            <label for="regions_20">Оренбургская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="29" id="regions_29">
-            <label for="regions_29">Самарская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="31" id="regions_31">
-            <label for="regions_31">Саратовская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="43" id="regions_43">
-            <label for="regions_43">Чувашская Республика</label>
-
-            <input type="checkbox" name="regions[region][]" value="38" id="regions_38">
-            <label for="regions_38">Ульяновская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="37" id="regions_37">
-            <label for="regions_37">Удмуртская Республика</label>
-        </div>
-        <div class="pull-left">
-            <input type="checkbox" name="regions[region][]" value="2" id="regions_2">
-            <label for="regions_2">Архангельская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="7" id="regions_7">
-            <label for="regions_7">Вологодская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="14" id="regions_14">
-            <label for="regions_14">Ленинградская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="28" id="regions_28">
-            <label for="regions_28">Ростовская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="12" id="regions_12">
-            <label for="regions_12">Краснодарский край</label>
-
-            <input type="checkbox" name="regions[region][]" value="9" id="regions_9">
-            <label for="regions_9">Иркутская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="10" id="regions_10">
-            <label for="regions_10">Кемеровская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="18" id="regions_18">
-            <label for="regions_18">Новосибирская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="19" id="regions_19">
-            <label for="regions_19">Омская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="13" id="regions_13">
-            <label for="regions_13">Красноярский край</label>
-
-            <input type="checkbox" name="regions[region][]" value="1" id="regions_1">
-            <label for="regions_1">Алтайский край</label>
-        </div>
-        <div class="pull-left">
-            <input type="checkbox" name="regions[region][]" value="36" id="regions_36">
-            <label for="regions_36">Тюменская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="40" id="regions_40">
-            <label for="regions_40">Ханты-Мансийский АО</label>
-
-            <input type="checkbox" name="regions[region][]" value="41" id="regions_41">
-            <label for="regions_41">Челябинская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="32" id="regions_32">
-            <label for="regions_32">Свердловская область</label>
-
-            <input type="checkbox" name="regions[region][]" value="24" id="regions_24">
-            <label for="regions_24">Республика Башкортостан</label>
-
-            <input type="checkbox" name="regions[region][]" value="42" id="regions_42">
-            <label for="regions_42">Чеченская Республика</label>
-
-            <input type="checkbox" name="regions[region][]" value="33" id="regions_33">
-            <label for="regions_33">Ставропольский край</label>
-
-            <input type="checkbox" name="regions[region][]" value="25" id="regions_25">
-            <label for="regions_25">Республика Дагестан</label>
-
-            <input type="checkbox" name="regions[region][]" value="39" id="regions_39">
-            <label for="regions_39">Хабаровский край</label>
-
-            <input type="checkbox" name="regions[region][]" value="23" id="regions_23">
-            <label for="regions_23">Приморский край</label>
-
-            <input type="checkbox" name="regions[region][]" value="26" id="regions_26">
-            <label for="regions_26">Республика Крым</label>
-        </div>
-    </div>
 </div>

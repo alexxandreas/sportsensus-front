@@ -1,14 +1,24 @@
-<div class="b-header">
+<div class="site-header" layout="row">
     <!--{% if IS_LEFT_BAR %}
     {% do class.append(widget + '_left-bar') %}
     {% endif %}-->
-    <a href="/" class="b-header__logo">
-        <img src="static/img/logo2.svg" alt="" class="b-header__logo-image"/>
+    <a href="/#!/" >
+        <img src="static/img/logo2.svg" alt="" class="header-logo-image"/>
     </a>
 
-    <ul class="b-header__menu">
+    <div class="header-menu" layout="row">
 
-        <li class="b-header__menu-item">
+
+        <!--<li class="b-header__menu-item" ng-repeat="item in menu" ng-show="item.visible()">-->
+            <!--<a href="" class="b-header__menu-link" ng-click="item.onClick && item.onClick()">{{item.name}}</a>-->
+        <!--</li>-->
+
+        <div layout="row"
+                class="header-menu-item" ng-repeat="item in menu" ng-show="item.visible()">
+            <a href="" class="header-menu-item-link" ng-click="item.onClick && item.onClick()">{{item.name}}</a>
+        </div>
+
+       <!-- <li class="b-header__menu-item">
             <a href="" class="b-header__menu-link">О проекте</a>
         </li>
         <li class="b-header__menu-item">
@@ -19,9 +29,12 @@
         </li>
         <li class="b-header__menu-item">
             <a href="" ng-click="setPath('/infobox/')" class="b-header__menu-link">Техническая поддержка</a>
-        </li>
+        </li>-->
 
-    </ul>
+    </div>
 
-    <a class="b-header__logout" href="" ng-show="loggedIn" ng-click="logout()">Выход</a>
+    <div flex></div>
+    <div>{{timeoutStr}}</div>
+    <!--class="b-header__logout"-->
+    <a class="button-logout" href="" ng-show="loggedIn" ng-click="logout()">Выход</a>
 </div>

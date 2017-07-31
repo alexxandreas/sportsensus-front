@@ -1,0 +1,171 @@
+<div layout="column" layout-align="start stretch" class="analyticsResults">
+	
+	<!-- стоимость пакета -->
+	<div layout="row" layout-align="start start" layout-wrap
+		 style="margin-top: 20px;">
+		<div layout="column" class="result-card" flex style="
+				border-color: #00415C;">
+			<!-- header -->
+			<div class="header" layout="row" layout-align="center center" style="background-color: #01698E; color:white;">Общая стоимость пакета</div>
+			<!-- footer -->
+			<div class="footer" layout="row" layout-align="start center" style="background-color: hsla(196, 99%, 42%, 1);">
+				<input flex=""
+					   type="text" placeholder="Введите стоимость"
+					   ng-model="price"
+					   style="
+								background-color: inherit;
+								font-size: 32px;
+
+								border: none;
+								outline: none;
+								text-overflow: ellipsis;
+								">
+			</div>
+			<div class="header2 " layout="row" layout-align="center center" style="background-color: hsla(196,99%,90%,1);">
+				<div class="currencyBlock">Валюта:</div>
+
+				<md-radio-group ng-model="currency" layout="row">
+					<md-radio-button value="₽" class="md-primary currencyBlock">₽</md-radio-button>
+					<md-radio-button value="$" class="md-primary currencyBlock">$</md-radio-button>
+					<md-radio-button value="€" class="md-primary currencyBlock">€</md-radio-button>
+				</md-radio-group>
+			</div>
+		</div>
+
+		<div style="width: 10px"></div>
+
+		<!-- Аудитория клуба -->
+		<div layout="column" class="result-card" flex style="border-color: #4b4483; ">
+			<!-- header -->
+			<div class="header" layout="row" layout-align="center center" style="background-color: #837EB6">Полная аудитория ('000)</div>
+
+			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #aca8d1;">Онлайн</div>
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #aca8d1;">Оффлайн</div>
+			</div>
+
+			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
+				<!-- footer -->
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #dcdaec;">{{results.peopleAllOnline.toLocaleString()}}</div>
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #dcdaec;">{{results.peopleAllOffline.toLocaleString()}}</div>
+			</div>
+		</div>
+	</div>
+
+	<!--  -->
+	<div layout="row" layout-align="start start" layout-wrap
+		 style="margin-top: 20px;">
+
+		<!-- Стоимость уникальной аудитории (CPT) -->
+		<div layout="column" class="result-card" flex style="border-color: #F57721; ">
+			<!-- header -->
+			<div class="header" layout="row" layout-align="center center" style="background-color: hsla(55,73%,61%,1);">{{'Стоимость уникальной аудитории ' + (results.audienceSelected ? 'с учетом ЦА ' : '') + '(CPT)'}}</div>
+
+			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #FFF79A;">Онлайн</div>
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #FFF79A;">Оффлайн</div>
+			</div>
+
+			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
+				<!-- footer -->
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #FFFCDD;">{{results.CPTUniqueOnline.toLocaleString() + ' ' + (results.CPTUniqueOnline ? currency : '')}}</div>
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #FFFCDD;">{{results.CPTUniqueOffline.toLocaleString() + ' ' + (results.CPTUniqueOffline ? currency : '')}}</div>
+			</div>
+		</div>
+
+
+		<div style="width: 10px"></div>
+
+		<!-- Offline -->
+		<div layout="column" class="result-card" flex style="border-color: #14B584;">
+			<!-- header -->
+			<div class="header" layout="row" layout-align="center center" style="background-color: hsla(150,38%,70%,1);"><b>CPT всего (от OTS)</b></div>
+
+			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #CCE8DA;">Онлайн</div>
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #CCE8DA;">Оффлайн</div>
+			</div>
+
+			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
+				<!-- footer -->
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #EDF8F2;">{{results.CPTOTSOnline.toLocaleString() + ' ' + (results.CPTOTSOnline ? currency : '')}}</div>
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #EDF8F2;">{{results.CPTOTSOffline.toLocaleString() + ' ' + (results.CPTOTSOffline ? currency : '')}}</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!--ЦА--><!--
+	<div layout="row" layout-align="start start" layout-wrap
+		 style="margin-top: 20px;">
+
+		&lt;!&ndash; Online &ndash;&gt;
+		<div layout="column" class="result-card" flex style="border-color: #F57721;">
+			&lt;!&ndash; header &ndash;&gt;
+			<div class="header" layout="row" layout-align="center center" style="background-color: hsla(55,73%,61%,1);;">ТВ-аудитория с учетом ЦА</div>
+
+			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #FFF79A;">Количество</div>
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #FFF79A;">CPT</div>
+			</div>
+
+			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
+				&lt;!&ndash; footer &ndash;&gt;
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #FFFCDD;">{{results.peopleOnlineCA.toLocaleString()}}</div>
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #FFFCDD;">{{results.CPTOnlineCA.toLocaleString()}}</div>
+			</div>
+		</div>
+
+		<div style="width: 10px"></div>
+
+		&lt;!&ndash; Offline &ndash;&gt;
+		<div layout="column" class="result-card" flex style="border-color: #14B584;">
+			&lt;!&ndash; header &ndash;&gt;
+			<div class="header" layout="row" layout-align="center center" style="background-color: hsla(150,38%,70%,1);">Зрители на трибунах с учетом ЦА</div>
+
+			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #CCE8DA;">Количество</div>
+				<div class="header2" layout="row" layout-align="center center" flex="50" style="background-color: #CCE8DA;">CPT</div>
+			</div>
+
+			<div layout="row" layout-align="space-around center" style="border-color: inherit;">
+				&lt;!&ndash; footer &ndash;&gt;
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #EDF8F2;">{{results.peopleOfflineCA.toLocaleString()}}</div>
+				<div class="footer" layout="row" layout-align="center center" flex="50" style="background-color: #EDF8F2;">{{results.CPTOfflineCA.toLocaleString()}}</div>
+			</div>
+		</div>
+	</div>
+-->
+
+	<!-- walk / watch --><!--
+	<div layout="row" layout-align="start start" layout-wrap
+		 style="margin-top: 20px;">
+
+		&lt;!&ndash; Online &ndash;&gt;
+		<div layout="column" class="result-card" flex style="border-color: #F57721;">
+
+			<div style="border-top: 4px solid; border-color: inherit;"></div>
+
+			<div ng-repeat="item in results.watchData"
+				 layout="row" style="border-color: inherit;">
+				<div class="header4" layout="row" layout-align="center center" flex="70" style="background-color: #FFF79A;">{{item.name}}</div>
+				<div class="footer4" layout="row" layout-align="center center" flex="30" style="background-color: #FFFCDD;">{{item.count.toLocaleString()}}</div>
+			</div>
+		</div>
+
+		<div style="width: 10px"></div>
+
+		&lt;!&ndash; Offline &ndash;&gt;
+		<div layout="column" class="result-card" flex style="border-color: #14B584;">
+
+			<div style="border-top: 4px solid; border-color: inherit;"></div>
+			<div ng-repeat="item in results.walkData"
+				 layout="row" style="border-color: inherit;">
+				<div class="header4" layout="row" layout-align="center center" flex="70" style="background-color: #CCE8DA;">{{item.name}}</div>
+				<div class="footer4" layout="row" layout-align="center center"  flex="30" style="background-color: #EDF8F2;">{{item.count.toLocaleString()}}</div>
+			</div>
+		</div>
+	</div>
+-->
+
+</div>

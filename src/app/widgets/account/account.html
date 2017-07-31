@@ -1,0 +1,40 @@
+<div class="infobox">
+	<!--<header-dir></header-dir>-->
+
+	<!--<div class="infobox">-->
+
+		<!--<div class="menu" ng-include="'/views/widgets/infobox/infoboxMenu.html'"></div>-->
+		<div class="menu" >
+			<ul>
+				<li class="menu-section">
+					<!--<div class="menu-section-name">
+						<img src="/static/img/icons/audience.png">
+						Болельщик
+					</div>-->
+					<ul class="left-menu">
+
+						<li
+								ng-repeat="item in topMenu"
+								class="left-menu-item"
+								ng-class="{'active': item == activeMenuItem}"
+								ng-click="setActiveMenuItem(item)">
+							{{item.text}}
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+
+		<div>
+			<div ng-if="activePage" style="padding-bottom: 94px;" class="infobox-body" ng-include="'/views/widgets/account/panels/'+activePage.tpl+'.html'"></div>
+		</div>
+
+<!--
+
+		<div ng-if="activeFooter" ng-include="'/views/widgets/infobox/panels/footer/'+activeFooter+'.html'"></div>
+-->
+
+
+	<!--</div>-->
+</div>

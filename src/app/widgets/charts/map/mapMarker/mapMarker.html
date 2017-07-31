@@ -1,0 +1,34 @@
+<div class="map-marker" style="width: 144px; height: 204px;"
+    ng-class="color" >
+
+
+    <div class="map-marker-bg" ng-class="color">
+        <div class="map-marker-ring"></div>
+        <div class="map-marker-progress-wrapper" >
+            <!--<div class="map-marker-progress" >
+                <div class="map-marker-progress-pie map-marker-progress-spinner"
+                ng-style="{'transform': 'rotate('+progress*360/100+'deg)'}"></div>
+                <div class="map-marker-progress-mask-l" ng-show="progress <= 50"></div>
+                <div class="map-marker-progress-mask-r" ng-show="progress > 50"></div>
+                <div class="map-marker-progress-pie map-marker-progress-filler" ng-show="progress > 50"></div>
+            </div>-->
+            <div style="
+             width: 105px;
+                height: 105px;
+                ">
+            <canvas class="map-marker-canvas"
+                    width="105" height="105"></canvas>
+            </div>
+            <div class="map-marker-progress-mask" ng-class="color"
+                 layout="column" layout-align="start center">
+                <div style="font-size: 13px; text-align: center; padding-top: 6px; margin: 0 10px;" flex="40"
+                     layout="row" layout-align="center center">{{header}}</div>
+                <div style="font-size: 17px; " flex="20"
+                     layout="row" layout-align="center center">{{countText}}</div>
+                <div style="font-size: 10px; text-align: center; padding-bottom: 12px; margin: 0 10px;" flex="40"
+                     layout="row" layout-align="center center">{{region}}</div>
+            </div>
+        </div>
+    </div>
+    <!--{{'transform '+ 'rotate('+progress*360/100+'deg)'}}-->
+</div>

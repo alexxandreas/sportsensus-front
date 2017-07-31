@@ -140,17 +140,22 @@
             margin-bottom: 20px;
 
             &::-webkit-input-placeholder {
-                color: #000;
+                color: #777;
             }
             &::-moz-placeholder          {
-                color: #000;
+                color: #777;
             }
             &:-moz-placeholder           {
-                color: #000;
+                color: #777;
             }
             &:-ms-input-placeholder      {
-                color: #000;
+                color: #777;
             }
+
+            &:focus::-webkit-input-placeholder {color: transparent}
+            &:focus::-moz-placeholder          {color: transparent}
+            &:focus:-moz-placeholder           {color: transparent}
+            &:focus:-ms-input-placeholder      {color: transparent}
         }
 
         select{

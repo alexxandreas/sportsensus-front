@@ -1,0 +1,145 @@
+<div class="hockeyBoxInfoTable"
+	layout="column" layotu-align="start stretch">
+
+	<div class="header" layout="row" layout-align="start center" flex>
+		Информация о площадке
+		<div flex></div>
+		<span class="showHideButton" ng-click="showed = !showed;">{{showed ? 'Свернуть' : 'Развернуть'}}</span>
+	</div>
+
+	<div layout="column" flex ng-show="showed" style="border-color: inherit;">
+		<div layout="row" flex style="border-color: inherit;">
+
+			<!--Основная информация-->
+			<div layout="column" class="card" flex ng-show="showed">
+				<div class="header" layout="row" layout-align="center center" >Основная информация</div>
+
+				<div layout="row" layout-align="space-around stretch">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Название</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.name}}</div>
+				</div>
+
+				<div layout="row" layout-align="space-around stretch" style="border-color: inherit;">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Клуб</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.clubName}}</div>
+				</div>
+
+				<div layout="row" layout-align="space-around stretch" style="border-color: inherit;">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Город</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.city}}</div>
+				</div>
+
+				<div layout="row" layout-align="space-around stretch" style="border-color: inherit;">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Игр в сезоне</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.gamesCount}}</div>
+				</div>
+
+				<div layout="row" layout-align="space-around stretch" style="border-color: inherit;">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Вместимость</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.capacity}}</div>
+				</div>
+			</div>
+
+			<div style="width: 5px;"></div>
+			<!--Информация о болельщиках-->
+			<div layout="column" class="card" flex ng-show="showed">
+				<div class="header" layout="row" layout-align="center center" >Информация о болельщиках</div>
+
+				<div layout="row" layout-align="space-around stretch">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Reach (000) offline</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.reachOffline.toLocaleString()}}</div>
+				</div>
+
+				<div layout="row" layout-align="space-around stretch" style="border-color: inherit;">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Reach (000) ТВ</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.reachOnline.toLocaleString()}}</div>
+				</div>
+
+				<div layout="row" layout-align="space-around stretch" style="border-color: inherit;">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >OTS offline</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.OTSOffline.toLocaleString()}}</div>
+				</div>
+
+				<div layout="row" layout-align="space-around stretch" style="border-color: inherit;">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >OTS ТВ</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.OTSOnline.toLocaleString()}}</div>
+				</div>
+			</div>
+		</div>
+
+		<div layout="row" flex style="border-color: inherit;">
+
+			<!--Зрители на трибунах-->
+			<div layout="column" class="card" flex ng-show="showed">
+				<div class="header" layout="row" layout-align="center center" >Зрители на трибунах</div>
+
+				<div layout="row" layout-align="space-around stretch">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Средняя посещаемость в сезоне 2015/16</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.offlineAVGAll.toLocaleString()}}%</div>
+				</div>
+
+				<div layout="row" layout-align="space-around stretch">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Всего зрителей на трибунах в сезоне 2015/16</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.offlineTotalAll.toLocaleString()}}%</div>
+				</div>
+
+				<div layout="row" layout-align="space-around stretch">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Уникальных зрителей на трибунах в сезоне 2015/16</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.offlineUniqueAll.toLocaleString()}}%</div>
+				</div>
+
+			</div>
+
+
+			<div style="width: 5px;"></div>
+			<!--Телезрители-->
+			<div layout="column" class="card" flex ng-show="showed">
+				<div class="header" layout="row" layout-align="center center" >Телезрители</div>
+
+				<div layout="row" layout-align="space-around stretch">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Телевизионных рейтингов в сезоне 2015/16</div>
+					<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.onlineRatings.toLocaleString()}}</div>
+				</div>
+
+				<div layout="row" layout-align="space-around stretch">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Телевизионная аудитория в сезоне 2015/16</div>
+					<div layout="column" layout-align="start stretch" flex="50" >
+						<div layout="row" layout-align="space-around stretch" style="border-color: inherit;">
+							<div class="item title" layout="row" layout-align="center center" flex="50" >Федеральная</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.onlineTotalFederal.toLocaleString()}}</div>
+						</div>
+						<div layout="row" layout-align="space-around stretch" style="border-color: inherit;">
+							<div class="item title" layout="row" layout-align="center center" flex="50" >Местная</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.onlineTotalLocal.toLocaleString()}}</div>
+						</div>
+						<div layout="row" layout-align="space-around stretch" style="border-color: inherit;">
+							<div class="item title" layout="row" layout-align="center center" flex="50" >Всего</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.onlineTotalAll.toLocaleString()}}</div>
+						</div>
+					</div>
+				</div>
+
+				<div layout="row" layout-align="space-around stretch">
+					<div class="item title" layout="row" layout-align="center center" flex="50" >Уникальная телевизионная аудитория в сезоне 2015/16</div>
+					<div layout="column" layout-align="start stretch" flex="50" >
+						<div layout="row" layout-align="space-around stretch" style="border-color: inherit;">
+							<div class="item title" layout="row" layout-align="center center" flex="50" >Федеральная</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.onlineUniqueFederal.toLocaleString()}}</div>
+						</div>
+						<div layout="row" layout-align="space-around stretch" style="border-color: inherit;">
+							<div class="item title" layout="row" layout-align="center center" flex="50" >Местная</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.onlineUniqueLocal.toLocaleString()}}</div>
+						</div>
+						<div layout="row" layout-align="space-around stretch" style="border-color: inherit;">
+							<div class="item title" layout="row" layout-align="center center" flex="50" >Всего</div>
+							<div class="item info" layout="row" layout-align="center center" flex="50" >{{hockeyBoxInfo.onlineUniqueAll.toLocaleString()}}</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+</div>

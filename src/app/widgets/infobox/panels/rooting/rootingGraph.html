@@ -1,0 +1,84 @@
+<div class="infobox-panel" ng-controller="rootingGraphCrtl"
+     layout="column" layout-align="start stretch"
+     save-as-pdf-dir>
+
+    <div layout="row" layout-align="space-between center"
+         style="margin: 5px 0;">
+        <h1 class="infobox-panel-header" layout="row" layout-align="start center">
+            Сила боления
+        </h1>
+        <download-dir title="Сила боления"></download-dir>
+    </div>
+
+
+    <div layout="column" layout-align="start stretch" >
+        <legend-dir legend="rootingLegend" selectable="true" columns-count="1"></legend-dir>
+
+        <div ng-repeat="sport in sportLegend">
+
+            <div class="infobox-panel-header2 infobox-panel-header2-checkbox no-outline no-select"
+                  layout="row" layout-align="start center"
+                  ng-click="checkSport(sport)">
+                <div flex="none" class="checkbox-color"
+                     ng-style="{'background-color': sport.selected ? sport.color : 'none'}"></div>
+                <div class="legend-item-text">{{sport.name}}</div>
+            </div>
+
+            <div ng-if="sport.selected">
+                <legend-dir legend="sport.clubs" selectable="true" columns-count="2"></legend-dir>
+            </div>
+
+            <!--<div ng-if="sport.selected && dataBySport[sport.id]" style="margin: 30px;">-->
+                <!--<div layout="column" layout-align="start start"-->
+                    <!--ng-show="dataBySport[sport.id].rootingCharts.length">-->
+                    <!--<div layout="column" layout-align="start start"-->
+                         <!--ng-repeat="rooting in dataBySport[sport.id].rootingCharts">-->
+                        <!--{{rooting.name}}-->
+                        <!--<horisontal-bar-dir chart="rooting.chart" ></horisontal-bar-dir>-->
+                    <!--</div>-->
+
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+    </div>
+
+
+    <div layout="column" layout-align="start start">
+        <div layout="column" layout-align="start start"
+             ng-repeat="rooting in rootingCharts">
+            {{rooting.name}}
+            <horisontal-bar-dir chart="rooting.chart" ></horisontal-bar-dir>
+            <div layout="row" layout-align="start start" layout-wrap>
+                <div layout="column" layout-align="start start"
+                     ng-repeat="chart in rooting.subItems"
+                style="margin: 10px;">
+                   <!-- {{chart.name}}-->
+                    <doughnut-dir chart="chart.chart"></doughnut-dir>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+   <!-- <div layout="column" layout-align="start stretch" >
+        <div layout="row" layout-align="start start" layout-wrap>
+            <legend-dir legend="interestLegend" ></legend-dir>
+            <legend-dir legend="sportLegend" columns-count="2"></legend-dir>
+
+        </div>
+        <div layout="row" layout-align="start start" layout-wrap ng-if="showCharts">
+            &lt;!&ndash;<radar-dir chart="chart"></radar-dir>&ndash;&gt;
+            <div ng-repeat="chart in charts"
+                 layout="column" layout-align="start start"
+                 style="margin: 10px;">
+                <div class="bar-chart-caption" layout="row" layout-align="center center" >{{chart.sport.name}}</div>
+                <stacked-bar-dir chart="chart.chartData" ></stacked-bar-dir>
+            </div>
+        </div>
+        <div ng-if="combineChart && showCharts" style="margin: 10px;">
+            &lt;!&ndash;<stacked-bar-dir chart="combineChart" style="height: 100%;" ng-style="{'width': ((combineChart.data.labels.length+1) * 50)+'px'}"></stacked-bar-dir>&ndash;&gt;
+            <stacked-bar-dir chart="combineChart" ></stacked-bar-dir>
+        </div>
+    </div>-->
+</div>

@@ -1,0 +1,75 @@
+.chart-legend {
+
+  .legend-item-hide-text {
+    margin-left: 5px;
+    cursor: pointer;
+    outline: none;
+    font-size: 12px;
+    color: #777;
+  }
+
+  .legend-item {
+
+    font-size: 13px;
+    font-weight: bold;
+    margin: 5px;
+
+    &.disabled {
+      color: #aaa;
+      cursor: default !important;
+    }
+
+    //&.cursor-pointer{
+    &.selectable {
+      cursor: pointer;
+    }
+
+    .legend-item-color {
+      //display: inline-block;
+      width: 15px;
+      height: 15px;
+      margin-right: 8px;
+      border-radius: 2px;
+      border-color: gray;
+      border-width: 1px;
+      border-style: solid;
+      //vertical-align: middle;
+    }
+
+    .legend-item-color-radio {
+      //display: inline-block;
+      width: 15px;
+      height: 15px;
+      margin-right: 8px;
+      border-radius: 8px;
+      border-color: gray;
+      border-width: 1px;
+      border-style: solid;
+      //vertical-align: middle;
+    }
+
+
+    .legend-item-text {
+      //display: inline-block;
+      //white-space:nowrap;
+    }
+
+
+  }
+
+  .sublegend{
+    margin-left: 15px;
+    //height: 100%;
+    //opacity: 1;
+  }
+  /*
+  .sublegend.ng-hide {
+    height: 0;
+    opacity: 0;
+  }
+  .sublegend.ng-hide-add, .sublegend.ng-hide-remove {
+    transition: all linear 0.5s;
+  }*/
+
+
+}

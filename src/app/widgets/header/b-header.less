@@ -1,56 +1,111 @@
 
 @panel-height: 78px;
 
+.site-header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    height: @panel-height;
+    line-height: @panel-height;
+    padding: 0 30px;
+    background: #fff;
+    overflow: hidden;
+
+    .header-menu {
+        margin: 0 0 0 100px;
+        padding: 0;
+        list-style-type: none;
+
+        .header-menu-item {
+            margin-right: 40px;
+
+            &:last-child{
+                margin-right: 0;
+            }
+
+            .header-menu-item-link {
+                padding-bottom: 2px;
+                font-size: 16px;
+                font-family: NOKIAPUREHEADLINE_BOLD;
+                text-decoration: none;
+                color: #000;
+                white-space: pre;
+
+                border-bottom: 3px solid transparent;
+
+                &:hover{
+                    border-bottom-color: #9fd9db;
+                }
+            }
+        }
+    }
+
+    .header-logo-image{
+        vertical-align: middle;
+    }
+
+    .button-logout{
+        margin-left: 20px;
+    }
+}
+
+
+/*
+
 .b-header{
     position: fixed;
     left: 0;
     top: 0;
     right: 0;
-    z-index: 2;
+    z-index: 10;
     height: @panel-height;
     line-height: @panel-height;
     padding: 0 30px;
     background: #fff;
-}
 
-.b-header__logout{
-    float: right;
-}
-
-.b-header__logo{
-    float: left;
-}
-
-.b-header__logo-image{
-    vertical-align: middle;
-}
-
-.b-header__menu{
-    float: left;
-    margin: 0 0 0 100px;
-    padding: 0;
-    list-style-type: none;
-}
-
-.b-header__menu-item{
-    float: left;
-    margin-right: 40px;
-
-    &:last-child{
-        margin-right: 0;
+    .b-header__logout{
+        float: right;
     }
-}
 
-.b-header__menu-link{
-    padding-bottom: 2px;
-    font-size: 16px;
-    font-family: NOKIAPUREHEADLINE_BOLD;
-    text-decoration: none;
-    color: #000;
-
-    border-bottom: 3px solid transparent;
-
-    &:hover{
-        border-bottom-color: #9fd9db;
+    .b-header__logo{
+        float: left;
     }
+
+    .b-header__logo-image{
+        vertical-align: middle;
+    }
+
+    .b-header__menu{
+        float: left;
+        margin: 0 0 0 100px;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    .b-header__menu-item{
+        float: left;
+        margin-right: 40px;
+
+        &:last-child{
+            margin-right: 0;
+        }
+    }
+
+    .b-header__menu-link{
+        padding-bottom: 2px;
+        font-size: 16px;
+        font-family: NOKIAPUREHEADLINE_BOLD;
+        text-decoration: none;
+        color: #000;
+
+        border-bottom: 3px solid transparent;
+
+        &:hover{
+            border-bottom-color: #9fd9db;
+        }
+    }
+
 }
+*/

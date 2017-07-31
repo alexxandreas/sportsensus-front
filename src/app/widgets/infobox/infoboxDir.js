@@ -17,263 +17,140 @@
         return {
             restrict: 'E',
             scope: {
+                type: '@'
             },
             templateUrl: '/views/widgets/infobox/infobox.html',
-            link: function ($scope, $el, attrs) {},
+            link: function ($scope, $el, attrs) {
+               
+            },
 
             controller: [
                 '$scope',
+                '$controller',
                 '$routeParams',
                 '$location',
                 '$window',
                 'ParamsSrv',
+                'ApiSrv',
                 function(
                     $scope,
+                    $controller,
                     $routeParams,
                     $location,
                     $window,
-                    ParamsSrv
+                    ParamsSrv,
+                    ApiSrv
                 ) {
-                    $scope.audienceCountText = null;
+
+                    $controller('baseInfoboxCtrl', {$scope: $scope});
+
+                 
 
                     $scope.audienceMenu = [{
                         id:'demography',
-                        text:'Социальная демография'
+                        tpl:'demography',
+                        text:'Социальная демография',
+                        isSelected: $scope.checkSelected.bind(null, 'demography'),
+                        footer: 'infobox'
                     },{
-                        id:'consume',
-                        text:'Потребительское поведение'
+                        id:'consume/consume',
+                        tpl:'consume/consume',
+                        text:'Потребительское поведение',
+                        isSelected: $scope.checkSelected.bind(null, 'consume'),
+                        footer: 'infobox'
                     },{
                         id:'regions',
-                        text:'География'
+                        tpl:'regions',
+                        text:'География',
+                        isSelected: $scope.checkSelected.bind(null, 'regions'),
+                        footer: 'infobox'
                     }];
+
+                    $scope.topMenu = $scope.audienceMenu;
                     
+                    
+                    function isSportSelected(){return $scope.sportSelected}
                     $scope.sportinfoMenu = [{
                         id:'sport',
-                        text:'Спорт'
+                        tpl:'sport/sport',
+                        text:'Спорт',
+                        isSelected: $scope.checkSelected.bind(null, 'sport'),
+                        footer: 'infobox'
                     },{
-                        id:'interest',
-                        text:'Степень интереса'
+                        id:'interest/interest',
+                        tpl:'interest/interest',
+                        // id:'interest/interestGraph',
+                        enabled: isSportSelected,
+                        text:'Степень интереса',
+                        isSelected: $scope.checkSelected.bind(null, 'interest'),
+                        footer: 'infobox'
                     },{
-                        id:'rooting',
-                        text:'Сила боления'
+                        id:'rooting/rooting',
+                        tpl:'rooting/rooting',
+                        // id:'rooting/rootingGraph',
+                        enabled: isSportSelected,
+                        text:'Сила боления',
+                        isSelected: $scope.checkSelected.bind(null, 'rooting'),
+                        footer: 'infobox'
                     },{
-                        id:'involve',
-                        text:'Причастность к видам спорта'
+                        id:'involve/involve',
+                        tpl:'involve/involve',
+                        enabled: isSportSelected,
+                        text:'Причастность к видам спорта',
+                        isSelected: $scope.checkSelected.bind(null, 'involve'),
+                        footer: 'infobox'
                     },{
-                        id:'image',
-                        text:'Восприятие видов спорта'
+                        id:'image/image',
+                        tpl:'image/image',
+                        // id:'image/imageGraph',
+                        enabled: isSportSelected,
+                        text:'Восприятие видов спорта',
+                        isSelected: $scope.checkSelected.bind(null, 'image'),
+                        footer: 'infobox'
+                    }];
+                    $scope.bottomMenu = $scope.sportinfoMenu;
+
+                    
+
+                    $scope.extPages = [{
+                        id:'image/imageGraph',
+                        tpl:'image/imageGraph',
+                        footer: 'infoboxResult'
+                    },{
+                        id:'allGraphs',
+                        tpl:'allGraphs',
+                        footer: 'infoboxResult'
+                    },{
+                        id:'expressSport/expressSport',
+                        tpl:'expressSport/expressSport',
+                        footer: 'infoboxResult'
+                    },{
+                        id:'expressAudience/expressAudience',
+                        tpl:'expressAudience/expressAudience',
+                        footer: 'infoboxResult'
                     }];
 
+                    $scope.pages = {};
 
-                    ParamsSrv.getParams().then(function(params){
-                        $scope.parameters = params;
-                    });
-                    
-                    /*$scope.demography = ParamsSrv.getDemography();
-                    $scope.consume = ParamsSrv.getConsume();
-                    $scope.sport = ParamsSrv.getSport();
-                    $scope.interest = ParamsSrv.getInterest();
-                    $scope.rooting = ParamsSrv.getRooting();
-                    $scope.involve = ParamsSrv.getInvolve();
-                    $scope.image = ParamsSrv.getImage();*/
-                    
-                    $scope.activeMenuItem = null;
-                    $scope.setActiveMenuItem = function(item){
-                        $scope.activeMenuItem = item;
-                    };
-                    
-                    // возвращает все наборы параметров, включая вложенные в виде линейной структуры
-                    $scope.getAllSubchildren = function(item){
-                        if (!item) return;
-                        var finalItems = [];
-                        if (!item.lists || item.lists.every(function(subitem){ return !subitem.lists; }))
-                            finalItems.push(item);
-                        else item.lists.forEach(function(subitem){
-                            finalItems = finalItems.concat($scope.getAllSubchildren(subitem));
+                    [$scope.audienceMenu, $scope.sportinfoMenu,  $scope.extPages, /*$scope.analyticsMenu*/].forEach(function(collection) {
+                        collection.forEach(function (item) {
+                            $scope.pages[item.id] = item;
                         });
-                        return finalItems;
-                    };
-
-                    $scope.pathClick = function(){
-                        $scope;
-                        var a = 10;
-                    };
-
-                    $scope.checkButtonClick = function(){
-                        $scope;
-                        var a = 10;
-                    };
-
-                    
-                    $scope.$on('ApiSrv.countError', function(){
-                        $scope.audienceCountText = 'Болельщики: НЕДОСТАТОЧНО ДАННЫХ';
                     });
 
-                    $scope.$on('ApiSrv.countLoaded', function(event, result){
-                        if (result.is_valid_count)
-                            $scope.audienceCountText = 'Болельщики: ' + result.audience_count;
-                        else
-                            $scope.audienceCountText = 'Болельщики: НЕДОСТАТОЧНО ДАННЫХ ' + result.audience_count;
-                    });
+                    $scope.setActiveMenuItem($scope.audienceMenu[0]);
                     
-                    // снимает выделение с соседний radio
-                    $scope.selectCheckbox = function(collection, item){
-                        ParamsSrv.getParams().then(function(params){
-                            var a = params;
-                        });
 
-                        if (collection.type != 'radio') return;
-                        angular.forEach(collection.items, function(_item) {
-                            if (item != _item) {
-                                _item.selected = false;
-                            }
-                        });
-                    };
+                    $scope.sportSelected = false; // показывает, выбран ли какой-либо вид спорта
+                    
+                    $scope.$on('ParamsSrv.paramsChanged', paramsChanged);
+                    paramsChanged();
 
-                    // кнопки левого меню
-                    function a() {
-                        iApp.Utils.bind(this.dom.button_menu, 'click', function (event) {
-                            var button = event.target;
-                            var id = button.getAttribute('data-id');
-
-                            iApp.Utils.each(this.dom.button_menu, function (item) {
-                                item.classList.remove('l-board__menu-button_active');
-                            });
-
-                            this.dom.body.style.display = '';
-                            this.dom.express.style.display = '';
-                            iApp.Utils.each(this.dom.box, function (item) {
-                                if (item.getAttribute('data-id') == id) {
-                                    item.style.display = 'flex';
-                                } else {
-                                    item.style.display = '';
-                                }
-                            });
-
-                            button.classList.add('l-board__menu-button_active');
-                        }.bind(this));
-
-                        // кнопка Показать результаты
-                        this.dom.check_button_result.addEventListener('click', function () {
-                            var data = new FormData(this.dom.form);
-                            var list_data = {};
-                            var names = [];
-                            data.forEach(function (value, key) {
-                                list_data[key] = value;
-                                names.push(key);
-                            });
-
-                            names = names.join('||');
-
-                            if (Object.keys(list_data).length) {
-                                this.dom.body.style.display = 'none';
-                                this.dom.express.style.display = 'block';
-
-                                console.log(this.is_info_sportinterest(names))
-
-                                if (this.is_info_sportinterest(names)) {
-                                    iApp.post('/infobox/info_sportinterest/', data, function (response) {
-                                        response = iApp.Utils.parse_json(response);
-                                        console.log(response)
-                                        this.dom.express.innerHTML = response.template;
-                                        iApp.define(iApp.blocks.gInfo, this.dom.express);
-                                    }.bind(this));
-                                    return;
-                                }
-
-                                if (this.is_info_fan_involvment(names)) {
-                                    iApp.post('/infobox/info_fan_involvment/', data, function (response) {
-                                        response = iApp.Utils.parse_json(response);
-                                        console.log(response);
-                                        this.dom.express.innerHTML = response.template;
-                                        iApp.define(iApp.blocks.gInfo, this.dom.express);
-                                    }.bind(this));
-                                    return;
-                                }
-
-                                if (names.indexOf('image') > -1) {
-                                    iApp.post('/infobox/info_sportimage/', data, function (response) {
-                                        response = iApp.Utils.parse_json(response);
-                                        //console.log(response);
-                                        this.dom.express.innerHTML = response.template;
-                                        //iApp.define(iApp.blocks.gInfo, this.dom.express);
-                                        iApp.define(iApp.blocks.lBoardChartRadar, this.dom.express);
-                                    }.bind(this));
-                                    return;
-                                }
-                                var path = '/infobox/express/';
-                                if (
-                                    names.indexOf('sport') > -1 ||
-                                    names.indexOf('interest') > -1 ||
-                                    names.indexOf('involve') > -1 ||
-                                    names.indexOf('image') > -1
-                                ) {
-                                    path = '/infobox/express_sport/';
-                                }
-
-                                iApp.post(path, data, function (response) {
-                                    response = iApp.Utils.parse_json(response);
-
-                                    if (response.status) {
-                                        console.log(response)
-                                        this.dom.express.innerHTML = response.template;
-
-                                        iApp.Utils.bind(this.dom.express.querySelectorAll('.l-board__chart-panel-hide'), 'click', function (event) {
-                                            event
-                                                .currentTarget
-                                                .parentNode
-                                                .parentNode
-                                                .querySelector('.l-board__chart-box-body')
-                                                .classList
-                                                .toggle('l-board__chart-box-body_hide')
-                                        });
-
-                                        iApp.define(iApp.blocks.lBoardCharts, this.dom.express);
-                                        iApp.define(iApp.blocks.lBoardCircleChart, this.dom.express);
-                                        iApp.define(iApp.blocks.lBoardDubleChart, this.dom.express);
-                                        iApp.define(iApp.blocks.lBoardCustomChart, this.dom.express);
-                                        iApp.define(iApp.blocks.lBoardChartCareer, this.dom.express);
-
-
-                                        if (response.express) {
-                                            //this.create_charts(response.express);
-                                            iApp.Utils.each(
-                                                this.dom.express.querySelectorAll('canvas'),
-                                                function (canvas) {
-                                                    var data = iApp.Utils.parse_json(canvas.getAttribute('data-data'));
-                                                    var type = canvas.getAttribute('data-type') || 'doughnut';
-
-                                                    this.create_canvas(canvas, data, type);
-                                                }.bind(this));
-
-                                        } else if (response.express_sport) {
-
-                                            iApp.Utils.each(
-                                                this.dom.express.querySelectorAll('canvas'),
-                                                function (canvas) {
-                                                    var data = iApp.Utils.parse_json(canvas.getAttribute('data-init'));
-                                                    var type = canvas.getAttribute('data-type') || 'doughnut';
-
-                                                    this.create_canvas(canvas, data, type);
-                                                }.bind(this));
-                                            //this.create_charts(response.express_sport);
-                                        } else if (response.image) {
-                                            //this.create_charts(response.express);
-                                            iApp.Utils.each(
-                                                this.dom.express.querySelectorAll('canvas'),
-                                                function (canvas) {
-                                                    var data = iApp.Utils.parse_json(canvas.getAttribute('data-init'));
-                                                    var type = canvas.getAttribute('data-type') || 'doughnut';
-
-                                                    this.create_canvas(canvas, data, type);
-                                                }.bind(this));
-                                        }
-                                    }
-
-                                }.bind(this));
-                            }
-                        }.bind(this));
+                    function paramsChanged() {
+                        $scope.sportSelected = !!ParamsSrv.getSelectedParams('sport');
                     }
+                    
+                    
                 }]
         };
     }

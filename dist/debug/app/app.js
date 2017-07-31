@@ -184,7 +184,7 @@
 			
 			.when('/analytics/', {
 				// template: '<analytics-dir></analytics-dir>',
-				template: getCheckAccessTemplate('rightholder', '<analytics-dir></analytics-dir>'),
+				template: getCheckAccessTemplate('rightholder,sponsor', '<analytics-dir></analytics-dir>'),
 				resolve: getUserAuthResolver()
 			})
 			
@@ -1920,7 +1920,6 @@
             angular.extend(userRights.tariff, {
                 access_cases: true,
                 access_infoblock: true,
-                access_admin: true,
                 updateTime: Date.now()
             });
             //     tariffActivationTime: (new Date()).toISOString(),
@@ -2100,46 +2099,6 @@
         return me;
     }
 }());
-(function () {
-	"use strict";
-	/**
-	 * @desc
-	 * @example
-	 */
-	angular.module('SportsensusApp')
-		.directive('adminDir', adminDir);
-
-	adminDir.$inject = [
-		'$rootScope'
-	];
-
-	function adminDir(
-		$rootScope
-	)    {
-		return {
-			restrict: 'E',
-			scope: {
-				type: '@'
-			},
-			templateUrl: '/views/widgets/admin/admin.html',
-			link: function ($scope, $el, attrs) {
-				//$scope.init();
-			},
-
-			controller: [
-				'$scope',
-				'$routeParams',
-				function(
-					$scope,
-					$routeParams
-				) {
-
-					
-				}]
-		};
-	}
-}());
-
 (function () {
 	"use strict";
 	/**
@@ -2410,107 +2369,34 @@
 	 * @example
 	 */
 	angular.module('SportsensusApp')
-		.directive('analyticsDir', analyticsDir);
+		.directive('adminDir', adminDir);
 
-	analyticsDir.$inject = [
-		'$rootScope',
-		'analyticsSrv'
+	adminDir.$inject = [
+		'$rootScope'
 	];
 
-	function analyticsDir(
-		$rootScope,
-		analyticsSrv
+	function adminDir(
+		$rootScope
 	)    {
 		return {
 			restrict: 'E',
 			scope: {
 				type: '@'
 			},
-			templateUrl: '/views/widgets/analytics/analytics.html',
+			templateUrl: '/views/widgets/admin/admin.html',
 			link: function ($scope, $el, attrs) {
-
+				//$scope.init();
 			},
 
 			controller: [
 				'$scope',
-				'$controller',
 				'$routeParams',
-				'$location',
-				'$window',
-				'$mdDialog',
-				'ParamsSrv',
-				'ApiSrv',
 				function(
 					$scope,
-					$controller,
-					$routeParams,
-					$location,
-					$window,
-					$mdDialog,
-					ParamsSrv,
-					ApiSrv
+					$routeParams
 				) {
 
-					$controller('baseInfoboxCtrl', {$scope: $scope});
-
-
-					$scope.audienceMenu = [{
-						id:'demography',
-						tpl:'demography',
-						text:'Социальная демография',
-						isSelected: $scope.checkSelected.bind(null, 'demography'),
-						footer: 'analytics'
-					},{
-						id:'consume',
-						tpl:'consume/consume',
-						text:'Потребительское поведение',
-						isSelected: $scope.checkSelected.bind(null, 'consume'),
-						footer: 'analytics'
-					},{
-						id:'regions',
-						tpl:'regions',
-						text:'География',
-						isSelected: $scope.checkSelected.bind(null, 'regions'),
-						footer: 'analytics'
-					}];
-					$scope.topMenu = $scope.audienceMenu;
-
-
-					function checkSportAnalyticsSelected(){
-						var selected = analyticsSrv.getSelected();
-						return !!(selected.sport || selected.league || selected.club);
-					}
-
-					$scope.bottomMenu = [
-						{
-							id:'sportAnalytics/sportAnalytics',
-							tpl:'sportAnalytics/sportAnalytics',
-							text:'Спорт',
-							footer: 'analytics',
-							isSelected: checkSportAnalyticsSelected
-						}
-					];
-
-
-					$scope.extPages = [{
-						id:'analytics/analytics',
-						tpl:'analytics/analytics',
-						footer: 'infoboxResult'
-					}];
-
-					$scope.pages = {};
-
-					[$scope.audienceMenu, $scope.bottomMenu, $scope.extPages].forEach(function(collection) {
-						collection.forEach(function (item) {
-							$scope.pages[item.id] = item;
-						});
-					});
-
-					$scope.setActiveMenuItem($scope.audienceMenu[0]);
 					
-
-					
-
 				}]
 		};
 	}
@@ -2727,6 +2613,119 @@
 (function () {
 	"use strict";
 	/**
+	 * @desc
+	 * @example
+	 */
+	angular.module('SportsensusApp')
+		.directive('analyticsDir', analyticsDir);
+
+	analyticsDir.$inject = [
+		'$rootScope',
+		'analyticsSrv'
+	];
+
+	function analyticsDir(
+		$rootScope,
+		analyticsSrv
+	)    {
+		return {
+			restrict: 'E',
+			scope: {
+				type: '@'
+			},
+			templateUrl: '/views/widgets/analytics/analytics.html',
+			link: function ($scope, $el, attrs) {
+
+			},
+
+			controller: [
+				'$scope',
+				'$controller',
+				'$routeParams',
+				'$location',
+				'$window',
+				'$mdDialog',
+				'ParamsSrv',
+				'ApiSrv',
+				function(
+					$scope,
+					$controller,
+					$routeParams,
+					$location,
+					$window,
+					$mdDialog,
+					ParamsSrv,
+					ApiSrv
+				) {
+
+					$controller('baseInfoboxCtrl', {$scope: $scope});
+
+
+					$scope.audienceMenu = [{
+						id:'demography',
+						tpl:'demography',
+						text:'Социальная демография',
+						isSelected: $scope.checkSelected.bind(null, 'demography'),
+						footer: 'analytics'
+					},{
+						id:'consume',
+						tpl:'consume/consume',
+						text:'Потребительское поведение',
+						isSelected: $scope.checkSelected.bind(null, 'consume'),
+						footer: 'analytics'
+					},{
+						id:'regions',
+						tpl:'regions',
+						text:'География',
+						isSelected: $scope.checkSelected.bind(null, 'regions'),
+						footer: 'analytics'
+					}];
+					$scope.topMenu = $scope.audienceMenu;
+
+
+					function checkSportAnalyticsSelected(){
+						var selected = analyticsSrv.getSelected();
+						return !!(selected.sport || selected.league || selected.club);
+					}
+
+					$scope.bottomMenu = [
+						{
+							id:'sportAnalytics/sportAnalytics',
+							tpl:'sportAnalytics/sportAnalytics',
+							text:'Спорт',
+							footer: 'analytics',
+							isSelected: checkSportAnalyticsSelected
+						}
+					];
+
+
+					$scope.extPages = [{
+						id:'analytics/analytics',
+						tpl:'analytics/analytics',
+						footer: 'infoboxResult'
+					}];
+
+					$scope.pages = {};
+
+					[$scope.audienceMenu, $scope.bottomMenu, $scope.extPages].forEach(function(collection) {
+						collection.forEach(function (item) {
+							$scope.pages[item.id] = item;
+						});
+					});
+
+					$scope.setActiveMenuItem($scope.audienceMenu[0]);
+					
+
+					
+
+				}]
+		};
+	}
+}());
+
+(function () {
+	"use strict";
+	/**
 	 * Директива, проверяющая права пользователя для доступа к указанной странице
 	 */
 	angular.module('SportsensusApp')
@@ -2761,18 +2760,34 @@
 					UserSrv
 				) {
 				    
-				    if (!$scope.type) {
-				    	showContent();
-				    } else {
-					    UserSrv.getUserCheckPromise().then(function(){
-					        if (UserSrv.hasAccess($scope.type)){
-						        showContent();
-					        } else {
-					            showAccessDenied();        
-					        }
-					    }, function(){
-					        showAccessDenied();
-					    })
+				 //   if (!$scope.type) {
+				 //   	showContent();
+				 //   } else {
+					//     UserSrv.getUserCheckPromise().then(function(){
+					//         if (UserSrv.hasAccess($scope.type)){
+					// 	        showContent();
+					//         } else {
+					//             showAccessDenied();        
+					//         }
+					//     }, function(){
+					//         showAccessDenied();
+					//     })
+					// }
+					
+					if (checkAccess($scope.type)){
+						showContent();
+					} else {
+						showAccessDenied();
+					}
+					
+					function checkAccess(types){
+						if (!types) return true;
+						var typesArray = types.split(',');
+						//if (!angular.isArray(types)) types = [types];
+						
+						return typesArray.some(function(type){
+							return UserSrv.hasAccess(type)
+						})
 					}
 					
 					
@@ -2845,7 +2860,8 @@
                     TimeSrv
                 ) {
                     $scope.loggedIn = false;
-                    $scope.isAdmin = false;
+                    //$scope.isAdmin = false;
+                    $scope.showAdmin = false;
                     
                     function checkHasAccess(type) {
                         return function(){
@@ -2905,7 +2921,7 @@
                         
                         {
                             'name': 'Панель администрирования',
-                            visible: function(){return $scope.isAdmin;},
+                            visible: function(){return $scope.showAdmin;},
                             onClick: function(){$scope.setPath('/admin/');}
                         }
                     ];
@@ -2917,7 +2933,9 @@
                     function updateUser(){
                         var user = UserSrv.getUser();
                         $scope.loggedIn = !!(user && user.sid);
-                        $scope.isAdmin = !!(user && user.userRights && user.userRights.admin);
+                        $scope.showAdmin = UserSrv.hasAccess('admin') || UserSrv.hasAccess('data_update') || UserSrv.hasAccess('homepage_update')
+
+                        //$scope.isAdmin = !!(user && user.userRights && user.userRights.admin);
                         
                         // оствшееся время на момент обновления (в секундах)
                         // $scope.updateRemainingTime = null;
@@ -4983,6 +5001,397 @@
         };
     }
 }());
+/////////////////////////////////////////////////////////
+/////////////// The Radar Chart Function ////////////////
+/////////////// Written by Nadieh Bremer ////////////////
+////////////////// VisualCinnamon.com ///////////////////
+/////////// Inspired by the code of alangrafu ///////////
+/////////////////////////////////////////////////////////
+
+function RadarChart(id, data, options) {
+    var cfg = {
+        w: 600,				//Width of the circle
+        h: 600,				//Height of the circle
+        margin: {top: 20, right: 20, bottom: 20, left: 20}, //The margins of the SVG
+        levels: 3,				//How many levels or inner circles should there be drawn
+        maxValue: 0, 			//What is the value that the biggest circle will represent
+        labelFactor: 1.25, 	//How much farther than the radius of the outer circle should the labels be placed
+        wrapWidth: 60, 		//The number of pixels after which a label needs to be given a new line
+        opacityArea: 0.35, 	//The opacity of the area of the blob
+        dotRadius: 4, 			//The size of the colored circles of each blog
+        opacityCircles: 0.1, 	//The opacity of the circles of each blob
+        strokeWidth: 2, 		//The width of the stroke around each blob
+        roundStrokes: false,	//If true the area and stroke will follow a round path (cardinal-closed)
+        color: d3.scale.category10()	//Color function
+    };
+
+    //Put all of the options into a variable called cfg
+    if('undefined' !== typeof options){
+        for(var i in options){
+            if('undefined' !== typeof options[i]){ cfg[i] = options[i]; }
+        }//for i
+    }//if
+
+    //If the supplied maxValue is smaller than the actual one, replace by the max in the data
+    var maxValue = Math.max(cfg.maxValue, d3.max(data, function(i){return d3.max(i.map(function(o){return o.value;}))}));
+
+    var allAxis = (data[0].map(function(i, j){return i.axis})),	//Names of each axis
+        total = allAxis.length,					//The number of different axes
+        radius = Math.min(cfg.w/2, cfg.h/2), 	//Radius of the outermost circle
+        //Format = d3.format('%'),			 	//Percentage formatting
+        //Format = d3.format('.1f'),			 	
+        Format = cfg.format,			 	
+        angleSlice = Math.PI * 2 / total;		//The width in radians of each "slice"
+
+    //Scale for the radius
+    var rScale = d3.scale.linear()
+        .range([0, radius])
+        .domain([0, maxValue]);
+
+    /////////////////////////////////////////////////////////
+    //////////// Create the container SVG and g /////////////
+    /////////////////////////////////////////////////////////
+
+    //Remove whatever chart with the same id/class was present before
+    d3.select(id).select("svg").remove();
+
+    //Initiate the radar chart SVG
+    var svg = d3.select(id).append("svg")
+        .attr("width",  cfg.w + cfg.margin.left + cfg.margin.right)
+        .attr("height", cfg.h + cfg.margin.top + cfg.margin.bottom)
+        .attr("class", "radar"+id);
+    //Append a g element		
+    var g = svg.append("g")
+        .attr("transform", "translate(" + (cfg.w/2 + cfg.margin.left) + "," + (cfg.h/2 + cfg.margin.top) + ")");
+
+    /////////////////////////////////////////////////////////
+    ////////// Glow filter for some extra pizzazz ///////////
+    /////////////////////////////////////////////////////////
+
+    //Filter for the outside glow
+    var filter = g.append('defs').append('filter').attr('id','glow'),
+        feGaussianBlur = filter.append('feGaussianBlur').attr('stdDeviation','2.5').attr('result','coloredBlur'),
+        feMerge = filter.append('feMerge'),
+        feMergeNode_1 = feMerge.append('feMergeNode').attr('in','coloredBlur'),
+        feMergeNode_2 = feMerge.append('feMergeNode').attr('in','SourceGraphic');
+
+
+
+    /////////////////////////////////////////////////////////
+    /////////////// Draw the Circular grid //////////////////
+    /////////////////////////////////////////////////////////
+
+    //Wrapper for the grid & axes
+    var axisGrid = g.append("g").attr("class", "axisWrapper");
+
+    //Draw the background circles
+    axisGrid.selectAll(".levels")
+        .data(d3.range(1,(cfg.levels+1)).reverse())
+        .enter()
+        .append("circle")
+        .attr("class", "gridCircle")
+        .attr("r", function(d, i){return radius/cfg.levels*d;})
+        .style("fill", "#CDCDCD")
+        .style("stroke", "#CDCDCD")
+        .style("fill-opacity", cfg.opacityCircles)
+        .style("filter" , "url(#glow)");
+
+    //Text indicating at what % each level is
+    axisGrid.selectAll(".axisLabel")
+        .data(d3.range(1,(cfg.levels+1)).reverse())
+        .enter().append("text")
+        .attr("class", "axisLabel")
+        .attr("x", 4)
+        .attr("y", function(d){return -d*radius/cfg.levels;})
+        .attr("dy", "0.4em")
+        .style("font-size", "10px")
+        .attr("fill", "#737373")
+        .text(function(d,i) { return Format(maxValue * d/cfg.levels); });
+
+    /////////////////////////////////////////////////////////
+    //////////////////// Draw the axes //////////////////////
+    /////////////////////////////////////////////////////////
+
+    //Create the straight lines radiating outward from the center
+    var axis = axisGrid.selectAll(".axis")
+        .data(allAxis)
+        .enter()
+        .append("g")
+        .attr("class", "axis");
+    //Append the lines
+    axis.append("line")
+        .attr("x1", 0)
+        .attr("y1", 0)
+        .attr("x2", function(d, i){ return rScale(maxValue*1.1) * Math.cos(angleSlice*i - Math.PI/2); })
+        .attr("y2", function(d, i){ return rScale(maxValue*1.1) * Math.sin(angleSlice*i - Math.PI/2); })
+        .attr("class", "line")
+        .style("stroke", "white")
+        .style("stroke-width", "2px");
+
+    //Append the labels at each axis
+    axis.append("text")
+        .attr("class", "legend")
+        .style("font-size", "11px")
+        .attr("text-anchor", "middle")
+        .attr("dy", "0.35em")
+        .attr("x", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice*i - Math.PI/2); })
+        .attr("y", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice*i - Math.PI/2); })
+        .text(function(d){return d})
+        .call(wrap, cfg.wrapWidth);
+
+    /////////////////////////////////////////////////////////
+    ///////////// Draw the radar chart blobs ////////////////
+    /////////////////////////////////////////////////////////
+
+    //The radial line function
+    var radarLine = d3.svg.line.radial()
+        .interpolate("linear-closed")
+        .radius(function(d) { return rScale(d.value); })
+        .angle(function(d,i) {	return i*angleSlice; });
+
+    if(cfg.roundStrokes) {
+        radarLine.interpolate("cardinal-closed");
+    }
+
+    //Create a wrapper for the blobs	
+    var blobWrapper = g.selectAll(".radarWrapper")
+        .data(data)
+        .enter().append("g")
+        .attr("class", "radarWrapper");
+
+    //Append the backgrounds	
+    blobWrapper
+        .append("path")
+        .attr("class", "radarArea")
+        .attr("d", function(d,i) { return radarLine(d); })
+        .style("fill", function(d,i) { return cfg.color(i); })
+        .style("fill-opacity", cfg.opacityArea)
+        .on('mouseover', function (d,i){
+            //Dim all blobs
+            d3.selectAll(".radarArea")
+                .transition().duration(200)
+                .style("fill-opacity", 0.1);
+            //Bring back the hovered over blob
+            d3.select(this)
+                .transition().duration(200)
+                .style("fill-opacity", 0.7);
+        })
+        .on('mouseout', function(){
+            //Bring back all blobs
+            d3.selectAll(".radarArea")
+                .transition().duration(200)
+                .style("fill-opacity", cfg.opacityArea);
+        });
+
+    //Create the outlines	
+    blobWrapper.append("path")
+        .attr("class", "radarStroke")
+        .attr("d", function(d,i) { return radarLine(d); })
+        .style("stroke-width", cfg.strokeWidth + "px")
+        .style("stroke", function(d,i) { return cfg.color(i); })
+        .style("fill", "none")
+        .style("filter" , "url(#glow)");
+
+    //Append the circles
+    blobWrapper.selectAll(".radarCircle")
+        .data(function(d,i) { return d; })
+        .enter().append("circle")
+        .attr("class", "radarCircle")
+        .attr("r", cfg.dotRadius)
+        .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
+        .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
+        .style("fill", function(d,i,j) { return cfg.color(j); })
+        .style("fill-opacity", 0.8);
+
+    /////////////////////////////////////////////////////////
+    //////// Append invisible circles for tooltip ///////////
+    /////////////////////////////////////////////////////////
+
+    //Wrapper for the invisible circles on top
+    var blobCircleWrapper = g.selectAll(".radarCircleWrapper")
+        .data(data)
+        .enter().append("g")
+        .attr("class", "radarCircleWrapper");
+
+    //Append a set of invisible circles on top for the mouseover pop-up
+    blobCircleWrapper.selectAll(".radarInvisibleCircle")
+        .data(function(d,i) { return d; })
+        .enter().append("circle")
+        .attr("class", "radarInvisibleCircle")
+        .attr("r", cfg.dotRadius*1.5)
+        .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
+        .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        .on("mouseover", function(d,i) {
+            newX =  parseFloat(d3.select(this).attr('cx')) - 10;
+            newY =  parseFloat(d3.select(this).attr('cy')) - 10;
+
+            tooltip
+                .attr('x', newX)
+                .attr('y', newY)
+                // .text(Format(d.value))
+                .text(d.tooltip)
+                //.transition().duration(200)
+                //.style('opacity', 1);
+                 .style('display', 'initial');
+
+            var bbox = tooltip.node().getBBox();
+            var chartW = (cfg.w + cfg.margin.left + cfg.margin.right)/2;
+
+            if (bbox.x + bbox.width > chartW){
+                newX = chartW - bbox.width - 10;
+                tooltip.attr('x', newX);
+                bbox = tooltip.node().getBBox();
+            }
+
+            var padding = 3;
+            tooltipRect
+                .attr("x", bbox.x - padding - 15 - 8)
+                .attr("y", bbox.y - padding)
+                .attr("width", bbox.width + (padding*2) + 15 + 8)
+                .attr("height", bbox.height + (padding*2))
+                .style('display', 'initial');
+            tooltipColor
+                .attr("x", bbox.x - 15 - 8)
+                .attr("y", bbox.y + (bbox.height - 15)/2)
+                .style('fill', d.tooltipColor)
+                .style('display', 'initial');
+        })
+        .on("mouseout", function(){
+            tooltip
+                //.transition().duration(200)
+                 // .style("opacity", 0);
+                .style('display', 'none');
+            tooltipColor
+                .style('display', 'none');
+            tooltipRect
+                //.transition().duration(200)
+                //.style('fill', 'rgba(0, 0, 0, 0.7)')
+                .style('display', 'none');
+        });
+
+    //Set up the small tooltip for when you hover over a circle
+    var tooltipRect = g.append('rect')
+        .style('fill', 'rgba(0, 0, 0, 0.7)')
+        .attr('rx', '2')
+        .attr('ry', '2')
+       // .attr('class', 'chartjs-tooltip')
+        .style('display', 'none');
+
+    var tooltipColor = g.append('rect')
+        //.style('fill', 'rgba(0, 0, 0, 0.7)')
+        .attr('rx', '2')
+        .attr('ry', '2')
+        .attr("width", 15)
+        .attr("height", 15)
+        .attr('stroke', 'gray')
+        // .attr('class', 'chartjs-tooltip')
+        .style('display', 'none');
+
+    var tooltip = g.append("text")
+        //.attr("class", "tooltip")
+        //.style("opacity", 0);
+        .style("fill", 'white')
+        .style('font-size', '13px')
+        .style('display', 'none');
+
+
+
+
+
+    /////////////////////////////////////////////////////////
+    /////////////////// Helper Function /////////////////////
+    /////////////////////////////////////////////////////////
+
+    //Taken from http://bl.ocks.org/mbostock/7555321
+    //Wraps SVG text	
+    function wrap(text, width) {
+        text.each(function() {
+            var text = d3.select(this),
+                words = text.text().split(/\s+/).reverse(),
+                word,
+                line = [],
+                lineNumber = 0,
+                lineHeight = 1.4, // ems
+                y = text.attr("y"),
+                x = text.attr("x"),
+                dy = parseFloat(text.attr("dy")),
+                tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+
+            while (word = words.pop()) {
+                line.push(word);
+                tspan.text(line.join(" "));
+                if (tspan.node().getComputedTextLength() > width) {
+                    line.pop();
+                    tspan.text(line.join(" "));
+                    line = [word];
+                    tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                }
+            }
+        });
+    }//wrap	
+
+}//RadarChart
+(function () {
+    "use strict";
+    /**
+     * @desc
+     * @example
+     */
+    angular.module('SportsensusApp')
+        .directive('radarDir', radarDir);
+
+    radarDir.$inject = [
+        '$rootScope'
+    ];
+
+    function radarDir(
+        $rootScope
+    )    {
+        return {
+            restrict: 'E',
+            scope: {
+                chart: '='
+            },
+            templateUrl: '/views/widgets/charts/radar/radar.html',
+            link: function ($scope, $el, attrs) {
+                $scope.el = $el;
+                $scope.$watch('chart', $scope.redrawChart);
+            },
+
+            controller: [
+                '$scope',
+                function(
+                    $scope
+                ){
+
+                    
+                    $scope.redrawChart = function(){
+                        if (!$scope.chart || !$scope.chart.data || !$scope.chart.options) {
+                            $scope.el.empty();
+                            return;
+                        }
+
+                        var margin = {top: 50, right: 120, bottom: 100, left: 120};
+                        var width = 700 - margin.left - margin.right;
+                        var height = 700 - margin.top - margin.bottom;
+
+                        
+                        var options = {
+                            w: width,
+                            h: height,
+                            margin: margin
+                        };
+                        options = angular.extend({},$scope.chart.options, options);
+                        
+                        RadarChart($scope.el[0], $scope.chart.data, options);
+                    }
+                    
+                }]
+        };
+    }
+}());
 (function () {
     "use strict";
     /**
@@ -6061,397 +6470,6 @@
 
 
 
-/////////////////////////////////////////////////////////
-/////////////// The Radar Chart Function ////////////////
-/////////////// Written by Nadieh Bremer ////////////////
-////////////////// VisualCinnamon.com ///////////////////
-/////////// Inspired by the code of alangrafu ///////////
-/////////////////////////////////////////////////////////
-
-function RadarChart(id, data, options) {
-    var cfg = {
-        w: 600,				//Width of the circle
-        h: 600,				//Height of the circle
-        margin: {top: 20, right: 20, bottom: 20, left: 20}, //The margins of the SVG
-        levels: 3,				//How many levels or inner circles should there be drawn
-        maxValue: 0, 			//What is the value that the biggest circle will represent
-        labelFactor: 1.25, 	//How much farther than the radius of the outer circle should the labels be placed
-        wrapWidth: 60, 		//The number of pixels after which a label needs to be given a new line
-        opacityArea: 0.35, 	//The opacity of the area of the blob
-        dotRadius: 4, 			//The size of the colored circles of each blog
-        opacityCircles: 0.1, 	//The opacity of the circles of each blob
-        strokeWidth: 2, 		//The width of the stroke around each blob
-        roundStrokes: false,	//If true the area and stroke will follow a round path (cardinal-closed)
-        color: d3.scale.category10()	//Color function
-    };
-
-    //Put all of the options into a variable called cfg
-    if('undefined' !== typeof options){
-        for(var i in options){
-            if('undefined' !== typeof options[i]){ cfg[i] = options[i]; }
-        }//for i
-    }//if
-
-    //If the supplied maxValue is smaller than the actual one, replace by the max in the data
-    var maxValue = Math.max(cfg.maxValue, d3.max(data, function(i){return d3.max(i.map(function(o){return o.value;}))}));
-
-    var allAxis = (data[0].map(function(i, j){return i.axis})),	//Names of each axis
-        total = allAxis.length,					//The number of different axes
-        radius = Math.min(cfg.w/2, cfg.h/2), 	//Radius of the outermost circle
-        //Format = d3.format('%'),			 	//Percentage formatting
-        //Format = d3.format('.1f'),			 	
-        Format = cfg.format,			 	
-        angleSlice = Math.PI * 2 / total;		//The width in radians of each "slice"
-
-    //Scale for the radius
-    var rScale = d3.scale.linear()
-        .range([0, radius])
-        .domain([0, maxValue]);
-
-    /////////////////////////////////////////////////////////
-    //////////// Create the container SVG and g /////////////
-    /////////////////////////////////////////////////////////
-
-    //Remove whatever chart with the same id/class was present before
-    d3.select(id).select("svg").remove();
-
-    //Initiate the radar chart SVG
-    var svg = d3.select(id).append("svg")
-        .attr("width",  cfg.w + cfg.margin.left + cfg.margin.right)
-        .attr("height", cfg.h + cfg.margin.top + cfg.margin.bottom)
-        .attr("class", "radar"+id);
-    //Append a g element		
-    var g = svg.append("g")
-        .attr("transform", "translate(" + (cfg.w/2 + cfg.margin.left) + "," + (cfg.h/2 + cfg.margin.top) + ")");
-
-    /////////////////////////////////////////////////////////
-    ////////// Glow filter for some extra pizzazz ///////////
-    /////////////////////////////////////////////////////////
-
-    //Filter for the outside glow
-    var filter = g.append('defs').append('filter').attr('id','glow'),
-        feGaussianBlur = filter.append('feGaussianBlur').attr('stdDeviation','2.5').attr('result','coloredBlur'),
-        feMerge = filter.append('feMerge'),
-        feMergeNode_1 = feMerge.append('feMergeNode').attr('in','coloredBlur'),
-        feMergeNode_2 = feMerge.append('feMergeNode').attr('in','SourceGraphic');
-
-
-
-    /////////////////////////////////////////////////////////
-    /////////////// Draw the Circular grid //////////////////
-    /////////////////////////////////////////////////////////
-
-    //Wrapper for the grid & axes
-    var axisGrid = g.append("g").attr("class", "axisWrapper");
-
-    //Draw the background circles
-    axisGrid.selectAll(".levels")
-        .data(d3.range(1,(cfg.levels+1)).reverse())
-        .enter()
-        .append("circle")
-        .attr("class", "gridCircle")
-        .attr("r", function(d, i){return radius/cfg.levels*d;})
-        .style("fill", "#CDCDCD")
-        .style("stroke", "#CDCDCD")
-        .style("fill-opacity", cfg.opacityCircles)
-        .style("filter" , "url(#glow)");
-
-    //Text indicating at what % each level is
-    axisGrid.selectAll(".axisLabel")
-        .data(d3.range(1,(cfg.levels+1)).reverse())
-        .enter().append("text")
-        .attr("class", "axisLabel")
-        .attr("x", 4)
-        .attr("y", function(d){return -d*radius/cfg.levels;})
-        .attr("dy", "0.4em")
-        .style("font-size", "10px")
-        .attr("fill", "#737373")
-        .text(function(d,i) { return Format(maxValue * d/cfg.levels); });
-
-    /////////////////////////////////////////////////////////
-    //////////////////// Draw the axes //////////////////////
-    /////////////////////////////////////////////////////////
-
-    //Create the straight lines radiating outward from the center
-    var axis = axisGrid.selectAll(".axis")
-        .data(allAxis)
-        .enter()
-        .append("g")
-        .attr("class", "axis");
-    //Append the lines
-    axis.append("line")
-        .attr("x1", 0)
-        .attr("y1", 0)
-        .attr("x2", function(d, i){ return rScale(maxValue*1.1) * Math.cos(angleSlice*i - Math.PI/2); })
-        .attr("y2", function(d, i){ return rScale(maxValue*1.1) * Math.sin(angleSlice*i - Math.PI/2); })
-        .attr("class", "line")
-        .style("stroke", "white")
-        .style("stroke-width", "2px");
-
-    //Append the labels at each axis
-    axis.append("text")
-        .attr("class", "legend")
-        .style("font-size", "11px")
-        .attr("text-anchor", "middle")
-        .attr("dy", "0.35em")
-        .attr("x", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice*i - Math.PI/2); })
-        .attr("y", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice*i - Math.PI/2); })
-        .text(function(d){return d})
-        .call(wrap, cfg.wrapWidth);
-
-    /////////////////////////////////////////////////////////
-    ///////////// Draw the radar chart blobs ////////////////
-    /////////////////////////////////////////////////////////
-
-    //The radial line function
-    var radarLine = d3.svg.line.radial()
-        .interpolate("linear-closed")
-        .radius(function(d) { return rScale(d.value); })
-        .angle(function(d,i) {	return i*angleSlice; });
-
-    if(cfg.roundStrokes) {
-        radarLine.interpolate("cardinal-closed");
-    }
-
-    //Create a wrapper for the blobs	
-    var blobWrapper = g.selectAll(".radarWrapper")
-        .data(data)
-        .enter().append("g")
-        .attr("class", "radarWrapper");
-
-    //Append the backgrounds	
-    blobWrapper
-        .append("path")
-        .attr("class", "radarArea")
-        .attr("d", function(d,i) { return radarLine(d); })
-        .style("fill", function(d,i) { return cfg.color(i); })
-        .style("fill-opacity", cfg.opacityArea)
-        .on('mouseover', function (d,i){
-            //Dim all blobs
-            d3.selectAll(".radarArea")
-                .transition().duration(200)
-                .style("fill-opacity", 0.1);
-            //Bring back the hovered over blob
-            d3.select(this)
-                .transition().duration(200)
-                .style("fill-opacity", 0.7);
-        })
-        .on('mouseout', function(){
-            //Bring back all blobs
-            d3.selectAll(".radarArea")
-                .transition().duration(200)
-                .style("fill-opacity", cfg.opacityArea);
-        });
-
-    //Create the outlines	
-    blobWrapper.append("path")
-        .attr("class", "radarStroke")
-        .attr("d", function(d,i) { return radarLine(d); })
-        .style("stroke-width", cfg.strokeWidth + "px")
-        .style("stroke", function(d,i) { return cfg.color(i); })
-        .style("fill", "none")
-        .style("filter" , "url(#glow)");
-
-    //Append the circles
-    blobWrapper.selectAll(".radarCircle")
-        .data(function(d,i) { return d; })
-        .enter().append("circle")
-        .attr("class", "radarCircle")
-        .attr("r", cfg.dotRadius)
-        .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
-        .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
-        .style("fill", function(d,i,j) { return cfg.color(j); })
-        .style("fill-opacity", 0.8);
-
-    /////////////////////////////////////////////////////////
-    //////// Append invisible circles for tooltip ///////////
-    /////////////////////////////////////////////////////////
-
-    //Wrapper for the invisible circles on top
-    var blobCircleWrapper = g.selectAll(".radarCircleWrapper")
-        .data(data)
-        .enter().append("g")
-        .attr("class", "radarCircleWrapper");
-
-    //Append a set of invisible circles on top for the mouseover pop-up
-    blobCircleWrapper.selectAll(".radarInvisibleCircle")
-        .data(function(d,i) { return d; })
-        .enter().append("circle")
-        .attr("class", "radarInvisibleCircle")
-        .attr("r", cfg.dotRadius*1.5)
-        .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
-        .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
-        .style("fill", "none")
-        .style("pointer-events", "all")
-        .on("mouseover", function(d,i) {
-            newX =  parseFloat(d3.select(this).attr('cx')) - 10;
-            newY =  parseFloat(d3.select(this).attr('cy')) - 10;
-
-            tooltip
-                .attr('x', newX)
-                .attr('y', newY)
-                // .text(Format(d.value))
-                .text(d.tooltip)
-                //.transition().duration(200)
-                //.style('opacity', 1);
-                 .style('display', 'initial');
-
-            var bbox = tooltip.node().getBBox();
-            var chartW = (cfg.w + cfg.margin.left + cfg.margin.right)/2;
-
-            if (bbox.x + bbox.width > chartW){
-                newX = chartW - bbox.width - 10;
-                tooltip.attr('x', newX);
-                bbox = tooltip.node().getBBox();
-            }
-
-            var padding = 3;
-            tooltipRect
-                .attr("x", bbox.x - padding - 15 - 8)
-                .attr("y", bbox.y - padding)
-                .attr("width", bbox.width + (padding*2) + 15 + 8)
-                .attr("height", bbox.height + (padding*2))
-                .style('display', 'initial');
-            tooltipColor
-                .attr("x", bbox.x - 15 - 8)
-                .attr("y", bbox.y + (bbox.height - 15)/2)
-                .style('fill', d.tooltipColor)
-                .style('display', 'initial');
-        })
-        .on("mouseout", function(){
-            tooltip
-                //.transition().duration(200)
-                 // .style("opacity", 0);
-                .style('display', 'none');
-            tooltipColor
-                .style('display', 'none');
-            tooltipRect
-                //.transition().duration(200)
-                //.style('fill', 'rgba(0, 0, 0, 0.7)')
-                .style('display', 'none');
-        });
-
-    //Set up the small tooltip for when you hover over a circle
-    var tooltipRect = g.append('rect')
-        .style('fill', 'rgba(0, 0, 0, 0.7)')
-        .attr('rx', '2')
-        .attr('ry', '2')
-       // .attr('class', 'chartjs-tooltip')
-        .style('display', 'none');
-
-    var tooltipColor = g.append('rect')
-        //.style('fill', 'rgba(0, 0, 0, 0.7)')
-        .attr('rx', '2')
-        .attr('ry', '2')
-        .attr("width", 15)
-        .attr("height", 15)
-        .attr('stroke', 'gray')
-        // .attr('class', 'chartjs-tooltip')
-        .style('display', 'none');
-
-    var tooltip = g.append("text")
-        //.attr("class", "tooltip")
-        //.style("opacity", 0);
-        .style("fill", 'white')
-        .style('font-size', '13px')
-        .style('display', 'none');
-
-
-
-
-
-    /////////////////////////////////////////////////////////
-    /////////////////// Helper Function /////////////////////
-    /////////////////////////////////////////////////////////
-
-    //Taken from http://bl.ocks.org/mbostock/7555321
-    //Wraps SVG text	
-    function wrap(text, width) {
-        text.each(function() {
-            var text = d3.select(this),
-                words = text.text().split(/\s+/).reverse(),
-                word,
-                line = [],
-                lineNumber = 0,
-                lineHeight = 1.4, // ems
-                y = text.attr("y"),
-                x = text.attr("x"),
-                dy = parseFloat(text.attr("dy")),
-                tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-
-            while (word = words.pop()) {
-                line.push(word);
-                tspan.text(line.join(" "));
-                if (tspan.node().getComputedTextLength() > width) {
-                    line.pop();
-                    tspan.text(line.join(" "));
-                    line = [word];
-                    tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-                }
-            }
-        });
-    }//wrap	
-
-}//RadarChart
-(function () {
-    "use strict";
-    /**
-     * @desc
-     * @example
-     */
-    angular.module('SportsensusApp')
-        .directive('radarDir', radarDir);
-
-    radarDir.$inject = [
-        '$rootScope'
-    ];
-
-    function radarDir(
-        $rootScope
-    )    {
-        return {
-            restrict: 'E',
-            scope: {
-                chart: '='
-            },
-            templateUrl: '/views/widgets/charts/radar/radar.html',
-            link: function ($scope, $el, attrs) {
-                $scope.el = $el;
-                $scope.$watch('chart', $scope.redrawChart);
-            },
-
-            controller: [
-                '$scope',
-                function(
-                    $scope
-                ){
-
-                    
-                    $scope.redrawChart = function(){
-                        if (!$scope.chart || !$scope.chart.data || !$scope.chart.options) {
-                            $scope.el.empty();
-                            return;
-                        }
-
-                        var margin = {top: 50, right: 120, bottom: 100, left: 120};
-                        var width = 700 - margin.left - margin.right;
-                        var height = 700 - margin.top - margin.bottom;
-
-                        
-                        var options = {
-                            w: width,
-                            h: height,
-                            margin: margin
-                        };
-                        options = angular.extend({},$scope.chart.options, options);
-                        
-                        RadarChart($scope.el[0], $scope.chart.data, options);
-                    }
-                    
-                }]
-        };
-    }
-}());
 (function (factory) {
 	"use strict";
 	if (typeof define === 'function' && define.amd) {
@@ -8505,188 +8523,6 @@ function RadarChart(id, data, options) {
 	}
 }());
 
-
-(function () {
-	"use strict";
-	/**
-	 * @desc
-	 * @example
-	 */
-	angular.module('SportsensusApp')
-		.directive('adminProfileDir', adminProfileDir);
-
-	adminProfileDir.$inject = [
-		'$rootScope'
-	];
-
-	function adminProfileDir(
-		$rootScope
-	)    {
-		return {
-			restrict: 'E',
-			scope: {
-				type: '@'
-			},
-			templateUrl: '/views/widgets/admin/panels/profile/profile.html', 
-			link: function ($scope, $el, attrs) {
-				//$scope.init();
-			},
-
-			controller: [
-				'$scope',
-				'$routeParams',
-				'$location',
-				'$window',
-				'$q',
-				'$mdDialog',
-				'ParamsSrv',
-				'ApiSrv',
-				'AdminProfilesSrv',
-				'TariffsSrv',
-				function(
-					$scope,
-					$routeParams,
-					$location,
-					$window,
-					$q,
-					$mdDialog,
-					ParamsSrv,
-					ApiSrv,
-					AdminProfilesSrv,
-					TariffsSrv
-				) { 
-	
-                    $scope.userId = Number.parseInt($routeParams.userId);
-                
-                    $scope.showPreloader = true;
-                    
-                    $q.all({
-                    	profile: AdminProfilesSrv.getProfile($scope.userId),
-                    	tariffs: TariffsSrv.getTariffs()
-                    }).then(function(result){
-                    	$scope.profile = result.profile;
-                    	$scope.tariffs = result.tariffs;
-                    	
-                    	if ($scope.profile.tariff){
-                    		var tariff =  TariffsSrv.getTariff($scope.profile.tariff.id);
-                    		$scope.profile.tariffId = tariff ? tariff.id : null;
-                    	}
-                        $scope.showPreloader = false;
-                    }, function(){
-                    	$scope.showPreloader = false;
-                        $mdDialog.show(
-                          $mdDialog.alert()
-                            .clickOutsideToClose(false)
-                            .title('Ошибка')
-                            .textContent('Ошибка загрузки данных с сервера')
-                            .ok('OK')
-                        ).then(function(){
-                            $location.path('/admin/profiles/');
-                        });
-                    });
-                    
-                   
-	                
-	                $scope.fieldsMap = [
-	                    {field: "login", title: "Логин"},
-                        {field: "first_name", title: "Имя"},
-                        {field: "last_name", title: "Фамилия"},
-                        {field: "company_name", title: "Название компании"},
-                        {field: "phone", title: "Телефон"},
-                        {field: "company_type", title: "Тип компании", values:{ 0: "Спонсор", 1: "Правообладатель", 2: "Агенство"}},
-                        {field: "legal_status", title: "Юридический статус", values:{ 0: "Физическое лицо", 1: "Юридическое лицо"}},
-                        {field: "city_address", title: "Город"},
-                        {field: "street_address", title: "Улица"},
-                        {field: "house_address", title: "Дом"},
-                        {field: "address_type", title: "Тип адреса", values:{ 0: "Рабочий", 1: "Домашний"}},
-                        {field: "inn", title: "Инн"},
-                        {field: "kpp", title: "Кпп"},
-                        {field: "legal_address", title: "Юридический адрес"},
-                        {field: "okpo", title: "ОКПО"},
-                        {field: "okonh", title: "ОКОНХ"},
-                        {field: "bank_account", title: "Банковский счет"},
-                        {field: "corr_account", title: "Корреспондентский счет"},
-                        {field: "bic", title: "БИК"}
-	                ];
-	                
-	                angular.forEach($scope.fieldsMap, function(field){
-	                    field.value = function(){
-	                        if (!$scope.profile) return undefined;
-	                        var val = $scope.profile[field.field];
-	                        return field.values ? field.values[val] : val;
-	                    }
-	                });
-	
-				
-
-					$scope.onTariffChanged = function(){
-						$scope.profile.dirty = true;
-						$scope.profile.setTariff = true;
-					};
-					
-					$scope.saveProfile = function(){
-						$scope.showPreloader = true;
-						var acl = {
-							"admin": $scope.profile.admin_role,
-							"sponsor":  $scope.profile.sponsor_role,
-							"rightholder":  $scope.profile.rightholder_role,
-							"demo":  $scope.profile.demo_role
-						};
-						if ($scope.profile.setTariff){
-							var tariffId = $scope.profile.tariffId;
-							acl.tariff_id = tariffId;
-						}
-						
-						ApiSrv.addRole($scope.profile.user_id, acl).then(function(acl){
-							$scope.showPreloader = false;
-							$scope.profile.admin_role = acl.admin;
-							$scope.profile.sponsor_role = acl.sponsor;
-							$scope.profile.rightholder_role = acl.rightholder;
-							$scope.profile.demo_role = acl.demo;
-							$scope.profile.dirty = false;
-							showSaveSuccess();
-						}, showSaveError);
-					};
-					
-				
-					$scope.updateTafiff = function(){
-						$scope.showPreloader = true;
-						var acl = {
-							tariff_id: $scope.profile.tariffId
-						}
-						
-						ApiSrv.addRole($scope.profile.user_id, acl).then(function(){
-							$scope.showPreloader = false;
-							showSaveSuccess();
-						}, function(){
-							$scope.showPreloader = false;
-							showSaveError();
-						});
-					}
-					
-					function showSaveSuccess(){
-						$mdDialog.show($mdDialog.alert()
-							.title('Сохранение данных')
-							.textContent('Изменения успешно сохранены')
-							.ok('OK'));
-					}
-					
-					function showSaveError(){
-						$mdDialog.show($mdDialog.alert()
-							.title('Ошибка')
-							.textContent('Невозможно применить изменения')
-							.ok('OK'));
-					}
-					
-					$scope.sendMail = function(){
-						$location.path('/admin/sendMail/' + $scope.profile.user_id);
-					}
-					
-				}]
-		};
-	}
-}());
-
 (function () {
 
     "use strict";
@@ -8867,6 +8703,188 @@ function RadarChart(id, data, options) {
 					$scope.openProfile = function(profile){
 						$location.path('/admin/profiles/' + profile.user_id);
 					};
+					
+				}]
+		};
+	}
+}());
+
+
+(function () {
+	"use strict";
+	/**
+	 * @desc
+	 * @example
+	 */
+	angular.module('SportsensusApp')
+		.directive('adminProfileDir', adminProfileDir);
+
+	adminProfileDir.$inject = [
+		'$rootScope'
+	];
+
+	function adminProfileDir(
+		$rootScope
+	)    {
+		return {
+			restrict: 'E',
+			scope: {
+				type: '@'
+			},
+			templateUrl: '/views/widgets/admin/panels/profile/profile.html', 
+			link: function ($scope, $el, attrs) {
+				//$scope.init();
+			},
+
+			controller: [
+				'$scope',
+				'$routeParams',
+				'$location',
+				'$window',
+				'$q',
+				'$mdDialog',
+				'ParamsSrv',
+				'ApiSrv',
+				'AdminProfilesSrv',
+				'TariffsSrv',
+				function(
+					$scope,
+					$routeParams,
+					$location,
+					$window,
+					$q,
+					$mdDialog,
+					ParamsSrv,
+					ApiSrv,
+					AdminProfilesSrv,
+					TariffsSrv
+				) { 
+	
+                    $scope.userId = Number.parseInt($routeParams.userId);
+                
+                    $scope.showPreloader = true;
+                    
+                    $q.all({
+                    	profile: AdminProfilesSrv.getProfile($scope.userId),
+                    	tariffs: TariffsSrv.getTariffs()
+                    }).then(function(result){
+                    	$scope.profile = result.profile;
+                    	$scope.tariffs = result.tariffs;
+                    	
+                    	if ($scope.profile.tariff){
+                    		var tariff =  TariffsSrv.getTariff($scope.profile.tariff.id);
+                    		$scope.profile.tariffId = tariff ? tariff.id : null;
+                    	}
+                        $scope.showPreloader = false;
+                    }, function(){
+                    	$scope.showPreloader = false;
+                        $mdDialog.show(
+                          $mdDialog.alert()
+                            .clickOutsideToClose(false)
+                            .title('Ошибка')
+                            .textContent('Ошибка загрузки данных с сервера')
+                            .ok('OK')
+                        ).then(function(){
+                            $location.path('/admin/profiles/');
+                        });
+                    });
+                    
+                   
+	                
+	                $scope.fieldsMap = [
+	                    {field: "login", title: "Логин"},
+                        {field: "first_name", title: "Имя"},
+                        {field: "last_name", title: "Фамилия"},
+                        {field: "company_name", title: "Название компании"},
+                        {field: "phone", title: "Телефон"},
+                        {field: "company_type", title: "Тип компании", values:{ 0: "Спонсор", 1: "Правообладатель", 2: "Агенство"}},
+                        {field: "legal_status", title: "Юридический статус", values:{ 0: "Физическое лицо", 1: "Юридическое лицо"}},
+                        {field: "city_address", title: "Город"},
+                        {field: "street_address", title: "Улица"},
+                        {field: "house_address", title: "Дом"},
+                        {field: "address_type", title: "Тип адреса", values:{ 0: "Рабочий", 1: "Домашний"}},
+                        {field: "inn", title: "Инн"},
+                        {field: "kpp", title: "Кпп"},
+                        {field: "legal_address", title: "Юридический адрес"},
+                        {field: "okpo", title: "ОКПО"},
+                        {field: "okonh", title: "ОКОНХ"},
+                        {field: "bank_account", title: "Банковский счет"},
+                        {field: "corr_account", title: "Корреспондентский счет"},
+                        {field: "bic", title: "БИК"}
+	                ];
+	                
+	                angular.forEach($scope.fieldsMap, function(field){
+	                    field.value = function(){
+	                        if (!$scope.profile) return undefined;
+	                        var val = $scope.profile[field.field];
+	                        return field.values ? field.values[val] : val;
+	                    }
+	                });
+	
+				
+
+					$scope.onTariffChanged = function(){
+						$scope.profile.dirty = true;
+						$scope.profile.setTariff = true;
+					};
+					
+					// $scope.saveProfile = function(){
+					// 	$scope.showPreloader = true;
+					// 	var acl = {
+					// 		"admin": $scope.profile.admin_role,
+					// 		"sponsor":  $scope.profile.sponsor_role,
+					// 		"rightholder":  $scope.profile.rightholder_role,
+					// 		"demo":  $scope.profile.demo_role
+					// 	};
+					// 	if ($scope.profile.setTariff){
+					// 		var tariffId = $scope.profile.tariffId;
+					// 		acl.tariff_id = tariffId;
+					// 	}
+						
+					// 	ApiSrv.addRole($scope.profile.user_id, acl).then(function(acl){
+					// 		$scope.showPreloader = false;
+					// 		$scope.profile.admin_role = acl.admin;
+					// 		$scope.profile.sponsor_role = acl.sponsor;
+					// 		$scope.profile.rightholder_role = acl.rightholder;
+					// 		$scope.profile.demo_role = acl.demo;
+					// 		$scope.profile.dirty = false;
+					// 		showSaveSuccess();
+					// 	}, showSaveError);
+					// };
+					
+				
+					$scope.updateTafiff = function(){
+						$scope.showPreloader = true;
+						var acl = {
+							tariff_id: $scope.profile.tariffId
+						}
+						
+						ApiSrv.addRole($scope.profile.user_id, acl).then(function(){
+							$scope.showPreloader = false;
+							showSaveSuccess();
+						}, function(){
+							$scope.showPreloader = false;
+							showSaveError();
+						});
+					}
+					
+					function showSaveSuccess(){
+						$mdDialog.show($mdDialog.alert()
+							.title('Сохранение данных')
+							.textContent('Изменения успешно сохранены')
+							.ok('OK'));
+					}
+					
+					function showSaveError(){
+						$mdDialog.show($mdDialog.alert()
+							.title('Ошибка')
+							.textContent('Невозможно применить изменения')
+							.ok('OK'));
+					}
+					
+					$scope.sendMail = function(){
+						$location.path('/admin/sendMail/' + $scope.profile.user_id);
+					}
 					
 				}]
 		};
@@ -10743,6 +10761,192 @@ function RadarChart(id, data, options) {
      * @desc
      */
     angular.module('SportsensusApp')
+        .controller('involveGraphCrtl', involveGraphCrtl);
+
+    involveGraphCrtl.$inject = [
+        '$scope',
+        '$controller',
+        'ParamsSrv',
+        'ApiSrv',
+        'graphHelpersSrv'
+    ];
+
+    function involveGraphCrtl(
+        $scope,
+        $controller,
+        ParamsSrv,
+        ApiSrv,
+        graphHelpersSrv
+    ) {
+
+        $controller('baseGraphCtrl', {$scope: $scope});
+
+        ParamsSrv.getParams().then(function (params) {
+            $scope.parameters = params;
+            $scope.prepareLegends();
+            requestGraph();
+        });
+
+        $scope.showCharts = false;
+
+        function requestGraph() {
+            var audience = ParamsSrv.getSelectedAudience();
+            var sports = {};
+            $scope.parameters.sport.lists.forEach(function (list) {
+                sports[list.key] = {interested: true}
+            });
+            var involve = $scope.parameters.involve.lists.map(function (list) {
+                return list.id;
+            });
+            var sportInvolve = { // все спорты и все интересы
+                sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
+                involve: involve // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
+            };
+            ApiSrv.getInvolveGraph(audience, sportInvolve).then(function (graphData) {
+                $scope.prepareData(graphData);
+                $scope.updateGraph();
+            }, function () {
+            });
+        }
+
+        $scope.prepareLegends = function () {
+            $scope.sportLegend = graphHelpersSrv.getSportLegend({color:'#555555'});
+            $scope.involveLegend = graphHelpersSrv.getInvolveLegend();
+
+            $scope.$watch('sportLegend', $scope.updateGraph, true);
+            $scope.$watch('involveLegend', $scope.updateGraph, true);
+        };
+
+
+
+        $scope.prepareData = function (data) {
+
+            var involves = {};
+            $scope.parameters.involve.lists.forEach(function (list) {
+                involves[list.id] = {
+                    id: list.id,
+                    name: list.name,
+                    count: 0
+                }
+            });
+
+            var sports = {};
+            $scope.parameters.sport.lists.forEach(function (list) {
+                sports[list.id] = angular.merge({
+                    data: angular.merge({}, involves)
+                }, list);
+            });
+
+
+            var legendIndexes = {};
+            data.legends.forEach(function(item, index){
+                legendIndexes[item.name] = index;
+            });
+
+            var maxValue = 0;
+            data.data.forEach(function (item) {
+                var sportId = item.legend[legendIndexes['sport']];
+                var involveId = item.legend[legendIndexes['involve']];
+                sports[sportId].data[involveId].count += item.count;
+                maxValue = Math.max(maxValue, sports[sportId].data[involveId].count);
+            }, this);
+            var multiplier = maxValue > 1000*1000 ? 1000*1000 : maxValue > 1000 ? 1000 : 1;
+
+
+            $scope.chartsData = {
+                multiplier: multiplier,
+                maxValue: maxValue,
+                sports: sports
+            };
+            
+
+        };
+
+        $scope.updateGraph = function () {
+            if (!$scope.chartsData) return;
+            
+
+            var sports = $scope.sportLegend.filter(function(item) {
+                return item.selected;
+            });
+
+            var involves = $scope.involveLegend.filter(function(item) {
+                return item.selected;
+            });
+
+            var charts = [];
+            sports.forEach(function(sport){
+                // if (!sport.selected) return;
+                //charts.push(sport);
+                var chartData = {labels:[],datasets:[]};
+
+                    var dataDs = { label:[], fillColor:[], data:[] };
+                    var emptyDs = { label:[], fillColor:[], data:[] };
+
+                    involves.forEach(function(involve){
+                        var value = $scope.chartsData.sports[sport.id].data[involve.id].count;
+                        if (value == 0) return;
+
+                        dataDs.label.push(involve.name + ': ' + value.toLocaleString('en-US'));
+                        dataDs.fillColor.push(involve.color);
+                        dataDs.data.push($scope.chartsData.sports[sport.id].data[involve.id].count);
+
+                        emptyDs.label.push(involve.name);
+                        emptyDs.fillColor.push(involve.color);
+                        emptyDs.data.push(0);
+
+                        chartData.labels.push('');
+                    });
+
+                    chartData.datasets.push(dataDs);
+                    chartData.datasets.push(emptyDs);
+                // }
+
+
+                charts.push({
+                    sport:sport,
+                    chartData:{data:chartData, options:{
+                        showLabels: $scope.formatValue,
+                        scaleLabel: function(obj){return $scope.formatValue(obj.value);}
+                    }}
+                })
+            });
+
+            $scope.showCharts = !!charts.length && !!involves.length;
+            $scope.charts = charts;
+
+            // Combine all sports in one graph
+            var combineChart = {data:{labels:[], datasets:[]}, options:{
+                scaleLabel: function(obj){return $scope.formatValue(obj.value);},
+                barWidth: 40,
+                barHeight: 300,
+                barValueSpacing: 30
+            }};
+            combineChart.data.labels = sports.map(function(item){return item.name;});
+            involves.forEach(function(involve){
+                var ds = { label:[], fillColor:[], data:[] };
+                sports.forEach(function(sport) {
+                    var value = $scope.chartsData.sports[sport.id].data[involve.id].count;
+                    ds.label.push(involve.name + ': ' + value.toLocaleString('en-US'));//item[0].name);
+                    ds.fillColor.push(involve.color);
+                    ds.data.push(value);
+
+                });
+                combineChart.data.datasets.push(ds);
+            });
+            $scope.combineChart = (combineChart.data.labels.length > 1 ? combineChart : null);
+        };
+
+    }
+
+}());
+
+(function () {
+    "use strict";
+    /**
+     * @desc
+     */
+    angular.module('SportsensusApp')
         .controller('interestGraphCrtl', interestGraphCrtl);
 
     interestGraphCrtl.$inject = [
@@ -11118,192 +11322,6 @@ function RadarChart(id, data, options) {
 
 
 
-
-    }
-
-}());
-
-(function () {
-    "use strict";
-    /**
-     * @desc
-     */
-    angular.module('SportsensusApp')
-        .controller('involveGraphCrtl', involveGraphCrtl);
-
-    involveGraphCrtl.$inject = [
-        '$scope',
-        '$controller',
-        'ParamsSrv',
-        'ApiSrv',
-        'graphHelpersSrv'
-    ];
-
-    function involveGraphCrtl(
-        $scope,
-        $controller,
-        ParamsSrv,
-        ApiSrv,
-        graphHelpersSrv
-    ) {
-
-        $controller('baseGraphCtrl', {$scope: $scope});
-
-        ParamsSrv.getParams().then(function (params) {
-            $scope.parameters = params;
-            $scope.prepareLegends();
-            requestGraph();
-        });
-
-        $scope.showCharts = false;
-
-        function requestGraph() {
-            var audience = ParamsSrv.getSelectedAudience();
-            var sports = {};
-            $scope.parameters.sport.lists.forEach(function (list) {
-                sports[list.key] = {interested: true}
-            });
-            var involve = $scope.parameters.involve.lists.map(function (list) {
-                return list.id;
-            });
-            var sportInvolve = { // все спорты и все интересы
-                sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
-                involve: involve // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
-            };
-            ApiSrv.getInvolveGraph(audience, sportInvolve).then(function (graphData) {
-                $scope.prepareData(graphData);
-                $scope.updateGraph();
-            }, function () {
-            });
-        }
-
-        $scope.prepareLegends = function () {
-            $scope.sportLegend = graphHelpersSrv.getSportLegend({color:'#555555'});
-            $scope.involveLegend = graphHelpersSrv.getInvolveLegend();
-
-            $scope.$watch('sportLegend', $scope.updateGraph, true);
-            $scope.$watch('involveLegend', $scope.updateGraph, true);
-        };
-
-
-
-        $scope.prepareData = function (data) {
-
-            var involves = {};
-            $scope.parameters.involve.lists.forEach(function (list) {
-                involves[list.id] = {
-                    id: list.id,
-                    name: list.name,
-                    count: 0
-                }
-            });
-
-            var sports = {};
-            $scope.parameters.sport.lists.forEach(function (list) {
-                sports[list.id] = angular.merge({
-                    data: angular.merge({}, involves)
-                }, list);
-            });
-
-
-            var legendIndexes = {};
-            data.legends.forEach(function(item, index){
-                legendIndexes[item.name] = index;
-            });
-
-            var maxValue = 0;
-            data.data.forEach(function (item) {
-                var sportId = item.legend[legendIndexes['sport']];
-                var involveId = item.legend[legendIndexes['involve']];
-                sports[sportId].data[involveId].count += item.count;
-                maxValue = Math.max(maxValue, sports[sportId].data[involveId].count);
-            }, this);
-            var multiplier = maxValue > 1000*1000 ? 1000*1000 : maxValue > 1000 ? 1000 : 1;
-
-
-            $scope.chartsData = {
-                multiplier: multiplier,
-                maxValue: maxValue,
-                sports: sports
-            };
-            
-
-        };
-
-        $scope.updateGraph = function () {
-            if (!$scope.chartsData) return;
-            
-
-            var sports = $scope.sportLegend.filter(function(item) {
-                return item.selected;
-            });
-
-            var involves = $scope.involveLegend.filter(function(item) {
-                return item.selected;
-            });
-
-            var charts = [];
-            sports.forEach(function(sport){
-                // if (!sport.selected) return;
-                //charts.push(sport);
-                var chartData = {labels:[],datasets:[]};
-
-                    var dataDs = { label:[], fillColor:[], data:[] };
-                    var emptyDs = { label:[], fillColor:[], data:[] };
-
-                    involves.forEach(function(involve){
-                        var value = $scope.chartsData.sports[sport.id].data[involve.id].count;
-                        if (value == 0) return;
-
-                        dataDs.label.push(involve.name + ': ' + value.toLocaleString('en-US'));
-                        dataDs.fillColor.push(involve.color);
-                        dataDs.data.push($scope.chartsData.sports[sport.id].data[involve.id].count);
-
-                        emptyDs.label.push(involve.name);
-                        emptyDs.fillColor.push(involve.color);
-                        emptyDs.data.push(0);
-
-                        chartData.labels.push('');
-                    });
-
-                    chartData.datasets.push(dataDs);
-                    chartData.datasets.push(emptyDs);
-                // }
-
-
-                charts.push({
-                    sport:sport,
-                    chartData:{data:chartData, options:{
-                        showLabels: $scope.formatValue,
-                        scaleLabel: function(obj){return $scope.formatValue(obj.value);}
-                    }}
-                })
-            });
-
-            $scope.showCharts = !!charts.length && !!involves.length;
-            $scope.charts = charts;
-
-            // Combine all sports in one graph
-            var combineChart = {data:{labels:[], datasets:[]}, options:{
-                scaleLabel: function(obj){return $scope.formatValue(obj.value);},
-                barWidth: 40,
-                barHeight: 300,
-                barValueSpacing: 30
-            }};
-            combineChart.data.labels = sports.map(function(item){return item.name;});
-            involves.forEach(function(involve){
-                var ds = { label:[], fillColor:[], data:[] };
-                sports.forEach(function(sport) {
-                    var value = $scope.chartsData.sports[sport.id].data[involve.id].count;
-                    ds.label.push(involve.name + ': ' + value.toLocaleString('en-US'));//item[0].name);
-                    ds.fillColor.push(involve.color);
-                    ds.data.push(value);
-
-                });
-                combineChart.data.datasets.push(ds);
-            });
-            $scope.combineChart = (combineChart.data.labels.length > 1 ? combineChart : null);
-        };
 
     }
 
@@ -13087,47 +13105,6 @@ function RadarChart(id, data, options) {
 	 * @example
 	 */
 	angular.module('SportsensusApp')
-		.directive('analyticsResultsDir', analyticsResultsDir);
-
-	analyticsResultsDir.$inject = [
-		'$rootScope'
-	];
-
-	function analyticsResultsDir(
-		$rootScope
-	)    {
-		return {
-			restrict: 'E',
-			scope: {
-				results: '=',
-				price: '='
-			},
-			templateUrl: '/views/widgets/infobox/panels/analytics/analyticsResults/analyticsResults.html',
-			link: function ($scope, $el, attrs) {
-				
-			},
-
-			controller: [
-				'$scope',
-				function(
-					$scope
-				){
-					$scope.currency = '₽';
-
-
-				}
-			]
-			
-		};
-	}
-}());
-(function () {
-	"use strict";
-	/**
-	 * @desc
-	 * @example
-	 */
-	angular.module('SportsensusApp')
 		.directive('clubInfoTableDir', clubInfoTableDir);
 
 	clubInfoTableDir.$inject = [
@@ -13196,6 +13173,47 @@ function RadarChart(id, data, options) {
 				}
 			]
 
+		};
+	}
+}());
+(function () {
+	"use strict";
+	/**
+	 * @desc
+	 * @example
+	 */
+	angular.module('SportsensusApp')
+		.directive('analyticsResultsDir', analyticsResultsDir);
+
+	analyticsResultsDir.$inject = [
+		'$rootScope'
+	];
+
+	function analyticsResultsDir(
+		$rootScope
+	)    {
+		return {
+			restrict: 'E',
+			scope: {
+				results: '=',
+				price: '='
+			},
+			templateUrl: '/views/widgets/infobox/panels/analytics/analyticsResults/analyticsResults.html',
+			link: function ($scope, $el, attrs) {
+				
+			},
+
+			controller: [
+				'$scope',
+				function(
+					$scope
+				){
+					$scope.currency = '₽';
+
+
+				}
+			]
+			
 		};
 	}
 }());

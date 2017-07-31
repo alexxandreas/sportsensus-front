@@ -184,7 +184,7 @@
 			
 			.when('/analytics/', {
 				// template: '<analytics-dir></analytics-dir>',
-				template: getCheckAccessTemplate('rightholder', '<analytics-dir></analytics-dir>'),
+				template: getCheckAccessTemplate('rightholder,sponsor', '<analytics-dir></analytics-dir>'),
 				resolve: getUserAuthResolver()
 			})
 			

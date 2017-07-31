@@ -35,18 +35,34 @@
 					UserSrv
 				) {
 				    
-				    if (!$scope.type) {
-				    	showContent();
-				    } else {
-					    UserSrv.getUserCheckPromise().then(function(){
-					        if (UserSrv.hasAccess($scope.type)){
-						        showContent();
-					        } else {
-					            showAccessDenied();        
-					        }
-					    }, function(){
-					        showAccessDenied();
-					    })
+				 //   if (!$scope.type) {
+				 //   	showContent();
+				 //   } else {
+					//     UserSrv.getUserCheckPromise().then(function(){
+					//         if (UserSrv.hasAccess($scope.type)){
+					// 	        showContent();
+					//         } else {
+					//             showAccessDenied();        
+					//         }
+					//     }, function(){
+					//         showAccessDenied();
+					//     })
+					// }
+					
+					if (checkAccess($scope.type)){
+						showContent();
+					} else {
+						showAccessDenied();
+					}
+					
+					function checkAccess(types){
+						if (!types) return true;
+						var typesArray = types.split(',');
+						//if (!angular.isArray(types)) types = [types];
+						
+						return typesArray.some(function(type){
+							return UserSrv.hasAccess(type)
+						})
 					}
 					
 					

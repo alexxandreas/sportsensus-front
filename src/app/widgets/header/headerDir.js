@@ -45,7 +45,8 @@
                     TimeSrv
                 ) {
                     $scope.loggedIn = false;
-                    $scope.isAdmin = false;
+                    //$scope.isAdmin = false;
+                    $scope.showAdmin = false;
                     
                     function checkHasAccess(type) {
                         return function(){
@@ -105,7 +106,7 @@
                         
                         {
                             'name': 'Панель администрирования',
-                            visible: function(){return $scope.isAdmin;},
+                            visible: function(){return $scope.showAdmin;},
                             onClick: function(){$scope.setPath('/admin/');}
                         }
                     ];
@@ -117,7 +118,9 @@
                     function updateUser(){
                         var user = UserSrv.getUser();
                         $scope.loggedIn = !!(user && user.sid);
-                        $scope.isAdmin = !!(user && user.userRights && user.userRights.admin);
+                        $scope.showAdmin = UserSrv.hasAccess('admin') || UserSrv.hasAccess('data_update') || UserSrv.hasAccess('homepage_update')
+
+                        //$scope.isAdmin = !!(user && user.userRights && user.userRights.admin);
                         
                         // оствшееся время на момент обновления (в секундах)
                         // $scope.updateRemainingTime = null;

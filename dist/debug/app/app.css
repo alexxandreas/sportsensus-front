@@ -523,6 +523,7 @@ md-switch.md-checked .md-thumb-container {
   color: rgba(255, 255, 255, 0.3);
 }
 
+
 .account-panel .params-table {
   width: 100%;
   font-size: 15px;
@@ -553,7 +554,6 @@ md-switch.md-checked .md-thumb-container {
   -webkit-appearance: none;
   -moz-appearance: none;
 }
-
 
 .article-panel .article {
   min-height: 200px;
@@ -637,6 +637,7 @@ md-switch.md-checked .md-thumb-container {
   line-height: 78px;
   padding: 0 30px;
   background: #fff;
+  overflow: hidden;
 }
 .site-header .header-menu {
   margin: 0 0 0 100px;
@@ -1829,14 +1830,6 @@ div > svg > circle:nth-child(5n) {
   transform: translate(-50%, 0);
 }
 
-.admin-cases .article-title {
-  margin-right: 10px;
-}
-.admin-cases .article-image {
-  max-width: 150px;
-  max-height: 150px;
-}
-
 .admin-case .md-errors-spacer {
   display: none;
 }
@@ -1846,6 +1839,14 @@ div > svg > circle:nth-child(5n) {
 .admin-case .article-image {
   margin: 10px;
   width: inherit;
+  max-width: 150px;
+  max-height: 150px;
+}
+
+.admin-cases .article-title {
+  margin-right: 10px;
+}
+.admin-cases .article-image {
   max-width: 150px;
   max-height: 150px;
 }

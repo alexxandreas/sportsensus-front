@@ -163,7 +163,7 @@
 						//{title: 'Продолжительность подписки', value: TimeSrv.secondsToDateTime(tariff.duration), visible:!!tariff.duration},
 						{
 							title: 'Количество сессий', 
-							value: tariff.sessions_count.toString() + ' (Осталось ' + tariff.remaining_sessions + ')', 
+							value: tariff.sessions_count ? tariff.sessions_count.toString() + ' (Осталось ' + tariff.remaining_sessions + ')' : null, 
 							visible:!!tariff.sessions_count
 							
 						}, {

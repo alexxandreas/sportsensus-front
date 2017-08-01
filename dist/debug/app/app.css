@@ -523,7 +523,6 @@ md-switch.md-checked .md-thumb-container {
   color: rgba(255, 255, 255, 0.3);
 }
 
-
 .account-panel .params-table {
   width: 100%;
   font-size: 15px;
@@ -554,6 +553,7 @@ md-switch.md-checked .md-thumb-container {
   -webkit-appearance: none;
   -moz-appearance: none;
 }
+
 
 .article-panel .article {
   min-height: 200px;
@@ -634,39 +634,27 @@ md-switch.md-checked .md-thumb-container {
   right: 0;
   z-index: 10;
   height: 78px;
-  line-height: 78px;
   padding: 0 30px;
   background: #fff;
   overflow: hidden;
 }
 .site-header .header-menu {
-  margin: 0 0 0 100px;
+  margin: 0 0 0 50px;
   padding: 0;
-  list-style-type: none;
 }
-.site-header .header-menu .header-menu-item {
-  margin-right: 40px;
+.site-header .header-logo-image {
+  width: 230px;
 }
-.site-header .header-menu .header-menu-item:last-child {
-  margin-right: 0;
-}
-.site-header .header-menu .header-menu-item .header-menu-item-link {
-  padding-bottom: 2px;
+.site-header .header-button {
+  padding: 0 15px;
   font-size: 16px;
   font-family: NOKIAPUREHEADLINE_BOLD;
   text-decoration: none;
   color: #000;
-  white-space: pre;
-  border-bottom: 3px solid transparent;
+  cursor: pointer;
 }
-.site-header .header-menu .header-menu-item .header-menu-item-link:hover {
-  border-bottom-color: #9fd9db;
-}
-.site-header .header-logo-image {
-  vertical-align: middle;
-}
-.site-header .button-logout {
-  margin-left: 20px;
+.site-header .header-button:hover {
+  color: #9fd9db;
 }
 /*
 

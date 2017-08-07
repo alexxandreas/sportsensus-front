@@ -1,7 +1,8 @@
 <div class="site-header" layout="row">
     
     <!--<a href="/#!/" >-->
-        <div layout="row" layout-align="start center" ng-click="goHome()">
+        <div layout="row" layout-align="start center" ng-click="goHome()"
+            class="header-logo" flex="none">
             <img src="static/img/logo2.svg" alt="" class="header-logo-image"/>    
         </div>
     </a>
@@ -13,7 +14,8 @@
     <!--    </div>-->
     <!--</div>-->
     
-    <div class="header-menu" layout="row" flex="grow" layout-wrap>
+    <div class="header-menu" layout="row" layout-align="start center" 
+        flex="grow" layout-wrap>
         <div layout="row" layout-align="start center" flex="none"
                 class="header-button" ng-repeat="item in menu" 
                 ng-show="item.visible()" ng-click="item.onClick && item.onClick()">

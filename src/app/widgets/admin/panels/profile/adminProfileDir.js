@@ -116,29 +116,29 @@
 						$scope.profile.setTariff = true;
 					};
 					
-					$scope.saveProfile = function(){
-						$scope.showPreloader = true;
-						var acl = {
-							"admin": $scope.profile.admin_role,
-							"sponsor":  $scope.profile.sponsor_role,
-							"rightholder":  $scope.profile.rightholder_role,
-							"demo":  $scope.profile.demo_role
-						};
-						if ($scope.profile.setTariff){
-							var tariffId = $scope.profile.tariffId;
-							acl.tariff_id = tariffId;
-						}
+					// $scope.saveProfile = function(){
+					// 	$scope.showPreloader = true;
+					// 	var acl = {
+					// 		"admin": $scope.profile.admin_role,
+					// 		"sponsor":  $scope.profile.sponsor_role,
+					// 		"rightholder":  $scope.profile.rightholder_role,
+					// 		"demo":  $scope.profile.demo_role
+					// 	};
+					// 	if ($scope.profile.setTariff){
+					// 		var tariffId = $scope.profile.tariffId;
+					// 		acl.tariff_id = tariffId;
+					// 	}
 						
-						ApiSrv.addRole($scope.profile.user_id, acl).then(function(acl){
-							$scope.showPreloader = false;
-							$scope.profile.admin_role = acl.admin;
-							$scope.profile.sponsor_role = acl.sponsor;
-							$scope.profile.rightholder_role = acl.rightholder;
-							$scope.profile.demo_role = acl.demo;
-							$scope.profile.dirty = false;
-							showSaveSuccess();
-						}, showSaveError);
-					};
+					// 	ApiSrv.addRole($scope.profile.user_id, acl).then(function(acl){
+					// 		$scope.showPreloader = false;
+					// 		$scope.profile.admin_role = acl.admin;
+					// 		$scope.profile.sponsor_role = acl.sponsor;
+					// 		$scope.profile.rightholder_role = acl.rightholder;
+					// 		$scope.profile.demo_role = acl.demo;
+					// 		$scope.profile.dirty = false;
+					// 		showSaveSuccess();
+					// 	}, showSaveError);
+					// };
 					
 				
 					$scope.updateTafiff = function(){

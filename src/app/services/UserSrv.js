@@ -129,7 +129,6 @@
             angular.extend(userRights.tariff, {
                 access_cases: true,
                 access_infoblock: true,
-                access_admin: true,
                 updateTime: Date.now()
             });
             //     tariffActivationTime: (new Date()).toISOString(),

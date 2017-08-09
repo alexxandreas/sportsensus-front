@@ -1882,6 +1882,13 @@ div > svg > circle:nth-child(5n) {
   text-align: center;
 }
 
+.admin-profile .acl-checkbox {
+  margin-right: 20px;
+}
+.admin-profile md-input-container {
+  margin: 0;
+}
+
 .admin-send-mail md-input-container {
   margin: 0;
 }
@@ -2130,63 +2137,6 @@ div > svg > circle:nth-child(5n) {
   width: 472px;
 }
 
-.analyticsResults .result-card .header {
-  padding: 10px;
-  border-top: 5px solid;
-  border-color: inherit;
-  height: 50px;
-  font-size: 20px;
-  text-align: center;
-}
-.analyticsResults .result-card .header2 {
-  padding: 10px;
-  border-top: 1px solid;
-  border-color: inherit;
-  height: 50px;
-  font-size: 20px;
-}
-.analyticsResults .result-card .footer {
-  padding: 10px;
-  border-top: 1px dotted;
-  border-color: inherit;
-  height: 60px;
-  font-size: 32px;
-}
-.analyticsResults .result-card .header3 {
-  padding: 10px;
-  border-top: 1px solid;
-  border-color: inherit;
-  height: 40px;
-  font-size: 15px;
-  text-align: center;
-}
-.analyticsResults .result-card .footer3 {
-  padding: 10px;
-  border-top: 1px dotted;
-  border-color: inherit;
-  height: 40px;
-  font-size: 20px;
-}
-.analyticsResults .result-card .header4 {
-  padding: 10px;
-  border-right: 1px dotted;
-  border-top: 1px solid;
-  border-color: inherit;
-  height: 50px;
-  font-size: 15px;
-  text-align: center;
-}
-.analyticsResults .result-card .footer4 {
-  padding: 10px;
-  border-top: 1px solid;
-  border-color: inherit;
-  height: 50px;
-  font-size: 20px;
-}
-.analyticsResults .result-card .currencyBlock {
-  margin: 0 20px;
-}
-
 .clubInfoTable,
 .leagueInfoTable {
   max-width: 800px;
@@ -2259,6 +2209,63 @@ div > svg > circle:nth-child(5n) {
 .leagueInfoTable .card .info {
   background-color: #ccf1ff;
   text-align: center;
+}
+
+.analyticsResults .result-card .header {
+  padding: 10px;
+  border-top: 5px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 20px;
+  text-align: center;
+}
+.analyticsResults .result-card .header2 {
+  padding: 10px;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 20px;
+}
+.analyticsResults .result-card .footer {
+  padding: 10px;
+  border-top: 1px dotted;
+  border-color: inherit;
+  height: 60px;
+  font-size: 32px;
+}
+.analyticsResults .result-card .header3 {
+  padding: 10px;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 40px;
+  font-size: 15px;
+  text-align: center;
+}
+.analyticsResults .result-card .footer3 {
+  padding: 10px;
+  border-top: 1px dotted;
+  border-color: inherit;
+  height: 40px;
+  font-size: 20px;
+}
+.analyticsResults .result-card .header4 {
+  padding: 10px;
+  border-right: 1px dotted;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 15px;
+  text-align: center;
+}
+.analyticsResults .result-card .footer4 {
+  padding: 10px;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 20px;
+}
+.analyticsResults .result-card .currencyBlock {
+  margin: 0 20px;
 }
 
 .hockeyBoxInfoTable {

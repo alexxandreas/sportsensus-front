@@ -1843,20 +1843,20 @@ div > svg > circle:nth-child(5n) {
   max-height: 150px;
 }
 
-.admin-menu {
-  width: 300px;
-  /*margin-right: 20px;*/
-}
-.admin-menu .active-item {
-  background-color: #82b1ff;
-}
-
 .admin-cases .article-title {
   margin-right: 10px;
 }
 .admin-cases .article-image {
   max-width: 150px;
   max-height: 150px;
+}
+
+.admin-menu {
+  width: 300px;
+  /*margin-right: 20px;*/
+}
+.admin-menu .active-item {
+  background-color: #82b1ff;
 }
 
 .admin-profile .acl-checkbox {

@@ -14,10 +14,10 @@
 
 	function fileModelDir(
 		$rootScope,
-		$parse
+		$parse 
 	)    {
 		return {
-			restrict: 'A',
+			restrict111: 'A',
 			link: function(scope, element, attrs) {
                 var model = $parse(attrs.fileModelDir);
                 var modelSetter = model.assign;

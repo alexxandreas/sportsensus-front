@@ -19,7 +19,7 @@
   },
   "scripts": {
     "serve-debug": "gulp serve-debug",
-    "build": "gulp build"
+    "publish": "gulp publish"
   },
   "private": true,
   "license": "proprietary",

@@ -1,3 +1,13 @@
+/**
+ * gulp serve-debug - запуск с liveserver для отладки из dist/debug
+ * gulp serve - то же самое, но из папки dist/release
+ * gulp clean - очищает dist
+ * gulp build - только сборка (и в debug, и в release)
+ * gulp publish - сборка и публикация в public
+ * 
+ * 
+ */
+
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
 var runSequence = require('run-sequence');
@@ -23,6 +33,7 @@ var releaseConfig = '../src/config_release.js';
 var debugMode = false;
 var distDebug = '../dist/debug/';
 var distRelease = '../dist/release/';
+var publishDir = '../public/';
 
 var libJs = [
 	//'../libs/leaflet/dist/leaflet-src.js',
@@ -230,3 +241,25 @@ gulp.task('live-reload', function () {
 		.pipe($.connect.reload());
 });
 
+gulp.task('publish', function (cb) {
+	runSequence(
+		'build',
+		'clean-public',
+		'copy-to-public',
+		cb);
+});
+
+gulp.task('clean-public', function(cb){
+	del([publishDir + '/*', '!' + publishDir + '/.git'],
+		{dot: true, force: true},
+		function (err, paths) {
+			return cb();
+		}
+	);
+});
+
+gulp.task('copy-to-public', function () {
+	return gulp
+		.src(distRelease + '/**/*')
+		.pipe(gulp.dest(publishDir))
+});

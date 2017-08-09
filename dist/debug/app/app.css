@@ -1843,6 +1843,14 @@ div > svg > circle:nth-child(5n) {
   max-height: 150px;
 }
 
+.admin-menu {
+  width: 300px;
+  /*margin-right: 20px;*/
+}
+.admin-menu .active-item {
+  background-color: #82b1ff;
+}
+
 .admin-cases .article-title {
   margin-right: 10px;
 }
@@ -1851,12 +1859,11 @@ div > svg > circle:nth-child(5n) {
   max-height: 150px;
 }
 
-.admin-menu {
-  width: 300px;
-  /*margin-right: 20px;*/
+.admin-profile .acl-checkbox {
+  margin-right: 20px;
 }
-.admin-menu .active-item {
-  background-color: #82b1ff;
+.admin-profile md-input-container {
+  margin: 0;
 }
 
 .admin-profiles .profiles-table .profiles-table-header {
@@ -1881,13 +1888,6 @@ div > svg > circle:nth-child(5n) {
 }
 .admin-profiles .profiles-table .profiles-table-cell-center {
   text-align: center;
-}
-
-.admin-profile .acl-checkbox {
-  margin-right: 20px;
-}
-.admin-profile md-input-container {
-  margin: 0;
 }
 
 .admin-send-mail md-input-container {
@@ -2138,6 +2138,63 @@ div > svg > circle:nth-child(5n) {
   width: 472px;
 }
 
+.analyticsResults .result-card .header {
+  padding: 10px;
+  border-top: 5px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 20px;
+  text-align: center;
+}
+.analyticsResults .result-card .header2 {
+  padding: 10px;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 20px;
+}
+.analyticsResults .result-card .footer {
+  padding: 10px;
+  border-top: 1px dotted;
+  border-color: inherit;
+  height: 60px;
+  font-size: 32px;
+}
+.analyticsResults .result-card .header3 {
+  padding: 10px;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 40px;
+  font-size: 15px;
+  text-align: center;
+}
+.analyticsResults .result-card .footer3 {
+  padding: 10px;
+  border-top: 1px dotted;
+  border-color: inherit;
+  height: 40px;
+  font-size: 20px;
+}
+.analyticsResults .result-card .header4 {
+  padding: 10px;
+  border-right: 1px dotted;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 15px;
+  text-align: center;
+}
+.analyticsResults .result-card .footer4 {
+  padding: 10px;
+  border-top: 1px solid;
+  border-color: inherit;
+  height: 50px;
+  font-size: 20px;
+}
+.analyticsResults .result-card .currencyBlock {
+  margin: 0 20px;
+}
+
 .clubInfoTable,
 .leagueInfoTable {
   max-width: 800px;
@@ -2210,63 +2267,6 @@ div > svg > circle:nth-child(5n) {
 .leagueInfoTable .card .info {
   background-color: #ccf1ff;
   text-align: center;
-}
-
-.analyticsResults .result-card .header {
-  padding: 10px;
-  border-top: 5px solid;
-  border-color: inherit;
-  height: 50px;
-  font-size: 20px;
-  text-align: center;
-}
-.analyticsResults .result-card .header2 {
-  padding: 10px;
-  border-top: 1px solid;
-  border-color: inherit;
-  height: 50px;
-  font-size: 20px;
-}
-.analyticsResults .result-card .footer {
-  padding: 10px;
-  border-top: 1px dotted;
-  border-color: inherit;
-  height: 60px;
-  font-size: 32px;
-}
-.analyticsResults .result-card .header3 {
-  padding: 10px;
-  border-top: 1px solid;
-  border-color: inherit;
-  height: 40px;
-  font-size: 15px;
-  text-align: center;
-}
-.analyticsResults .result-card .footer3 {
-  padding: 10px;
-  border-top: 1px dotted;
-  border-color: inherit;
-  height: 40px;
-  font-size: 20px;
-}
-.analyticsResults .result-card .header4 {
-  padding: 10px;
-  border-right: 1px dotted;
-  border-top: 1px solid;
-  border-color: inherit;
-  height: 50px;
-  font-size: 15px;
-  text-align: center;
-}
-.analyticsResults .result-card .footer4 {
-  padding: 10px;
-  border-top: 1px solid;
-  border-color: inherit;
-  height: 50px;
-  font-size: 20px;
-}
-.analyticsResults .result-card .currencyBlock {
-  margin: 0 20px;
 }
 
 .hockeyBoxInfoTable {

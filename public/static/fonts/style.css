@@ -1,0 +1,41 @@
+@font-face {
+    font-family: NOKIAPUREHEADLINE_BOLD;
+    src: url('/static/fonts/NOKIAPUREHEADLINE_BOLD.TTF');
+}
+
+@font-face {
+    font-family: NOKIAPUREHEADLINE_EXTRABOLD;
+    src: url('/static/fonts/NOKIAPUREHEADLINE_EXTRABOLD.TTF');
+}
+
+@font-face {
+    font-family: NOKIAPUREHEADLINE_LIGHT;
+    src: url('/static/fonts/NOKIAPUREHEADLINE_LIGHT.TTF');
+}
+
+@font-face {
+    font-family: NOKIAPUREHEADLINE_REGULAR;
+    src: url('/static/fonts/NOKIAPUREHEADLINE_REGULAR.TTF');
+}
+
+@font-face {
+    font-family: NOKIAPUREHEADLINE_ULTRALIGHT;
+    src: url('/static/fonts/NOKIAPUREHEADLINE_ULTRALIGHT.TTF');
+}
+
+@font-face {
+    font-family: NOKIAPURETEXT;
+    src: url('/static/fonts/NOKIAPURETEXT.TTF');
+}
+
+
+@font-face {
+    font-family: NOKIAPURETEXTLIGHT;
+    src: url('/static/fonts/NOKIAPURETEXTLIGHT.TTF');
+}
+
+
+@font-face {
+    font-family: NOKIAPURETEXTMEDIUM;
+    src: url('/static/fonts/NOKIAPURETEXTMEDIUM.TTF');
+}

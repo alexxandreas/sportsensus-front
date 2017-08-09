@@ -2371,6 +2371,47 @@
 	angular.module('SportsensusApp')
 		.directive('adminDir', adminDir);
 
+
+	adminDir.$inject = [
+		'$rootScope'
+	];
+
+	function adminDir(
+		$rootScope
+	)    {
+		return {
+			restrict: 'E',
+			scope: {
+				type: '@'
+			},
+			templateUrl: '/views/widgets/admin/admin.html',
+			link: function ($scope, $el, attrs) {
+				//$scope.init();
+			},
+
+			controller: [
+				'$scope',
+				'$routeParams',
+				function(
+					$scope,
+					$routeParams
+				) {
+
+					
+				}]
+		};
+	}
+}());
+
+(function () {
+	"use strict";
+	/**
+	 * @desc
+	 * @example
+	 */
+	angular.module('SportsensusApp')
+		.directive('analyticsDir', analyticsDir);
+
 	adminDir.$inject = [
 		'$rootScope'
 	];
@@ -2930,12 +2971,7 @@
                     $scope.$on('UserSrv.logout', updateUser);
                     updateUser();
                     
-                    function updateUser(){
-                        var user = UserSrv.getUser();
-                        $scope.loggedIn = !!(user && user.sid);
-                        $scope.showAdmin = UserSrv.hasAccess('admin') || UserSrv.hasAccess('data_update') || UserSrv.hasAccess('homepage_update')
 
-                        //$scope.isAdmin = !!(user && user.userRights && user.userRights.admin);
                         
                         // оствшееся время на момент обновления (в секундах)
                         // $scope.updateRemainingTime = null;
@@ -2996,6 +3032,11 @@
                         $anchorScroll();
                         //reset to old to keep any additional routing logic from kicking in
                         $location.hash(old);
+                    }
+                    
+                    $scope.goHome = function(){
+                        //$location.hash(id);
+                        $scope.setPath('/');
                     }
                     
                     $scope.$on("$destroy", function() {

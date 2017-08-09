@@ -1,40 +1,67 @@
 <div class="site-header" layout="row">
-    <!--{% if IS_LEFT_BAR %}
-    {% do class.append(widget + '_left-bar') %}
-    {% endif %}-->
-    <a href="/#!/" >
-        <img src="static/img/logo2.svg" alt="" class="header-logo-image"/>
+    
+    <!--<a href="/#!/" >-->
+        <div layout="row" layout-align="start center" ng-click="goHome()"
+            class="header-logo" flex="none">
+            <img src="static/img/logo2.svg" alt="" class="header-logo-image"/>    
+        </div>
     </a>
 
-    <div class="header-menu" layout="row">
-
-
-        <!--<li class="b-header__menu-item" ng-repeat="item in menu" ng-show="item.visible()">-->
-            <!--<a href="" class="b-header__menu-link" ng-click="item.onClick && item.onClick()">{{item.name}}</a>-->
-        <!--</li>-->
-
-        <div layout="row"
-                class="header-menu-item" ng-repeat="item in menu" ng-show="item.visible()">
-            <a href="" class="header-menu-item-link" ng-click="item.onClick && item.onClick()">{{item.name}}</a>
+    <!--<div class="header-menu" layout="row">-->
+    <!--    <div layout="row"-->
+    <!--            class="header-menu-item" ng-repeat="item in menu" ng-show="item.visible()">-->
+    <!--        <a href="" class="header-menu-item-link" ng-click="item.onClick && item.onClick()">{{item.name}}</a>-->
+    <!--    </div>-->
+    <!--</div>-->
+    
+    <div class="header-menu" layout="row" layout-align="start center" 
+        flex="grow" layout-wrap>
+        <div layout="row" layout-align="start center" flex="none"
+                class="header-button" ng-repeat="item in menu" 
+                ng-show="item.visible()" ng-click="item.onClick && item.onClick()">
+            <!--<a href="" class="header-menu-item-link" ng-click="item.onClick && item.onClick()">{{item.name}}</a>-->
+            {{item.name}}
         </div>
-
-       <!-- <li class="b-header__menu-item">
-            <a href="" class="b-header__menu-link">О проекте</a>
-        </li>
-        <li class="b-header__menu-item">
-            <a href="#registration" class="b-header__menu-link">Зарегестрироваться</a>
-        </li>
-        <li class="b-header__menu-item">
-            <a href="" ng-click="setPath('/login/')" class="b-header__menu-link">Войти</a>
-        </li>
-        <li class="b-header__menu-item">
-            <a href="" ng-click="setPath('/infobox/')" class="b-header__menu-link">Техническая поддержка</a>
-        </li>-->
-
     </div>
 
     <div flex></div>
-    <div>{{timeoutStr}}</div>
-    <!--class="b-header__logout"-->
-    <a class="button-logout" href="" ng-show="loggedIn" ng-click="logout()">Выход</a>
+    
+    <!--<div>{{timeoutStr}}</div>-->
+    
+    <div layout="column" layout-align="center start">
+        <div class="button-logout header-button" ng-show="loggedIn" ng-click="logout()">
+            Выход
+        </div>
+    </div>
+    
+    <!--<a class="button-logout" href="" ng-show="loggedIn" ng-click="logout()">Выход</a>-->
+    <!--md-offset="-20 50"-->
+     <!--md-position-mode="target target"-->
+     
+     
+    <!--<md-menu md-offset="0 50" md-position-mode="target-right target" >-->
+    <!--  <md-button aria-label="Меню пользователя" ng-click="$mdMenu.open($event)">-->
+        <!--<md-icon md-menu-origin md-svg-icon="call:ring-volume"></md-icon>-->
+    <!--    User-->
+    <!--  </md-button>-->
+    <!--  <md-menu-content width="6">-->
+    <!--    <md-menu-item>-->
+    <!--        Вы вошли как-->
+    <!--        <br>-->
+    <!--        User-->
+          <!--<md-button ng-click="ctrl.announceClick($index)"> <span md-menu-align-target>Option</span> {{item}} </md-button>-->
+    <!--    </md-menu-item>-->
+    <!--    <md-menu-item ng-show="timeoutStr">-->
+            <!--{{timeoutStr}}-->
+    <!--        342-->
+            <!--<md-button ng-click="ctrl.announceClick($index)"> <span md-menu-align-target>Option</span> {{item}} </md-button>-->
+    <!--    </md-menu-item>-->
+    <!--    <md-menu-item>-->
+            
+    <!--      <md-button ng-click="logout()"> <span md-menu-align-target>Выход</span> </md-button>-->
+    <!--    </md-menu-item>-->
+    <!--  </md-menu-content>-->
+    <!--</md-menu>-->
+    
+    
 </div>

@@ -17,7 +17,7 @@
 		$parse 
 	)    {
 		return {
-			restrict111: 'A',
+			restrict111ss: 'A',
 			link: function(scope, element, attrs) {
                 var model = $parse(attrs.fileModelDir);
                 var modelSetter = model.assign;

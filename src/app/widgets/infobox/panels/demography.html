@@ -10,10 +10,15 @@ layout="column" layout-align="start stretch">
         >Сбросить</md-button>
     </h1>
 
-    <div layout="row" layout-align="start start" layout-wrap>
+    <div layout="row" layout-align="start start" layout-wrap
+        class="infobox-selection">
         <div  ng-repeat="collection in parameters.demography.lists"
-        layout="column" layout-align="start start" flex="30"
-              style="margin: 5px;">
+            layout="column" layout-align="start start" 
+            class="infobox-selection-item"
+            flex-sm="100"
+            flex-md="50"
+            flex-lg="30" 
+            flex-gt-lg="25" >
             <div class="infobox-panel-header3" >
                 {{collection.name}}
             </div>

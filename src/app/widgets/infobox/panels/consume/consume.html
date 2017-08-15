@@ -17,11 +17,16 @@
             {{block.name}}
         </div>
 
-        <div layout="row" layout-align="start start" layout-wrap>
+        <div layout="row" layout-align="start start" layout-wrap
+            class="infobox-selection">
             <div ng-repeat="list in block.lists"
-                 layout="column" layout-align="start start" flex="30"
-                 style="margin: 5px;"
-                ng-show="list.visibleFn ? list.visibleFn() : true">
+                 layout="column" layout-align="start start"
+                ng-show="list.visibleFn ? list.visibleFn() : true"
+                class="infobox-selection-item"
+                flex-sm="100"
+                flex-md="50"
+                flex-lg="30" 
+                flex-gt-lg="25" >
                 <div class="infobox-panel-header3" ng-show="list.name" >
                     {{list.name}}
                 </div>

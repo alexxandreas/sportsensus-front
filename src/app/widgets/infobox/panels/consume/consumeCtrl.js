@@ -19,25 +19,12 @@
 		ParamsSrv,
 		ApiSrv
 	) {
+		$controller('baseInfoboxCtrl', {$scope: $scope});
+		 
 		//$controller('baseGraphCtrl', {$scope: $scope});
 		ParamsSrv.getParams().then(function (params) {
 			$scope.parameters = params;
-			// $scope.parameters.tvcable.visible = {
-			// 	tvhome:2
-			// };
-			// $scope.parameters.net.visible = {
-			// 	time_week:'net'
-			// };
-
-			// $scope.parameters.gamingplatform.visible = {
-			// 	gamingtime: [1,2,3]
-			// };
-
 			$scope.prepareConsume(params.consume);
-			//$scope.prepareLegends();
-			//requestData();
-			//requestData($scope.sportLegend[0]);
-			//updateCaption();
 		});
 
 
@@ -94,7 +81,14 @@
 
 		$scope.blocks = [];
 		$scope.prepareConsume = function(consume){
-			$scope.blocks = consume.lists.map(function(list){ return {name: list.name, lists: list.lists}; });
+			$scope.blocks = consume.lists.map(function(list){ 
+				return {
+					name: list.name, 
+					lists: list.lists,
+					visible: false,
+					isSelected: $scope.checkSelected.bind(null, list.key),
+				}; 
+			});
 			$scope.blocks.forEach(function(block){
 				if (block.lists.every(function(list){ return !list.lists })){ // terminate list (like antivirus)
 					block.lists = [{

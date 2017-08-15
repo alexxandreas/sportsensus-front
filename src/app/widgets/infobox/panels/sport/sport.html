@@ -14,7 +14,7 @@
         <div  ng-repeat="sport in parameters.sport.lists"
             layout="column" layout-align="start stretch"
             style="margin: 5px;"
-            flex="30">
+            flex="100">
 
             <div class="infobox-panel-header2 infobox-panel-header2-checkbox no-outline no-select"
                  layout="row" layout-align="start center"
@@ -28,9 +28,9 @@
 
 
             <!-- Лиги -->
-            <div layout="column" layout-align="start start" class="chart-legend"
-                 ng-if="sport.leagues && sport.leagues.length">
-                <div layout="column" layout-align="start start"
+            <div layout="column" layout-align="start stretch" class="chart-legend"
+                 ng-if="sport.interested && sport.leagues && sport.leagues.length">
+                <div layout="column" layout-align="start stretch"
                      ng-repeat="league in sport.leagues">
 
                     <div layout="row" layout-align="start center">
@@ -45,58 +45,33 @@
                         <!--<div class="legend-item-hide-text" ng-click="league.analyticsExpanded = !league.analyticsExpanded;">{{league.analyticsExpanded ? 'Скрыть': 'Показать'}}</div>-->
                     </div>
 
-                    <!-- Клубы в лигах -->
-                    <!--<div ng-if="league.clubs"
-                         class="sublegend"
-                         ng-show="league.analyticsExpanded">
-                        <div layout="column" layout-align="start start" class="chart-legend">
-                            <div layout="column" layout-align="start start"
-                                 ng-repeat="club in league.clubs">
-                                <div class="legend-item selectable no-outline no-select"
-                                     layout="row" layout-align="start center"
-
-                                     ng-click="selectClub(club, league, sport);">
-                                    <div flex="none" class="legend-item-color-radio"
-                                         ng-style="{'background-color': (club == selected.club || (league == selected.league && !selected.club)) ? '#777777' : 'none'}"
-                                    ></div>
-                                    <div class="legend-item-text">{{club.name}}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>-->
-
-                    <legend-dir legend="league.clubs" columns-count="1"
+                    <legend-dir legend="league.clubs"
+                                columns-layout="{'def':2, 'md':3, 'lg': 4, 'gt-lg':5}"
                                 style="margin-left: 15px;"
-                                selectable="true" highlightable="false"
-                                highlighted-color="'#bfebff'" selected-color="'#777777'"
-                                disabled="!sport.interested"></legend-dir>
+                                selectable="true" 
+                                highlightable="false"
+                                highlighted-color="'#bfebff'" 
+                                selected-color="'#777777'"
+                                disabled="!sport.interested">
+                    </legend-dir>
 
                 </div>
             </div>
 
 
             <!-- Клубы при отсутствии лиг -->
-            <div layout="column" layout-align="start start" class="chart-legend"
-                 ng-if="!(sport.leagues && sport.leagues.length)">
+            <div layout="column" layout-align="start stretch" class="chart-legend"
+                 ng-if="sport.interested && !(sport.leagues && sport.leagues.length)">
 
-
-                <!--<div layout="column" layout-align="start start"
-                     ng-repeat="club in sport.clubs">
-                    <div class="legend-item selectable no-outline no-select"
-                         layout="row" layout-align="start center"
-                         class="selectable"
-                         ng-click="selectClub(club, null, sport);">
-                        <div flex="none" class="legend-item-color-radio"
-                             ng-style="{'background-color': club == selected.club ? '#777777' : 'none'}"
-                        ></div>
-                        <div class="legend-item-text">{{club.name}}</div>
-                    </div>
-                </div>-->
-                <legend-dir legend="sport.clubs" columns-count="1"
+                <legend-dir legend="sport.clubs" 
+                            columns-layout="{'def':2, 'md':3, 'lg': 4, 'gt-lg':5}"
                             style="margin-left: 15px;"
-                            selectable="true" highlightable="false"
-                            highlighted-color="'#bfebff'" selected-color="'#777777'"
-                            disabled="!sport.interested"></legend-dir>
+                            selectable="true" 
+                            highlightable="false"
+                            highlighted-color="'#bfebff'" 
+                            selected-color="'#777777'"
+                            disabled="!sport.interested">
+                </legend-dir>
 
             </div>
 

@@ -17,6 +17,7 @@
 		ApiSrv
 	) {
 
+
 		ParamsSrv.getParams().then(function(params){
 			$scope.parameters = params;
 		});

@@ -37,9 +37,39 @@
 
         var padamsDefer = $q.defer();
 
-        var parametersNames = ['demography','consume','regions','region','sport','interest','rooting','involve',
-            'image','watch','walk','tvhome', 'tvcable','electronics','electronics_exist','gasoften','career',
-            'decision', 'timeusage', 'time_week', 'visit_time', 'net','gamingplatform', 'gamingtime'];
+        var parametersNames = [
+            'demography',
+            'consume',
+            'car',
+            'gaming',
+            'antivirus',
+            'money',
+            'mobile',
+            'electronics',
+            'timeusage',
+            'tv',
+            'regions',
+            'region',
+            'sport',
+            'interest',
+            'rooting',
+            'involve',
+            'image',
+            'watch',
+            'walk',
+            'tvhome',
+            'tvcable',
+            'electronics_exist',
+            'gasoften',
+            'career',
+            'decision',
+            'timeusage',
+            'time_week',
+            'visit_time',
+            'net',
+            'gamingplatform',
+            'gamingtime'
+        ];
         var parameters = {}; // все параметры
         var selected = {}; // выбранные параметры
 
@@ -260,22 +290,7 @@
             return !!selected['demography'] || !!selected['regions'] || !!selected['consume'];
         }
 
-        // function getSelectedSports(){
-        //     return getSelectedParamsRec(parameters.sport);
-        // }
-        //
-        // function getSelectedInterest(){
-        //     // return {
-        //     //     sport: getSelectedParamsRec(parameters.sport),
-        //     //     interest: getSelectedParamsRec(parameters.interest)
-        //     // }
-        //     return getSelectedParamsRec(parameters.interest);
-        // }
-        //
-        // function getSelectedInterest(){
-        //
-        // }
-
+       
 
         function getSelectedDemographyCaption(){
             var demography =parameters.demography;

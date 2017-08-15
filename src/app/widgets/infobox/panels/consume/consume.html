@@ -12,13 +12,20 @@
 
     <div layout="column" layout-align="start stretch"
         ng-repeat="block in blocks"
-        style="margin-bottom: 40px;">
-        <div class="infobox-panel-header2" >
-            {{block.name}}
+         style="margin: 5px;">
+        
+        <div class="infobox-panel-header2 infobox-panel-header2-checkbox no-outline no-select"
+             layout="row" layout-align="start center"
+             ng-click="block.visible = !block.visible">
+            <div flex="none" class="checkbox-color"
+                 ng-style="{'background-color': block.visible ? '#777777' : 'none'}"></div>
+            <div class="legend-item-text">{{block.name}}{{block.isSelected() ? ' *' : ''}}</div>
         </div>
-
-        <div layout="row" layout-align="start start" layout-wrap
-            class="infobox-selection">
+        
+        <div layout="row" layout-align="start start" layout-wrap 
+            ng-if="block.visible"
+            style="margin-bottom: 20px;">
+            
             <div ng-repeat="list in block.lists"
                  layout="column" layout-align="start start"
                 ng-show="list.visibleFn ? list.visibleFn() : true"

@@ -14,4 +14,4 @@ npm run serve-debug
 * форкнуться от master
 * создать ветку с фичей, начинающуюся с текущей даты: 2017-01-25-feature
 * создать PR в master исходного репозитория
-* после мерджа обновить свой master: https://help.github.com/articles/configuring-a-remote-for-a-fork/
+* после мерджа обновить свой master: https://help.github.com/articles/syncing-a-fork/

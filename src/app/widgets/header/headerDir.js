@@ -31,6 +31,7 @@
                 '$interval',
                 '$anchorScroll',
                 'ApiSrv',
+                'ParamsSrv',
                 'UserSrv',
                 'TimeSrv',
                 function(
@@ -41,6 +42,7 @@
                     $interval,
                     $anchorScroll,
                     ApiSrv,
+                    ParamsSrv,
                     UserSrv,
                     TimeSrv
                 ) {
@@ -57,6 +59,14 @@
                     function isLoggedIn(){return $scope.loggedIn};
                     function isNotLoggedIn(){return !$scope.loggedIn};
                     
+                    
+                    ParamsSrv.getRadars().then(function(radars){
+                        $scope.radars = radars;
+                    })
+                    
+                    $scope.selectRadar = function(radarId){
+                        ParamsSrv.selectRadar(radarId);
+                    }
                     
                     $scope.menu = [/*{
                             'name': 'О проекте',
@@ -121,27 +131,6 @@
                         $scope.loggedIn = !!(user && user.sid);
                         $scope.showAdmin = UserSrv.hasAccess('admin') || UserSrv.hasAccess('data_update') || UserSrv.hasAccess('homepage_update')
 
-                        //$scope.isAdmin = !!(user && user.userRights && user.userRights.admin);
-
-                        
-                        // оствшееся время на момент обновления (в секундах)
-                        // $scope.updateRemainingTime = null;
-                        
-                        
-                        //var tariff = user && user.userRights && user.userRights.tariff;
-                        // var tariff = UserSrv.getTariff();
-                        
-                        // if (!tariff){
-                        //     return;
-                        // }
-                        
-                        // var remainingTime = Number.parseInt(tariff.remaining_time);
-                        // if (!isNaN(remainingTime) && remainingTime){
-                        //     $scope.updateRemainingTime = remainingTime; //Math.round(remainingTime);
-                        // }
-                        
-                        // // момент обновления
-                        // $scope.updateTime = tariff.updateTime;
                     }
                     
                     

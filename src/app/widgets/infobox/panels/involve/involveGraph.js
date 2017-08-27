@@ -24,11 +24,11 @@
 
         $controller('baseGraphCtrl', {$scope: $scope});
 
-        ParamsSrv.getParams().then(function (params) {
-            $scope.parameters = params;
+	    $scope.setParams = function(params){
             $scope.prepareLegends();
             requestGraph();
-        });
+		}
+
 
         $scope.showCharts = false;
 
@@ -48,13 +48,14 @@
             ApiSrv.getInvolveGraph(audience, sportInvolve).then(function (graphData) {
                 $scope.prepareData(graphData);
                 $scope.updateGraph();
-            }, function () {
+            }).finally(function () {
+                $scope.showPreloader = false;
             });
         }
 
         $scope.prepareLegends = function () {
-            $scope.sportLegend = graphHelpersSrv.getSportLegend({color:'#555555'});
-            $scope.involveLegend = graphHelpersSrv.getInvolveLegend();
+            $scope.sportLegend = graphHelpersSrv.getSportLegend({sport: $scope.parameters.sport, color:'#555555'});
+            $scope.involveLegend = graphHelpersSrv.getInvolveLegend({involve: $scope.parameters.involve});
 
             $scope.$watch('sportLegend', $scope.updateGraph, true);
             $scope.$watch('involveLegend', $scope.updateGraph, true);

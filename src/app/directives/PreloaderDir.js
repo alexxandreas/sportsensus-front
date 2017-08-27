@@ -18,9 +18,9 @@
 	)    {
 		return {
 			restrict: 'A',
-			scope: {
-				preloaderDir: '='
-			},
+			//scope: {
+			//	preloaderDir: '='
+			//},
 		
 			link: function ($scope, $el, attrs) {
 			    var divTemplate = '<div layout="row" layout-align="center center" '+
@@ -33,11 +33,11 @@
                 
                 $el.css( "position", "relative" );
 				
-				$scope.$watch('preloaderDir', function(value){
+				// $scope.$watch('preloaderDir', function(value){
+				$scope.$watch('showPreloader', function(value){
     				if (value === true) {
     				    $el.append(div);
     				} else {
-    				    //$el.remove(div);
     				    div.remove();
     				}
     			});

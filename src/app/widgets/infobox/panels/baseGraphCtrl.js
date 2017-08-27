@@ -9,23 +9,39 @@
     baseGraphCtrl.$inject = [
         '$scope',
         '$rootScope',
-        'graphHelpersSrv'
+        'graphHelpersSrv',
+        'ParamsSrv'
     ];
 
     function baseGraphCtrl($scope,
                           $rootScope,
-                           graphHelpersSrv)
+                           graphHelpersSrv,
+                           ParamsSrv)
     {
 
-        // $scope.getLegend;
-		//
-        // $scope.getSportLegend;
-        //
-        // $scope.getInterestLegend;
-        //
-        // $scope.getImageLegend;
-		//
-        // $scope.getInvolveLegend;
+        $scope.$on('ParamsSrv.radarChanged', function(){
+			updateParams();
+		})
+		updateParams();
+		
+		function updateParams() {
+			$scope.showPreloader = true;
+			ParamsSrv
+				.getParams()
+				.then(setParams)
+				.catch(function(){
+				    $scope.showPreloader = false;
+				});
+		}
+
+        function setParams(params){
+            $scope.parameters = params;
+            if ($scope.setParams){
+              $scope.setParams(params);  
+            } else {
+                $scope.showPreloader = false;
+            }
+        }
 
         $scope.formatValue = graphHelpersSrv.formatValue;
 

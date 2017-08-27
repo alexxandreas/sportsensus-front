@@ -10,8 +10,13 @@
 
         <div class="menu" ng-include="'/views/widgets/infobox/infoboxMenu.html'"></div>
 
-        <div>
-            <div ng-if="activePage" style="padding-bottom: 94px;" class="infobox-body" ng-include="'/views/widgets/infobox/panels/'+activePage.tpl+'.html'"></div>
+        <div >
+            <div ng-if="activePage" 
+            style="padding-bottom: 94px;" 
+            class="infobox-body" 
+            
+            ng-include="'/views/widgets/infobox/panels/'+activePage.tpl+'.html'"
+            ></div>
         </div>
 
         <!--<div class=" infobox-express"></div>-->

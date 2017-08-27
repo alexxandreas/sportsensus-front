@@ -48,7 +48,7 @@
 
                     $scope.audienceMenu = [{
                         id:'demography',
-                        tpl:'demography',
+                        tpl:'demography/demography',
                         text:'Социальная демография',
                         isSelected: $scope.checkSelected.bind(null, 'demography'),
                         footer: 'infobox'
@@ -60,7 +60,7 @@
                         footer: 'infobox'
                     },{
                         id:'regions',
-                        tpl:'regions',
+                        tpl:'regions/regions',
                         text:'География',
                         isSelected: $scope.checkSelected.bind(null, 'regions'),
                         footer: 'infobox'

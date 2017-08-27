@@ -24,11 +24,11 @@
 
         $controller('baseGraphCtrl', {$scope: $scope});
         
-        ParamsSrv.getParams().then(function (params) {
-            $scope.parameters = params;
+    	$scope.setParams = function(params){
             $scope.prepareLegends();
             requestGraph();
-        });
+		}
+
 
         function requestGraph() {
             var audience = ParamsSrv.getSelectedAudience();
@@ -46,13 +46,14 @@
             ApiSrv.getImageGraph(audience, sportimage).then(function (graphData) {
                 $scope.prepareData(graphData);
                 $scope.updateGraph();
-            }, function () {
+            }).finally(function () {
+                $scope.showPreloader = false;
             });
         }
 
         $scope.prepareLegends = function () {
-            $scope.sportLegend = graphHelpersSrv.getSportLegend();
-            $scope.imageLegend = graphHelpersSrv.getImageLegend();
+            $scope.sportLegend = graphHelpersSrv.getSportLegend({sport: $scope.parameters.sport});
+            $scope.imageLegend = graphHelpersSrv.getImageLegend({image: $scope.parameters.image});
             $scope.$watch('sportLegend', $scope.updateGraph, true);
         };
 

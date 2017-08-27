@@ -44,11 +44,17 @@
             sid = _sid;
         }
         
+        var radarId = null;
+        
+        function setRadarId(_radarId){
+            radarId = _radarId;
+        }
+        
         function request(method, params, responsePath){
             var data = {
                 jsonrpc: "2.0",
                 method: method,
-                params: angular.extend({sid:sid}, params),
+                params: angular.extend({sid:sid, radarId: radarId}, params),
                 id: "id"
             };
             
@@ -102,6 +108,20 @@
 
         function getStatic(type){
             return request('get_static', {type:type}, 'data.result.data');
+        }
+        
+        function getRadars(){
+            var d = $q.defer();
+            d.resolve([{
+                id: 1,
+                name: "Исследование за 2015 год"
+            },{
+                id: 2,
+                name: "Исследование за 2017 год"
+            }]);
+            return d.promise;
+            
+            return request('get_radars', null, 'data.result.data');
         }
         
         function getTranslations(){
@@ -186,45 +206,6 @@
         
         function getTariffs(){
             return request('get_tariffs', null, 'data.result.tariffs');
-            
-            var d = $q.defer();
-            
-            var tariffs = [{
-                id:1,
-                name:'tariff 1',
-                description: 'описание тарифа',
-                duration:3, // продолжительность подписки (3-12 мес) - хз, в каких единицах. наверное в месяцах
-                sessionCount:2, // количество (часовых) сессий, доступное на тарифе
-                sessionDuration:3600, // продолжительность каждой сессии (час) - в секундах
-                accessCases:true, // доступ к кейсам ??? доступно на всех тарифах - надо ли делать поле?
-                accessInfoblock:true, // доступ к инфоблоку ??? доступно на всех тарифах - надо ли делать поле?
-                accessAnalytics:false, // доступ к аналитике
-                accessScheduler:false // доступ к планировщику
-            },{
-                id:2,
-                name:'tariff 2',
-                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                duration:3, // продолжительность подписки (3-12 мес) - хз, в каких единицах. наверное в месяцах
-                sessionCount:2, // количество (часовых) сессий, доступное на тарифе
-                sessionDuration:3600, // продолжительность каждой сессии (час) - в секундах
-                accessCases:true, // доступ к кейсам ??? доступно на всех тарифах - надо ли делать поле?
-                accessInfoblock:true, // доступ к инфоблоку ??? доступно на всех тарифах - надо ли делать поле?
-                accessAnalytics:false, // доступ к аналитике
-                accessScheduler:false // доступ к планировщику
-            },{
-                id:3,
-                name:'tariff 3',
-                description: 'описание тарифа',
-                duration:3, // продолжительность подписки (3-12 мес) - хз, в каких единицах. наверное в месяцах
-                sessionCount:2, // количество (часовых) сессий, доступное на тарифе
-                sessionDuration:3600, // продолжительность каждой сессии (час) - в секундах
-                accessCases:true, // доступ к кейсам ??? доступно на всех тарифах - надо ли делать поле?
-                accessInfoblock:true, // доступ к инфоблоку ??? доступно на всех тарифах - надо ли делать поле?
-                accessAnalytics:false, // доступ к аналитике
-                accessScheduler:false // доступ к планировщику
-            }];
-            d.resolve(tariffs);
-            return d.promise;
         }
         
         function sendEmail(options) {
@@ -249,6 +230,7 @@
 
         var me = {
             setSid: setSid,
+            setRadarId: setRadarId,
 
             register: register,
             activate: activate,
@@ -256,6 +238,7 @@
             checkSession: checkSession,
             logout: logout,
             getStatic: getStatic,
+            getRadars: getRadars,
             getTranslations: getTranslations,
             getAudienceCount: getAudienceCount,
             getImageGraph: getImageGraph,

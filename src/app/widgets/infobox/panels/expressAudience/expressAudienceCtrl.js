@@ -22,13 +22,11 @@
 
         $controller('baseGraphCtrl', {$scope: $scope});
 
-        ParamsSrv.getParams().then(function (params) {
-            $scope.parameters = params;
-            //$scope.prepareLegends();
+		
+		$scope.setParams = function(params){
             requestData();
-            //requestData($scope.sportLegend[0]);
             updateCaption();
-        });
+		}
 
         $scope.sportDatas = {};
 
@@ -36,22 +34,9 @@
             $scope.caption = ParamsSrv.getSelectedDemographyCaption();
         }
 
-        function requestData(sport) { // sport from legend
+        function requestData(sport) { 
             var audience = ParamsSrv.getSelectedAudience();
             
-            //var clubs = sport.clubs ? sport.clubs.filter(function(club){return club.selected;}).map(function(club){return club.id; }) : [];
-            //
-            // var sports = {};
-            // $scope.parameters.sport.lists.forEach(function (list) {
-            //     sports[list.id] = {interested: true}
-            // });
-            // var images = $scope.parameters.image.lists.map(function (list) {
-            //     return list.id;
-            // });
-            // var sportimage = { // все спорты и все интересы
-            //     sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
-            //     image: images // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
-            // };
             ApiSrv.getExpressAudience(audience).then(function (data) {
                 $scope.graphs = {};
                 prepareInterestData(data.interest);
@@ -60,18 +45,13 @@
                 prepareKnownHelpData(data.clubs_known_help);
                 prepareWatchData(data.watch);
                 prepareWalkData(data.walk);
-
-
-                var a = data;
                 
-                //$scope.updateGraph();
-            }, function () {
+            }).finally(function(){
+                $scope.showPreloader = false;
             });
         }
 
         var colorGenerator = d3.scale.category10();
-
-        
 
 
         function prepareInterestData(data){

@@ -26,7 +26,17 @@
 
     <div flex></div>
     
-    <!--<div>{{timeoutStr}}</div>-->
+    <div layout="column" layout-align="center start" flex="none">
+         <div class="header-radar-checkbox no-outline no-select"
+                 layout="row" layout-align="start center"
+                 ng-repeat="radar in radars"
+                 ng-click="selectRadar(radar.id)">
+                <div flex="none" class="checkbox-color"
+                     ng-style="{'background-color': radar.selected ? '#777777' : 'none'}"></div>
+                <div class="legend-item-text">{{radar.name}}</div>
+            </div>
+    </div>
+   
     
     <div layout="column" layout-align="center start">
         <div class="button-logout header-button" ng-show="loggedIn" ng-click="logout()">

@@ -7,6 +7,10 @@
     // инициализируем сервис
     // angular.module('SportsensusApp').run(['AudienceCountSrv', function(AudienceCountSrv) { }]);
 
+    // events:
+    // 'AudienceCountSrv.countLoading'
+    // 'AudienceCountSrv.countLoaded'
+    // 'AudienceCountSrv.countError'
     AudienceCountSrv.$inject = [
         '$rootScope',
         '$q',
@@ -47,22 +51,48 @@
             });
         }
         
+        function clearCache(){
+            audienceCache = [];
+        }
+        
         // всегда резолвится, не реджектится
         // нужна для подсчета процентного соотношения выбранной аудитории к полной
-        var getTotalCount = UserSrv.loadWhenAuth(function(resolve, reject){
-            getCachedCount().then(function(result){
-                resolve(result.audience_count)
+        
+        //var getTotalCount = UserSrv.loadWhenAuth(function(resolve, reject){
+        //     getCachedCount().then(function(result){
+        //         resolve(result.audience_count)
+        //     }, function(){
+        //         return $q.resolve(0);
+        //     });
+        // }, true);
+        
+        // var getTotalCount = ParamsSrv.getParams().then(function(){
+        //     return getCachedCount().then(function(result){
+        //         return result.audience_count
+        //         // resolve(result.audience_count)
+        //     }, function(){
+        //         return 0;
+        //     });
+        // }, function(){
+        //     return 0;
+        // });
+        
+        
+        function getTotalCount(){
+            return getCachedCount().then(function(result){
+                return result.audience_count
             }, function(){
-                return $q.resolve(0);
+                return 0;
             });
-        }, true);
+        };
         
         // при первом обращении к сервису запрашиваем начальное значение аудитории
-        getCount();
+        //getCount();
         
         var lastCountResult = null;
         function getLastCountResult(){ return lastCountResult; }
         
+        // вызывается только из ParamsSrv и только после загрузки списка радаров
         // events:
         // 'AudienceCountSrv.countLoading'
         // 'AudienceCountSrv.countLoaded'
@@ -91,7 +121,8 @@
         
         var me = {
             getCount: getCount,
-            getLastCountResult: getLastCountResult
+            getLastCountResult: getLastCountResult,
+            clearCache: clearCache
         };
 
         return me;

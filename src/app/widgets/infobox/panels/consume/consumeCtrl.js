@@ -19,15 +19,21 @@
 		ParamsSrv,
 		ApiSrv
 	) {
-		$controller('baseInfoboxCtrl', {$scope: $scope});
+		//$controller('baseInfoboxCtrl', {$scope: $scope});
 		 
-		//$controller('baseGraphCtrl', {$scope: $scope});
-		ParamsSrv.getParams().then(function (params) {
-			$scope.parameters = params;
-			$scope.prepareConsume(params.consume);
-		});
 
-
+		$scope.$on('ParamsSrv.radarChanged', function(){
+			updateParams();
+		})
+		updateParams();
+		
+		function updateParams() {
+			ParamsSrv
+				.getParams()
+				.then(prepareConsume);
+		}
+		
+		
 
 		// возвращает все наборы параметров, включая вложенные в виде линейной структуры
 		$scope.getAllSubchildren2 = function(item){
@@ -80,12 +86,22 @@
 		//function
 
 		$scope.blocks = [];
-		$scope.prepareConsume = function(consume){
+		function prepareConsume(params){
+			//var consume = $scope.parameters && $scope.parameters.consume;
+			var consume = params && params.consume;
+			
+			$scope.blocks = [];
+			
+			if (!consume) {
+				return;
+			}
+			
 			$scope.blocks = consume.lists.map(function(list){ 
 				return {
-					name: list.name, 
+					origin: list,
+					//name: list.name, 
 					lists: list.lists,
-					visible: false,
+					//visible: false,
 					isSelected: $scope.checkSelected.bind(null, list.key),
 				}; 
 			});
@@ -100,8 +116,12 @@
 			});
 		}
 
-
-		
+		// переопределяем setParams
+		var parentSetParams = $scope.setParams;
+		$scope.setParams = function(params){
+			parentSetParams(params);
+			$scope.prepareConsume();
+		}
 
 	}
 

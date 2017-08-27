@@ -17,13 +17,17 @@
         'ApiSrv',
         'AudienceCountSrv',
         'ConfigSrv',
-        'TranslationsSrv'
+        'TranslationsSrv',
+        'MultiPromiseSrv',
+        'UserSrv'
     ];
 
 
     /**
      * events:
      * ParamsSrv.paramsChanged type newValue oldValue. type in ['demography','consume','regions','region','sport','interest','rooting','involve','image','career]
+     * ParamsSrv.radarStartChanging - запрос на изменение выбранного радара
+     * ParamsSrv.radarChanged - радар изменен
      */
     function ParamsSrv(
         $rootScope,
@@ -32,10 +36,67 @@
         ApiSrv,
         AudienceCountSrv,
         ConfigSrv,
-        TranslationsSrv
+        TranslationsSrv,
+        MultiPromiseSrv,
+        UserSrv
     ) {
 
-        var padamsDefer = $q.defer();
+        // функция, возвращающая промис, который резолвится/режектится один раз за сессию
+        var getRadars = UserSrv.loadWhenAuth(function(resolve, reject){
+            ApiSrv.getRadars().then(resolve, reject);
+        });
+        
+       
+        //var paramsDefer = MultiPromiseSrv.defer();
+        //var paramsDeferState = angular.copy(paramsDefer.promise.$$state);
+        
+        var paramsPromise;
+        //var currentParams = null;
+        
+        // TODO отписываться от всех watch!
+        function selectRadar(radarId){
+            //paramsDefer.notify('qwe');
+            //paramsDefer.reset();
+            
+            paramsPromise = getRadars().then(function(radars){
+                radarId = radarId || radars[0].id;
+                
+                var selected = radars.find(function(radar){ return radar.selected; });
+                if (selected && selected.id == radarId){
+                    return parameters;
+                }
+                ApiSrv.setRadarId(radarId);
+                AudienceCountSrv.clearCache();
+                
+                angular.forEach(radars, function(radar){
+                    radar.selected = radar.id == radarId;
+                })
+                
+                return ApiSrv.getTranslations().then(function(translations){
+                    prepareParams(translations);
+                    
+                    AudienceCountSrv.getCount();
+                    return parameters;
+                });
+            });
+            
+            //paramsPromise.then(paramsDefer.resolve, paramsDefer.reject);
+            
+            $rootScope.$broadcast('ParamsSrv.radarChanged');
+            
+            // paramsPromise.finally(function(){
+                // $rootScope.$broadcast('ParamsSrv.radarChanged');
+            // })
+        }
+        
+        // выбираем радар по умолчанию
+        selectRadar();
+        
+        function getParams() {
+            return paramsPromise;
+            // return paramsDefer.promise;
+        }
+        
 
         var parametersNames = [
             'demography',
@@ -70,75 +131,83 @@
             'gamingplatform',
             'gamingtime'
         ];
+        var parametersWatchers = {};
+        
         var parameters = {}; // все параметры
         var selected = {}; // выбранные параметры
 
-        //var enums = null;
-        /*ApiSrv.getEnums().then(function(data){
-            enums = data;
-            prepareParams();
-            setParamsWatchers();
-            padamsDefer.resolve(parameters);
-        }, function(){
-            padamsDefer.reject();
-        });*/
-
-        var translations = null; // {pages, translates}
-        TranslationsSrv.getTranslations().then(function(data){
-            translations = data;
-            extendTranslations();
-            prepareParams();
-            setParamsWatchers();
-            padamsDefer.resolve(parameters);
-        }, function(){
-            padamsDefer.reject();
-        });
-
-        function extendTranslations(){
-            return;
-          
+        function isNumber(n) {
+            return !isNaN(parseFloat(n)) && isFinite(n);
         }
 
-
-        // подписка на изменение параметров, для перезапроса count
-        function setParamsWatchers(){
-
-        }
-
-        function prepareParams() {
-
-            function isNumber(n) {
-                return !isNaN(parseFloat(n)) && isFinite(n);
+        function getElement(translations, key){
+            function recFind(items){
+                var finded;
+                items.some(function(item){
+                    //if (item.id && item.id == id){
+                    if (item.key && item.key == key){
+                        finded = item;
+                    } else if (item.lists instanceof Array){
+                        finded = recFind(item.lists);
+                    }
+                    return !!finded;
+                });
+                return finded;
             }
-
-          
-
-            function getElement(key){
-                function recFind(items){
-                    var finded;
-                    items.some(function(item){
-                        //if (item.id && item.id == id){
-                        if (item.key && item.key == key){
-                            finded = item;
-                        } else if (item.lists instanceof Array){
-                            finded = recFind(item.lists);
-                        }
-                        return !!finded;
-                    });
-                    return finded;
+            
+            var item = recFind(translations.pages);
+            if (!item) return;
+            return item;
+        }
+        
+        function applyOldParameters(oldParams, newParams, type) {
+            // if (type == 'demography'){
+            //     var a = 10;    
+            // }
+            var oldParam = oldParams[type];
+            var newParam = newParams[type];
+            recApply(oldParam, newParam);
+            
+            function recApply(oldParam, newParam){
+                if (!oldParam) return;
+                
+                if (oldParam.selected){
+                    newParam.selected = oldParam.selected;
+                }
+                if (oldParam.interested){
+                    newParam.interested = oldParam.interested;
                 }
                 
-                var item = recFind(translations.pages);
-                if (!item) return;
-                //recFillTranslations(item); // TODO убрать, когда будет переделан формат выдачи
-                return item;
-                
-                // translations.translates = {}
+                if (newParam.lists instanceof Array && oldParam.lists instanceof Array) {
+                    angular.forEach(newParam.lists, function(newList){
+                        var oldList = oldParam.lists.find(function(oldList){
+                            return ((oldList.key && oldList.key == newList.key) || 
+                                    (angular.isNumber(oldList.id) && oldList.id == newList.id))
+                        });
+                        
+                        recApply(oldList, newList);
+                    });
+                }
             }
+        }
+        
+            
+        function prepareParams(translations) {
 
-            parametersNames.forEach(function(type){
-                parameters[type] = getElement(type);
-                $rootScope.$watch(function(){return parameters[type]; }, function(newValue, oldValue){
+            var oldParameters = parameters;
+            var oldSelected = selected;
+            
+            parameters = {}; // все параметры
+            selected = {}; // выбранные параметры
+
+            
+            parametersNames.forEach(function(type) {
+                angular.isFunction(parametersWatchers[type]) && parametersWatchers[type]();
+                
+                parameters[type] = getElement(translations, type);
+                applyOldParameters(oldParameters, parameters, type);
+                
+                parametersWatchers[type] = $rootScope.$watch(function(){return parameters[type]; }, function(newValue, oldValue){
                     selected[type] = getSelectedParamsRec(newValue);
 
                     // игнорируем первый вызов $watch
@@ -188,21 +257,22 @@
 
             var colorGenerator = d3.scale.category10();
             parametersNames.forEach(function(type){
-            //['sport','interest','involve','watch','walk'].forEach(function(type){
                 parameters[type].lists.forEach(function(item){
                     var id = item.id;
                     id = Number.parseInt(id) % 10;
                     if(!Number.isNaN(id)) {
                         item.chartColor = colorGenerator(id);
-                        //console.log(id + ' ' + typeof(id) + ' ' + item.chartColor);
                     }
                 });
             });
             parameters.region.lists.forEach(function(item){
                 item.chartColor = '#777777';
             })
-
         }
+        
+        
+        
+        
 
         function clearSelection(type){
             clearRec(parameters[type]);
@@ -224,17 +294,6 @@
                 if (item.interested !== undefined) item.interested = true;
                 else item.selected = true;
             });
-            /*
-            selectRec(parameters[type]);
-
-            function selectRec(item) {
-                if (item.selected !== undefined) item.selected = true;
-                if (item.interested !== undefined) item.interested = true;
-
-                item.lists && item.lists.forEach(function (subitem) {
-                    selectRec(subitem);
-                });
-            }*/
         }
 
         function getSelectedParamsRec(item){
@@ -351,12 +410,15 @@
             return result;
         }
 
-        function getParams(){
-            return padamsDefer.promise;
-        }
+       
+        
+        
 
 
         var me = {
+            getRadars: getRadars,
+            selectRadar: selectRadar,
+            
             getParams: getParams,
             getSelectedParams: getSelectedParams,
             getSelectedAudience: getSelectedAudience,

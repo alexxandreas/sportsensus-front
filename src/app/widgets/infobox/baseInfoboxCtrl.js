@@ -16,11 +16,46 @@
 		ParamsSrv,
 		ApiSrv
 	) {
-
-
-		ParamsSrv.getParams().then(function(params){
+		
+		//$scope.showPreloader = true;
+		
+		// ParamsSrv.getParams().then(
+		// 	$scope.setParams,  
+		// 	function(){}, 
+		// 	function(msg){
+		// 		if (msg == 'reset'){
+		// 			$scope.showPreloader = true;
+		// 		}
+		// 	}
+		// ).finally(function(){
+		// 	$scope.showPreloader = false;
+		// });
+		
+		
+		
+		$scope.$on('ParamsSrv.radarChanged', function(){
+			updateParams();
+		})
+		updateParams();
+		
+		function updateParams() {
+			$scope.showPreloader = true;
+			ParamsSrv
+				.getParams()
+				.then(setParams)
+				.finally(function(){
+					$scope.showPreloader = false;
+				});
+		}
+		
+		function setParams(params){
 			$scope.parameters = params;
-		});
+		}
+		
+
+		// ParamsSrv.getParams().then(function(params){
+		// 	$scope.parameters = params;
+		// });
 		
 		$scope.checkSelected = function(type){
 			return !!ParamsSrv.getSelectedParams(type);

@@ -1,6 +1,7 @@
 <div class="infobox-panel" ng-controller="consumeCtrl"
-     layout="column" layout-align="start stretch">
-
+     layout="column" layout-align="start stretch"
+     preloader-dir>
+    
     <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
         {{parameters.consume.name}}
         <div flex></div>
@@ -14,16 +15,17 @@
         ng-repeat="block in blocks"
          style="margin: 5px;">
         
+        <!--ng-click="block.visible = !block.visible">-->
         <div class="infobox-panel-header2 infobox-panel-header2-checkbox no-outline no-select"
              layout="row" layout-align="start center"
-             ng-click="block.visible = !block.visible">
+             ng-click="block.origin.selected = !block.origin.selected">
             <div flex="none" class="checkbox-color"
-                 ng-style="{'background-color': block.visible ? '#777777' : 'none'}"></div>
-            <div class="legend-item-text">{{block.name}}{{block.isSelected() ? ' *' : ''}}</div>
+                 ng-style="{'background-color': block.origin.selected ? '#777777' : 'none'}"></div>
+            <div class="legend-item-text">{{block.origin.name}}{{block.isSelected() ? ' *' : ''}}</div>
         </div>
         
         <div layout="row" layout-align="start start" layout-wrap 
-            ng-if="block.visible"
+            ng-if="block.origin.selected"
             style="margin-bottom: 20px;">
             
             <div ng-repeat="list in block.lists"
@@ -64,5 +66,6 @@
             ></legend-dir>
         </div>
     </div>-->
+
 </div>
 

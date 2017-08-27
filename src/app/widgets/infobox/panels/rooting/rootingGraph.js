@@ -30,25 +30,16 @@
         //$scope.chartDatas = {sportId: chartData}
         //$scope.chartDatas = {};
 
-        ParamsSrv.getParams().then(function (params) {
-            $scope.parameters = params;
+        $scope.setParams = function(params){
             $scope.prepareLegends();
-            //requestGraph();
-
-
-            // $scope.$watch(function(){
-            //     return [$scope.sportLegend, $scope.rootingLegend]
-            // }, $scope.requestGraph, true);
 
             $scope.$watch('sportLegend', $scope.requestGraph, true);
             $scope.$watch('rootingLegend', $scope.updateGraph, true);
-            //$scope.$watch('', $scope.requestGraph, true);
-
-            //$scope.$watch('involveLegend', $scope.updateGraph, true);
-        });
+		}
+	
 
         $scope.prepareLegends = function () {
-            //$scope.sportLegend = $scope.getSportLegend({color:'#555555', clubs:true, selectAll:false})
+            //$scope.sportLegend = $scope.getSportLegend({sport:$scope.parameters.sport, color:'#555555', clubs:true, selectAll:false})
             //    .filter(function(sport){return !!sport.clubs;});
 
             $scope.sportLegend = graphHelpersSrv.getLegend($scope.parameters.sport.lists, {color:'#555555', selectAll:false, depth:1})
@@ -100,6 +91,8 @@
             }).then(function(obj){
                 $scope.prepareData(obj);
                 $scope.updateGraph();
+            }).finally(function(){
+                $scope.showPreloader = false;
             });
 
             // ApiSrv.getRootingGraph(audience, sports, rooting).then(function (graphData) {

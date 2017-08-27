@@ -23,14 +23,13 @@
     ) {
 
         $controller('baseGraphCtrl', {$scope: $scope});
-        
-        ParamsSrv.getParams().then(function (params) {
-            $scope.parameters = params;
+
+		
+		$scope.setParams = function(params){
             $scope.prepareLegends();
             updateCaption();
-            // requestData();
-            //requestData($scope.sportLegend[0]);
-        });
+		}
+		
 
         function updateCaption(){
             $scope.caption = ParamsSrv.getSelectedSportCaption(true);
@@ -42,29 +41,15 @@
             var audience = ParamsSrv.getSelectedAudience();
             var clubs = sport.clubs ? sport.clubs.filter(function(club){return club.selected;}).map(function(club){return club.id; }) : [];
             
-
-
-            //
-            // var sports = {};
-            // $scope.parameters.sport.lists.forEach(function (list) {
-            //     sports[list.id] = {interested: true}
-            // });
-            // var images = $scope.parameters.image.lists.map(function (list) {
-            //     return list.id;
-            // });
-            // var sportimage = { // все спорты и все интересы
-            //     sport: sports, // ParamsSrv.getParams().sport //ParamsSrv.getSelectedParams('sport'),
-            //     image: images // [1, 2, 3, 4, 5, 6, 7] // ParamsSrv.getSelectedParams('image')
-            // };
             ApiSrv.getExpressSport(audience, sport.id, clubs).then(function (data) {
                 $scope.prepareSportData(sport, data);
-                //$scope.updateGraph();
-            }, function () {
+            }).finally(function(){
+                $scope.showPreloader = false;
             });
         }
 
         $scope.prepareLegends = function () {
-            $scope.sportLegend = graphHelpersSrv.getSportLegend({color:'#555555', clubs:true, selectAll:false});
+            $scope.sportLegend = graphHelpersSrv.getSportLegend({sport:$scope.parameters.sport, color:'#555555', clubs:true, selectAll:false});
             //    .filter(function(sport){return !!sport.clubs;});
 
             $scope.sportLegend.forEach(function(sport){

@@ -25,11 +25,6 @@
 		ParamsSrv
 	) {
 
-		var parameters;
-		ParamsSrv.getParams().then(function(params) {
-			parameters = params;
-		});
-
 
 		function getLegend(objects, options){
 			options = options || {};
@@ -61,7 +56,8 @@
 		function getSportLegend (options) {
 			options = options || {};
 			var selected = false;
-			var legend = parameters.sport.lists.map(function (list) {
+			//var legend = parameters.sport.lists.map(function (list) {
+			var legend = options.sport.lists.map(function (list) {
 				selected = selected || list.interested;
 				var result = {
 					id: list.id,
@@ -94,7 +90,8 @@
 		function getInterestLegend(options){
 			options = options || {};
 			var selected = false;
-			var legend = parameters.interest.lists.map(function (list) {
+			// var legend = parameters.interest.lists.map(function (list) {
+			var legend = options.interest.lists.map(function (list) {
 				selected = selected || list.selected;
 				return {
 					id: list.id,
@@ -110,7 +107,8 @@
 		function getImageLegend(options){
 			options = options || {};
 			var selected = false;
-			var legend = parameters.image.lists.map(function (list) {
+			// var legend = parameters.image.lists.map(function (list) {
+			var legend = options.image.lists.map(function (list) {
 				selected = selected || list.selected;
 				return {
 					id: list.id,
@@ -126,7 +124,8 @@
 		function getInvolveLegend(options){
 			options = options || {};
 			var selected = false;
-			var legend = parameters.involve.lists.map(function (list) {
+			// var legend = parameters.involve.lists.map(function (list) {
+			var legend = options.involve.lists.map(function (list) {
 				selected = selected || list.selected;
 				return {
 					id: list.id,

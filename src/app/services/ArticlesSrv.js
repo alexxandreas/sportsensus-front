@@ -106,18 +106,31 @@
                     //var newArticle = angular.extend({id: id}, article);
                     //delete newArticle.content;
                     
-                    var oldArticle = articles.filter(function(art){
-                        return art.id == newArticle.id;
-                    })[0];
+                    // var oldArticle = articles.filter(function(art){
+                    //   return art.id == newArticle.id;
+                    // })[0];
                     
-                    if (oldArticle)
-                        angular.extend(oldArticle, newArticle)
-                    else 
-                        articles.push(newArticle);
+                    
+                    
+                    if (article.id == undefined) {
+                        articles.push(article);
+                    } else {
+                        var oldArticle = articles.find(function(art){
+                            return art.id == newArticle.id;
+                        });
+                        oldArticle && angular.extend(oldArticle, newArticle);
+                    }
+                    angular.extend(article, newArticle);
+                    
+                    // if (oldArticle)
+                    //     angular.extend(article, newArticle)
+                    // else 
+                    //     articles.push(newArticle);
                         
                     //addTags(newArticle.tags);
                     
-                    return newArticle;
+                    //return newArticle;
+                    return article;
                 })
             });
             

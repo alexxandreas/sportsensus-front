@@ -136,6 +136,15 @@
                         $scope.showPreloader = true;
                         ArticlesSrv.setArticle($scope.article).then(function(){
                             $scope.showPreloader = false;
+                            $mdDialog.show(
+                              $mdDialog.alert()
+                                .clickOutsideToClose(false)
+                                .title('Сохранение')
+                                .textContent('Данные успешно сохранены на сервер')
+                                .ok('OK')
+                            ).then(function(){
+                                 $location.path('/admin/cases/');
+                            });
                         }, function(){
                             $scope.showPreloader = false;
                             $mdDialog.show(

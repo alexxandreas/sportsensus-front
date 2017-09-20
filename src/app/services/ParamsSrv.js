@@ -172,7 +172,7 @@
             recApply(oldParam, newParam);
             
             function recApply(oldParam, newParam){
-                if (!oldParam) return;
+                if (!oldParam || !newParam) return;
                 
                 if (oldParam.selected){
                     newParam.selected = oldParam.selected;
@@ -314,7 +314,10 @@
 
             var colorGenerator = d3.scale.category10();
             parametersNames.forEach(function(type){
-                parameters[type].lists.forEach(function(item){
+                var params = parameters[type];
+                if (!params || !params.lists) return;
+                
+                params.lists.forEach(function(item){
                     var id = item.id;
                     id = Number.parseInt(id) % 10;
                     if(!Number.isNaN(id)) {
@@ -358,6 +361,8 @@
         }
 
         function getSelectedParamsRec(item){
+            if (!item) return undefined;
+            
             if (item.lists && item.lists.some(function(subitem){return !subitem.lists; })){ // терминальный лист (age, clubs)
                 var selectedA = item.lists.filter(function(subitem){return subitem.selected; })
                     .map(function(subitem){return subitem.id});

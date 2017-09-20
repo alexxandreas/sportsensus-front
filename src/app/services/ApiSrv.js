@@ -113,15 +113,15 @@
         function getRadars(){
             var d = $q.defer();
             d.resolve([{
-                id: 1,
+                id: 0,
                 name: "Исследование за 2015 год"
             },{
-                id: 2,
+                id: 1,
                 name: "Исследование за 2017 год"
             }]);
             return d.promise;
             
-            return request('get_radars', null, 'data.result.data');
+            return request('get_databases', null, 'data.result.data');
         }
         
         function getTranslations(){

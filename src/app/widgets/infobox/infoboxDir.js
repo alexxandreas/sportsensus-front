@@ -121,8 +121,8 @@
                         tpl:'allGraphs',
                         footer: 'infoboxResult'
                     },{
-                        id:'expressSport/expressSport',
-                        tpl:'expressSport/expressSport',
+                        id:'expressSport/expressSports',
+                        tpl:'expressSport/expressSports',
                         footer: 'infoboxResult'
                     },{
                         id:'expressAudience/expressAudience',

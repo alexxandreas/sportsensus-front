@@ -37,7 +37,8 @@
                 highlightable: '=?',
                 selectedColor: '=?',
                 highlightedColor: '=?',
-                disabled: '=?'
+                disabled: '=?',
+                singleSelection: '=?'
             },
             templateUrl: '/views/widgets/charts/legend/legend.html',
             link: function ($scope, $el, attrs) {
@@ -142,7 +143,14 @@
 
                     
                     $scope.itemClick = function(item){
-                        item.selected = !item.selected;
+                        //item.selected = !item.selected;
+                        var newSelection = !item.selected;
+                        if (newSelection && $scope.singleSelection){
+                            angular.forEach($scope.legend, function(item){
+                                item.selected = false;
+                            })
+                        }
+                        item.selected = newSelection;
                     };
 
                     $scope.highlightItem = function(item){

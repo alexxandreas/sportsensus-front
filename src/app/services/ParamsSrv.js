@@ -129,7 +129,10 @@
             'visit_time',
             'net',
             'gamingplatform',
-            'gamingtime'
+            'gamingtime',
+            "fan_type",
+            "sponsor",
+            "services_now"
         ];
         var parametersWatchers = {};
         
@@ -191,9 +194,62 @@
             }
         }
         
+        function extendTranslations(translations){
+            translations.pages.push({
+                key: "fan_type",
+                name: "Тип боления",
+                lists: [{
+                    id: 1,
+                    name: "Монолайнеры"
+                },{
+                    id: 2,
+                    name: "Традиционалисты"
+                },{
+                    id: 3,
+                    name: "Спокойные"
+                },{
+                    id: 4,
+                    name: "Горячие"
+                },{
+                    id: 5,
+                    name: "Одержимые"
+                }]
+            });
+            
+            translations.pages.push({
+                key: "sponsor",
+                name: "Спонсор",
+                lists: [{
+                    id: 1,
+                    name: "Спонсор 1"
+                },{
+                    id: 2,
+                    name: "Спонсор 2"
+                },{
+                    id: 3,
+                    name: "Спонсор 3"
+                },{
+                    id: 4,
+                    name: "Спонсор 4"
+                },{
+                    id: 5,
+                    name: "Спонсор 5"
+                }]
+            });
+            
+        }
+        
+        function extendAfterProcessing(){
+            parameters.time_week.lists.forEach(function(item, index){
+                item.id = index+1;
+            })
+        }
             
         function prepareParams(translations) {
 
+            // TODO мок на время отсутствия бекенда
+            extendTranslations(translations);
+            
             var oldParameters = parameters;
             var oldSelected = selected;
             
@@ -254,6 +310,7 @@
             });
 
 
+            extendAfterProcessing();
 
             var colorGenerator = d3.scale.category10();
             parametersNames.forEach(function(type){
@@ -268,6 +325,10 @@
             parameters.region.lists.forEach(function(item){
                 item.chartColor = '#777777';
             })
+            
+            
+            
+            
         }
         
         

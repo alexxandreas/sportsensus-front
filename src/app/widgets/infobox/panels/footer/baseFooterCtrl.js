@@ -67,7 +67,7 @@
 					$scope.checkButtonPage = 'expressAudience/expressAudience';
 				} else if ($scope.sportSelected && !audienceSelected && !filtersSelected) {
 					$scope.checkButtonText = 'Экспресс-результат';
-					$scope.checkButtonPage = 'expressSport/expressSport';
+					$scope.checkButtonPage = 'expressSport/expressSports';
 				} else {
 					$scope.checkButtonText = 'Показать результат';
 					$scope.checkButtonPage = 'allGraphs';

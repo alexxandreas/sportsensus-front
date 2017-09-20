@@ -16,59 +16,125 @@
         layout="row" layout-align="start center" ng-bind-html="caption | trustAsHtmlFltr">
     </h2>
 
+    
+    <legend-dir legend="graphsModes" columns-count="1" 
+        selectable="true" selected-color="'#777777'"
+        single-selection="true"></legend-dir>
 
 
-    <div layout="row" layout-align="start start" layout-wrap
-     style="margin-top: 8px;">
-        <div layout="column" layout-align="start start"
-             style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-3 вида спорта по интересу</div>
+    <div layout="row" layout-align="start start" layout-wrap style="margin-top: 8px;">
+        
+        <!--1. + топ-10 регионов. график - карта с легендой-->
+        <!-- TODO -->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-10 регионов</div>
+            <!--<legend-dir legend="graphs.interest.legends.interest" columns-count="1" selectable="false"></legend-dir>-->
+            <!--<horisontal-bar-dir chart="graphs.interest.chartData2" ></horisontal-bar-dir>-->
+            <map-dir regions="" style="width:100%; margin-top: 30px;"
+                     highlighted-color="'#bfebff'" selectable="false" selected-color="'#4ac0b6'"></map-dir>
+        </div>
+        
+        <!-- распределение по типу боления. график - бублик -->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.fanType.label}}</div>
+            <legend-dir legend="graphs.fanType.legends.fan_type" columns-count="1" selectable="false"></legend-dir>
+            <doughnut-dir chart="graphs.fanType.chart"></doughnut-dir>
+        </div>
+        
+        <!-- топ-5 по интересу. график - вертикальный бар -->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.interest.label}}</div>
             <legend-dir legend="graphs.interest.legends.interest" columns-count="1" selectable="false"></legend-dir>
-
-            <horisontal-bar-dir chart="graphs.interest.chartData2" ></horisontal-bar-dir>
+            <!--<horisontal-bar-dir chart="graphs.interest.chartData2" ></horisontal-bar-dir>-->
+            <stacked-bar-dir chart="graphs.interest.chart" ></stacked-bar-dir>
         </div>
 
-        <div layout="column" layout-align="start start"
-             style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-3 вида спорта по вовлеченности</div>
+        <!-- топ-5 по вовлеченности. график - горизонтальный бар -->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.involve.label}}</div>
             <legend-dir legend="graphs.involve.legends.involve" columns-count="1" selectable="false"></legend-dir>
-            <div layout="row" layout-align="start start">
-                <doughnut-dir ng-repeat="chart in graphs.involve.charts" chart="chart"></doughnut-dir>
-
-            </div>
-            <!--<stacked-bar-dir chart="graphs.involve.chartData" ></stacked-bar-dir>-->
+            <!--<div layout="row" layout-align="start start">-->
+            <!--    <doughnut-dir ng-repeat="chart in graphs.involve.charts" chart="chart"></doughnut-dir>-->
+            <!--</div>-->
+            <horisontal-bar-dir chart="graphs.involve.chart" ></horisontal-bar-dir>
         </div>
 
-        <div layout="column" layout-align="start start"
-             style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-5 спонтанное знание клубов</div>
-            <!--<legend-dir legend="graphs.known.legends.known" columns-count="1" selectable="false"></legend-dir>-->
-
-            <horisontal-bar-dir chart="graphs.known.chartData2" ></horisontal-bar-dir>
+        <!-- топ-5 подсказанного знания турниров (лиг). график - вертикальный бар-->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.knownHelpTournament.label}}</div>
+            <!--<legend-dir legend="graphs.knownHelpTournament.legends.interest" columns-count="1" selectable="false"></legend-dir>-->
+            <!--<horisontal-bar-dir chart="graphs.knownHelpTournament.chart" ></horisontal-bar-dir>-->
+            <stacked-bar-dir chart="graphs.knownHelpTournament.chart" ></stacked-bar-dir>
         </div>
-        <div layout="column" layout-align="start start"
-             style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-5 подсказанное знание клубов</div>
+        
+        <!-- топ-5 спонтанного знания турниров (лиг). график - вертикальный бар-->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.knownTournament.label}}</div>
+            <!--<legend-dir legend="graphs.knownTournament.legends.interest" columns-count="1" selectable="false"></legend-dir>-->
+            <stacked-bar-dir chart="graphs.knownTournament.chart" ></stacked-bar-dir>
+        </div>
+        
+        <!-- топ-5 подсказанного знания клубов. график - вертикальный бар-->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.knownHelp.label}}</div>
             <!--<legend-dir legend="graphs.involve.legends.involve" columns-count="1" selectable="false"></legend-dir>-->
-
-            <horisontal-bar-dir chart="graphs.knownHelp.chartData2" ></horisontal-bar-dir>
+            <!--<horisontal-bar-dir chart="graphs.knownHelp.chart" ></horisontal-bar-dir>-->
+            <stacked-bar-dir chart="graphs.knownHelp.chart" ></stacked-bar-dir>
         </div>
-
-        <div layout="column" layout-align="start start"
-             style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-3 клуба по смотрению</div>
+        
+        <!-- топ-5 спонтанного знания клубов. график - вертикальный бар-->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.known.label}}</div>
+            <!--<legend-dir legend="graphs.known.legends.known" columns-count="1" selectable="false"></legend-dir>-->
+            <!--<horisontal-bar-dir chart="graphs.known.chart" ></horisontal-bar-dir>-->
+            <stacked-bar-dir chart="graphs.known.chart" ></stacked-bar-dir>
+        </div>
+        
+        <!-- топ-5 подсказанного знания спортсменов. график - горизонтальный бар-->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.knownHelpPlayer.label}}</div>
+            <!--<legend-dir legend="graphs.involve.legends.involve" columns-count="1" selectable="false"></legend-dir>-->
+            <horisontal-bar-dir chart="graphs.knownHelpPlayer.chart" ></horisontal-bar-dir>
+        </div>
+        
+        <!-- топ-5 спонтанного знания спортсменов. график - горизонтальный бар-->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.knownPlayer.label}}</div>
+            <!--<legend-dir legend="graphs.known.legends.known" columns-count="1" selectable="false"></legend-dir>-->
+            <horisontal-bar-dir chart="graphs.knownPlayer.chart" ></horisontal-bar-dir>
+        </div>
+        
+        <!-- топ-5 клубов по телесмотрению. график - вертикальный бар -->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.watch.label}}</div>
             <legend-dir legend="graphs.watch.legends.watch" columns-count="1" selectable="false"></legend-dir>
-
-            <horisontal-bar-dir chart="graphs.watch.chartData2" ></horisontal-bar-dir>
+            <!--<horisontal-bar-dir chart="graphs.watch.chart" ></horisontal-bar-dir>-->
+            <stacked-bar-dir chart="graphs.watch.chart" ></stacked-bar-dir>
         </div>
 
-        <div layout="column" layout-align="start start"
-             style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-3 клуба по посещению</div>
+        <!--топ-5 по смотрению в WEB. график - вертикальный бар-->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.watchWEB.label}}</div>
+            <legend-dir legend="graphs.watch.legends.watch" columns-count="1" selectable="false"></legend-dir>
+            <!--<horisontal-bar-dir chart="graphs.watchWEB.chart" ></horisontal-bar-dir>-->
+            <stacked-bar-dir chart="graphs.watchWEB.chart" ></stacked-bar-dir>
+        </div>
+        
+        <!--топ-5 клубов по посещаемости. график - горизонтальный бар-->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.walk.label}}</div>
             <legend-dir legend="graphs.walk.legends.walk" columns-count="1" selectable="false"></legend-dir>
-
-            <horisontal-bar-dir chart="graphs.walk.chartData2" ></horisontal-bar-dir>
+            <horisontal-bar-dir chart="graphs.walk.chart" ></horisontal-bar-dir>
         </div>
+        
+        <!--топ-5 самых упоминаемых спонсоров. график - горизонтальный бар-->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.knownSponsor.label}}</div>
+            <!--<legend-dir legend="graphs.known.legends.known" columns-count="1" selectable="false"></legend-dir>-->
+            <!--<horisontal-bar-dir chart="graphs.knownSponsor.chart" ></horisontal-bar-dir>-->
+            <stacked-bar-dir chart="graphs.knownSponsor.chart" ></stacked-bar-dir>
+        </div>
+        
     </div>
 
 

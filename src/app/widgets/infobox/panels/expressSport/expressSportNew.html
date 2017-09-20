@@ -1,0 +1,214 @@
+<div class="infobox-panel express-sport"
+     layout="column" layout-align="start stretch"
+     save-as-pdf-dir>
+
+
+    <div layout="row" layout-align="space-between center"
+         style="margin: 5px 0;">
+        <h1 class="infobox-panel-header" layout="row" layout-align="start center">
+            Экспресс-результат по спорту
+        </h1>
+        <download-dir title="Экспресс-результат по спорту" subtitle="{{caption}}"></download-dir>
+    </div>
+
+
+    <!--ng-bind-html="caption | trustAsHtmlFltr"-->
+    <h2 class="infobox-panel-header2" ng-show="caption"
+        layout="row" layout-align="start center"
+        ng-bind-html="'Профиль спорта: ' + sport.name + (clubNames ? '&lt;br&gt;Клубы: ' + clubNames : '')  | trustAsHtmlFltr">
+    </h2>
+
+
+    <!--<div layout="column" layout-align="start stretch"-->
+    <!--     style="margin-top: 8px;">-->
+
+    <div layout="row" layout-align="start start" layout-wrap style="margin-top: 8px;">
+
+      
+        
+        <!-- род деятельности. график - бублик -->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.career.label}}</div>
+            <legend-dir legend="graphs.career.legends.career" columns-count="1" selectable="false"></legend-dir>
+            <doughnut-dir chart="graphs.career.chart"></doughnut-dir>
+        </div>
+        
+        <!-- владение разного рода платным ТВ. график - бублик -->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.tvhome.label}}</div>
+            <legend-dir legend="graphs.tvhome.legends.tvhome" columns-count="1" selectable="false"></legend-dir>
+            <doughnut-dir chart="graphs.tvhome.chart"></doughnut-dir>
+        </div>
+        
+        <!-- владение автомобилем. график - бублик -->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.car.label}}</div>
+            <legend-dir legend="graphs.car.legends.car" columns-count="1" selectable="false"></legend-dir>
+            <doughnut-dir chart="graphs.car.chart"></doughnut-dir>
+        </div>
+        
+        <!-- владение устройствами. график - горизонтальный бар -->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.electronics.label}}</div>
+            <legend-dir legend="graphs.electronics.legends.electronics" columns-count="1" selectable="false"></legend-dir>
+            <horisontal-bar-dir chart="graphs.electronics.chart" ></horisontal-bar-dir>
+            <!--<stacked-bar-dir chart="graphs.interest.chart" ></stacked-bar-dir>-->
+        </div>
+
+        <!--  посещение ТРЦ/кинотеатров/фитнеса. график - горизонтальный бар -->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.time_week.label}}</div>
+            <legend-dir legend="graphs.time_week.legends.time_week" columns-count="1" selectable="false"></legend-dir>
+            <horisontal-bar-dir chart="graphs.time_week.chart" ></horisontal-bar-dir>
+            <!--<stacked-bar-dir chart="graphs.interest.chart" ></stacked-bar-dir>-->
+        </div>
+        
+        <!-- топ-5 финансовых продуктов. график - горизонтальный бар -->
+        <div layout="column" layout-align="start start" style="margin: 10px;">
+            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.services_now.label}}</div>
+            <legend-dir legend="graphs.services_now.legends.services_now" columns-count="1" selectable="false"></legend-dir>
+            <horisontal-bar-dir chart="graphs.services_now.chart" ></horisontal-bar-dir>
+            <!--<stacked-bar-dir chart="graphs.interest.chart" ></stacked-bar-dir>-->
+        </div>
+
+
+
+<!--
+1. средний возраст. числом
+2. средний доход. числом
+3. + средняя численность семьи. числом
+4. число детей в семье. числом
+12. мобильный интернет. числом
+
+
++5. род деятельности. график - бублик career
++8. владение разного рода платным ТВ. график - бублик (как есть) tvhome
++9. владение автомобилем. график - бублик (как есть)
++10. владение устройствами. график - горизонтальный бар electronics
+11. + посещение ТРЦ/кинотеатров/фитнеса. график - горизонтальный бар
+14. + топ-5 финансовых продуктов. график - горизонтальный бар
+
+
+
+6. + распределение ца по типу боления. график - бублики
+7. * топ-3 региона проживания => топ-5 рериона проживания. график - новая карта с таблицей region
+13. играют в видео игры. числом
+15. * заправляются на лукойле => топ-3 АЗС. график -
+
+
+sponsor
+
+-->
+
+        
+        
+<!--
+        <div layout="column" layout-align="start start"
+             style="margin: 10px;">
+            <div class="infobox-panel-header2"
+                 style="margin: 10px 0;"
+                 layout="row" layout-align="center center" >Социальная демография</div>
+
+            <div layout="row" layout-align="start start" style="width: 100%; margin: 20px 0;">
+                <parameter-widget-dir flex="33" header="Средний возраст болельщика" text="{{sport.data.avg_age_text}}" footer=""></parameter-widget-dir>
+                <parameter-widget-dir flex="33" header="Средний доход" text="{{sport.data.avg_income_text}}" footer="На члена семьи"></parameter-widget-dir>
+                <parameter-widget-dir flex="33" header="Число детей в семье" text="{{sport.data.avg_children_text}}" footer=""></parameter-widget-dir>
+            </div>
+
+            <div class="infobox-panel-header3" style="margin: 20px 0;">Род деятельности</div>
+
+            <horisontal-bar-dir chart="sport.data.careerChart" ></horisontal-bar-dir>
+        </div>
+
+
+        <div layout="column" layout-align="start start"
+             style="margin: 10px;">
+
+            <div class="infobox-panel-header2"
+                 style="margin: 10px 0;"
+                 layout="row" layout-align="center center" >Топ-3 региона проживания</div>
+
+            <map-dir regions="sport.data.regionsLegend" style="width:100%; margin-top: 30px;"
+                     highlighted-color="'#bfebff'" selectable="false" selected-color="'#4ac0b6'"></map-dir>
+
+            <horisontal-bar-dir chart="sport.data.regionsChart" ></horisontal-bar-dir>
+        </div>
+
+
+        <div layout="column" layout-align="start start"
+             style="margin: 10px;">
+            <div class="infobox-panel-header2"
+                 style="margin: 10px 0;"
+                 layout="row" layout-align="center center" >Потребительское поведение</div>
+
+            <div layout="row" layout-align="space-between stretch" style="width: 100%; margin: 20px 0;">
+                <div layout="column" layout-align="start start" flex="33" style="margin: 10px;">
+                    <doughnut-dir chart="sport.data.tvHomeChart"></doughnut-dir>
+                    <legend-dir legend="sport.data.tvHomeLegend" columns-count="1" selectable="false"></legend-dir>
+                </div>
+                <div layout="column" layout-align="start start" flex="33" style="margin: 10px;">
+                    <doughnut-dir chart="sport.data.carChart"></doughnut-dir>
+                    <legend-dir legend="sport.data.carLegend" columns-count="1" selectable="false"></legend-dir>
+                </div>
+                <div layout="column" layout-align="start start" flex="33" style="margin: 10px;">
+                    <doughnut-dir chart="sport.data.electronicsChart"></doughnut-dir>
+                    <legend-dir legend="sport.data.electronicsLegend" columns-count="1" selectable="false"></legend-dir>
+                </div>
+            </div>
+
+            <div layout="row" layout-align="start start" style="width: 100%; margin: 20px 0;" >
+                <parameter-widget-dir flex="33" header="Посещают ТРЦ" text="{{sport.data.trc_text}}" footer=""></parameter-widget-dir>
+                <parameter-widget-dir flex="33"  header="Мобильный интернет" text="{{sport.data.mobile_hours_text}}" footer="Часа в день"></parameter-widget-dir>
+                <parameter-widget-dir flex="33"  header="Играют в видео игры" text="{{sport.data.game_text}}" footer=""></parameter-widget-dir>
+            </div>
+
+            <div layout="row" layout-align="start start" style="width: 100%; margin: 20px 0;">
+                <parameter-widget-dir flex="33"  header="Имеют депозит, срочный вклад" text="{{sport.data.bank_text}}" footer=""></parameter-widget-dir>
+                <parameter-widget-dir flex="33"  header="{{sport.data.gas_persent_header}}" text="{{sport.data.gas_persent_text}}" footer=""></parameter-widget-dir>
+                <parameter-widget-dir flex="33" ></parameter-widget-dir>
+            </div>
+
+        </div>
+
+
+        <div layout="column" layout-align="start start"
+             style="margin: 10px;"
+            ng-if="sport.data.clubs && sport.data.clubs.length">
+            <div class="infobox-panel-header2"
+                 style="margin: 10px 0;"
+                 layout="row" layout-align="center center" >Сила боления</div>
+
+
+            <div ng-repeat="club in sport.data.clubs"
+                layout="column" layout-align="start start">
+
+                <div class="infobox-panel-header3"
+                     style="margin: 10px 0;"
+                     layout="row" layout-align="center center" >{{club.club.name}}</div>
+
+                <div layout="column" layout-align="start center">
+                    <div layout="row" layout-align="space-around center">
+
+                        <div flex="50" layout="column" layout-align="start center">
+                            <div class="infobox-panel-header3" layout="row" layout-align="center center">Ходил</div>
+                            
+                            <legend-dir legend="club.walkLegend" columns-count="1" selectable="false"></legend-dir>
+                        </div>
+                        <div flex="50" layout="column" layout-align="start center">
+                            <div class="infobox-panel-header3" layout="row" layout-align="center center">Смотрел</div>
+                            
+                            <legend-dir legend="club.watchLegend" columns-count="1" selectable="false"></legend-dir>
+                        </div>
+                    </div>
+                    <horisontal-bar-dir chart="club.walkWatchChart"></horisontal-bar-dir>
+                    <div style="height: 20px;"></div>
+                </div>
+            </div>
+-->
+
+        </div>
+
+    </div>
+
+    <!--<download-dir></download-dir>-->
+</div>

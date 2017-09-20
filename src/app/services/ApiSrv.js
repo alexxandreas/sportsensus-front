@@ -54,8 +54,7 @@
             var data = {
                 jsonrpc: "2.0",
                 method: method,
-                // params: angular.extend({sid:sid, radarId: radarId}, params),
-                params: angular.extend({sid:sid}, params),
+                params: angular.extend({sid:sid, radarId: radarId}, params),
                 id: "id"
             };
             

@@ -1,0 +1,61 @@
+<div class="header-new" layout="row" layout-align="start center">
+    
+    <a href="/#!/">
+        <div layout="row" layout-align="start center" ng-click="goHome()"
+            class="header-new__logo" flex="none">
+            <!--<img src="static/img/logo2.svg" alt="" class="header-logo-image"/>    -->
+        </div>
+    </a>
+
+    <!-- меню -->
+    <div class="header-menu" layout="row" layout-align="start center" 
+        flex="grow" >
+        
+        <div layout="row" layout-align="start center" 
+                class="header-button" 
+                ng-repeat="item in menu" ng-if="item.visible()" flex="none"
+                 ng-click="item.onClick && item.onClick()">
+            <div class="header-button-content" layout="row" layout-align="start center">
+                <div ng-if="item.iconClass" class="header-button-icon" ng-class="item.iconClass"></div>
+                <div>{{item.name}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div flex></div>
+    
+    <!--таймер-->
+    <div class="header-timer">
+        15:48
+    </div>
+    
+    <!--кнопка ЛК-->
+    <div class="header-button header-user-button" layout="row" layout-align="start center"
+        ng-if="menuUserItem.visible()" flex="none"
+        ng-click="menuUserItem.onClick && menuUserItem.onClick()">
+        <div class="header-button-content" layout="row" layout-align="start center">
+            <div ng-if="menuUserItem.iconClass" class="header-button-icon" ng-class="menuUserItem.iconClass"></div>
+            <div>{{menuUserItem.name}}</div>
+        </div>
+    </div>
+    
+    
+    <!--<div layout="column" layout-align="center start" flex="none">-->
+    <!--     <div class="header-radar-checkbox no-outline no-select"-->
+    <!--             layout="row" layout-align="start center"-->
+    <!--             ng-repeat="radar in radars"-->
+    <!--             ng-click="selectRadar(radar.id)">-->
+    <!--            <div flex="none" class="checkbox-color"-->
+    <!--                 ng-style="{'background-color': radar.selected ? '#777777' : 'none'}"></div>-->
+    <!--            <div class="legend-item-text">{{radar.name}}</div>-->
+    <!--        </div>-->
+    <!--</div>-->
+   
+    
+    <!--<div layout="column" layout-align="center start">-->
+    <!--    <div class="button-logout header-button" ng-show="loggedIn" ng-click="logout()">-->
+    <!--        Выход-->
+    <!--    </div>-->
+    <!--</div>-->
+   
+</div>

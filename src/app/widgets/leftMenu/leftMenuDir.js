@@ -51,6 +51,42 @@
                         $scope.radars = radars;
                     });
                     
+                    $scope.audienceBlocks = [{
+                        name: 'block1',
+                        items: [{
+                            name: 'item1'
+                        },{
+                            name: 'item2'
+                        },{
+                            name: 'item3'
+                        }]
+                    },{
+                        name: 'block2',
+                        items: [{
+                            name: 'item4'
+                        },{
+                            name: 'item5'
+                        },{
+                            name: 'long long long long long long long long long long long long item6'
+                        },{
+                            name: 'item'
+                        }]
+                    },{
+                        name: 'block3',
+                        items: [{
+                            name: 'itemitemitem'
+                        },{
+                            name: 'item'
+                        },{
+                            name: 'longlonglonglonglonglonglonglongitem6'
+                        },{
+                            name: 'item'
+                        }]
+                    }];
+                    
+                    $scope.audienceMessage = "Кол-во болельщиков";
+                    $scope.audienceCount = 984797927;
+                    $scope.audienceError = false;
                     
                     
                     //             $scope.loggedIn = false;

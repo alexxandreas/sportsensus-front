@@ -1,53 +1,71 @@
 <div class="left-menu" layout="column" layout-align="start stretch">
     
-    <div class="radar-selector" layout="row" layout-align="center center">
-        <div ng-repeat="radar in radars"
-            layout="column" layout-align="start center">
-                <div class="radar-button" layout="row" layout-align="center center">
-                    15
+    <div class="left-menu-content">
+        
+        <div class="radar-selector" layout="row" layout-align="center center" flex="none">
+            <div ng-repeat="radar in radars"
+                layout="column" layout-align="start center">
+                    <div class="radar-button" layout="row" layout-align="center center">
+                        15
+                    </div>
+                    <div class="radar-line"></div>
+            </div>
+        </div>
+    
+        <div class="buttons" layout="column" layout-align="start stretch" flex="none">
+            <div class="button" layout="row" layout-align="start center">
+                <div class="button-icon button-fan-icon"></div>
+                Болельщик
+            </div>
+            <div class="button" layout="row" layout-align="start center">
+                <div class="button-icon button-sport-icon"></div>
+                Спорт
+            </div>
+        </div>
+        
+        <div class="audience-menu" flex="none">
+            <div class="menu-closed" ng-show="!audienceMenuOpened"
+                layout="column" layout-align="center stretch">
+                <div class="button-icon button-open" ng-click="audienceMenuOpened = true;"></div>
+            </div>
+            <div class="menu-opened" ng-show="audienceMenuOpened"
+                layout="column" layout-align="center stretch">
+                <div class="button-icon button-close" ng-click="audienceMenuOpened = false;"></div>
+                <div class="button-spacer"></div>
+                <div class="button-action" layout="row" layout-align="center center">Сохранить набор</div>
+                <div class="button-action" layout="row" layout-align="center center">Загрузить набор</div>
+                <div class="button-action" layout="row" layout-align="center center">Очистить всё</div>
+            </div>
+        </div>
+        
+        <div class="audience" layout="column" layout-align="start stretch" flex="none">
+            <div class="audience-block" ng-repeat="block in audienceBlocks"
+                layout="column" layout-align="start stretch">
+                <div class="audience-items">
+                    <div class="audience-item" ng-repeat="item in block.items">
+                        {{item.name}}
+                        <div class="audience-remove"></div>
+                    </div>
                 </div>
-                <div class="radar-line"></div>
+            </div>
         </div>
-    </div>
-
-    <div class="buttons" layout="column" layout-align="start stretch">
-        <div class="button" layout="row" layout-align="start center">
-            <div class="button-icon button-fan-icon"></div>
-            Болельщик
-        </div>
-        <div class="button" layout="row" layout-align="start center">
-            <div class="button-icon button-sport-icon"></div>
-            Спорт
-        </div>
-    </div>
-    
-    <div class="audience-menu">
-        <div class="menu-closed" ng-show="!audienceMenuOpened"
-            layout="column" layout-align="center stretch">
-            <div class="button-icon button-open" ng-click="audienceMenuOpened = true;"></div>
-        </div>
-        <div class="menu-opened" ng-show="audienceMenuOpened"
-            layout="column" layout-align="center stretch">
-            <div class="button-icon button-close" ng-click="audienceMenuOpened = false;"></div>
-            <div class="button-spacer"></div>
-            <div class="button-action" layout="row" layout-align="center center">Сохранить набор</div>
-            <div class="button-action" layout="row" layout-align="center center">Загрузить набор</div>
-            <div class="button-action" layout="row" layout-align="center center">Очистить всё</div>
-        </div>
-    </div>
-    
-    <div class="audience" layout="column" layout-align="start stretch">
         
-    </div>
-    
-    <div flex></div>
-    
-    <div class="audience-message">
+        <div flex></div>
         
-    </div>
-    
-    <div class="result-button">
+        <div class="audience-message" ng-class="{'audience-message-error': audienceError}" 
+            ng-show="audienceMessage" layout="column" layout-align="center stretch" flex="none">
+            <div class="message">
+                {{audienceMessage}}
+            </div>
+            <div class="count" ng-if="audienceCount">
+                {{audienceCount.toLocaleString()}}
+            </div>
+        </div>
         
+        <div class="result-button" layout="row" layout-align="center center" flex="none">
+            РЕЗУЛЬТАТ
+        </div>
+    
     </div>
    
 </div>

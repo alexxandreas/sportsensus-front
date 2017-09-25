@@ -1,4 +1,5 @@
 @main-theme-color: #d0efec;
+@hover-color: #a7e2dd;
 
 .left-menu {
     
@@ -107,6 +108,8 @@
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
+            margin-left: 4px;
+            margin-right: 6px;
         }
         
         .button-fan-icon {
@@ -167,9 +170,10 @@
             cursor: pointer;
             outline: none;
             //  width: 100%;
-             
+            box-sizing: content-box;
+                 
             &:hover {
-                background-color: #a7e2dd; 
+                background-color: @hover-color; 
             }
         }
         
@@ -250,6 +254,12 @@
         font-size: 14px;
         letter-spacing: 0.1em;
         background-color: @main-theme-color;
+        cursor: pointer;
+        outline: none;
+        
+        &:hover {
+            background-color: @hover-color;
+        }
     }
     
 }

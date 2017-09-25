@@ -115,9 +115,9 @@
         
     }
     
-    .header-button:last-child {
-        margin-right: 30px;
-    }
+    // .header-button:last-child {
+    //     margin-right: 30px;
+    // }
     
     .header-button:not(:last-child) {
         margin-right: -15px;
@@ -136,6 +136,13 @@
         font-size: 32px;
         margin-right: 30px;
         letter-spacing: 0.025em;
+        white-space: nowrap;
+        color: #4ac0b6;
+    }
+    
+    .fake-menu {   
+        height: 0;
+        overflow: hidden;
     }
     
     @header-user-button-selected-color: #a7e2dd;
@@ -145,6 +152,7 @@
         letter-spacing: 0.025em;
         margin-left: 0 !important;
         margin-right: 0 !important;
+        text-transform: none;
         
         &:before {
             border-bottom: @header-new-height solid @main-theme-color;
@@ -153,10 +161,18 @@
         .header-button-content {
             padding-right: 15px;
             background-color: @main-theme-color;
+            overflow: hidden;
         }
         
         &:after {
             display: none;
+        }
+        
+        .header-user-button-text {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: 140px;
         }
     }
     
@@ -171,7 +187,6 @@
         }
         
         .header-button-content {
-            // padding-right: 15px;
             background-color: @header-user-button-selected-color;
         }
         

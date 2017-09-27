@@ -90,7 +90,7 @@
         }
         
         // выбираем радар по умолчанию
-        selectRadar();
+        selectRadar(1);
         
         function getParams() {
             return paramsPromise;

@@ -1,0 +1,72 @@
+<div class="header-new" layout="row" layout-align="start center">
+    
+    <a href="/#!/">
+        <div layout="row" layout-align="start center" ng-click="goHome()"
+            class="header-new__logo" flex="none">
+            <!--<img src="static/img/logo2.svg" alt="" class="header-logo-image"/>    -->
+        </div>
+    </a>
+
+    <!--<div layout="column" layout-align="start stretch" flex>-->
+    <!--    <div layout="row" layout-align="start center" flex>-->
+        
+            <!-- меню -->
+            <div class="header-menu" layout="row" layout-align="start center" 
+                flex="none" >
+                
+                <div layout="row" layout-align="start center" 
+                        class="header-button" 
+                        ng-repeat="item in menu" ng-if="item.visible()" flex="none"
+                         ng-click="item.onClick && item.onClick()"
+                         ng-class="{'selected': item.selected && item.selected()}">
+                    <div class="header-button-content" layout="row" layout-align="start center">
+                        <div ng-if="item.iconClass" class="header-button-icon" ng-class="item.iconClass" flex="none"></div>
+                        <!--<div ng-if="headerOptions.headersVisible" flex="none">{{item.name}}</div>-->
+                        <div flex="none">{{item.name}}</div>
+                    </div>
+                </div>
+            </div>
+        
+            <!--<div class="header-delimeter" flex></div>-->
+            <div flex></div>
+            
+        <!--</div>-->
+        
+        <!--<div class="fake-menu" layout="row" layout-align="start center" flex>-->
+            <!-- фейковое меню -->
+        <!--    <div class="header-menu" layout="row" layout-align="start center" -->
+        <!--        flex="none" >-->
+                
+        <!--        <div layout="row" layout-align="start center" -->
+        <!--                class="header-button" -->
+        <!--                ng-repeat="item in menu" ng-if="item.visible()" flex="none"-->
+        <!--                 ng-class="{'selected': item.selected && item.selected()}">-->
+        <!--            <div class="header-button-content" layout="row" layout-align="start center" flex="none">-->
+        <!--                <div ng-if="item.iconClass" class="header-button-icon" ng-class="item.iconClass"></div>-->
+        <!--                <div flex="none">{{item.name}}</div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--    </div>-->
+        
+        <!--    <div class="header-delimeter" flex></div>-->
+        <!--</div>-->
+    <!--</div>-->
+    
+    
+    <!--таймер-->
+    <div class="header-timer" ng-if="timeoutStr" ng-click="logout()">
+        {{timeoutStr}}
+    </div>
+    
+    <!--кнопка ЛК-->
+    <div class="header-button header-user-button" layout="row" layout-align="start center"
+        ng-if="menuUserItem.visible()" flex="none"
+        ng-click="menuUserItem.onClick && menuUserItem.onClick()">
+        <div class="header-button-content" layout="row" layout-align="start center">
+            <div ng-if="menuUserItem.iconClass" class="header-button-icon" ng-class="menuUserItem.iconClass" flex="none"></div>
+            <div class="header-user-button-text">{{menuUserItem.name}}</div>
+        </div>
+    </div>
+    
+   
+</div>

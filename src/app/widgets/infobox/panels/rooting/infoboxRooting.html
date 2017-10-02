@@ -1,0 +1,131 @@
+<div class="infobox-panel"
+     layout="column" layout-align="start stretch"
+     preloader-dir>
+
+    <infobox-tabs-dir></infobox-tabs-dir>
+    
+    <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
+        {{parameters.rooting.name}}
+        <div flex></div>
+        <md-button class="md-raised md-primary"
+                   ng-click="selectAll('rooting')"
+        >Выделить всё</md-button>
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!checkSelected('rooting')"
+                   ng-click="clearSelection('rooting')"
+        >Сбросить</md-button>
+    </h1>
+
+    <!--<h1 class="l-board__header">
+        {{parameters.rooting.name}}
+    </h1>-->
+
+    <legend-dir legend="parameters.rooting.lists" columns-count="1"
+                selectable="true" highlightable="false"
+                highlighted-color="'#bfebff'" selected-color="'#777777'"
+    ></legend-dir>
+
+   <!-- <div class="l-board__body-box-list" >
+        <ul>
+            <li ng-repeat="collection in parameters.rooting.lists">
+                <input type="checkbox" name="{{collection.id}}" id="{{collection.id}}"
+                       ng-model="collection.selected"
+                       ng-click="selectCheckbox(collection, item)">
+                <label for="{{collection.id}}">{{collection.name}}</label>
+            </li>
+        </ul>
+    </div>-->
+
+    <!--<h1 class="l-board__header">
+        <img src="/static/img/icons/rooting.png">
+        Сила боления
+    </h1>
+
+    <div class="l-board__body-box-list" ng-repeat="collection in parameters.rooting">
+        <h3>
+            <input type="checkbox" name="{{collection.id+'!'}}" id="{{collection.id}}"
+                   ng-model="collection.selected"
+                   >
+            <label for="{{collection.id}}">{{collection.text}}</label>
+        </h3>
+        <ul ng-show="collection.items">
+            <li ng-repeat="item in collection.items">
+                <input type="checkbox" name="{{collection.id}}" id="{{collection.id+'_'+item.id}}"
+                       ng-model="item.selected"
+                       ng-disabled="!collection.selected"
+                       ng-click="selectCheckbox(collection, item)">
+                <label for="{{collection.id+'_'+item.id}}">{{item.text}}</label>
+            </li>
+        </ul>
+    </div>-->
+
+
+
+<!--
+    <div class="l-board__body-box-list">
+        <h3>
+            <input type="checkbox" name="sport[]" value="1" id="sport_1">
+            <label for="sport_1">Спонтанное знание</label>
+        </h3>
+    </div>
+
+    <div class="l-board__body-box-list">
+        <h3>
+            <input type="checkbox" name="sport[]" value="1" id="sport_1">
+            <label for="sport_1">Подсказанное знание</label>
+        </h3>
+    </div>
+
+    <div class="l-board__body-box-list">
+        <h3>
+            <input type="checkbox" name="sport[]" value="1" id="sport_1">
+            <label for="sport_1">Просмотр соревнования по ТВ или в интернете</label>
+        </h3>
+
+        <ul>
+            <li>
+                <input type="radio" name="clubs[]" value="1" id="football_0" disabled="disabled">
+                <label for="football_0">Смотрел(а) только за компанию с друзьями/родными</label>
+            </li>
+            <li>
+                <input type="radio" name="clubs[]" value="1" id="football_0" disabled="disabled">
+                <label for="football_0">Смотрел(а) время от времени, когда есть свободное время</label>
+            </li>
+            <li>
+                <input type="radio" name="clubs[]" value="1" id="football_0" disabled="disabled">
+                <label for="football_0">Смотрел(а) только самые значимые или интересные игры</label>
+            </li>
+            <li>
+                <input type="radio" name="clubs[]" value="1" id="football_0" disabled="disabled">
+                <label for="football_0">Старался(ась) не пропускать ни одной игры</label>
+            </li>
+        </ul>
+    </div>
+
+    <div class="l-board__body-box-list">
+        <h3>
+            <input type="checkbox" name="sport[]" value="1" id="sport_1">
+            <label for="sport_1">Посещение соревнований</label>
+        </h3>
+
+        <ul>
+            <li>
+                <input type="radio" name="clubs[]" value="1" id="football_0" disabled="disabled">
+                <label for="football_0">Ходил(а) только за компанию с друзьями/родными</label>
+            </li>
+            <li>
+                <input type="radio" name="clubs[]" value="1" id="football_0" disabled="disabled">
+                <label for="football_0">Ходил(а) время от времени, когда было свободное время</label>
+            </li>
+            <li>
+                <input type="radio" name="clubs[]" value="1" id="football_0" disabled="disabled">
+                <label for="football_0">Ходил(а) только самые значимые или интересные игры</label>
+            </li>
+            <li>
+                <input type="radio" name="clubs[]" value="1" id="football_0" disabled="disabled">
+                <label for="football_0">Старался(ась) не пропускать ни одной игры</label>
+            </li>
+        </ul>
+    </div>
+-->
+</div>

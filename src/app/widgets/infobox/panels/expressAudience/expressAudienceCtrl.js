@@ -32,31 +32,6 @@
 
         $scope.sportDatas = {};
 
-        // $scope.graphsModes = [{
-        //     id: 1,
-        //     graphKey: "",
-        //     selected: true,
-        //     name: "‘000"
-        // },{
-        //     id: 2,
-        //     graphKey: "_col",
-        //     name: "% Col"
-        // },{
-        //     id: 3,
-        //     graphKey: "_row",
-        //     name: "% Row"
-        // }];
-        
-        // $scope.selectedGraphMode = null;
-        
-        // $scope.$watch('graphsModes', function(newValue, oldValue) {
-        //     //if (newValue === oldValue) return;
-        //     $scope.selectedGraphMode = $scope.graphsModes.find(function(mode){
-        //         return mode.selected;
-        //     }) || $scope.graphsModes[0];
-            
-        //     prepareGraphs();
-        // }, true);
         
         $scope.setGraphsMode = function(graphMode){
             prepareGraphs();

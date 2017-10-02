@@ -30,10 +30,6 @@
             //updateCaption();
 		}
 		
-// 		$scope.setParams = function(params){
-//             requestData();
-//             updateCaption();
-// 		}
 		
 		$scope.sports = {};
 		
@@ -46,11 +42,6 @@
             sportLegend.forEach(function(sport){
                 $scope.$watch(function(){return sport;}, function(sport, oldValue){
                     if (sport.selected){
-                        // $scope.sports[sport.id] = {
-                        //     sport: sport,
-                        //     //clubs: sport.clubs.filter(function(club){return club.selected;}),
-                        //     clubNames: sport.clubs.filter(function(club){return club.selected;}).map(function(club){return club.name; }).join(', ')
-                        // };
                         $scope.sports[sport.id] = sport;
                         //requestData(sport);
                     } else {

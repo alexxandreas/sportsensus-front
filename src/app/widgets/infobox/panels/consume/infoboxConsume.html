@@ -1,6 +1,8 @@
-<div class="infobox-panel" ng-controller="consumeCtrl"
+<div class="infobox-panel" 
      layout="column" layout-align="start stretch"
      preloader-dir>
+    
+    <infobox-tabs-dir></infobox-tabs-dir>
     
     <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
         {{parameters.consume.name}}
@@ -47,25 +49,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-
-    <!--<div layout="row" layout-align="start start" layout-wrap>
-
-        <div ng-repeat="collection in getAllSubchildren(parameters && parameters.consume)"
-             layout="column" layout-align="start start" flex="30"
-             style="margin: 5px;">
-            <div class="infobox-panel-header3" >
-                {{collection.name}}
-            </div>
-            <legend-dir legend="collection.lists" columns-count="1"
-                        selectable="true" highlightable="false"
-                        highlighted-color="'#bfebff'" selected-color="'#777777'"
-            ></legend-dir>
-        </div>
-    </div>-->
 
 </div>
 

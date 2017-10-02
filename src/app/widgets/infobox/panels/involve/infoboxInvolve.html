@@ -1,0 +1,36 @@
+<div class="infobox-panel"
+     layout="column" layout-align="start stretch"
+     preloader-dir>
+
+    <infobox-tabs-dir></infobox-tabs-dir>
+    
+    <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
+        {{parameters.involve.name}}
+        <div flex></div>
+        <md-button class="md-raised md-primary"
+                   ng-click="selectAll('involve')"
+        >Выделить всё</md-button>
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!checkSelected('involve')"
+                   ng-click="clearSelection('involve')"
+        >Сбросить</md-button>
+    </h1>
+
+    <legend-dir legend="parameters.involve.lists" columns-count="1"
+                selectable="true" highlightable="false"
+                highlighted-color="'#bfebff'" selected-color="'#777777'"
+    ></legend-dir>
+    <!--<div class="l-board__body-box-list" >
+        <ul>
+            <li ng-repeat="collection in parameters.involve.lists">
+                <input type="checkbox" name="{{collection.id}}" id="{{collection.id}}"
+                       ng-model="collection.selected"
+                       ng-click="selectCheckbox(collection, item)">
+                <label for="{{collection.id}}">{{collection.name}}</label>
+            </li>
+        </ul>
+    </div>
+-->
+
+
+</div>

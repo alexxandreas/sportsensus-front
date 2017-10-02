@@ -1,0 +1,8 @@
+<div class="infobox-tabs" layout="row" layout-align="start stretch">
+    <div ng-repeat="item in menu"
+        class="menu-item"
+        ng-class="{'selected': item.selected}"
+        ng-click="itemClick(item.key)">
+        {{item.name}}
+    </div>
+</div>

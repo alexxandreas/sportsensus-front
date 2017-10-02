@@ -58,7 +58,8 @@
                 id: "id"
             };
             
-            return $http.post(url, data).then(function(response){
+            var requestUrl = url + '?method=' + method;
+            return $http.post(requestUrl, data).then(function(response){
                 var error = response.data && response.data.error;
                 if (error){
                     $rootScope.$broadcast('ApiSrv.requestError', error);
@@ -111,17 +112,17 @@
         }
         
         function getRadars(){
-            var d = $q.defer();
-            d.resolve([{
-                id: 0,
-                name: "Исследование за 2015 год"
-            },{
-                id: 1,
-                name: "Исследование за 2017 год"
-            }]);
-            return d.promise;
+            // var d = $q.defer();
+            // d.resolve([{
+            //     id: 0,
+            //     name: "Исследование за 2015 год"
+            // },{
+            //     id: 1,
+            //     name: "Исследование за 2017 год"
+            // }]);
+            // return d.promise;
             
-            return request('get_databases', null, 'data.result.data');
+            return request('get_databases', null, 'data.result.databases');
         }
         
         function getTranslations(){

@@ -418,7 +418,7 @@
        
 
         function getSelectedDemographyCaption(){
-            var demography =parameters.demography;
+            var demography = parameters.demography;
             var results = [];
             demography.lists.forEach(function(list){
                 var selected = list.lists.filter(function(sublist){

@@ -72,8 +72,8 @@
                         prepareFanTypeData($scope.getGraphData($scope.serverData, 'fan_type'));              // распределение по типу боления. график - бублик
                         prepareInterestData($scope.getGraphData($scope.serverData, 'interest'));             // топ-5 по интересу. график - бар
                         prepareInvolveData($scope.getGraphData($scope.serverData, 'involvment'));            // топ-5 по вовлеченности. график - бар.
-                        prepareKnownHelpTournamentData($scope.getGraphData($scope.serverData, 'clubs_known_help'));       // топ-5 подсказанного знания турниров (лиг). график - бар
-                        prepareKnownTournamentData($scope.getGraphData($scope.serverData, 'clubs_known'));   // топ-5 спонтанного знания турниров (лиг). график - бар
+                        prepareKnownHelpTournamentData($scope.getGraphData($scope.serverData, 'tournaments_known_help'));       // топ-5 подсказанного знания турниров (лиг). график - бар
+                        prepareKnownTournamentData($scope.getGraphData($scope.serverData, 'tournaments_known'));   // топ-5 спонтанного знания турниров (лиг). график - бар
                         prepareKnownHelpClubData($scope.getGraphData($scope.serverData, 'clubs_known_help'));// топ-5 подсказанного знания клубов. график - бар
                         prepareKnownClubData($scope.getGraphData($scope.serverData, 'clubs_known'));         // топ-5 спонтанного знания клубов. график - бар
                         prepareKnownHelpPlayerData($scope.getGraphData($scope.serverData, 'clubs_known_help'));        // топ-5 подсказанного знания спортсменов. график - бар
@@ -299,23 +299,23 @@
                         
                         data = $scope.prepareChartData(data, {
                             'sport': $scope.parameters.sport,
-                            'club': $scope.parameters.sport
+                            'tournament': $scope.parameters.sport
                         });
             
                         var dataset = { label:[], fillColor:[], data:[] };
                         var chartData = {labels:[],datasets:[dataset]};
-                        data.legends.club.forEach(function(club, index) {
-                            var count = data.getCount({'sport': club.sport.id, 'club': club.id});
-                            dataset.label.push(club.name + ' (' + club.sport.name + '): ' + count.toLocaleString('en-US'));
+                        data.legends.tournament.forEach(function(tournament, index) {
+                            var count = data.getCount({'sport': tournament.sport.id, 'tournament': tournament.id});
+                            dataset.label.push(tournament.name + ' (' + tournament.sport.name + '): ' + count.toLocaleString('en-US'));
                             dataset.fillColor.push(colorGenerator(index));
                             dataset.data.push(count);
             
-                            chartData.labels.push(club.name + ' (' + club.sport.name + ')');
+                            chartData.labels.push(tournament.name + ' (' + tournament.sport.name + ')');
                         });
             
                         $scope.graphs.knownHelpTournament = {
                             legends:data.legends,
-                            label: "Топ-" + data.legends.club.length  + " подсказанное знание турниров (лиг)",
+                            label: "Топ-" + data.legends.tournament.length  + " подсказанное знание турниров (лиг)",
                             chart:{
                                 data:chartData,
                                 options:{
@@ -331,24 +331,24 @@
                     function prepareKnownTournamentData(data) {
                         data = $scope.prepareChartData(data, {
                             'sport': $scope.parameters.sport,
-                            'club': $scope.parameters.sport
+                            'tournament': $scope.parameters.sport
                         });
             
                         var dataset = { label:[], fillColor:[], data:[] };
                         var chartData = {labels:[],datasets:[dataset]};
             
-                        data.legends.club.forEach(function(club, index) {
-                            var count = data.getCount({'sport': club.sport.id, 'club': club.id});
-                            dataset.label.push(club.name + ' (' + club.sport.name + '): ' + count.toLocaleString('en-US'));
-                            dataset.fillColor.push(colorGenerator(index)); //club.color);
+                        data.legends.tournament.forEach(function(tournament, index) {
+                            var count = data.getCount({'sport': tournament.sport.id, 'tournament': tournament.id});
+                            dataset.label.push(tournament.name + ' (' + tournament.sport.name + '): ' + count.toLocaleString('en-US'));
+                            dataset.fillColor.push(colorGenerator(index)); //tournament.color);
                             dataset.data.push(count);
             
-                            chartData.labels.push(club.name + ' (' + club.sport.name + ')');
+                            chartData.labels.push(tournament.name + ' (' + tournament.sport.name + ')');
                         });
             
                         $scope.graphs.knownTournament = {
                             legends:data.legends,
-                            label: "Топ-" + data.legends.club.length  + " спонтанное знание турниров (лиг)",
+                            label: "Топ-" + data.legends.tournament.length  + " спонтанное знание турниров (лиг)",
                             chart:{
                                 data:chartData,
                                 options:{

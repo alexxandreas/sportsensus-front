@@ -216,26 +216,7 @@
                 }]
             });
             
-            translations.pages.push({
-                key: "sponsor",
-                name: "Спонсор",
-                lists: [{
-                    id: 1,
-                    name: "Спонсор 1"
-                },{
-                    id: 2,
-                    name: "Спонсор 2"
-                },{
-                    id: 3,
-                    name: "Спонсор 3"
-                },{
-                    id: 4,
-                    name: "Спонсор 4"
-                },{
-                    id: 5,
-                    name: "Спонсор 5"
-                }]
-            });
+            
             
         }
         
@@ -284,6 +265,7 @@
                 prepareChildren('clubs');
                 prepareChildren('leagues');
                 prepareChildren('playgrounds');
+                prepareChildren('tournaments');
                 
                 function prepareChildren(type){
                     var childObj = item.lists.filter(function(child){return child.key == type;});

@@ -1,0 +1,102 @@
+<div class="home-page" layout="column" layout-align="start center">
+    <div class="home-background">
+        
+        <div layout="row" layout-align="start center" class="button-enter">
+            <div class="button-enter-content" layout="row" layout-align="start center">
+                <div class="button-enter-icon"></div>
+                <div class="button-enter-text">Войти</div>
+            </div>
+        </div>
+        
+        <div class="logo"></div>
+        
+        <div class="description">
+            Платформа для оценки<br>эффективности<br>спортивного спонсорства
+        </div>
+        
+        <div layout="row" layout-align="center center" class="button-register button-register-top">
+            Зарегистрироваться
+        </div>
+        
+        <div class="video">
+            <iframe  src="https://www.youtube.com/embed/f8rsvpAs2qw" frameborder="0" allowfullscreen></iframe>
+        </div>
+        
+        <div layout="column" layout-align="start start" class="what-is-it-block">
+            <div class="what-is-it">
+                Что такое <b>Sport Sensus</b> ?
+            </div>
+            
+            <div layout="column" layout-align="start stretch" class="it-is-block">
+                <div class="it-is">
+                    Онлайн платформа для планирования, контроля,<br>анализа и эффективности спортивного<br>спонсорства
+                </div>
+                <div class="it-is">
+                    Актуальные данные и уникальный комплексный<br>алгоритм
+                </div>
+                <div class="it-is">
+                    Новый уровень профессионального диалога<br>правообладателей и спонсора в эру современных<br>технологий
+                </div>
+            </div>
+        </div>
+        
+        <div layout="row" layout-align="center center" class="actions">
+            <div layout="row" layout-align="start center"
+                class="action" ng-repeat="item in actionItems">
+                <div layout="row" layout-align="center center" class="action-number">
+                    {{$index+1}}
+                </div>
+                <div class="action-text" ng-bind-html="item | trustAsHtmlFltr"></div>
+            </div>
+        </div>
+        
+        <div class="for-who">
+            Для кого<br>эта платформа
+        </div>
+        
+        <div class="for-who-block" ng-repeat="block in forWho"
+            ng-class="'for-who-block-'+($index+1)"
+            layout="column" layout-align="start stretch">
+            <div class="for-who-header">
+                {{block.title}}
+            </div>
+            <div layout="column" layout-align="start stretch" class="for-who-list">
+                <div class="for-who-list-item" ng-repeat="item in block.items"
+                    ng-bind-html="item | trustAsHtmlFltr"></div>
+            </div>
+            <div flex></div>
+            <div class="for-who-button" layout="row" layout-align="center center">
+                Зарегистрироваться
+            </div>
+        </div>
+        
+        <div layout="row" layout-align="center center" class="register-title">
+            Регистрация
+        </div>
+        
+        <div layout="row" layout-align="center start" class="register">
+            <div layout="column" layout-align="start stretch" class="register-column">
+                <div class="register-item-title">Тип компании</div>
+                <div class="register-input"></div>
+                <div class="register-item-title">Имя</div>
+                <div class="register-input"></div>
+                <div class="register-item-title">Фамилия</div>
+                <div class="register-input"></div>
+            </div>
+            <div layout="column" layout-align="start stretch" class="register-column">
+                <div class="register-item-title">Компания</div>
+                <div class="register-input"></div>
+                <div class="register-item-title">Адрес эл. почты</div>
+                <div class="register-input"></div>
+                <div class="register-item-title">Телефон</div>
+                <div class="register-input"></div>
+            </div>
+        </div>
+        
+        <div layout="row" layout-align="center center" class="button-register button-register-bottom">
+            Зарегистрироваться
+        </div>
+        
+    </div>
+    
+</div>

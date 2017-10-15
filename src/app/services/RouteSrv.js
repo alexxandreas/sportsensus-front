@@ -231,13 +231,18 @@
             return routes;   
         }
         
+        function getPath(type){
+            var route = routes[type];
+            return '#!' + route.path;
+        }
         
         
         
         var me = {
             navigate: navigate,
             getCurrentRoute: getCurrentRoute,
-            getRoutes: getRoutes
+            getRoutes: getRoutes,
+            getPath: getPath
         };
 
 

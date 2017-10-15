@@ -28,13 +28,15 @@
                 '$anchorScroll',
                 '$window',
                 'ApiSrv',
+                'RouteSrv',
                 function(
                     $scope,
                     $routeParams,
                     $location,
                     $anchorScroll,
                     $window,
-                    ApiSrv
+                    ApiSrv,
+                    RouteSrv
                 ){
                     $scope.actionItems = [
                         'Изучайте аудиторию,<br>выбирайте наиболее<br>релевантрую и лояльную',
@@ -44,6 +46,7 @@
                     
                     $scope.forWho = [{
                         title: 'Правообладатель',
+                        type: 1,
                         items: [
                             'Доступ к данным об<br>аудитории спорта/клуба',
                             'Пакетирование спонсорских<br>предложений, обоснование<br>стоимости и эффективности',
@@ -51,6 +54,7 @@
                         ]
                     },{
                         title: 'Спонсор',
+                        type: 0,
                         items: [
                             'Изучение спортивных<br>предпочтений целевой<br>аудитории бренда/продукта',
                             'Верификация спонсорских<br>предложений',
@@ -58,6 +62,7 @@
                         ]
                     },{
                         title: 'Агенство',
+                        type: 2,
                         items: [
                             'Профессиональная<br>аналитика спонсорских<br>пакетов',
                             'Быстрый и удобный доступ<br>к данным',
@@ -65,7 +70,20 @@
                         ]
                     }];
                     
+                    $scope.enterPath = RouteSrv.getPath('login');
                     
+                    $scope.scrollToRegistration = function(type){
+                        $scope.scrollTo('registration'); 
+                        $scope.regData.company_type = type;
+                    }
+                    
+                    $scope.scrollTo = function(id) {
+                        var old = $location.hash();
+                        $location.hash(id);
+                        $anchorScroll();
+                        //reset to old to keep any additional routing logic from kicking in
+                        $location.hash(old);
+                    }
                     
                     $scope.regData = {
                         first_name:  '',
@@ -85,36 +103,27 @@
                         {value: 2, name: 'Агенство'}
                     ];
                     
-                    $scope.companyTypeFiz = function(fiz) {
-                        if (arguments.length)
-                            return $scope.regData.legal_status  = fiz ? 0 : 1;
-                        else
-                            return $scope.regData.legal_status  == 0 ? true : false;
-                    };
-
-                    $scope.companyTypeYur = function(yur) {
-                        if (arguments.length)
-                            return $scope.regData.legal_status  = yur ? 1 : 0;
-                        else
-                            return $scope.regData.legal_status  == 0 ? false : true;
-                    };
-
-                    
                     $scope.register = function(){
                         ApiSrv.register($scope.regData);
                     }
                     
-                    $scope.scrollToRegistration = function(){
-                        $scope.scrollTo('registration'); 
-                    }
+    
                     
-                    $scope.scrollTo = function(id) {
-                        var old = $location.hash();
-                        $location.hash(id);
-                        $anchorScroll();
-                        //reset to old to keep any additional routing logic from kicking in
-                        $location.hash(old);
-                    }
+                    // $scope.companyTypeFiz = function(fiz) {
+                    //     if (arguments.length)
+                    //         return $scope.regData.legal_status  = fiz ? 0 : 1;
+                    //     else
+                    //         return $scope.regData.legal_status  == 0 ? true : false;
+                    // };
+
+                    // $scope.companyTypeYur = function(yur) {
+                    //     if (arguments.length)
+                    //         return $scope.regData.legal_status  = yur ? 1 : 0;
+                    //     else
+                    //         return $scope.regData.legal_status  == 0 ? false : true;
+                    // };
+
+                    
                 }]
         };
     }

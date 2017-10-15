@@ -1,30 +1,50 @@
-<div class="infobox-panel" 
+<div class="infobox-panel infobox-consume-panel" 
     layout="column" layout-align="start stretch"
     preloader-dir>
     
     <infobox-tabs-dir></infobox-tabs-dir>
 
-    <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
-        География
-        <div flex></div>
-        <md-button class="md-raised md-primary"
-                   ng-disabled="!checkSelected('regions')"
-                   ng-click="clearSelection('regions')"
-        >Сбросить</md-button>
-    </h1>
+    <!--<h1 class="infobox-panel-header" layout="row" layout-align="start center" >-->
+    <!--    География-->
+    <!--    <div flex></div>-->
+    <!--    <md-button class="md-raised md-primary"-->
+    <!--               ng-disabled="!checkSelected('regions')"-->
+    <!--               ng-click="clearSelection('regions')"-->
+    <!--    >Сбросить</md-button>-->
+    <!--</h1>-->
 
 
-
-    <map-dir regions="parameters.region.lists" style="width:100%;"
+    <div layout="row" layout-align="start start"
+        class="regions-content">
+        <div layout="row" layout-align="start start">
+            <div ng-repeat="blocks in columns" class="regions-column">
+                <div layout="column" layout-align="start start">
+                    <div ng-repeat="block in blocks">
+                        <div class="infobox-header-1" ng-show="block.char">
+                            {{block.char}}
+                        </div>
+                        <infobox-selectable-list-dir items="block.regions" columns-count="1"
+                            selectable="true" highlightable="false">
+                        </infobox-selectable-list-dir>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <map-dir regions="parameters.region.lists" style="width:100%;"
              highlighted-color="'#bfebff'" selected-color="'#A4DEF4'"></map-dir>
+    </div>
+    
 
-    <legend-dir legend="parameters.region.lists" 
-                columns-layout="{'def':2, 'md':3, 'lg': 4, 'gt-lg':5}"
-                selectable="true" 
-                highlightable="true"
-                highlighted-color="'#bfebff'" 
-                selected-color="'#A4DEF4'">
-    </legend-dir>
+    
+    
+    <!--<legend-dir legend="parameters.region.lists" -->
+    <!--            columns-layout="{'def':2, 'md':3, 'lg': 4, 'gt-lg':5}"-->
+    <!--            selectable="true" -->
+    <!--            highlightable="true"-->
+    <!--            highlighted-color="'#bfebff'" -->
+    <!--            selected-color="'#A4DEF4'">-->
+    <!--</legend-dir>-->
 
 
 </div>

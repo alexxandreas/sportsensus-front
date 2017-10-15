@@ -1,36 +1,147 @@
-<div class="infobox-panel"
+<div class="infobox-panel infobox-demography-panel"
     layout="column" layout-align="start stretch"
     preloader-dir> 
     
     <infobox-tabs-dir></infobox-tabs-dir>
-    
-    <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
-        {{parameters.demography.name}}
-        <div flex></div>
-        <md-button class="md-raised md-primary"
-                   ng-disabled="!checkSelected('demography')"
-                    ng-click="clearSelection('demography')"
-        >Сбросить</md-button>
-    </h1>
 
+    <!--<div layout="row" layout-align="start start" layout-wrap-->
+    <!--    class="infobox-selection demography-selection">-->
+    <!--    <div  ng-repeat="collection in parameters.demography.lists"-->
+    <!--        layout="column" layout-align="start start" -->
+    <!--        class="infobox-selection-item "-->
+    <!--        flex-sm="100"-->
+    <!--        flex-md="50"-->
+    <!--        flex-lg="30" -->
+    <!--        flex-gt-lg="25" >-->
+    <!--        <div class="infobox-header-1" ng-show="collection.name">-->
+    <!--            {{collection.name}}-->
+    <!--        </div>-->
+
+    <!--        <infobox-selectable-list-dir items="collection.lists" columns-count="1"-->
+    <!--            selectable="true" highlightable="false">-->
+    <!--        </infobox-selectable-list-dir>-->
+    <!--    </div>-->
+    <!--</div>-->
+    
+    
     <div layout="row" layout-align="start start" layout-wrap
-        class="infobox-selection">
-        <div  ng-repeat="collection in parameters.demography.lists"
-            layout="column" layout-align="start start" 
-            class="infobox-selection-item"
+        class="infobox-selection demography-selection">
+        
+        <!-- Пол -->
+        <div layout="column" layout-align="start stretch" 
+            class="infobox-selection-item "
             flex-sm="100"
             flex-md="50"
             flex-lg="30" 
             flex-gt-lg="25" >
-            <div class="infobox-panel-header3" >
-                {{collection.name}}
+            <div class="infobox-header-1">
+                {{parameters.gender.name}}
             </div>
 
-            <legend-dir legend="collection.lists" columns-count="1"
-                        selectable="true" highlightable="false"
-                        highlighted-color="'#bfebff'" selected-color="'#777777'"
-                        ></legend-dir>
+            <infobox-selectable-list-dir items="parameters.gender.lists" columns-count="1"
+                selectable="true" highlightable="false">
+            </infobox-selectable-list-dir>
         </div>
+        
+        <!-- Возраст -->
+        <div layout="column" layout-align="start stretch" 
+            class="infobox-selection-item "
+            flex-sm="100"
+            flex-md="50"
+            flex-lg="30" 
+            flex-gt-lg="25" >
+            <div class="infobox-header-1">
+                {{parameters.age.name}}
+            </div>
+
+            <infobox-selectable-list-dir items="parameters.age.lists" columns-layout="{'def':3}"
+                selectable="true" highlightable="false">
+            </infobox-selectable-list-dir>
+        </div>
+        
+        <!-- Доход -->
+        <div layout="column" layout-align="start stretch" 
+            class="infobox-selection-item "
+            flex-sm="100"
+            flex-md="50"
+            flex-lg="30" 
+            flex-gt-lg="25" >
+            <div class="infobox-header-1">
+                {{parameters.income.name}}
+            </div>
+
+            <infobox-selectable-list-dir items="parameters.income.lists" columns-layout="{'def':4}"
+                selectable="true" highlightable="false">
+            </infobox-selectable-list-dir>
+        </div>
+        
+        <!-- Род деятельности -->
+        <div layout="column" layout-align="start stretch" 
+            class="infobox-selection-item "
+            flex-sm="100"
+            flex-md="50"
+            flex-lg="30" 
+            flex-gt-lg="25" >
+            <div class="infobox-header-1">
+                {{parameters.career.name}}
+            </div>
+
+            <infobox-selectable-list-dir items="parameters.career.lists" 
+                selectable="true" highlightable="false">
+            </infobox-selectable-list-dir>
+        </div>
+        
+        <!-- Семейное положение -->
+        <div layout="column" layout-align="start stretch" 
+            class="infobox-selection-item "
+            flex-sm="100"
+            flex-md="50"
+            flex-lg="30" 
+            flex-gt-lg="25" >
+            <div class="infobox-header-1">
+                {{parameters.family.name}}
+            </div>
+
+            <infobox-selectable-list-dir items="parameters.family.lists" 
+                selectable="true" highlightable="false">
+            </infobox-selectable-list-dir>
+        </div>
+        
+        <div layout="column" layout-align="start stretch">
+            
+            <!-- Кол-во человек в семье -->
+            <div layout="column" layout-align="start stretch" 
+                class="infobox-selection-item "
+                flex-sm="100"
+                flex-md="50"
+                flex-lg="30" 
+                flex-gt-lg="25" >
+                <div class="infobox-header-1">
+                    {{parameters.familysize.name}}
+                </div>
+    
+                <infobox-selectable-list-dir items="parameters.familysize.lists" columns-layout="{'def':3}"
+                    selectable="true" highlightable="false">
+                </infobox-selectable-list-dir>
+            </div>
+            
+            <!-- Кол-во детей -->
+            <div layout="column" layout-align="start stretch" 
+                class="infobox-selection-item "
+                flex-sm="100"
+                flex-md="50"
+                flex-lg="30" 
+                flex-gt-lg="25" >
+                <div class="infobox-header-1">
+                    {{parameters.children.name}}
+                </div>
+    
+                <infobox-selectable-list-dir items="parameters.children.lists" columns-layout="{'def':3}"
+                    selectable="true" highlightable="false">
+                </infobox-selectable-list-dir>
+            </div>
+        </div>
+        
     </div>
     
 </div>

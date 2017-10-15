@@ -1,34 +1,37 @@
-<div class="infobox-panel"
+<div class="infobox-panel infobox-image-panel"
      layout="column" layout-align="start stretch"
      preloader-dir>
 
     <infobox-tabs-dir></infobox-tabs-dir>
     
-    <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
-        {{parameters.image.name}}
-        <div flex></div>
+    <div layout="column" layout-align="start stretch"
+        class="image-content">
 
-        <md-button class="md-raised md-primary"
-                   ng-show="checkSelected('image')"
-                   ng-click="clearSelection('image')"
-        >Сбросить</md-button>
-    </h1>
+        <div class="image-hint">Все уровни восприятия будут отображены на одном сводном графике</div>
 
-    <div class="infobox-panel-header3">Все уровни восприятия будут отображены на одном сводном графике</div>
+       <infobox-selectable-list-dir 
+            items="parameters.image.lists" 
+            all-selected="true"
+            selectable="false" 
+            highlightable="false">
+        </infobox-selectable-list-dir>
+    </div>
+    
+    <!--<h1 class="infobox-panel-header" layout="row" layout-align="start center" >-->
+    <!--    {{parameters.image.name}}-->
+    <!--    <div flex></div>-->
 
-    <legend-dir legend="parameters.image.lists" columns-count="1"
-                selectable="false" highlightable="false"
-                highlighted-color="'#bfebff'" selected-color="'#777777'"
-    ></legend-dir>
+    <!--    <md-button class="md-raised md-primary"-->
+    <!--               ng-show="checkSelected('image')"-->
+    <!--               ng-click="clearSelection('image')"-->
+    <!--    >Сбросить</md-button>-->
+    <!--</h1>-->
 
-   <!-- <div class="l-board__body-box-list" >
-        <ul>
-            <li ng-repeat="collection in parameters.image.lists">
-                <input type="checkbox" name="{{collection.id}}" id="{{collection.id}}"
-                       ng-model="collection.selected"
-                       ng-click="selectCheckbox(collection, item)">
-                <label for="{{collection.id}}">{{collection.name}}</label>
-            </li>
-        </ul>
-    </div>-->
+    <!--<div class="infobox-panel-header3">Все уровни восприятия будут отображены на одном сводном графике</div>-->
+
+    <!--<legend-dir legend="parameters.image.lists" columns-count="1"-->
+    <!--            selectable="false" highlightable="false"-->
+    <!--            highlighted-color="'#bfebff'" selected-color="'#777777'"-->
+    <!-- ></legend-dir>-->
+
 </div>

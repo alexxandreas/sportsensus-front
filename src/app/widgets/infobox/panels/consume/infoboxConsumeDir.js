@@ -135,12 +135,12 @@
             			});
             		}
             
-            		// переопределяем setParams
-            		var parentSetParams = $scope.setParams;
-            		$scope.setParams = function(params){
-            			parentSetParams(params);
-            			$scope.prepareConsume();
-            		}
+            // 		// переопределяем setParams
+            // 		var parentSetParams = $scope.setParams;
+            // 		$scope.setParams = function(params){
+            // 			parentSetParams(params);
+            // 			$scope.prepareConsume();
+            // 		}
                    
                     
                    

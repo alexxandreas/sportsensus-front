@@ -1,35 +1,38 @@
-<div class="infobox-panel"
+<div class="infobox-panel infobox-interest-panel"
      layout="column" layout-align="start stretch"
      preloader-dir>
 
     <infobox-tabs-dir></infobox-tabs-dir>
 
-    <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
-        {{parameters.interest.name}}
-        <div flex></div>
-        <md-button class="md-raised md-primary"
-                   ng-click="selectAll('interest')"
-        >Выделить всё</md-button>
-        <md-button class="md-raised md-primary"
-                   ng-disabled="!checkSelected('interest')"
-                   ng-click="clearSelection('interest')"
-        >Сбросить</md-button>
-    </h1>
+    <div layout="column" layout-align="start stretch"
+        class="interest-content">
 
-    <legend-dir legend="parameters.interest.lists" columns-count="1"
-                selectable="true" highlightable="false"
-                highlighted-color="'#bfebff'" selected-color="'#777777'"
-                ></legend-dir>
+       <infobox-selectable-list-dir 
+            items="parameters.interest.lists" 
+            selectable="true" 
+            highlightable="false">
+        </infobox-selectable-list-dir>
+    </div>
 
-    <!--<div class="l-board__body-box-list" >
-        <ul>
-            <li ng-repeat="collection in parameters.interest.lists">
-                <input type="checkbox" name="{{collection.id}}" id="{{collection.id}}"
-                       ng-model="collection.selected"
-                       ng-click="selectCheckbox(collection, item)">
-                <label for="{{collection.id}}">{{collection.name}}</label>
-            </li>
-        </ul>
-    </div>-->
+    <!--<h1 class="infobox-panel-header" layout="row" layout-align="start center" >-->
+    <!--    {{parameters.interest.name}}-->
+    <!--    <div flex></div>-->
+    <!--    <md-button class="md-raised md-primary"-->
+    <!--               ng-click="selectAll('interest')"-->
+    <!--    >Выделить всё</md-button>-->
+    <!--    <md-button class="md-raised md-primary"-->
+    <!--               ng-disabled="!checkSelected('interest')"-->
+    <!--               ng-click="clearSelection('interest')"-->
+    <!--    >Сбросить</md-button>-->
+    <!--</h1>-->
+    
+    
+
+    <!--<legend-dir legend="parameters.interest.lists" columns-count="1"-->
+    <!--            selectable="true" highlightable="false"-->
+    <!--            highlighted-color="'#bfebff'" selected-color="'#777777'"-->
+    <!--            ></legend-dir>-->
+
+    
 
 </div>

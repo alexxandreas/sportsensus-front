@@ -54,8 +54,10 @@
     
     
     <!--таймер-->
-    <div class="header-timer" ng-if="timeoutStr" ng-click="logout()">
-        {{timeoutStr}}
+    <div class="header-timer" ng-if="timeoutStr"
+        layout="row" layout-align="start center" flex="none">
+        <div class="">{{timeoutStr}}</div>
+        <div class="header-timer-suffix" ng-if="timeoutStrSuffix">{{timeoutStrSuffix}}</div>
     </div>
     
     <!--кнопка ЛК-->
@@ -68,5 +70,13 @@
         </div>
     </div>
     
+    <!--Кнопка Выход-->
+    <div class="header-button header-exit-button" 
+        layout="row" layout-align="start center" flex="none"
+        ng-click="logout()">
+        <div class="header-button-content" layout="row" layout-align="start center">
+            <div class="header-button-icon header-exit-icon" flex="none"></div>
+        </div>
+    </div>
    
 </div>

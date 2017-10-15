@@ -90,16 +90,12 @@
 			},
             'infobox': {
                 path: '/infobox/',
-                template: getCheckAccessTemplate('infoblock', '<infobox-dir></infobox-dir>'),
+                //template: getCheckAccessTemplate('infoblock', '<infobox-dir></infobox-dir>'),
+                redirectTo: '/infobox/demography/',
 				resolve: getUserAuthResolver()
             },
             // остальные роуты для инфоблока ниже, в цикле
             
-    //         'infobox:regions': {
-    //             path: '/infobox/regions/',
-    //             template: getCheckAccessTemplate('infoblock', '<infobox-dir><articles-dir></articles-dir></infobox-dir>'),
-				// resolve: getUserAuthResolver()
-    //         },
             'analytics': {
                 path: '/analytics/',
                 template: getCheckAccessTemplate('rightholder,sponsor', '<analytics-dir></analytics-dir>'),

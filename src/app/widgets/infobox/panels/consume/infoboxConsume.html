@@ -1,53 +1,86 @@
-<div class="infobox-panel" 
+<div class="infobox-panel infobox-consume-panel" 
      layout="column" layout-align="start stretch"
      preloader-dir>
     
     <infobox-tabs-dir></infobox-tabs-dir>
     
-    <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
-        {{parameters.consume.name}}
-        <div flex></div>
-        <md-button class="md-raised md-primary"
-                   ng-disabled="!checkSelected('consume')"
-                   ng-click="clearSelection('consume')"
-        >Сбросить</md-button>
-    </h1>
-
+    <!--<h1 class="infobox-panel-header" layout="row" layout-align="start center" >-->
+    <!--    {{parameters.consume.name}}-->
+    <!--    <div flex></div>-->
+    <!--    <md-button class="md-raised md-primary"-->
+    <!--               ng-disabled="!checkSelected('consume')"-->
+    <!--               ng-click="clearSelection('consume')"-->
+    <!--    >Сбросить</md-button>-->
+    <!--</h1>-->
+    
     <div layout="column" layout-align="start stretch"
-        ng-repeat="block in blocks"
-         style="margin: 5px;">
-        
-        <!--ng-click="block.visible = !block.visible">-->
-        <div class="infobox-panel-header2 infobox-panel-header2-checkbox no-outline no-select"
-             layout="row" layout-align="start center"
-             ng-click="block.origin.selected = !block.origin.selected">
-            <div flex="none" class="checkbox-color"
-                 ng-style="{'background-color': block.origin.selected ? '#777777' : 'none'}"></div>
-            <div class="legend-item-text">{{block.origin.name}}{{block.isSelected() ? ' *' : ''}}</div>
-        </div>
-        
-        <div layout="row" layout-align="start start" layout-wrap 
-            ng-if="block.origin.selected"
-            style="margin-bottom: 20px;">
-            
-            <div ng-repeat="list in block.lists"
-                 layout="column" layout-align="start start"
-                ng-show="list.visibleFn ? list.visibleFn() : true"
-                class="infobox-selection-item"
-                flex-sm="100"
-                flex-md="50"
-                flex-lg="30" 
-                flex-gt-lg="25" >
-                <div class="infobox-panel-header3" ng-show="list.name" >
-                    {{list.name}}
-                </div>
-                <legend-dir legend="list.lists" columns-count="1"
-                            selectable="true" highlightable="false"
-                            highlighted-color="'#bfebff'" selected-color="'#777777'"
-                ></legend-dir>
+        class="consume-content">
 
+        <div layout="column" layout-align="start stretch"
+            ng-repeat="block in blocks"
+            class="consume-block">
+            
+            <!--ng-click="block.visible = !block.visible">-->
+            <div class="" layout="row" layout-align="start center">
+                 <!--ng-click="block.origin.selected = !block.origin.selected">-->
+                 
+                <!--<div flex="none" class="checkbox-color"-->
+                <!--     ng-style="{'background-color': block.origin.selected ? '#777777' : 'none'}"></div>-->
+                <!--<div class="legend-item-text">{{block.origin.name}}{{block.isSelected() ? ' *' : ''}}</div>-->
+                <div class="consume-image" ng-class="'consume-image-' + block.origin.key"></div>
+                <div class="infobox-header-2 consume-header-2" >
+                    {{block.origin.name}}
+                </div>
+                <div class="consume-arrow" ng-class="{'selected':block.origin.selected}" 
+                    ng-click="block.origin.selected = !block.origin.selected"></div>
             </div>
+            
+            <div layout="row" layout-align="start start" layout-wrap
+                class="infobox-selection consume-selection"
+                ng-if="block.origin.selected">
+                <div ng-repeat="collection in block.lists"
+                    layout="column" layout-align="start start" 
+                    class="infobox-selection-item "
+                    ng-show="collection.visibleFn ? collection.visibleFn() : true"
+                    flex-sm="100"
+                    flex-md="50"
+                    flex-lg="30" 
+                    flex-gt-lg="25" >
+                    <div class="infobox-header-1" ng-show="collection.name">
+                        {{collection.name}}
+                    </div>
+        
+                    <infobox-selectable-list-dir items="collection.lists" columns-count="1"
+                        selectable="true" highlightable="false">
+                    </infobox-selectable-list-dir>
+                </div>
+            </div>
+            
+            <!--<div layout="row" layout-align="start start" layout-wrap -->
+            <!--    ng-if="block.origin.selected"-->
+            <!--    style="margin-bottom: 20px;">-->
+                
+            <!--    <div ng-repeat="list in block.lists"-->
+            <!--         layout="column" layout-align="start start"-->
+            <!--        ng-show="list.visibleFn ? list.visibleFn() : true"-->
+            <!--        class="infobox-selection-item"-->
+            <!--        flex-sm="100"-->
+            <!--        flex-md="50"-->
+            <!--        flex-lg="30" -->
+            <!--        flex-gt-lg="25" >-->
+            <!--        <div class="infobox-panel-header3" ng-show="list.name" >-->
+            <!--            {{list.name}}-->
+            <!--        </div>-->
+            <!--        <legend-dir legend="list.lists" columns-count="1"-->
+            <!--                    selectable="true" highlightable="false"-->
+            <!--                    highlighted-color="'#bfebff'" selected-color="'#777777'"-->
+            <!--        ></legend-dir>-->
+    
+            <!--    </div>-->
+            <!--</div>-->
+        
         </div>
+        
     </div>
 
 </div>

@@ -100,6 +100,13 @@
 
         var parametersNames = [
             'demography',
+            'gender',
+            'age',
+            'income',
+            'career',
+            'familysize',
+            'family',
+            'children',
             'consume',
             'car',
             'gaming',
@@ -138,6 +145,8 @@
         
         var parameters = {}; // все параметры
         var selected = {}; // выбранные параметры
+        
+        var colorGenerator = d3.scale.category10();
 
         function isNumber(n) {
             return !isNaN(parseFloat(n)) && isFinite(n);
@@ -216,27 +225,7 @@
                 }]
             });
             
-            translations.pages.push({
-                key: "sponsor",
-                name: "Спонсор",
-                lists: [{
-                    id: 1,
-                    name: "Спонсор 1"
-                },{
-                    id: 2,
-                    name: "Спонсор 2"
-                },{
-                    id: 3,
-                    name: "Спонсор 3"
-                },{
-                    id: 4,
-                    name: "Спонсор 4"
-                },{
-                    id: 5,
-                    name: "Спонсор 5"
-                }]
-            });
-            
+        
         }
         
         function extendAfterProcessing(){
@@ -312,32 +301,45 @@
 
             extendAfterProcessing();
 
-            var colorGenerator = d3.scale.category10();
+            //var colorGenerator = d3.scale.category10();
             parametersNames.forEach(function(type){
                 var params = parameters[type];
                 if (!params || !params.lists) return;
                 
                 params.lists.forEach(function(item){
-                    var id = item.id;
-                    id = Number.parseInt(id) % 10;
-                    if(!Number.isNaN(id)) {
-                        item.chartColor = colorGenerator(id);
-                    }
+                    item.chartColor = getItemColor(type, item);
+                    
+                    // var id = item.id;
+                    // id = Number.parseInt(id) % 10;
+                    // if(!Number.isNaN(id)) {
+                    //     item.chartColor = colorGenerator(id);
+                    // }
                 });
             });
-            parameters.region.lists.forEach(function(item){
-                item.chartColor = '#777777';
-            })
-            
-            
-            
+            // parameters.region.lists.forEach(function(item){
+            //     item.chartColor = '#777777';
+            // })
             
         }
         
+        function getItemColor(type, item){
+            var colors = ConfigSrv.get().colors;
+            var typeColors = colors && colors[type];
+            var color = typeColors && (typeColors[item.id] || typeColors[item.key]);
+            
+            if (!color){
+                var id = item.id;
+                id = Number.parseInt(id) % 10;
+                if(!Number.isNaN(id)) {
+                    // var colorGenerator = d3.scale.category10();
+                    color = colorGenerator(id);
+                }
+            }
+            //return color || '#000';
+            return color;
+        }
         
         
-        
-
         function clearSelection(type){
             clearRec(parameters[type]);
             

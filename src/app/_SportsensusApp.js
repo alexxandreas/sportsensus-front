@@ -27,6 +27,7 @@
 			$routeProvider.when(route.path, {
 				template: route.template,
 				controller: route.controller,
+				redirectTo: route.redirectTo,
 				resolve: route.resolve
 			})
 		})

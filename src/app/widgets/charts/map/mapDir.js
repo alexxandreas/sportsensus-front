@@ -210,13 +210,13 @@
                         },
                         "sr": {
                             "path": "m137.23,308.27-0.17857,3.0357-0.26786,1.25-2.2321,1.1607,1.4286,1.6964,1.0714,3.2143,2.2321,0.71429,0.98215,0.80357,0.89285,1.0714,1.7857,0.625,2.5893,2.5,0.89286,1.0714,0,1.875-1.5179,2.0536-2.4107,2.8571-0.44643,1.25,0.44643,1.6964,0.71429,0.89286,2.1428,1.1607,4.0179,3.9286,1.7857,4.5536,1.25,1.4286,1.25,1.3393,0.26786,1.9643-0.71428,2.5-0.53572,2.4107,0.26786,1.7857,0.89286,1.0714,1.6071,0.44643,1.6964,0,1.6964-1.1607,1.25-1.0714,0.44642-2.6786,0.0893-1.875,2.2321-0.625,3.3036,1.25,1.6964,0.35714,1.6072,0,1.3393-1.5179,0.44643-0.53571,1.6071,0.35714,1.3393,1.0714,1.5178,0.89286,4.6429,0,1.1607-1.1607,1.3393,0.17857,0.89286,0.80358,1.6071-0.53572,0-1.7857-0.89286-1.9643-0.35714-1.3393-0.17857-3.9286-0.0893-2.0536-0.71428-1.25,0.0893-2.8571-0.35714-1.6071,0-2.5-0.80357-1.3393-1.1607-1.6071-2.5-1.0714-1.6072-2.0536-2.5893-0.0893-1.0714-0.35714-1.7857-1.6964-0.625-1.25-0.44642-0.89286-1.7857-2.4107-5.625-0.26786-0.53571-0.17857-1.9643-2.5893-3.125-0.89286-2.2321-2.9464-6.1607-3.3036-2.3214,0-1.0714-1.6964,0.44643-2.5-0.80357-0.35714-3.8393,2.1428-1.5179,0.35715z",
+                            "id": [31],
                             "name": "Саратовская область",
                             "ShortName": "Саратовская область"
-
                         },
                         "mr": {
                             "path": "m157.59,290.05,1.875,2.1429,2.6786,1.7857,1.7857,1.1607,1.7857,2.7679,0.44642,2.4107,2.0536,2.1429,2.5893,0.0893,1.6071,0.26786,0.89286,2.2321,0.71429,1.4286,2.0536,0.89286,1.7857,0.35714,1.25,0.625,0.53572,0.80358,5.8928,0.17857,2.6786-3.5714,0.35715-0.53572,0.71428-1.3393,0.0893-2.1429-0.0893-1.9643-1.7857-0.98215-0.35714-2.5-0.0893-0.80357-1.6964,0,0,0.17857-0.80357,0.89286-1.3393,0.80357-5.2678,0-2.5893-2.3214,0.17857-3.5714-1.1607-1.0714-0.17857-0.80358,1.0714-1.0714,0-1.6072-2.5893-0.53571-1.7857-0.0893-0.80357-1.25-0.71429-1.6964-1.25,1.1607-2.1429,2.3214-2.4107,1.5178-1.5179,0.98215-2.9464,0.26785z",
-                            "id": [-3], // TODO дописать для нового радара
+                            "id": [46], 
                             "name": "Республика Мордовия",
                             "ShortName": "Республика Мордовия"
                         },
@@ -326,7 +326,7 @@
                         },
                         "ko": {
                             "path": "m254.63,259.27,2.1466-0.63134,0.63134-0.88388,1.894,0.12627,1.6415,1.894,2.1466,0.25254,2.1466-0.50508,1.5152-1.894,0.50508-1.5152-0.63135-0.88389,0.63135-1.5152,2.1466-1.2627,4.5457-1.894,2.6516-1.1364,0.25254-1.5152-0.50508-2.5254-2.1466-0.88389-3.283,0.12627-2.3991,1.6415-2.3991-0.75761s-0.50508-1.0102-1.2627-1.0102-1.5152-0.25253-1.5152-0.25253l0.50507-3.0305,1.7678-0.37881,1.389-1.5152,0.50508-1.894,2.1466-0.50508,2.2728,0.12627,0.63135-1.7678-0.63135-0.63134-0.63134-2.1466,0.63134-1.389,4.5457-2.0203v-1.2627l-1.0102-2.5254-0.63135-1.6415-1.6415-1.7678-0.63134-1.1364,0.25254-1.6415,1.2627-0.63134,1.7678,0.75761,1.5152,2.1466,1.6415,1.5152,2.2728,1.894,2.6516,1.2627,1.7678,1.1364,0.50508,1.7678,1.5152,1.5152,3.1567,0.3788,1.894,1.2627,2.9042,0.50507,0.88388,1.2627h2.0203l1.0102-0.63134-0.25254-1.5152-0.75761-1.5152,0.50507-1.0102,0.88389-1.5152s0.25253-1.1364-0.12627-1.6415c-0.37881-0.50508-1.1364-1.1364-1.1364-1.1364v-0.88388l2.7779-3.283,3.1567-2.1466,1.894-2.0203,1.0102-0.88388,2.3991,0.63134,3.4093,0.12627,2.5254,0.75762,4.2932,0.50507,2.1466,0.63135,3.283,0.12627,2.3991-0.50508,1.5152,0.12627,0.12627,1.894,1.2627,1.0102,2.1466,2.1466,5.3033,4.672,7.4499,4.672,6.4397,3.7881,5.177,3.0305,5.5558,3.283,2.7779,1.894,2.2728,0.25254h3.283l2.1466-1.0102,2.5254-2.3991,1.6415-1.2627,2.7779,0.25253,2.3991-0.12626,2.0203-0.63135,1.5152-0.88388,1.6415-0.37881,3.1567,0.12627,1.6415,0.25254-0.50508,1.5152-0.88388,1.1364-1.1364,0.63134-0.50508,1.894,1.2627,1.7678,1.2627,1.389,0.12627,1.894-1.1364,1.389-0.88388,0.25254-0.75762,1.389-2.0203,0.25254-2.3991-0.12627-2.1466,0.88388-2.5254,1.389-1.389,1.1364-3.0305-0.12627-2.1466-0.50507h-3.1567-2.0203l-1.0102,0.3788-1.389,1.5152-0.75762,0.88389-2.1466,1.6415-1.5152,0.50508h-2.3991l-2.3991-0.25254-1.5152,0.50508-2.9042,2.0203-2.2728,1.2627-1.5152,1.0102-1.5152,0.3788-1.2627-0.12626-1.2627-1.0102-0.12626-1.894-0.63135-1.389-1.6415,0.88388-1.5152,1.389-1.0102,1.2627-0.88388,0.50508-1.2627,0.50507-0.75762,0.37881-0.12627,1.7678-0.3788,1.7678-0.63135,1.389-0.88388,1.1364-1.0102,1.6415-1.894,1.6415-1.6415,1.389-1.2627,0.75762-2.7779,3.283-1.894,2.6516-1.1364,3.0305-0.50507,1.6415-1.5152,1.6415-2.0203,0.88388-1.5152,0.63134-1.7678,1.0102h-2.2728l-3.1567-1.0102-3.1567-1.6415-4.4194-2.1466-0.75761-0.3788-2.5254,0.50507h-3.283l-3.0305-0.88388-2.9042-1.389-1.0102,0.25254-1.6415-0.12627-1.5152-1.2627-2.2728-2.3991-1.894-0.88388-0.63135-1.5152-2.2728-3.0305-5.8084-1.1364-1.389-0.63134-1.7678,0.63134-0.75761,0.75762v0.75761l0.37881,0.88389v1.6415,1.0102l-0.50508,0.3788-1.389-0.63134-0.88388-0.37881-1.1364,0.25254-1.5152,0.88388-1.5152,0.50508-1.1364-0.25254-0.88389-1.389-0.88388-0.63135-2.2728-0.88388-6.0609-1.1364-1.2627,0.25254-1.1364,1.1364-0.63135,1.5152-1.1364,0.37881-1.6415-1.389v-1.1364l1.0102-1.389,0.50507-0.75761-0.50507-1.0102-1.1364-1.0102-1.1364-1.0102-0.3788-0.75761,1.5152-1.2627,1.1364-2.5254,1.6415-1.0102,1.6415-0.3788,1.894-1.2627,0.88388-2.3991,1.2627-1.2627z",
-                            "id": [-1], // TODO дописать для нового радара
+                            "id": [45], 
                             "name": "Республика Коми",
                             "ShortName": "Республика Коми"
                         },
@@ -388,7 +388,7 @@
                         },
                         "tm": {
                             "path": "m454.64,359.43,1.25,3.2143,1.25,2.3214s-0.53571,2.3214-0.71428,3.0357c-0.17857,0.71429-1.6071,3.0357-1.6071,3.0357s0.53571,1.25,1.6071,1.9643c1.0714,0.71429,5.8929,1.7857,5.8929,1.7857l5.3571,0.17857s3.75,0.89285,4.1071,1.6071c0.35714,0.71429,0.89286,1.0714,0.89286,2.1429,0,1.0714,0.35714,4.2857,0.35714,4.2857s1.25,0.35714,2.6786,0.35714,3.0357,0.35715,3.0357,0.35715,0.35714,2.1428,0.35714,2.6786c0,0.53571-0.89286,1.7857-1.9643,1.7857s-3.75,1.6072-3.75,1.6072-1.25,2.6786-1.25,3.75-0.89285,3.5714-0.53571,4.2857c0.35714,0.71429,4.4643,1.7857,5.1786,2.1429,0.71429,0.35714,3.2143,2.6786,3.2143,2.6786s-0.71429,1.6071-1.6072,2.6786c-0.89285,1.0714-4.1071,3.0357-5.3571,4.6429-1.25,1.6071-0.35714,2.8571-0.35714,2.8571l-0.71429,1.6071-3.2143,0.53572-3.2143,0.35714-1.4286-1.6071-1.9643-0.17857-4.66-0.57h-2.3214l-1.25,1.0714s-2.1429,1.0714-3.2143,1.25c-1.0714,0.17857-5.3571,1.25-6.0714,1.25-0.71428,0-6.4286,0.71429-6.4286,0.71429l-3.3928,1.4286h-2.3214l-0.35715-1.9643,0.71429-2.1429-0.35714-2.3214,1.7857-2.3214-0.53571-1.4286s-1.0714-0.17858-1.9643,0.53571c-0.89286,0.71429-4.4643,1.0714-4.4643,1.0714l-4.2857-0.17857-1.9643-2.3214-0.89286-3.0357s-1.25-1.0714-2.6786-0.71428c-1.4286,0.35714-1.6072,1.25-2.6786,1.25s-2.5,0-3.0357-0.89286c-0.53571-0.89286-0.89285-3.0357-0.89285-3.0357l-0.9-2.33s-1.6071-0.89286-2.5-1.6071c-0.89286-0.71429-3.2143-2.3214-3.2143-2.3214l-5.1786-2.3214-4.2857-1.9643-4.6429-1.7857-2.6786-1.0714-1.7857-2.5v-3.0357l1.6072-2.8572,0.35714-1.7857-0.53571-2.3214,1.25-3.0357,0.71428-3.3929,1.9643-1.0714,3.3928-2.8571s0-2.1429,0.71429-2.3214c0.71429-0.17857,5.7143-1.6071,5.7143-1.6071l1.9643-1.7857,1.25-2.6786,2.5-1.6071,1.6071-3.2143s1.0714-1.0714,1.7857-1.7857c0.71428-0.71429,2.1428-1.4286,2.1428-1.4286l1.9643-0.35715,2.1429,1.7857,2.1428,1.0714,2.5,0.35714,2.8572,1.4286,1.0714,1.6071,3.0357,0.89286h3.3929l2.1428,0.35714,1.25,1.6072,2.6786,0.71428,2.3214,0.71429,2.1429,1.7857,1.25-0.89286,1.7857-0.53571,2.1428-1.4286,2.1429-0.17857,1.6071,0.71428,1.7857,0.89286z",
-                            "id": [-2], // TODO дописать для нового радара
+                            "id": [47], 
                             "name": "Томская область",
                             "ShortName": "Томская область"
                         },
@@ -499,10 +499,7 @@
 
 
                     $scope.regionsO = {};
-                    //$scope.regions = $scope.parameters.regions.lists;
-
-                    
-
+            
                     $scope.updateRegions = function(){
                         if (!$scope.regions) return;
                         $scope.regionsO = {};
@@ -510,20 +507,20 @@
                         var maxRegion = null;
                         $scope.regions.forEach(function(region){
                             $scope.regionsO[region.id] = region;
-                            if (region.data && region.data.count > maxValue){
-                                maxValue = region.data.count;
-                                maxRegion = region;
-                            }
+                            // if (region.data && region.data.count > maxValue){
+                            //     maxValue = region.data.count;
+                            //     maxRegion = region;
+                            // }
                         });
                         // показываем маркер для региона с максимальным значением
-                        if (maxRegion){
-                            var items = Object.keys($scope.svgRegions)
-                                .map(function(itemId){return $scope.svgRegions[itemId];})
-                                .filter(function(item){return item.id && item.id.length && item.id.indexOf(maxRegion.id) >= 0;
-                            });
-                            if (items[0])
-                                $scope.regionClick(items[0]);
-                        }
+                        // if (maxRegion){
+                        //     var items = Object.keys($scope.svgRegions)
+                        //         .map(function(itemId){return $scope.svgRegions[itemId];})
+                        //         .filter(function(item){return item.id && item.id.length && item.id.indexOf(maxRegion.id) >= 0;
+                        //     });
+                        //     if (items[0])
+                        //         $scope.regionClick(items[0]);
+                        // }
                     };
                     
                     $scope.isRegionActive = function(item){
@@ -563,7 +560,7 @@
                     $scope.regionClick = function(item, event){
                         
                         if (!item || !item.id || !item.id.length) {
-                            $scope.hideMarker();
+                            // $scope.hideMarker();
                             return;
                         }
 
@@ -574,82 +571,82 @@
                                 regions.push($scope.regionsO[id]);
                         });
 
-                        if ($scope.markerItem == item)
-                            $scope.hideMarker();
-                        else {
-                            $scope.markerData = {
-                                //name: item.name,
-                                name: item.ShortName,
-                                count: 0,
-                                percent: 0,
-                                header: ''
-                            };
+                        // if ($scope.markerItem == item)
+                        //     $scope.hideMarker();
+                        // else {
+                        //     $scope.markerData = {
+                        //         //name: item.name,
+                        //         name: item.ShortName,
+                        //         count: 0,
+                        //         percent: 0,
+                        //         header: ''
+                        //     };
                             regions.forEach(function(region){
-                                $scope.markerData.count += region.data && region.data.count || 0;
-                                $scope.markerData.percent += region.data && region.data.percent || 0;
-                                $scope.markerData.header += (region.data && region.data.header ? ' '+region.data.header : '');
+                                // $scope.markerData.count += region.data && region.data.count || 0;
+                                // $scope.markerData.percent += region.data && region.data.percent || 0;
+                                // $scope.markerData.header += (region.data && region.data.header ? ' '+region.data.header : '');
                                 if ($scope.selectable !== false)
                                     region.selected = newValue;
                             });
-                            if ($scope.markerData.count)
-                                $scope.showMarker(item);
-                            else
-                                $scope.hideMarker();
-                        }
+                            // if ($scope.markerData.count)
+                            //     $scope.showMarker(item);
+                            // else
+                            //     $scope.hideMarker();
+                       // }
                     };
 
-                    $scope.getItemCenter = function(item){
-                        var path = $scope.el[0].querySelectorAll('path[region-id="'+JSON.stringify(item.id)+'"]');
-                        if (!path.length) return null;
+                    // $scope.getItemCenter = function(item){
+                    //     var path = $scope.el[0].querySelectorAll('path[region-id="'+JSON.stringify(item.id)+'"]');
+                    //     if (!path.length) return null;
 
-                        function getElementCoords(element, coords) {
-                            var ctm = element.getCTM(),
-                                x = ctm.e + coords.x*ctm.a + coords.y*ctm.c,
-                                y = ctm.f + coords.x*ctm.b + coords.y*ctm.d;
-                            return {x: x, y: y};
-                        }
+                    //     function getElementCoords(element, coords) {
+                    //         var ctm = element.getCTM(),
+                    //             x = ctm.e + coords.x*ctm.a + coords.y*ctm.c,
+                    //             y = ctm.f + coords.x*ctm.b + coords.y*ctm.d;
+                    //         return {x: x, y: y};
+                    //     }
 
-                        var bbox = path[0].getBBox();
-                        var x = bbox.x + bbox.width/2;
-                        var y = bbox.y + bbox.height/2;
+                    //     var bbox = path[0].getBBox();
+                    //     var x = bbox.x + bbox.width/2;
+                    //     var y = bbox.y + bbox.height/2;
 
-                        var xy = getElementCoords(path[0], {x:x, y:y});
-                        //console.log(path);
-                        return xy;
-                    };
+                    //     var xy = getElementCoords(path[0], {x:x, y:y});
+                    //     //console.log(path);
+                    //     return xy;
+                    // };
 
-                    $scope.markerItem = null;
-                    $scope.showMarker = function(item){
+                    // $scope.markerItem = null;
+                    // $scope.showMarker = function(item){
                         
-                        var center = $scope.getItemCenter(item);
-                        if (!center){
-                            $scope.hideMarker();
-                            return;
-                        }
-                        var markerWidth = 144;
-                        var markerHeight = 204;
+                    //     var center = $scope.getItemCenter(item);
+                    //     if (!center){
+                    //         $scope.hideMarker();
+                    //         return;
+                    //     }
+                    //     var markerWidth = 144;
+                    //     var markerHeight = 204;
 
-                        $scope.markerLeft = center.x - markerWidth/2;
-                        $scope.markerTop = center.y - markerHeight;
-                        $scope.markerVisible = true;
-                        $scope.markerItem = item;
-                    };
+                    //     $scope.markerLeft = center.x - markerWidth/2;
+                    //     $scope.markerTop = center.y - markerHeight;
+                    //     $scope.markerVisible = true;
+                    //     $scope.markerItem = item;
+                    // };
                     
-                    $scope.hideMarker = function(){
-                        $scope.markerVisible = false;
-                        $scope.markerItem = null;
-                    };
+                    // $scope.hideMarker = function(){
+                    //     $scope.markerVisible = false;
+                    //     $scope.markerItem = null;
+                    // };
 
-                    var tempMarkerItem;
-                    $scope.$on('printStart', function(){
-                        tempMarkerItem = $scope.markerItem;
-                        $scope.hideMarker();
-                    });
-                    $scope.$on('printEnd', function(){
-                       if (tempMarkerItem)
-                           $scope.showMarker(tempMarkerItem);
-                        tempMarkerItem = null;
-                    });
+                    // var tempMarkerItem;
+                    // $scope.$on('printStart', function(){
+                    //     tempMarkerItem = $scope.markerItem;
+                    //     $scope.hideMarker();
+                    // });
+                    // $scope.$on('printEnd', function(){
+                    //   if (tempMarkerItem)
+                    //       $scope.showMarker(tempMarkerItem);
+                    //     tempMarkerItem = null;
+                    // });
 
 
 
@@ -670,27 +667,7 @@
                         });
                     };
                     
-                   /* $scope.redrawChart = function(){
-                        if (!$scope.chart || !$scope.chart.data || !$scope.chart.options) {
-                            $scope.el.empty();
-                            return;
-                        }
-
-                        var margin = {top: 50, right: 120, bottom: 100, left: 120};
-                        var width = 700 - margin.left - margin.right;
-                        var height = 700 - margin.top - margin.bottom;
-
-
-                        var options = {
-                            w: width,
-                            h: height,
-                            margin: margin
-                        };
-                        options = angular.extend({},$scope.chart.options, options);
-
-                        RadarChart($scope.el[0], $scope.chart.data, options);
-                    }
-*/
+                 
                 }]
         };
     }

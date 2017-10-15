@@ -1,8 +1,101 @@
-<div class="infobox-panel"
+<div class="infobox-panel infobox-sport-panel"
      layout="column" layout-align="start stretch"
      preloader-dir>
     
     <infobox-tabs-dir></infobox-tabs-dir>
+    
+    
+    <div layout="column" layout-align="start stretch"
+        class="sport-content">
+
+        <div layout="column" layout-align="start stretch"
+            ng-repeat="sport in parameters.sport.lists"
+            class="sport-block">
+            
+            <!--ng-click="block.visible = !block.visible">-->
+            <div class="sport-header" layout="row" layout-align="start center">
+                <div class="sport-image" ng-style="{'background-color':sport.chartColor}"></div>
+                
+                <div class="infobox-header-1 sport-title" >
+                    {{sport.name}}
+                </div>
+                <div class="sport-arrow" ng-class="{'selected':sport.interested}" 
+                    ng-click="sport.interested = !sport.interested"></div>
+            </div>
+            
+            
+            <!-- Лиги -->
+            <div layout="column" layout-align="start stretch" class="one-sport-content"
+                 ng-if="sport.interested && sport.leagues && sport.leagues.length">
+                <div layout="column" layout-align="start stretch"
+                     ng-repeat="league in sport.leagues">
+
+                    <div class="infobox-header-1" >
+                        {{league.name}}
+                    </div>  
+                    
+                    <infobox-selectable-list-dir 
+                        items="league.clubs" 
+                        columns-layout="{'def':2, 'md':3, 'lg': 4, 'gt-lg':5}"
+                        selectable="true" 
+                        highlightable="false">
+                    </infobox-selectable-list-dir>
+
+                </div>
+            </div>
+            
+            <!-- Клубы при отсутствии лиг -->
+            <div layout="column" layout-align="start stretch" class="one-sport-content"
+                 ng-if="sport.interested && !(sport.leagues && sport.leagues.length) && (sport.clubs && sport.clubs.length)">
+
+                    <infobox-selectable-list-dir 
+                        items="sport.clubs" 
+                        columns-layout="{'def':2, 'md':3, 'lg': 4, 'gt-lg':5}"
+                        selectable="true" 
+                        highlightable="false">
+                    </infobox-selectable-list-dir>
+                    
+                <!--<legend-dir legend="sport.clubs" -->
+                <!--            columns-layout="{'def':2, 'md':3, 'lg': 4, 'gt-lg':5}"-->
+                <!--            style="margin-left: 15px;"-->
+                <!--            selectable="true" -->
+                <!--            highlightable="false"-->
+                <!--            highlighted-color="'#bfebff'" -->
+                <!--            selected-color="'#777777'"-->
+                <!--            disabled="!sport.interested">-->
+                <!--</legend-dir>-->
+
+            </div>
+            
+            <!--<div layout="row" layout-align="start start" layout-wrap-->
+            <!--    class="infobox-selection consume-selection"-->
+            <!--    ng-if="block.origin.selected">-->
+            <!--    <div ng-repeat="collection in block.lists"-->
+            <!--        layout="column" layout-align="start start" -->
+            <!--        class="infobox-selection-item "-->
+            <!--        ng-show="collection.visibleFn ? collection.visibleFn() : true"-->
+            <!--        flex-sm="100"-->
+            <!--        flex-md="50"-->
+            <!--        flex-lg="30" -->
+            <!--        flex-gt-lg="25" >-->
+            <!--        <div class="infobox-header-1" ng-show="collection.name">-->
+            <!--            {{collection.name}}-->
+            <!--        </div>-->
+        
+            <!--        <infobox-selectable-list-dir items="collection.lists" columns-count="1"-->
+            <!--            selectable="true" highlightable="false">-->
+            <!--        </infobox-selectable-list-dir>-->
+            <!--    </div>-->
+            <!--</div>-->
+            
+       
+        
+        </div>
+        
+    </div>
+
+
+    <!--
 
     <h1 class="infobox-panel-header" layout="row" layout-align="start center" >
         {{parameters.sport.name}}
@@ -30,7 +123,7 @@
 
 
 
-            <!-- Лиги -->
+            <!-- Лиги --
             <div layout="column" layout-align="start stretch" class="chart-legend"
                  ng-if="sport.interested && sport.leagues && sport.leagues.length">
                 <div layout="column" layout-align="start stretch"
@@ -40,12 +133,10 @@
                         <div class="legend-item selectable no-outline no-select"
                              layout="row" layout-align="start center"
                              >
-                            <!--<div flex="none" class="legend-item-color-radio"
-                                 ng-style="{'background-color': league == selected.league && !selected.club ? '#777777' : 'none'}"
-                            ></div>-->
+                        
                             <div class="legend-item-text">{{league.name}}</div>
                         </div>
-                        <!--<div class="legend-item-hide-text" ng-click="league.analyticsExpanded = !league.analyticsExpanded;">{{league.analyticsExpanded ? 'Скрыть': 'Показать'}}</div>-->
+                        
                     </div>
 
                     <legend-dir legend="league.clubs"
@@ -61,8 +152,7 @@
                 </div>
             </div>
 
-
-            <!-- Клубы при отсутствии лиг -->
+            <!-- Клубы при отсутствии лиг --
             <div layout="column" layout-align="start stretch" class="chart-legend"
                  ng-if="sport.interested && !(sport.leagues && sport.leagues.length)">
 
@@ -77,15 +167,9 @@
                 </legend-dir>
 
             </div>
-
-
-
-            <!--<legend-dir legend="sport.clubs" columns-count="1"
-                        selectable="true" highlightable="false"
-                        highlighted-color="'#bfebff'" selected-color="'#777777'"
-                        disabled="!sport.interested"></legend-dir>-->
-
         </div>
     </div>
 
+
+    -->
 </div>

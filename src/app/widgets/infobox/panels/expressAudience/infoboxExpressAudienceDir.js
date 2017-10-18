@@ -76,10 +76,10 @@
                         prepareKnownTournamentData($scope.getGraphData($scope.serverData, 'tournaments_known'));   // топ-5 спонтанного знания турниров (лиг). график - бар
                         prepareKnownHelpClubData($scope.getGraphData($scope.serverData, 'clubs_known_help'));// топ-5 подсказанного знания клубов. график - бар
                         prepareKnownClubData($scope.getGraphData($scope.serverData, 'clubs_known'));         // топ-5 спонтанного знания клубов. график - бар
-                        prepareKnownHelpPlayerData($scope.getGraphData($scope.serverData, 'clubs_known_help'));        // топ-5 подсказанного знания спортсменов. график - бар
-                        prepareKnownPlayerData($scope.getGraphData($scope.serverData, 'clubs_known'));       // топ-5 спонтанного знания спортсменов. график - бар
+                        //prepareKnownHelpPlayerData($scope.getGraphData($scope.serverData, 'clubs_known_help'));        // топ-5 подсказанного знания спортсменов. график - бар
+                        prepareKnownPlayerData($scope.getGraphData($scope.serverData, 'players_known'));       // топ-5 спонтанного знания спортсменов. график - бар
                         prepareWatchData($scope.getGraphData($scope.serverData, 'watch'));                   // топ-5 клубов по телесмотрению. график - бар
-                        prepareWatchWEBData($scope.getGraphData($scope.serverData, 'watch'));                // топ-5 по смотрению в WEB. график - бар
+                        //prepareWatchWEBData($scope.getGraphData($scope.serverData, 'watch'));                // топ-5 по смотрению в WEB. график - бар
                         prepareWalkData($scope.getGraphData($scope.serverData, 'walk'));                     // топ-5 клубов по посещаемости. график - бар
                         prepareKnownSponsors($scope.getGraphData($scope.serverData, 'sponsors_known'));      // топ-5 самых упоминаемых спонсоров. график - бар
                     }
@@ -424,59 +424,59 @@
             
                     // топ-5 подсказанного знания спортсменов. график - бар
                     // TODO сейчас используются данные по знанию клубов
-                    function prepareKnownHelpPlayerData(data) {
-                        data = $scope.prepareChartData(data, {
-                            'sport': $scope.parameters.sport,
-                            'club': $scope.parameters.sport
-                        });
+                    // function prepareKnownHelpPlayerData(data) {
+                    //     data = $scope.prepareChartData(data, {
+                    //         'sport': $scope.parameters.sport,
+                    //         'player': $scope.parameters.sport
+                    //     });
             
-                        var dataset = { label:[], fillColor:[], data:[] };
-                        var chartData = {labels:[],datasets:[dataset]};
-                        data.legends.club.forEach(function(club, index) {
-                            var count = data.getCount({'sport': club.sport.id, 'club': club.id});
-                            dataset.label.push(club.name + ' (' + club.sport.name + '): ' + count.toLocaleString('en-US'));
-                            dataset.fillColor.push(colorGenerator(index));
-                            dataset.data.push(count);
+                    //     var dataset = { label:[], fillColor:[], data:[] };
+                    //     var chartData = {labels:[],datasets:[dataset]};
+                    //     data.legends.player.forEach(function(player, index) {
+                    //         var count = data.getCount({'sport': player.sport.id, 'player': player.id});
+                    //         dataset.label.push(player.name + ' (' + player.sport.name + '): ' + count.toLocaleString('en-US'));
+                    //         dataset.fillColor.push(colorGenerator(index));
+                    //         dataset.data.push(count);
             
-                            chartData.labels.push(club.name + ' (' + club.sport.name + ')');
-                        });
+                    //         chartData.labels.push(player.name + ' (' + player.sport.name + ')');
+                    //     });
             
-                        $scope.graphs.knownHelpPlayer = {
-                            legends:data.legends,
-                            label: "Топ-" + data.legends.club.length  + " подсказанное знание спортсменов",
-                            chart:{
-                                data:chartData,
-                                options:{
-                                    showLabels: false, // : $scope.formatValue,
-                                    scaleLabel: function(obj){return $scope.formatValue(obj.value)}
-                                }
-                            }
-                        };
-                    }
+                    //     $scope.graphs.knownHelpPlayer = {
+                    //         legends:data.legends,
+                    //         label: "Топ-" + data.legends.player.length  + " подсказанное знание спортсменов",
+                    //         chart:{
+                    //             data:chartData,
+                    //             options:{
+                    //                 showLabels: false, // : $scope.formatValue,
+                    //                 scaleLabel: function(obj){return $scope.formatValue(obj.value)}
+                    //             }
+                    //         }
+                    //     };
+                    // }
                     
                     // топ-5 спонтанное знания спортсменов. график - бар
                     // TODO сейчас используются данные по знанию клубов
                     function prepareKnownPlayerData(data) {
                         data = $scope.prepareChartData(data, {
                             'sport': $scope.parameters.sport,
-                            'club': $scope.parameters.sport
+                            'player': $scope.parameters.sport
                         });
             
                         var dataset = { label:[], fillColor:[], data:[] };
                         var chartData = {labels:[],datasets:[dataset]};
             
-                        data.legends.club.forEach(function(club, index) {
-                            var count = data.getCount({'sport': club.sport.id, 'club': club.id});
-                            dataset.label.push(club.name + ' (' + club.sport.name + '): ' + count.toLocaleString('en-US'));
-                            dataset.fillColor.push(colorGenerator(index)); //club.color);
+                        data.legends.player.forEach(function(player, index) {
+                            var count = data.getCount({'sport': player.sport.id, 'player': player.id});
+                            dataset.label.push(player.name + ' (' + player.sport.name + '): ' + count.toLocaleString('en-US'));
+                            dataset.fillColor.push(colorGenerator(index)); //player.color);
                             dataset.data.push(count);
             
-                            chartData.labels.push(club.name + ' (' + club.sport.name + ')');
+                            chartData.labels.push(player.name + ' (' + player.sport.name + ')');
                         });
             
                         $scope.graphs.knownPlayer = {
                             legends:data.legends,
-                            label: "Топ-" + data.legends.club.length  + " спонтанное знание спортсменов",
+                            label: "Топ-" + data.legends.player.length  + " спонтанное знание спортсменов",
                             chart:{
                                 data:chartData,
                                 options:{
@@ -528,41 +528,41 @@
             
                     // топ-5 по смотрению в WEB. график - бар
                     // TODO сейчас используются данные из prepareWatchData
-                    function prepareWatchWEBData(data) {
-                        data = $scope.prepareChartData(data, {
-                            'sport': $scope.parameters.sport,
-                            'club': $scope.parameters.sport,
-                            'watch': $scope.parameters.watch
-                        });
+                    // function prepareWatchWEBData(data) {
+                    //     data = $scope.prepareChartData(data, {
+                    //         'sport': $scope.parameters.sport,
+                    //         'club': $scope.parameters.sport,
+                    //         'watch': $scope.parameters.watch
+                    //     });
             
-                        var datasets = data.legends.watch.map(function(){
-                            return { label:[], fillColor:[], data:[] }
-                        });
-                        var chartData = {labels:[],datasets:datasets};
+                    //     var datasets = data.legends.watch.map(function(){
+                    //         return { label:[], fillColor:[], data:[] }
+                    //     });
+                    //     var chartData = {labels:[],datasets:datasets};
             
-                        data.legends.club.forEach(function(club) {
-                            data.legends.watch.forEach(function (watch, watchIndex) {
-                                var count = data.getCount({'sport': club.sport.id, 'club': club.id, 'watch': watch.id}) || 0;
-                                var ds = datasets[watchIndex];
-                                ds.label.push(watch.name + ': ' + count.toLocaleString('en-US'));
-                                ds.fillColor.push(watch.color);
-                                ds.data.push(count);
-                            });
-                            chartData.labels.push(club.name + ' (' + club.sport.name + ')');
-                        });
+                    //     data.legends.club.forEach(function(club) {
+                    //         data.legends.watch.forEach(function (watch, watchIndex) {
+                    //             var count = data.getCount({'sport': club.sport.id, 'club': club.id, 'watch': watch.id}) || 0;
+                    //             var ds = datasets[watchIndex];
+                    //             ds.label.push(watch.name + ': ' + count.toLocaleString('en-US'));
+                    //             ds.fillColor.push(watch.color);
+                    //             ds.data.push(count);
+                    //         });
+                    //         chartData.labels.push(club.name + ' (' + club.sport.name + ')');
+                    //     });
                         
-                        $scope.graphs.watchWEB = {
-                            legends:data.legends,
-                            label: "Топ-" + data.legends.club.length + PluralSrv([' клуб',' клуба',' клубов'], data.legends.club.length) + " по смотрению в WEB",
-                            chart:{
-                                data:chartData,
-                                options:{
-                                    showLabels: false, // : $scope.formatValue,
-                                    scaleLabel: function(obj){return $scope.formatValue(obj.value)}
-                                }
-                            }
-                        };
-                    }
+                    //     $scope.graphs.watchWEB = {
+                    //         legends:data.legends,
+                    //         label: "Топ-" + data.legends.club.length + PluralSrv([' клуб',' клуба',' клубов'], data.legends.club.length) + " по смотрению в WEB",
+                    //         chart:{
+                    //             data:chartData,
+                    //             options:{
+                    //                 showLabels: false, // : $scope.formatValue,
+                    //                 scaleLabel: function(obj){return $scope.formatValue(obj.value)}
+                    //             }
+                    //         }
+                    //     };
+                    // }
             
                     // топ-5 клубов по посещаемости. график - бар
                     function prepareWalkData(data){

@@ -1,0 +1,90 @@
+@main-theme-color: #d0efec;
+
+.infobox-selectable-list {
+    
+    
+    
+//     .legend-item-hide-text {
+//     margin-left: 5px;
+//     cursor: pointer;
+//     outline: none;
+//     font-size: 12px;
+//     color: #777;
+//   }
+
+//   .legend-item {
+
+//     font-size: 13px;
+//     font-weight: bold;
+//     margin: 5px;
+
+//     &.disabled {
+//       color: #aaa;
+//       cursor: default !important;
+//     }
+
+//     //&.cursor-pointer{
+//     &.selectable {
+//       cursor: pointer;
+//     }
+
+//     .legend-item-color {
+//       //display: inline-block;
+//       width: 15px;
+//       height: 15px;
+//       margin-right: 8px;
+//       border-radius: 2px;
+//       border-color: gray;
+//       border-width: 1px;
+//       border-style: solid;
+//       //vertical-align: middle;
+//     }
+
+//     .legend-item-color-radio {
+//       //display: inline-block;
+//       width: 15px;
+//       height: 15px;
+//       margin-right: 8px;
+//       border-radius: 8px;
+//       border-color: gray;
+//       border-width: 1px;
+//       border-style: solid;
+//       //vertical-align: middle;
+//     }
+
+
+//     .legend-item-text {
+//       //display: inline-block;
+//       //white-space:nowrap;
+//     }
+
+
+//   }
+
+//   .sublegend{
+//     margin-left: 15px;
+//   }
+}
+
+.infobox-selectable-list-item {
+    
+    margin: 2px 9px 2px -9px;
+    
+    .list-item-text {
+        line-height: 20px;
+        font-size: 12px;
+        
+        // padding: 0 2px;
+        padding: 3px 9px;
+    }
+    
+    &.selectable {
+        cursor: pointer;
+        outline: none;
+    }
+    
+    &.selected,
+    &:hover {
+        background-color: @main-theme-color;
+    }
+}

@@ -77,16 +77,22 @@
          * Возвращает оставшееся время сессии в часах:минутах или в другом формате
          */
         function prepareSessionTimeout(sec){
+            var result = {
+                hours: null,
+                days: null
+            };
             if (sec < 60 * 60 * 24){
                 var min = Math.floor(sec / secInMin);
                 var hours = Math.floor(sec / secInHour);
-                var result = (hours > 9 ? hours : "0" + hours) + ":" + 
+                var res = (hours > 9 ? hours : "0" + hours) + ":" + 
                     (min > 9 ? min : "0" + min);
+                result.hours = res;
                 
                 return result;
             } else {
                 var days = Math.floor(sec / secInDay);
-                var result = days + PluralSrv([' день',' дня',' дней'], days)
+                var res = days; // + PluralSrv([' день',' дня',' дней'], days)
+                result.days = res;
                 
                 return result;
             }

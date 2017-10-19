@@ -179,6 +179,14 @@
                             // onClick: function(){$scope.setPath('/account/');}
                             onClick: function(){RouteSrv.navigate('account');}
                     };
+                    
+                    // $scope.menuExitItem = {
+                    //     'name': 'Личный кабинет',
+                    //         //visible: isLoggedIn,
+                    //         iconClass: 'header-exit-icon',
+                    //         // onClick: function(){$scope.setPath('/account/');}
+                    //         //onClick: function(){RouteSrv.navigate('account');}
+                    // };
 
                     $scope.$on('UserSrv.login', updateUser);
                     $scope.$on('UserSrv.logout', updateUser);
@@ -207,7 +215,17 @@
                             $scope.timeoutStr = null;
                             return;
                         }
-                        $scope.timeoutStr = TimeSrv.prepareSessionTimeout(tariff.realRemainingTime);
+                        var timeout = TimeSrv.prepareSessionTimeout(tariff.realRemainingTime);
+                        if (timeout.hours){
+                            $scope.timeoutStr = timeout.hours;
+                        } else if (timeout.days){
+                            $scope.timeoutStr = timeout.days;
+                            $scope.timeoutStrSuffix = 'дн';
+                        } else {
+                            $scope.timeoutStr = null;
+                        }
+                        
+                        
                     }
 
                     

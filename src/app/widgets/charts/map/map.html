@@ -8,7 +8,9 @@
               ng-mouseleave="unhighlightRegion(item)"
               ng-style="getRegionClasses(item).styles"
                 fill="#EAF1F4" fill-rule="evenodd"
-              ng-attr-d="{{item.path}}" clip-rule="evenodd" region-id="{{item.id}}"></path>
+              ng-attr-d="{{item.path}}" clip-rule="evenodd" region-id="{{item.id}}">
+            <title>{{item.name}}</title>
+        </path>
     </svg>
     <div class="marker-wrapper" ng-show="markerVisible"
         ng-style="{'left':markerLeft+'px', 'top':markerTop+'px'}">

@@ -96,8 +96,8 @@
                         prepareCar($scope.serverData.car);              
                         prepareElectronics($scope.getGraphData($scope.serverData, 'electronics'));  
                       
-                        prepareVisit();
-                        prepareServicesNow();
+                        // prepareVisit();
+                        // prepareServicesNow();
                     }
                     
                     // Род дейтельности

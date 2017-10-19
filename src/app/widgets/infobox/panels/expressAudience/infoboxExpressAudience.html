@@ -28,20 +28,20 @@
         
         <!--1. + топ-10 регионов. график - карта с легендой-->
         <!-- TODO -->
-        <div layout="column" layout-align="start start" style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-10 регионов</div>
+        <!--<div layout="column" layout-align="start start" style="margin: 10px;">-->
+        <!--    <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-10 регионов</div>-->
             <!--<legend-dir legend="graphs.interest.legends.interest" columns-count="1" selectable="false"></legend-dir>-->
             <!--<horisontal-bar-dir chart="graphs.interest.chartData2" ></horisontal-bar-dir>-->
-            <map-dir regions="" style="width:100%; margin-top: 30px;"
-                     highlighted-color="'#bfebff'" selectable="false" selected-color="'#4ac0b6'"></map-dir>
-        </div>
+        <!--    <map-dir regions="" style="width:100%; margin-top: 30px;"-->
+        <!--             highlighted-color="'#bfebff'" selectable="false" selected-color="'#4ac0b6'"></map-dir>-->
+        <!--</div>-->
         
         <!-- распределение по типу боления. график - бублик -->
-        <div layout="column" layout-align="start start" style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.fanType.label}}</div>
-            <legend-dir legend="graphs.fanType.legends.fan_type" columns-count="1" selectable="false"></legend-dir>
-            <doughnut-dir chart="graphs.fanType.chart"></doughnut-dir>
-        </div>
+        <!--<div layout="column" layout-align="start start" style="margin: 10px;">-->
+        <!--    <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.fanType.label}}</div>-->
+        <!--    <legend-dir legend="graphs.fanType.legends.fan_type" columns-count="1" selectable="false"></legend-dir>-->
+        <!--    <doughnut-dir chart="graphs.fanType.chart"></doughnut-dir>-->
+        <!--</div>-->
         
         <!-- топ-5 по интересу. график - вертикальный бар -->
         <div layout="column" layout-align="start start" style="margin: 10px;">
@@ -55,9 +55,6 @@
         <div layout="column" layout-align="start start" style="margin: 10px;">
             <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.involve.label}}</div>
             <legend-dir legend="graphs.involve.legends.involve" columns-count="1" selectable="false"></legend-dir>
-            <!--<div layout="row" layout-align="start start">-->
-            <!--    <doughnut-dir ng-repeat="chart in graphs.involve.charts" chart="chart"></doughnut-dir>-->
-            <!--</div>-->
             <horisontal-bar-dir chart="graphs.involve.chart" ></horisontal-bar-dir>
         </div>
 
@@ -130,12 +127,12 @@
         </div>
         
         <!--топ-5 самых упоминаемых спонсоров. график - горизонтальный бар-->
-        <div layout="column" layout-align="start start" style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.knownSponsor.label}}</div>
+        <!--<div layout="column" layout-align="start start" style="margin: 10px;">-->
+        <!--    <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.knownSponsor.label}}</div>-->
             <!--<legend-dir legend="graphs.known.legends.known" columns-count="1" selectable="false"></legend-dir>-->
             <!--<horisontal-bar-dir chart="graphs.knownSponsor.chart" ></horisontal-bar-dir>-->
-            <stacked-bar-dir chart="graphs.knownSponsor.chart" ></stacked-bar-dir>
-        </div>
+        <!--    <stacked-bar-dir chart="graphs.knownSponsor.chart" ></stacked-bar-dir>-->
+        <!--</div>-->
         
     </div>
 

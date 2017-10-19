@@ -67,21 +67,23 @@
                         if (!$scope.serverData) return;
                         
                         $scope.graphs = {};
-                            
+                             
                         // prepareRegionsData();                        // топ-10 регионов. график - карта с легендой
-                        prepareFanTypeData($scope.getGraphData($scope.serverData, 'fan_type'));              // распределение по типу боления. график - бублик
+                        // prepareFanTypeData($scope.getGraphData($scope.serverData, 'fan_type'));              // распределение по типу боления. график - бублик
                         prepareInterestData($scope.getGraphData($scope.serverData, 'interest'));             // топ-5 по интересу. график - бар
                         prepareInvolveData($scope.getGraphData($scope.serverData, 'involvment'));            // топ-5 по вовлеченности. график - бар.
                         prepareKnownHelpTournamentData($scope.getGraphData($scope.serverData, 'tournaments_known_help'));       // топ-5 подсказанного знания турниров (лиг). график - бар
                         prepareKnownTournamentData($scope.getGraphData($scope.serverData, 'tournaments_known'));   // топ-5 спонтанного знания турниров (лиг). график - бар
                         prepareKnownHelpClubData($scope.getGraphData($scope.serverData, 'clubs_known_help'));// топ-5 подсказанного знания клубов. график - бар
                         prepareKnownClubData($scope.getGraphData($scope.serverData, 'clubs_known'));         // топ-5 спонтанного знания клубов. график - бар
-                        //prepareKnownHelpPlayerData($scope.getGraphData($scope.serverData, 'clubs_known_help'));        // топ-5 подсказанного знания спортсменов. график - бар
+                        // подсказанного знания спортсменов не будет в 2017 году
+                        // prepareKnownHelpPlayerData($scope.getGraphData($scope.serverData, 'clubs_known_help'));        // топ-5 подсказанного знания спортсменов. график - бар
                         prepareKnownPlayerData($scope.getGraphData($scope.serverData, 'players_known'));       // топ-5 спонтанного знания спортсменов. график - бар
                         prepareWatchData($scope.getGraphData($scope.serverData, 'watch'));                   // топ-5 клубов по телесмотрению. график - бар
-                        //prepareWatchWEBData($scope.getGraphData($scope.serverData, 'watch'));                // топ-5 по смотрению в WEB. график - бар
+                        // смотрения в ВЕБ не будет в 2017 году
+                        // prepareWatchWEBData($scope.getGraphData($scope.serverData, 'watch'));                // топ-5 по смотрению в WEB. график - бар
                         prepareWalkData($scope.getGraphData($scope.serverData, 'walk'));                     // топ-5 клубов по посещаемости. график - бар
-                        prepareKnownSponsors($scope.getGraphData($scope.serverData, 'sponsors_known'));      // топ-5 самых упоминаемых спонсоров. график - бар
+                        // prepareKnownSponsors($scope.getGraphData($scope.serverData, 'sponsors_known'));      // топ-5 самых упоминаемых спонсоров. график - бар
                     }
                     
                     

@@ -204,28 +204,26 @@
         }
         
         function extendTranslations(translations){
-            translations.pages.push({
-                key: "fan_type",
-                name: "Тип боления",
-                lists: [{
-                    id: 1,
-                    name: "Монолайнеры"
-                },{
-                    id: 2,
-                    name: "Традиционалисты"
-                },{
-                    id: 3,
-                    name: "Спокойные"
-                },{
-                    id: 4,
-                    name: "Горячие"
-                },{
-                    id: 5,
-                    name: "Одержимые"
-                }]
-            });
-            
-        
+            // translations.pages.push({
+            //     key: "fan_type",
+            //     name: "Тип боления",
+            //     lists: [{
+            //         id: 1,
+            //         name: "Монолайнеры"
+            //     },{
+            //         id: 2,
+            //         name: "Традиционалисты"
+            //     },{
+            //         id: 3,
+            //         name: "Спокойные"
+            //     },{
+            //         id: 4,
+            //         name: "Горячие"
+            //     },{
+            //         id: 5,
+            //         name: "Одержимые"
+            //     }]
+            // });
         }
         
         function extendAfterProcessing(){
@@ -271,8 +269,10 @@
             parameters.sport.lists.forEach(function(item){
                 
                 prepareChildren('clubs');
+                prepareChildren('players');
                 prepareChildren('leagues');
                 prepareChildren('playgrounds');
+                prepareChildren('tournaments');
                 
                 function prepareChildren(type){
                     var childObj = item.lists.filter(function(child){return child.key == type;});

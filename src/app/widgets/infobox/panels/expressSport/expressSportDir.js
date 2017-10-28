@@ -218,6 +218,7 @@
                         prepareMobile($scope.serverData.mobile_hours);
                         prepareGasStation($scope.getGraphData($scope.serverData, 'gasoften'));
                         prepareServicesNow($scope.getGraphData($scope.serverData, 'services_now'));
+
                     }
                     
                     

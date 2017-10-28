@@ -67,6 +67,7 @@
                         if (!$scope.serverData) return;
                         
                         $scope.graphs = {};
+
                             
                         
                         prepareRegions($scope.getGraphData($scope.serverData, 'regions'));              // топ-10 регионов. график - карта с легендой
@@ -91,6 +92,7 @@
                         
                         
                         
+
                     }
                     
             
@@ -269,6 +271,7 @@
                         $scope.tournamentHelpBarsChart = {
                             items: items
                         }
+
                     }
                     
                     // топ-5 спонтанного знания турниров (лиг). график - бар
@@ -298,6 +301,7 @@
                         $scope.tournamentKnownBarsChart = {
                             items: items
                         }
+
                     }
                     
                     
@@ -359,6 +363,7 @@
                         $scope.clubKnownBarsChart = {
                             items: items
                         }
+
                     }
             
             
@@ -417,19 +422,20 @@
                             });
                             chartData.labels.push(club.name + ' (' + club.sport.name + ')');
                         });
+
                         
-                        $scope.graphs.watchWEB = {
-                            legends:data.legends,
-                            label: "Топ-" + data.legends.club.length + PluralSrv([' клуб',' клуба',' клубов'], data.legends.club.length) + " по смотрению в WEB",
-                            chart:{
-                                data:chartData,
-                                options:{
-                                    showLabels: false, // : $scope.formatValue,
-                                    scaleLabel: function(obj){return $scope.formatValue(obj.value)}
-                                }
-                            }
-                        };
-                    }
+                    //     $scope.graphs.watchWEB = {
+                    //         legends:data.legends,
+                    //         label: "Топ-" + data.legends.club.length + PluralSrv([' клуб',' клуба',' клубов'], data.legends.club.length) + " по смотрению в WEB",
+                    //         chart:{
+                    //             data:chartData,
+                    //             options:{
+                    //                 showLabels: false, // : $scope.formatValue,
+                    //                 scaleLabel: function(obj){return $scope.formatValue(obj.value)}
+                    //             }
+                    //         }
+                    //     };
+                    // }
             
                     // топ-5 клубов по посещаемости. график - бар
                     function prepareWalkData(data){

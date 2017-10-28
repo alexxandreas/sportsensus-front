@@ -1,0 +1,334 @@
+<div class="express-sport"
+     layout="column" layout-align="start stretch"
+     save-as-pdf-dir>
+
+
+    <!--<div layout="row" layout-align="space-between center"-->
+    <!--     style="margin: 5px 0;">-->
+    <!--    <h1 class="infobox-panel-header" layout="row" layout-align="start center">-->
+    <!--        Экспресс-результат по спорту-->
+    <!--    </h1>-->
+    <!--    <download-dir title="Экспресс-результат по спорту" subtitle="{{caption}}"></download-dir>-->
+    <!--</div>-->
+
+
+    <!--ng-bind-html="caption | trustAsHtmlFltr"-->
+    <!--<h2 class="infobox-panel-header2" ng-show="caption"-->
+    <!--    layout="row" layout-align="start center"-->
+    <!--    ng-bind-html="'Профиль спорта: ' + sport.name + (clubNames ? '&lt;br&gt;Клубы: ' + clubNames : '')  | trustAsHtmlFltr">-->
+    <!--</h2>-->
+
+
+    <!--<div layout="column" layout-align="start stretch"-->
+    <!--     style="margin-top: 8px;">-->
+
+    <div layout="column" layout-align="start stretch"
+        class="infobox-express-sport-content">
+
+        <!-- Первая строка с графиками -->
+        <div layout="row" layout-align="start start"
+            class="express-sport-block">
+            
+            
+            <!-- summary -->
+            <div class="express-sport-summary"
+                layout="column" flex="33">
+                
+                <div class="infobox-header-1">
+                    Средний доход (руб/мес)
+                </div>
+                
+                <div layout="row" layout-align="start center"
+                    class="summary-income-block">
+                    <div class="summary-icon summary-income-icon"></div>
+                    <div class="summary-value-text">{{summaryIncome}}</div>    
+                </div>
+                
+                <div layout="row" layout-align="start end">
+                    
+                    <div class="summary-gender-icon summary-gender-icon-male"
+                        layout="column" layout-align="center center">
+                        <div class="summary-value-text">{{summaryAge}}</div>
+                        <div class="summary-age-text">{{summaryAgeText}}</div>
+                    </div> 
+                    
+                    <div layout="column" layout-align="start start" 
+                        class="summary-results">
+                        <div class="carer-results-item disabled"
+                            layout="column">
+                            <div layout="row" layout-align="start center">
+                                <div class="summary-icon summary-familysize-icon"></div>
+                                <div class="summary-value-text">{{summaryFamilysize}}</div>
+                            </div>    
+                            <div class="summary-results-text">
+                                человека<br>в семье
+                            </div>
+                        </div>
+                        <div class="carer-results-item"
+                            layout="column">
+                            <div layout="row" layout-align="start center">
+                                <div class="summary-icon summary-children-icon"></div>
+                                <div class="summary-value-text">{{summaryChildren}}</div>
+                            </div>    
+                            <div class="summary-results-text">
+                                ребёнка<br>в семье
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>  <!-- summary -->
+            
+            <!-- career --> 
+            <div layout="column" layout-align="start start"
+                class="express-sport-career" flex="33">
+                
+                <div class="infobox-header-1">
+                    Род деятельности
+                </div>
+                
+                <div class="express-sport-donut">
+                    <doughnut-chart-dir data="careerDonutChart">
+                        <div class="express-sport-donut-icon career-icon"></div>
+                    </doughnut-chart-dir> 
+                </div>
+                
+                <div class="express-sport-colored-legend">
+                    <colored-legend-dir items="careerItems"></colored-legend-dir>
+                </div>
+                
+            </div> <!-- career -->
+            
+            <!-- regions --> 
+            <div layout="column" layout-align="start start"
+                class="express-sport-regions" flex="33">
+                
+                <div class="infobox-header-1">
+                    Топ-{{regionsCount}} регинонов проживания
+                </div>
+                
+                <div class="regions-map">
+                    <map-dir regions="regionsItems" style="width:100%; margin-top: 30px;"
+                     selectable="false"></map-dir>
+                </div>
+                
+                <div class="express-sport-horisontal-bars">
+                    <horisontal-bars-dir 
+                        data="regionsBarsChart" 
+                        left-text-class="'text-1 text-max-width-120'"
+                        right-text-class="'text-2'"
+                    ></horisontal-bars-dir>
+                </div>
+                
+            </div> <!-- regions -->
+            
+        </div>
+        
+        <!-- Вторая строка с графиками -->
+        <div layout="row" layout-align="start start"
+            class="express-sport-block">
+    
+            <!-- Тип боления --> 
+            <div layout="column" layout-align="start start"
+                class="express-sport-fan-type" flex="25">
+                
+                <div class="infobox-header-1">
+                    Тип боления
+                </div>
+                
+                <div class="express-sport-donut">
+                    <doughnut-chart-dir data="fanTypeDonutChart">
+                        <div class="express-sport-donut-icon fan-type-icon"></div>
+                    </doughnut-chart-dir> 
+                </div>
+                
+                <div class="express-sport-colored-legend">
+                    <colored-legend-dir items="fanTypeItems"></colored-legend-dir>
+                </div>
+                
+            </div> <!-- Тип боления -->
+            
+            <!-- Телевидение --> 
+            <div layout="column" layout-align="start start"
+                class="express-sport-tv" flex="25">
+                
+                <div class="infobox-header-1">
+                    Телевидение
+                </div>
+                
+                <div class="express-sport-donut">
+                    <doughnut-chart-dir data="tvHomeDonutChart">
+                        <div class="express-sport-donut-icon tv-icon"></div>
+                    </doughnut-chart-dir> 
+                </div>
+                
+                <div class="express-sport-colored-legend">
+                    <colored-legend-dir items="tvHomeItems"></colored-legend-dir>
+                </div>
+                
+            </div> <!-- Телевидение -->
+            
+            <!-- Гаджеты --> 
+            <div layout="column" layout-align="start start"
+                class="express-sport-gadget" flex="25">
+                
+                <div class="infobox-header-1">
+                    Гаджеты
+                </div>
+                
+                <div class="express-sport-donut">
+                    <doughnut-chart-dir data="electronicsDonutChart">
+                        <div class="express-sport-donut-icon gadget-icon"></div>
+                    </doughnut-chart-dir> 
+                </div>
+                
+                <div class="express-sport-colored-legend">
+                    <colored-legend-dir items="electronicsItems"></colored-legend-dir>
+                </div>
+                
+            </div> <!-- Телевидение -->
+            
+            <!-- Автомобиль --> 
+            <div layout="column" layout-align="start start"
+                class="express-sport-auto" flex="25">
+                
+                <div class="infobox-header-1">
+                    Автомобиль
+                </div>
+                
+                <div class="auto-icon" ng-class="autoClass"></div>
+                
+                <div layout="row" layout-align="start start">
+                    <div layout="column" layout-align="start start">
+                        <div class="auto-item auto-value-yes" layout="row" layout-align="center center">{{autoYesText}}</div>
+                        <div class="auto-item auto-value-no" layout="row" layout-align="center center">{{autoNoText}}</div>
+                    </div>
+                    <div layout="column" layout-align="start start">
+                        <div class="auto-item auto-text" layout="row" layout-align="center center">Есть<br>авто</div>
+                        <div class="auto-item auto-text" layout="row" layout-align="center center">Нет<br>авто</div>
+                    </div>
+                </div>
+                
+            </div> <!-- Телевидение -->
+        </div>
+    
+        <!-- Третья строка с графиками -->
+        <div layout="row" layout-align="start start"
+            class="express-sport-block">
+            
+            <div layout="column" layout-align="start start" flex="50">
+                
+                <!-- Развлечения --> 
+                <div layout="column" layout-align="start start"
+                    class="express-sport-time-week disabled">
+                    
+                    <div class="infobox-header-1">
+                        Развлечения
+                    </div>
+                    
+                    <div class="express-sport-horisontal-bars">
+                        <horisontal-bars-dir 
+                            data="timeWeekBarsChart"
+                            left-text-class="'text-1 text-max-width-120'"
+                            right-text-class="'text-2'"
+                        ></horisontal-bars-dir>
+                    </div>
+                </div> <!-- Развлечения -->
+                
+                <div layout="row" layout-align="start start" class="express-sport-gaming">
+                    <div layout="column" layout-align="start start">
+                        <div class="gaming-item mobile-icon"></div>
+                        <div class="gaming-item gaming-icon"></div>
+                    </div>
+                    <div layout="column" layout-align="start start">
+                        <div class="gaming-item gaming-percent" layout="row" layout-align="center center">{{mobileText}}</div>
+                        <div class="gaming-item gaming-percent" layout="row" layout-align="center center">{{gamingText}}</div>
+                    </div>
+                    <div layout="column" layout-align="start start">
+                        <div class="gaming-item gaming-text" layout="row" layout-align="center center">используют<br>мобильный<br>интернет</div>
+                        <div class="gaming-item gaming-text" layout="row" layout-align="center center">играют<br>в видео<br>игры</div>
+                    </div>
+                </div>
+
+                
+                <!-- Топ-3 АЗС --> 
+                <div layout="column" layout-align="start start"
+                    class="express-sport-gasoften disabled">
+                    
+                    <div class="infobox-header-1">
+                        Топ-{{gasoftenCount}} АЗС
+                    </div>
+                    
+                    <div class="express-sport-horisontal-bars">
+                        <horisontal-bars-dir 
+                            data="gasoftenBarsChart"
+                            left-text-class="'text-1 text-max-width-120'"
+                            right-text-class="'text-2'"
+                        ></horisontal-bars-dir>
+                    </div>
+                </div> <!-- Топ-3 АЗС -->
+            </div>
+            
+            <!-- Топ-10 финансовых продуктов --> 
+            <div layout="column" layout-align="start start"
+                class="express-sport-service disabled" flex="50">
+                
+                <div class="infobox-header-1">
+                    Топ-{{serviceCount}} финансовых продуктов
+                </div>
+                
+                <div class="express-sport-horisontal-bars">
+                    <horisontal-bars-dir 
+                        data="serviceBarsChart"
+                        left-text-class="'text-1 text-max-width-200'"
+                        right-text-class="'text-2'"
+                        ></horisontal-bars-dir>
+                </div>
+            </div> <!--Топ-10 финансовых продуктов -->
+            
+            
+        </div>
+    
+    
+   
+        <!--
+
+        <div layout="column" layout-align="start start"
+             style="margin: 10px;"
+            ng-if="sport.data.clubs && sport.data.clubs.length">
+            <div class="infobox-panel-header2"
+                 style="margin: 10px 0;"
+                 layout="row" layout-align="center center" >Сила боления</div>
+
+
+            <div ng-repeat="club in sport.data.clubs"
+                layout="column" layout-align="start start">
+
+                <div class="infobox-panel-header3"
+                     style="margin: 10px 0;"
+                     layout="row" layout-align="center center" >{{club.club.name}}</div>
+
+                <div layout="column" layout-align="start center">
+                    <div layout="row" layout-align="space-around center">
+
+                        <div flex="50" layout="column" layout-align="start center">
+                            <div class="infobox-panel-header3" layout="row" layout-align="center center">Ходил</div>
+                            
+                            <legend-dir legend="club.walkLegend" columns-count="1" selectable="false"></legend-dir>
+                        </div>
+                        <div flex="50" layout="column" layout-align="start center">
+                            <div class="infobox-panel-header3" layout="row" layout-align="center center">Смотрел</div>
+                            
+                            <legend-dir legend="club.watchLegend" columns-count="1" selectable="false"></legend-dir>
+                        </div>
+                    </div>
+                    <horisontal-bar-dir chart="club.walkWatchChart"></horisontal-bar-dir>
+                    <div style="height: 20px;"></div>
+                </div>
+            </div>
+        -->
+
+
+    </div>
+
+</div>

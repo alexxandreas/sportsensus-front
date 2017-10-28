@@ -1,27 +1,314 @@
-<div class="infobox-panel" ng-controller="expressAudienceCtrl"
+<div class="express-audience"
      layout="column" layout-align="start stretch"
      save-as-pdf-dir
      preloader-dir>
 
     <infobox-tabs-dir></infobox-tabs-dir>
 
-    <div layout="row" layout-align="space-between center"
-         style="margin: 5px 0;">
-        <h1 class="infobox-panel-header" layout="row" layout-align="start center">
-            Экспресс-результат по аудитории
-        </h1>
-        <download-dir title="Экспресс-результат по аудитории" subtitle="{{caption}}"></download-dir>
+    <!--<div layout="row" layout-align="space-between center"-->
+    <!--     style="margin: 5px 0;">-->
+    <!--    <h1 class="infobox-panel-header" layout="row" layout-align="start center">-->
+    <!--        Экспресс-результат по аудитории-->
+    <!--    </h1>-->
+    <!--    <download-dir title="Экспресс-результат по аудитории" subtitle="{{caption}}"></download-dir>-->
+    <!--</div>-->
+
+
+    <!--<h2 class="infobox-panel-header2" ng-show="caption"-->
+    <!--    layout="row" layout-align="start center" ng-bind-html="caption | trustAsHtmlFltr">-->
+    <!--</h2>-->
+
+    
+    <!--<legend-dir legend="graphsModes" columns-count="1" -->
+    <!--    selectable="true" selected-color="'#777777'"-->
+    <!--    single-selection="true"></legend-dir>-->
+
+
+    
+
+
+    <div layout="column" layout-align="start stretch"
+        class="infobox-express-audience-content">
+
+        <!-- Первая строка с графиками -->
+        <div layout="row" layout-align="start start"
+            class="express-audience-block">
+            
+            <!-- regions --> 
+            <div layout="column" layout-align="start start"
+                class="express-audience-regions" flex="50">
+                
+                <div class="infobox-header-1">
+                    Топ-{{regionsCount}} регинонов проживания
+                </div>
+                
+                <div class="regions-map">
+                    <map-dir regions="regionsItems" style="width:100%; margin-top: 30px;"
+                     selectable="false"></map-dir>
+                </div>
+                
+                <div class="express-audience-horisontal-bars">
+                    <horisontal-bars-dir 
+                        data="regionsBarsChart" 
+                        left-text-class="'text-1 text-max-width-120'"
+                        right-text-class="'text-2'"
+                    ></horisontal-bars-dir>
+                </div>
+             
+            </div> <!-- regions -->
+            
+            <div layout="column" layout-align="start start">
+                
+                <!-- fan_type --> 
+                <div layout="column" layout-align="start start"
+                    class="express-audience-fan-type">
+                    
+                    <div class="infobox-header-1">
+                        Тип боления
+                    </div>
+                    
+                    <div layout="row" layout-align="start center">
+                        <div class="express-audience-donut fan-type-donut">
+                            <doughnut-chart-dir data="fanTypeDonutChart">
+                                <div class="express-audience-donut-icon fan-type-icon"></div>
+                            </doughnut-chart-dir> 
+                        </div>
+                        
+                        <div class="express-audience-colored-legend">
+                            <colored-legend-dir items="fanTypeItems"></colored-legend-dir>
+                        </div>
+                    </div>
+                </div> <!-- fan_type -->
+                
+                <!-- interest -->
+                <div layout="column" layout-align="start start"
+                    class="express-audience-interest">
+                    
+                    <div class="infobox-header-1">
+                        Топ-{{intetestCount}} видов спорта по интересу
+                    </div>
+                    
+                    <div class="express-audience-vertical-bars">
+                        <vertical-bars-dir 
+                            data="interestBarsChart" 
+                            top-text-class="'text-2'"
+                            bottom-text-class="'text-1 text-max-width-120'"
+                        ></vertical-bars-dir>
+                    </div>
+                    
+                </div> <!-- interest -->
+            
+            </div>
+        
+        </div>
+        
+        <!-- Вторая строка с графиками -->
+        <div layout="column" layout-align="start start"
+            class="express-audience-block">
+            
+            <div class="infobox-header-1">
+                Топ-{{}} видов спорта по вовлеченности
+            </div>
+            
+            <!--Первая строка графиков-->
+            <div layout="row" layout-align="start start">
+                <div flex="33">
+                    легенда
+                </div>
+                <div flex="33">
+                    1
+                </div>
+                <div flex="33">
+                    2
+                </div>
+            </div>
+            
+            <!--Первая строка графиков-->
+            <div layout="row" layout-align="start start">
+                <div flex="33">
+                    3
+                </div>
+                <div flex="33">
+                    4
+                </div>
+                <div flex="33">
+                    5
+                </div>
+            </div>
+            
+        </div>
+        
+        
+        <!-- Третья строка с графиками -->
+        <div layout="column" layout-align="start stretch"
+            class="express-audience-block">
+            
+            <div class="express-audience-centered-block" layout="column" layout-align="start center">
+                
+                <div class="centered-block-header infobox-header-3">
+                    Топ-{{tournamentKnownHelpCount}} знания<br>турниров (лиг)
+                </div>
+                
+                <div class="centered-block-content" layout="column" layout-align="center stretch">
+                    <div class="centered-block-graphs" layout="row" layout-align="center start">
+                        <div class="centered-block-graph-left" layout="column">
+                            <div class="centered-block-title" layout="row" layout-align="end center">Подсказанное</div>
+                            <div class="">
+                                <horisontal-bars-dir 
+                                    data="tournamentHelpBarsChart"
+                                    align="'right'"
+                                    left-text-class="'text-2'"
+                                    right-text-class="'text-1 text-width-100'"
+                                ></horisontal-bars-dir>
+                            </div>
+                        </div>
+                        <div class="centered-block-graph-right" layout="column">
+                            <div class="centered-block-title" layout="row" layout-align="start center">Спонтанное</div>
+                            <div class="">
+                                <horisontal-bars-dir 
+                                    data="tournamentKnownBarsChart" 
+                                    left-text-class="'text-1 text-width-100'"
+                                    right-text-class="'text-2'"
+                                ></horisontal-bars-dir>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="centered-block-image centered-block-image-tournament"></div>
+                </div>
+            </div>
+            
+            
+            <div class="express-audience-centered-block" layout="column" layout-align="start center">
+                
+                <div class="centered-block-header infobox-header-3">
+                    Топ-{{clubKnownHelpCount}} знания<br>клубов
+                </div>
+                
+                <div class="centered-block-content" layout="column" layout-align="center stretch">
+                    <div class="centered-block-graphs" layout="row" layout-align="center start">
+                        <div class="centered-block-graph-left" layout="column">
+                            <div class="centered-block-title" layout="row" layout-align="end center">Подсказанное</div>
+                            <div class="">
+                                <horisontal-bars-dir 
+                                    data="clubHelpBarsChart"
+                                    align="'right'"
+                                    left-text-class="'text-2'"
+                                    right-text-class="'text-1 text-width-100'"
+                                ></horisontal-bars-dir>
+                            </div>
+                        </div>
+                        <div class="centered-block-graph-right" layout="column">
+                            <div class="centered-block-title" layout="row" layout-align="start center">Спонтанное</div>
+                            <div class="">
+                                <horisontal-bars-dir 
+                                    data="clubKnownBarsChart" 
+                                    left-text-class="'text-1 text-width-100'"
+                                    right-text-class="'text-2'"
+                                ></horisontal-bars-dir>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="centered-block-image centered-block-image-tournament"></div>
+                </div>
+            </div>
+            
+        </div>
+        
+        
+        <!-- Четвертая строка с графиками -->
+        <div layout="column" layout-align="start stretch"
+            class="express-audience-block">
+            
+            <!--первая строка: подсказанное знание спортсменов + топ по телесмотрению -->
+            <div layout="row" layout-align="start start">
+                
+                <!--<div layout="column" layout-align="start end"-->
+                <!--    class="express-audience-clubs-watch" flex="50">-->
+                    
+                    <div layout="column" layout-align="start start" 
+                        class="express-audience-clubs-watch" flex="50">
+                        <div layout="row" layout-align="start center">
+                            <div class="express-audience-small-icon clubs-watch-icon"></div>
+                            <div class="infobox-header-3">Топ-{{clubWatchCount}} клубов по<br>телесмотрению</div>
+                        </div>
+                        
+                        <div class="express-audience-horisontal-bars">
+                            <horisontal-bars-dir 
+                                data="clubWatchBarsChart" 
+                                left-text-class="'text-1 text-width-100'"
+                                right-text-class="'text-2'"
+                            ></horisontal-bars-dir>
+                        </div>
+                    </div>
+                <!--</div> -->
+                
+                <div layout="column" layout-align="start start"
+                    class="express-audience-clubs-walk" flex="50">
+                    
+                    <div layout="row" layout-align="start center">
+                        <div class="express-audience-small-icon clubs-walk-icon"></div>
+                        <div class="infobox-header-3">Топ-{{clubWalkCount}} клубов по<br>посещаемости</div>
+                    </div>
+                   
+                    <div class="express-audience-horisontal-bars">
+                        <horisontal-bars-dir 
+                            data="clubWalkBarsChart" 
+                            left-text-class="'text-1 text-width-100'"
+                            right-text-class="'text-2'"
+                        ></horisontal-bars-dir>
+                    </div>
+                </div>
+            </div>
+            
+            <!--вторая строка: топ клубов по посещению + топ спонсоров-->
+            <div layout="row" layout-align="start start">
+                
+                <!--<div layout="column" layout-align="start end"-->
+                <!--    class="express-audience-players-known" flex="50">-->
+                    
+                    <div layout="column" layout-align="start start" 
+                        class="express-audience-players-known" flex="50">
+                        <div layout="row" layout-align="start center">
+                            <div class="express-audience-small-icon players-known-icon"></div>
+                            <div class="infobox-header-3">Топ-{{playerKnownCount}} подсказанного<br>знания спортсменов</div>
+                        </div>
+                        
+                        <div class="express-audience-horisontal-bars">
+                            <horisontal-bars-dir 
+                                data="playerKnownBarsChart" 
+                                left-text-class="'text-1 text-width-100'"
+                                right-text-class="'text-2'"
+                            ></horisontal-bars-dir>
+                        </div>
+                    </div>
+                <!--</div>-->
+                
+                <div layout="column" layout-align="start start"
+                    class="express-audience-sponsors" flex="50">
+                    
+                    <div layout="row" layout-align="start center">
+                        <div class="express-audience-small-icon sponsors-icon"></div>
+                        <div class="infobox-header-3">Топ-{{sponsorKnownCount}} самых<br>упоминаемых<br>спонсоров</div>
+                    </div>
+                    
+                    <div class="express-audience-horisontal-bars">
+                        <horisontal-bars-dir 
+                            data="sponsorKnownBarsChart" 
+                            left-text-class="'text-1 text-width-100'"
+                            right-text-class="'text-2'"
+                        ></horisontal-bars-dir>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+        
     </div>
 
 
-    <h2 class="infobox-panel-header2" ng-show="caption"
-        layout="row" layout-align="start center" ng-bind-html="caption | trustAsHtmlFltr">
-    </h2>
 
-    
-    <legend-dir legend="graphsModes" columns-count="1" 
-        selectable="true" selected-color="'#777777'"
-        single-selection="true"></legend-dir>
+
 
 
     <div layout="row" layout-align="start start" layout-wrap style="margin-top: 8px;">

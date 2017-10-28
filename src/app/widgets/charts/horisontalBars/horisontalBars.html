@@ -1,0 +1,131 @@
+<div layout="column" layout-align="start start" 
+    class="horisontal-bars" >
+    
+    <!-- строка с двумя столбцами. первый - названия, второй - график и значения -->
+    <!--<div layout="row" layout-align="start start"-->
+        <!--ng-class="bars-columns">-->
+        
+    <div layout="row" layout-align="start start"
+        class="bars-columns-left"
+        ng-if="align == 'left'">
+        
+        <!-- левые подписи -->
+        <div layout="column" layout-align="start end"
+            class="bars-title">
+            <!--layout="row" layout-align="end center"-->
+            <div ng-repeat="group in dataForRender.groups"
+                
+                ng-bind-html="group.leftText | trustAsHtmlFltr"
+                class="horisontal-bars-left-text"
+                ng-class="leftTextClass"
+                ng-style="group.style">
+            </div>
+            
+        </div>
+        
+        <!-- бары + правые подписи -->
+        <div layout="column" layout-align="start start"
+            class="bars-bars">
+            
+            <div ng-repeat="group in dataForRender.groups"
+                layout="row" layout-align="start center"
+                ng-style="group.style">
+                
+                <div layout="row" layout-align="start center"
+                    class="horisontal-bars-group">
+                    <div ng-repeat="bar in group.bars"
+                        class="horisontal-bars-bar"
+                        ng-style="bar.style">
+                    </div>
+                </div>
+                
+                <div ng-bind-html="group.rightText | trustAsHtmlFltr"
+                    layout="row" layout-align="center center"
+                    class="horisontal-bars-right-text"
+                    ng-class="rightTextClass">
+                </div>
+            
+            </div>
+   
+        </div>
+    </div>
+    
+    
+    
+    <div layout="row" layout-align="start start"
+        class="bars-columns-right"
+        ng-if="align == 'right'">
+        
+        <!-- бары + левые подписи -->
+        <div layout="column" layout-align="start end"
+            class="bars-bars">
+            
+            <div ng-repeat="group in dataForRender.groups"
+                layout="row" layout-align="end center"
+                ng-style="group.style">
+                
+                <div ng-bind-html="group.leftText | trustAsHtmlFltr"
+                    class="horisontal-bars-left-text"
+                    ng-class="leftTextClass">
+                </div>
+                
+                <div layout="row" layout-align="end center"
+                    class="horisontal-bars-group">
+                    <div ng-repeat="bar in group.bars"
+                        class="horisontal-bars-bar"
+                        ng-style="bar.style">
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+        
+        <!-- правые подписи -->
+        <div layout="column" layout-align="start start"
+            class="bars-title">
+            
+            <div ng-repeat="group in dataForRender.groups"
+                ng-bind-html="group.rightText | trustAsHtmlFltr"
+                
+                class="horisontal-bars-right-text"
+                ng-class="rightTextClass"
+                ng-style="group.style">
+            </div>
+            
+        </div>
+        
+    </div>
+    
+    <!--<div layout="column" layout-align="start start"-->
+    <!--    ng-style="{'align-items': align == 'right' ? 'flex-end' : 'flex-start'}">-->
+    
+    <!--    <div ng-repeat="group in dataForRender.groups"-->
+    <!--        layout="row" layout-align="start center"-->
+    <!--        ng-style="group.style">-->
+            
+    <!--        <div ng-bind-html="group.leftText | trustAsHtmlFltr"-->
+    <!--            ng-class="leftTextClass"-->
+    <!--            class="horisontal-bars-left-text"></div>-->
+            
+    <!--        <div layout="row" layout-align="start center"-->
+    <!--            class="horisonral-bars-group" ng-class="'horisonral-bars-group-align-' + align">-->
+                
+    <!--            <div ng-repeat="bar in group.bars"-->
+    <!--                layout="row" layout-align="start center"-->
+    <!--                class="horisontal-bars-bar"-->
+    <!--                ng-style="bar.style">-->
+                    
+    <!--            </div>-->
+            
+    <!--        </div>-->
+            
+    <!--        <div ng-bind-html="group.rightText | trustAsHtmlFltr"-->
+    <!--            ng-class="rightTextClass"-->
+    <!--            class="horisontal-bars-right-text"></div>-->
+    <!--    </div>-->
+    <!--</div>-->
+    
+</div>
+
+

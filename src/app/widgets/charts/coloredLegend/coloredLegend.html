@@ -1,0 +1,28 @@
+<div layout="row" layout-align="start start" 
+    class="colored-legend" 
+    >
+    
+    
+    <div layout="column" layout-align="start start">
+        <div ng-repeat="item in drawedItems"
+            class="colored-legend-item"
+            layout="row" layout-align="start center">
+            
+            <div class="legend-point" ng-style="item.pointStyle"></div>
+            <div class="legend-caption" ng-bind-html="item.caption | trustAsHtmlFltr"></div>
+            <!--<div class="legend-value" ng-bind-html="item.value | trustAsHtmlFltr"></div>-->
+            
+        </div>
+    </div>
+    
+    <div layout="column" layout-align="start start">
+        <div ng-repeat="item in drawedItems"
+            class="colored-legend-item legend-value"
+            ng-bind-html="item.valueText | trustAsHtmlFltr">
+        </div>
+    </div>
+    
+    
+</div>
+
+

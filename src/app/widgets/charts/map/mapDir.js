@@ -17,12 +17,12 @@
         return {
             restrict: 'E',
             scope: {
-                chart: '=',
+                //chart: '=',
                 regions: '=',
                 selectable: '=?',
                 selectedColor: '=?',
                 disabledColor: '=?',
-                highlightedColor: '=?'
+                //highlightedColor: '=?'
             },
             templateUrl: '/views/widgets/charts/map/map.html',
             link: function ($scope, $el, attrs) {
@@ -507,21 +507,27 @@
                         var maxRegion = null;
                         $scope.regions.forEach(function(region){
                             $scope.regionsO[region.id] = region;
-                            // if (region.data && region.data.count > maxValue){
-                            //     maxValue = region.data.count;
-                            //     maxRegion = region;
-                            // }
                         });
-                        // показываем маркер для региона с максимальным значением
-                        // if (maxRegion){
-                        //     var items = Object.keys($scope.svgRegions)
-                        //         .map(function(itemId){return $scope.svgRegions[itemId];})
-                        //         .filter(function(item){return item.id && item.id.length && item.id.indexOf(maxRegion.id) >= 0;
-                        //     });
-                        //     if (items[0])
-                        //         $scope.regionClick(items[0]);
-                        // }
+                       
                     };
+                    
+                   
+                    // $scope.regions = [{
+                    //     id: 15,
+                    //     color: '#fc4a1a',
+                    //     selected: true,
+                    //     highlighted: false
+                    // }, {
+                    //     id: 18,
+                    //     color: '#4b78bf',
+                    //     selected: false,
+                    //     highlighted: false,
+                    // }, {
+                    //     id: 23, 
+                    //     color: '#ff9750',
+                    //     selected: false,
+                    //     highlighted: false
+                    // }];
                     
                     $scope.isRegionActive = function(item){
                         if (!item || !item.id || !item.id.length) return false;
@@ -537,20 +543,25 @@
                             state:{},
                             styles:{}
                         };
+                        // если у региона нет id - значит мы с этим регионом не работаем
                         if (!item || !item.id || !item.id.length) {
                             res.styles = {'fill': $scope.disabledColor || '#d9e4e8'};
                             return res;
                         }
+                        // перебираем все регионы, связанные с этим
                         item.id.forEach(function(id){
-                            if ($scope.regionsO[id] && $scope.regionsO[id].selected)
+                            var region = $scope.regionsO[id];
+                            if (region && region.selected) {
                                 res.state.selected = true;
-                            if ($scope.regionsO[id] && $scope.regionsO[id].highlighted)
-                                res.state.highlighted = true;
+                                res.styles = {'fill': region.color || $scope.selectedColor || '#770000'};
+                            }
+                            // if ($scope.regionsO[id] && $scope.regionsO[id].highlighted)
+                                // res.state.highlighted = true;
                         });
-                        if (res.state.selected)
-                            res.styles = {'fill': $scope.selectedColor || '#770000'};
-                        else if (res.state.highlighted)
-                            res.styles = {'fill': $scope.highlightedColor || '#007700'};
+                        // if (res.state.selected)
+                            // res.styles = {'fill': $scope.selectedColor || '#770000'};
+                        // else if (res.state.highlighted)
+                            // res.styles = {'fill': $scope.highlightedColor || '#007700'};
                         
                         return res;
                     };
@@ -560,95 +571,24 @@
                     $scope.regionClick = function(item, event){
                         
                         if (!item || !item.id || !item.id.length) {
-                            // $scope.hideMarker();
+                            return;
+                        }
+                        
+                        if ($scope.selectable === false) {
                             return;
                         }
 
                         var newValue = !$scope.getRegionClasses(item).state.selected;
                         var regions = [];
                         item.id.forEach(function(id){
-                            if ($scope.regionsO[id])
-                                regions.push($scope.regionsO[id]);
+                            var region = $scope.regionsO[id];
+                            if (!region) return;
+                            region.selected = newValue;
                         });
 
-                        // if ($scope.markerItem == item)
-                        //     $scope.hideMarker();
-                        // else {
-                        //     $scope.markerData = {
-                        //         //name: item.name,
-                        //         name: item.ShortName,
-                        //         count: 0,
-                        //         percent: 0,
-                        //         header: ''
-                        //     };
-                            regions.forEach(function(region){
-                                // $scope.markerData.count += region.data && region.data.count || 0;
-                                // $scope.markerData.percent += region.data && region.data.percent || 0;
-                                // $scope.markerData.header += (region.data && region.data.header ? ' '+region.data.header : '');
-                                if ($scope.selectable !== false)
-                                    region.selected = newValue;
-                            });
-                            // if ($scope.markerData.count)
-                            //     $scope.showMarker(item);
-                            // else
-                            //     $scope.hideMarker();
-                       // }
                     };
 
-                    // $scope.getItemCenter = function(item){
-                    //     var path = $scope.el[0].querySelectorAll('path[region-id="'+JSON.stringify(item.id)+'"]');
-                    //     if (!path.length) return null;
-
-                    //     function getElementCoords(element, coords) {
-                    //         var ctm = element.getCTM(),
-                    //             x = ctm.e + coords.x*ctm.a + coords.y*ctm.c,
-                    //             y = ctm.f + coords.x*ctm.b + coords.y*ctm.d;
-                    //         return {x: x, y: y};
-                    //     }
-
-                    //     var bbox = path[0].getBBox();
-                    //     var x = bbox.x + bbox.width/2;
-                    //     var y = bbox.y + bbox.height/2;
-
-                    //     var xy = getElementCoords(path[0], {x:x, y:y});
-                    //     //console.log(path);
-                    //     return xy;
-                    // };
-
-                    // $scope.markerItem = null;
-                    // $scope.showMarker = function(item){
-                        
-                    //     var center = $scope.getItemCenter(item);
-                    //     if (!center){
-                    //         $scope.hideMarker();
-                    //         return;
-                    //     }
-                    //     var markerWidth = 144;
-                    //     var markerHeight = 204;
-
-                    //     $scope.markerLeft = center.x - markerWidth/2;
-                    //     $scope.markerTop = center.y - markerHeight;
-                    //     $scope.markerVisible = true;
-                    //     $scope.markerItem = item;
-                    // };
-                    
-                    // $scope.hideMarker = function(){
-                    //     $scope.markerVisible = false;
-                    //     $scope.markerItem = null;
-                    // };
-
-                    // var tempMarkerItem;
-                    // $scope.$on('printStart', function(){
-                    //     tempMarkerItem = $scope.markerItem;
-                    //     $scope.hideMarker();
-                    // });
-                    // $scope.$on('printEnd', function(){
-                    //   if (tempMarkerItem)
-                    //       $scope.showMarker(tempMarkerItem);
-                    //     tempMarkerItem = null;
-                    // });
-
-
+     
 
                     $scope.highlightRegion = function(item){
                         if (!item || !item.id || !item.id.length) return;

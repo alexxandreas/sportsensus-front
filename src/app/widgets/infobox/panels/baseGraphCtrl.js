@@ -105,5 +105,25 @@
             return serverData[key+graphKey];
         }
         
+        $scope.formatCount = function(count){
+            if (count > 1000*1000)
+                return format(count/1000/1000, ' M');
+            else if (count > 1000)
+                return format(count/1000, ' k');
+            else 
+                return format(count);
+                
+            function format(count, suffix){
+                suffix = suffix || '';
+                if (count > 100)
+                    return Math.round(count) + suffix;
+                else if (count > 10)
+                    return Math.round(count*10)/10 + suffix;
+                else 
+                    return Math.round(count*100)/100 + suffix;
+            }
+        }
+        
+        
     }
 }());

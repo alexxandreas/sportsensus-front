@@ -1,0 +1,35 @@
+<div layout="column" layout-align="start start" 
+    class="doughnut-chart">
+    
+    <div class="doughnut-chart-content" 
+        layout="row" layout-align="center center" ng-transclude>
+    </div>
+    
+    <!--<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"></svg>-->
+    <!--<svg width="450" height="450" viewBox="0 0 450 450" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">-->
+    <svg width="100%" height="100%" viewBox="0 0 450 450" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g>
+            <!--<path stroke-width="1" stroke="#0C1013" fill="#2C3E50" data-order="0"-->
+            <!--<path stroke-width="1" stroke="#fff" fill="#2C3E50" data-order="0"-->
+            <path stroke-width="1" stroke="transparent" ng-attr-fill="{{item.color}}" ng-attr-data-order="{{$index}}"
+            ng-repeat="item in dataForRender.items"
+            ng-attr-d="{{item.d}}"></path>
+            
+        </g>
+        
+        <!--<g>-->
+        <!--    <path stroke-width="1" stroke="#0C1013" fill="#2C3E50" data-order="0" d="M 225 10 A 215 215 0 0 1 421.8912861253715 311.36446866563296 L 372.6684645940286 289.77335149922476 A 161.25 161.25 0 0 0 225 63.75 Z"></path>-->
+        <!--    <path stroke-width="1" stroke="#0C1013" fill="#FC4349" data-order="1" d="M 421.8912861253715 311.36446866563296 A 215 215 0 0 1 189.61224860039255 437.0676945007881 L 198.4591864502944 384.05077087559107 A 161.25 161.25 0 0 0 372.6684645940286 289.77335149922476 Z"></path>-->
+        <!--    <path stroke-width="1" stroke="#0C1013" fill="#6DBCDB" data-order="2" d="M 189.61224860039255 437.0676945007881 A 215 215 0 0 1 16.57897155364651 277.77949318972577 L 68.68422866523488 264.5846198922943 A 161.25 161.25 0 0 0 198.4591864502944 384.05077087559107 Z"></path>-->
+        <!--    <path stroke-width="1" stroke="#0C1013" fill="#F7E248" data-order="3" d="M 16.57897155364651 277.77949318972577 A 215 215 0 0 1 45.009131306958494 107.40626212623269 L 90.00684848021888 136.8046965946745 A 161.25 161.25 0 0 0 68.68422866523488 264.5846198922943 Z"></path>-->
+        <!--    <path stroke-width="1" stroke="#0C1013" fill="#D7DADB" data-order="4" d="M 45.009131306958494 107.40626212623269 A 215 215 0 0 1 155.1894665284709 21.649343703000284 L 172.64209989635316 72.48700777725023 A 161.25 161.25 0 0 0 90.00684848021888 136.8046965946745 Z"></path>-->
+        <!--    <path stroke-width="1" stroke="#0C1013" fill="#FFF" data-order="5" d="M 155.1894665284709 21.649343703000284 A 215 215 0 0 1 224.9998352830555 10.000000000063096 L 224.9998764622916 63.75000000004732 A 161.25 161.25 0 0 0 172.64209989635316 72.48700777725023 Z"></path>-->
+        <!--</g>-->
+    </svg>
+    
+    
+    
+    
+</div>
+
+

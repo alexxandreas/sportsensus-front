@@ -9,12 +9,14 @@
 
     expressSportDir.$inject = [
         '$rootScope',
-        '$mdMedia'
+        '$mdMedia',
+        'PluralSrv'
     ];
 
     function expressSportDir(
         $rootScope,
-        $mdMedia
+        $mdMedia,
+        PluralSrv
     )    {
         return {
             restrict: 'E',
@@ -22,7 +24,7 @@
                 sport: '='
                 // columnsLayout: '=?',
             },
-            templateUrl: '/views/widgets/infobox/panels/expressSport/expressSportNew.html',
+            templateUrl: '/views/widgets/infobox/panels/expressSport/expressSportNew2.html',
             link: function ($scope, $el, attrs) {
                 //if (angular.isUndefined($scope.selectable))
                 //   $scope.selectable = true;
@@ -44,27 +46,143 @@
                 ){
                     
                     $controller('baseGraphCtrl', {$scope: $scope});
+                    
+                    
+                    
+                    $scope.testDonutData = {
+                        items: [{
+                            value: 100,
+                            valueText: '100 %',
+                            color: '#fc4a1a',
+                            text: 'text 100'
+                        },{
+                            value: 150,
+                            valueText: '150 %',
+                            color: '#4b78bf',
+                            text: 'text 150'
+                        },{
+                            value: 30,
+                            valueText: '30 %',
+                            color: '#ff9750',
+                            text: 'text 30'
+                        },{
+                            value: 56,
+                            valueText: '56 %',
+                            color: '#af9d94',
+                            text: 'text 56'
+                        }, {
+                            value: 83,
+                            valueText: '83 %',
+                            color: '#86cfe2',
+                            text: 'text 83'
+                        }]
+                    };
+                    
+                    
+                    $scope.testBarsData = {
+                        groups: [{ // одна группа блоков, расположенных в стек
+                            leftText: 'left1',
+                            rightText: '100%',
+                            bars: [{
+                                value: 100,
+                                color: '#fc4a1a',
+                                text: 'tooltip100'
+                            }]
+                            // tooltip: 'обший tooltip'
+                        },{ // одна группа блоков, расположенных в стек
+                            leftText: 'left2',
+                            rightText: '150%',
+                            bars: [{
+                                value: 150,
+                                color: '#4b78bf',
+                                text: 'tooltip150'
+                            }]
+                            // tooltip: 'обший tooltip'
+                        },{ // одна группа блоков, расположенных в стек
+                            leftText: 'left3',
+                            rightText: '30%',
+                            bars: [{
+                                value: 30,
+                                color: '#ff9750',
+                                text: 'tooltip30'
+                            }]
+                            // tooltip: 'обший tooltip'
+                        },{ // одна группа блоков, расположенных в стек
+                            leftText: 'left4',
+                            rightText: '56%',
+                            bars: [{
+                                value: 56,
+                                color: '#af9d94',
+                                text: 'tooltip56'
+                            }]
+                            // tooltip: 'обший tooltip'
+                        }
+                        ]
+                    };
+                    
+                    $scope.testRegionsData = {
+                        items: [{ 
+                            id: 15,
+                            selected: true, // для карты
+                            leftText: 'left1',
+                            rightText: '100%',
+                            value: 100,
+                            color: '#fc4a1a',
+                            text: 'tooltip100'
+                        },{ // одна группа блоков, расположенных в стек
+                            id: 18,
+                            selected: true, // для карты
+                            leftText: 'left2',
+                            rightText: '150%',
+                            value: 150,
+                            color: '#4b78bf',
+                            text: 'tooltip150'
+                        },{ // одна группа блоков, расположенных в стек
+                            id: 23,
+                            selected: true, // для карты
+                            leftText: 'left3',
+                            rightText: '30%',
+                            value: 30,
+                            color: '#ff9750',
+                            text: 'tooltip30'
+                        },{ // одна группа блоков, расположенных в стек
+                            id: 5,
+                            selected: true, // для карты
+                            leftText: 'left4',
+                            rightText: '56%',
+                            value: 56,
+                            color: '#af9d94',
+                            text: 'tooltip56'
+                        }]
+                    };
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    var mainThemeColors = ['#287177', '#287177', '#399997', '#399997', '#4ac0b6', '#4ac0b6', '#85ddd0', '#85ddd0', '#a0efe2', '#a0efe2'];
+                    
 
 		            // данные перезапрашиваются каждый раз при изменении радара
             		$scope.setParams = function(params){
                         requestData();
-                        updateCaption();
+                        //updateCaption();
             		}
             		
             		$scope.setGraphsMode = function(graphMode){
                         prepareSportData();
                     }
                     
-                    function updateCaption(){
-                        $scope.caption = ParamsSrv.getSelectedSportCaption(true);
-                        $scope.clubNames = $scope.sport.clubs
-                            ? $scope.sport.clubs.filter(function(club){return club.selected;}).map(function(club){return club.name; }).join(', ')
-                            : null
-                    }
+                    // function updateCaption(){
+                    //     $scope.caption = ParamsSrv.getSelectedSportCaption(true);
+                    //     $scope.clubNames = $scope.sport.clubs
+                    //         ? $scope.sport.clubs.filter(function(club){return club.selected;}).map(function(club){return club.name; }).join(', ')
+                    //         : null
+                    // }
         
-                    // $scope.$watch('sport', function(){
-                    //     requestData();
-                    // });
                     
                     
                     function requestData() { // $scope.sport from legend
@@ -76,8 +194,6 @@
                         ApiSrv.getExpressSport(audience, $scope.sport.id, clubs).then(function (data) {
                             $scope.serverData = data;
                             prepareSportData();
-                            //$scope.serverData = data;
-                            //prepareGraphs()
                         }).finally(function(){
                             $scope.showPreloader = false;
                         });
@@ -87,50 +203,142 @@
                     function prepareSportData(){
                         if (!$scope.serverData) return;
                         
+                        
                         $scope.graphs = {};
                         
-                        //prepareFanTypeData($scope.getGraphData($scope.serverData, 'fan_type'));      
-                        prepareCareer($scope.getGraphData($scope.serverData, 'career'));           
+                        prepareSummary($scope.serverData);
+                        prepareCareer($scope.getGraphData($scope.serverData, 'career'));      
+                        prepareRegions($scope.getGraphData($scope.serverData, 'region'));      
+                        prepareFanType($scope.getGraphData($scope.serverData, 'fan_type'));
                         prepareTvHome($scope.getGraphData($scope.serverData, 'tvhome'));           
-                        // prepareCar($scope.getGraphData($scope.serverData, 'car'));              
-                        prepareCar($scope.serverData.car);              
                         prepareElectronics($scope.getGraphData($scope.serverData, 'electronics'));  
-                      
-                        // prepareVisit();
-                        // prepareServicesNow();
+                        prepareCar($scope.serverData.car);              
+                        prepareVisit($scope.getGraphData($scope.serverData, 'time_week'));
+                        prepareGaming($scope.serverData.game);
+                        prepareMobile($scope.serverData.mobile_hours);
+                        prepareGasStation($scope.getGraphData($scope.serverData, 'gasoften'));
+                        prepareServicesNow($scope.getGraphData($scope.serverData, 'services_now'));
+
                     }
+                    
+                    
+                    
+                    function prepareSummary(data) {
+                        
+                        $scope.summaryIncome = data.avg_income;
+                        $scope.summaryAge = Math.round(data.avg_age);
+                        $scope.summaryAgeText = PluralSrv(['год','года','лет'], $scope.summaryAge); 
+                        $scope.summaryChildren = Math.round(data.avg_children*10)/10;
+                        
+                        // TODO не приходят данные с бекенда!
+                        $scope.summaryFamilysize = '';
+                        
+                    }
+                    
                     
                     // Род дейтельности
                     function prepareCareer(data) {
-                        
+                        var colors = ['#399997', '#a0efe2', '#4ac0b6', '#324766', '#ffc85a', '#fd9276', '#bc1d0d', '#d3d7dd'];
                         data = $scope.prepareChartData(data, {
                             'career': $scope.parameters.career
                         });
                         
-            
-                        var chartData = [];
-            
+                        var items = [];
+                        
                         data.legends.career.forEach(function (career, careerIndex) {
                             var count = data.getCount({'career': career.id});
-                            chartData.push({
-                                label: career.name + ': ' + count.toLocaleString('en-US'),
-                                color: career.color,
-                                value: count
+                            items.push({
+                                // label: career.name + ': ' + count.toLocaleString('en-US'),
+                                // color: career.color,
+                                value: count,
+                                // valueText: count.toLocaleString('en-US'),
+                                valueText: $scope.formatCount(count),
+                                text: career.name
                             });
                         });
-            
-                        $scope.graphs.career = {
-                            legends:data.legends,
-                            label: "Род дейтельности",
-                            chart:{
-                                chartData: chartData,
-                                // text:'222',// текст внутри бублика
-                                options: {
-                                    percentageInnerCutout: 70
-                                }
-                            }
-                        };
+                        items.sort(function(a, b){ return b.value - a.value; });
+                        items.forEach(function(item, index){
+                            item.color = colors[index % colors.length];
+                        });
+                        
+                        $scope.careerItems = items;
+                        $scope.careerDonutChart = {
+                            items: items
+                        }
                     }
+                    
+                    // Регионы проживания
+                    function prepareRegions(data) {
+                        //var colors = ['#287177', '#287177', '#399997', '#399997', '#4ac0b6'];
+                        var data = $scope.prepareChartData(data, {
+                            'region': $scope.parameters.region
+                            //'sport': $scope.parameters.sport
+                        });
+            
+                        //data.legends.region.forEach()
+                        var allCount = data.getCount();
+                        
+                        var items = [];
+                        
+                        data.legends.region.forEach(function(region){
+                            region.selected = true;
+                            var count = data.getCount({'region': region.id});
+                            items.push({
+                                id: region.id,
+                                selected: true, // для карты
+                                leftText: region.name,
+                                rightText: $scope.formatCount(count),
+                                value: count,
+                                //color: '#fc4a1a',
+                                // text: region.name
+                            });
+                        });
+                        items.sort(function(a, b){ return b.value - a.value; });
+                        items.forEach(function(item, index){
+                            item.color = mainThemeColors[index % mainThemeColors.length];
+                        });
+                        
+                        $scope.regionsCount = items.length;
+                        $scope.regionsItems = items;
+                        $scope.regionsMapChart = {
+                            items: items
+                        }
+                        $scope.regionsBarsChart = {
+                            items: items
+                        }
+                    }
+                    
+                    function prepareFanType(data){
+                        data.legends[0].name = 'fan_type';
+                        
+                        data = $scope.prepareChartData(data, {
+                            'fan_type': $scope.parameters.fan_type
+                        });
+                        
+                        var items = [];
+                        
+                        data.legends.fan_type.forEach(function (fanType, fanTypeIndex) {
+                            var count = data.getCount({'fan_type': fanType.id});
+                            items.push({
+                                // label: career.name + ': ' + count.toLocaleString('en-US'),
+                                color: fanType.color,
+                                value: count,
+                                // valueText: count.toLocaleString('en-US'),
+                                valueText: $scope.formatCount(count),
+                                text: fanType.name
+                            });
+                        });
+                        items.sort(function(a, b){ return b.value - a.value; });
+                        // items.forEach(function(item, index){
+                        //     item.color = colors[index % colors.length];
+                        // });
+                        
+                        $scope.fanTypeItems = items;
+                        $scope.fanTypeDonutChart = {
+                            items: items
+                        }
+                    }
+                    
                     
                     
                     // Владение разного рода платным ТВ
@@ -140,68 +348,27 @@
                             'tvhome': $scope.parameters.tvhome
                         });
                         
-            
-                        var chartData = [];
-            
-                        data.legends.tvhome.forEach(function (tvhome, tvhomeIndex) {
-                            var count = data.getCount({'career': tvhome.id});
-                            chartData.push({
-                                label: tvhome.name + ': ' + count.toLocaleString('en-US'),
-                                color: tvhome.color,
-                                value: count
+                        var items = [];
+                        
+                        data.legends.tvhome.forEach(function (tvHome, tvhomeIndex) {
+                            var count = data.getCount({'tvhome': tvHome.id});
+                            items.push({
+                                // label: career.name + ': ' + count.toLocaleString('en-US'),
+                                color: tvHome.color,
+                                value: count,
+                                // valueText: count.toLocaleString('en-US'),
+                                valueText: $scope.formatCount(count),
+                                text: tvHome.name
                             });
                         });
-            
-                        $scope.graphs.tvhome = {
-                            legends:data.legends,
-                            label: "Владение разного рода платным ТВ",
-                            chart:{
-                                chartData: chartData,
-                                // text:'222',// текст внутри бублика
-                                options: {
-                                    percentageInnerCutout: 70
-                                }
-                            }
-                        };
+                        
+                        $scope.tvHomeItems = items;
+                        $scope.tvHomeDonutChart = {
+                            items: items
+                        }
                     }
                     
-                    // Владение автомобилем
-                    function prepareCar(data) {
-                        
-                        var carPercent = Math.round(data);
-   
-                        var chartData = [{
-                            label: 'Владеют: ' + carPercent + '%',
-                            legend: 'Владеют',
-                            color: "#2CA02C",
-                            value: carPercent
-                        },{
-                            label: 'Не владеют: ' + (100-carPercent) + '%',
-                            legend: 'Не владеют',
-                            color: "#D62728",
-                            value: 100 - carPercent
-                        }]
-                        
-                        var legend = chartData.map(function(item){
-                            return {
-                                name: item.legend,
-                                color: item.color
-                            }
-                        });
-                        
-                        
-                        $scope.graphs.car = {
-                            legends: {car: legend},
-                            label: "Владение автомобилем",
-                            chart:{
-                                chartData: chartData,
-                                text:"Владение автомобилем",
-                                options: {
-                                    percentageInnerCutout: 70
-                                }
-                            }
-                        };
-                    }
+                   
                     
                     // Владение устройствами
                     function prepareElectronics(data){
@@ -210,33 +377,36 @@
                             'electronics': $scope.parameters.electronics_exist
                         });
             
-                        var dataset = { label:[], fillColor:[], data:[] };
-                        var chartData = {labels:[], datasets:[dataset]};
-                        
+                        var items = [];
                         
                         data.legends.electronics.forEach(function (electronics, electronicsIndex) {
                             var count = data.getCount({'electronics': electronics.id});
-                            dataset.label.push(electronics.name + ': ' + count.toLocaleString('en-US'));
-                            dataset.fillColor.push(electronics.color);
-                            dataset.data.push(count);
-                            
-                            // chartData.labels.push(electronics.name);
-                            chartData.labels.push('');
+                            items.push({
+                                // label: career.name + ': ' + count.toLocaleString('en-US'),
+                                color: electronics.color,
+                                value: count,
+                                // valueText: count.toLocaleString('en-US'),
+                                valueText: $scope.formatCount(count),
+                                text: electronics.name
+                            });
                         });
-                        //chartData.labels.push(sport.name);
                         
-                        $scope.graphs.electronics = {
-                            legends:data.legends,
-                            label: "Владение устройствами",
-                            chart:{
-                                data:chartData,
-                                options:{
-                                    showLabels: false, // : $scope.formatValue,
-                                    stacked: true,
-                                    scaleLabel: function(obj){return $scope.formatValue(obj.value)}
-                                }
-                            }
-                        };
+                        $scope.electronicsItems = items;
+                        $scope.electronicsDonutChart = {
+                            items: items
+                        }
+            
+                    }
+                    
+                    
+                     // Владение автомобилем
+                    function prepareCar(data) {
+                        
+                        var carPercent = Math.round(data);
+                        
+                        $scope.autoClass = 'auto-icon-' + (Math.round(carPercent/10) * 10);
+                        $scope.autoYesText = carPercent + '%';
+                        $scope.autoNoText = (100 - carPercent) + '%';
                     }
                     
                     
@@ -274,39 +444,107 @@
                             'time_week': $scope.parameters.time_week
                         });
              
-                        var dataset = { label:[], fillColor:[], data:[] };
-                        var chartData = {labels:[], datasets:[dataset]};
+                        var items = [];
                         
-                        
-                        data.legends.time_week.forEach(function (time_week, time_weekIndex) {
-                            var count = data.getCount({'time_week': time_week.id});
-                            dataset.label.push(time_week.name + ': ' + count.toLocaleString('en-US'));
-                            dataset.fillColor.push(time_week.color);
-                            dataset.data.push(count);
-                            
-                            // chartData.labels.push(electronics.name);
-                            chartData.labels.push('');
+                        data.legends.time_week.forEach(function (timeWeek, timeWeekIndex) {
+                            var count = data.getCount({'time_week': timeWeek.id});
+                            items.push({
+                                // label: career.name + ': ' + count.toLocaleString('en-US'),
+                                // color: timeWeek.color,
+                                value: count,
+                                // valueText: count.toLocaleString('en-US'),
+                                // valueText: $scope.formatCount(count),
+                                leftText: timeWeek.name,
+                                rightText: $scope.formatCount(count),
+                                // text: timeWeek.name
+                            });
                         });
-                        //chartData.labels.push(sport.name);
+                        items.sort(function(a, b){ return b.value - a.value; });
+                        items.forEach(function(item, index){
+                            item.color = mainThemeColors[index % mainThemeColors.length];
+                        });
                         
-                        $scope.graphs.time_week = {
-                            legends:data.legends,
-                            label: "Посещение заведений",
-                            chart:{
-                                data:chartData,
-                                options:{
-                                    showLabels: false, // : $scope.formatValue,
-                                    stacked: true,
-                                    scaleLabel: function(obj){return $scope.formatValue(obj.value)}
+                        
+                        $scope.timeWeekItems = items;
+                        $scope.timeWeekBarsChart = {
+                            items: items
+                        }
+                    }
+                    
+                    
+                    function prepareGaming(data){
+                        $scope.gamingText = Math.round(data) + '%';
+                    }
+                    
+                    function prepareMobile(data){
+                        // $scope.mobileText = '87%';
+                        $scope.mobileText = Math.round(data*10)/10 + 'ч';
+                    }
+                    
+                    
+                    function prepareGasStation(data) { // gasoften
+                        data = {
+                            "data": [
+                                {
+                                    "count": 10,
+                                    "legend": [1]
+                                },
+                                {
+                                    "count": 20,
+                                    "legend": [2]
+                                },
+                                {
+                                    "count": 30,
+                                    "legend": [3]
+                                },
+                                {
+                                    "count": 40,
+                                    "legend": [4]
                                 }
-                            }
-                        };
+                            ],
+                            "legends": [
+                                {
+                                    "name": "gasoften",
+                                    "is_audience": false
+                                }
+                            ]
+                        }
+            
                         
+                        data = $scope.prepareChartData(data, {
+                            'gasoften': $scope.parameters.gasoften
+                        });
+             
+                        var items = [];
+                        
+                        data.legends.gasoften.forEach(function (gasoften, gasoftenIndex) {
+                            var count = data.getCount({'gasoften': gasoften.id});
+                            items.push({
+                                // label: career.name + ': ' + count.toLocaleString('en-US'),
+                                // color: timeWeek.color,
+                                value: count,
+                                // valueText: count.toLocaleString('en-US'),
+                                // valueText: $scope.formatCount(count),
+                                leftText: gasoften.name,
+                                rightText: $scope.formatCount(count),
+                                // text: timeWeek.name
+                            });
+                        });
+                        items.sort(function(a, b){ return b.value - a.value; });
+                        items.forEach(function(item, index){
+                            item.color = mainThemeColors[index % mainThemeColors.length];
+                        });
+                        
+                        $scope.gasoftenCount = items.length;
+                        $scope.gasoftenItems = items;
+                        $scope.gasoftenBarsChart = {
+                            items: items
+                        }
                     }
                     
                     // топ-5 финансовых продуктов. график -  бар
                     function prepareServicesNow(data) {
-                        //financial
+                        
                         data = {
                             "data": [
                                 {
@@ -337,39 +575,38 @@
                                 }
                             ]
                         }
-            
+
                         
                         data = $scope.prepareChartData(data, {
                             'services_now': $scope.parameters.services_now
                         });
-            
-                        var dataset = { label:[], fillColor:[], data:[] };
-                        var chartData = {labels:[], datasets:[dataset]};
                         
+                         var items = [];
                         
-                        data.legends.services_now.forEach(function (services_now, services_nowIndex) {
-                            var count = data.getCount({'services_now': services_now.id});
-                            dataset.label.push(services_now.name + ': ' + count.toLocaleString('en-US'));
-                            dataset.fillColor.push(services_now.color);
-                            dataset.data.push(count);
-                            
-                            // chartData.labels.push(electronics.name);
-                            chartData.labels.push('');
+                        data.legends.services_now.forEach(function (service, serviceIndex) {
+                            var count = data.getCount({'services_now': service.id});
+                            items.push({
+                                // label: career.name + ': ' + count.toLocaleString('en-US'),
+                                // color: timeWeek.color,
+                                value: count,
+                                // valueText: count.toLocaleString('en-US'),
+                                // valueText: $scope.formatCount(count),
+                                leftText: service.name,
+                                rightText: $scope.formatCount(count),
+                                // text: timeWeek.name
+                            });
                         });
-                        //chartData.labels.push(sport.name);
+                        items.sort(function(a, b){ return b.value - a.value; });
+                        items.forEach(function(item, index){
+                            item.color = mainThemeColors[index % mainThemeColors.length];
+                        });
                         
-                        $scope.graphs.services_now = {
-                            legends:data.legends,
-                            label: "Топ-" + data.legends.services_now.length + PluralSrv([' финансовый продукт',' финансовых продукта',' финансовых продуктов'], data.legends.services_now.length),
-                            chart:{
-                                data:chartData,
-                                options:{
-                                    showLabels: false, // : $scope.formatValue,
-                                    stacked: true,
-                                    scaleLabel: function(obj){return $scope.formatValue(obj.value)}
-                                }
-                            }
-                        };
+                        $scope.serviceCount = items.length;
+                        $scope.serviceItems = items;
+                        $scope.serviceBarsChart = {
+                            items: items
+                        }
+                        
                     }
                     
                     
@@ -398,201 +635,7 @@
                         data.gas_persent_header = 'Заправляются на ' + (gasStation ? gasStation.name : '');
             
             
-                        ////////////////////////////////////////////////////
-                        //         Занятость
-                        ////////////////////////////////////////////////////
-            
-                        var careerData = data.career ? $scope.prepareChartData(data.career, {
-                            'career': $scope.parameters.career
-                        }) : null;
-            
-                        var dataDs = { label:[], fillColor:[], data:[] };
-                        //var emptyDs = { label:[], fillColor:[], data:[] };
-                        var chartData = {labels:[],datasets:[dataDs]}; //, emptyDs]};
-            
-                        /*careerData.legends.career.forEach(function(career){
-                            career.data = {
-                                count: careerData.getCount({'career': career.id})
-                            }
-                        });
-                        careerData.legends.career.sort(function(a,b){
-                            return a.data.count - b.data.count;
-                        });
-            
-                        careerData.legends.career.forEach(function(career){
-                            //dataDs.label.push($scope.formatValue(career.data.count));//career.name);//region.name);
-                            dataDs.label.push(career.name + ': ' + career.data.count.toLocaleString('en-US'));//region.name);
-                            dataDs.fillColor.push("#4ac0b6");//career.color);
-                            //var count = regionsData.getCount({'region': region.id});
-                            dataDs.data.push(career.data.count);
-            
-                            // emptyDs.label.push(region.name);
-                            // emptyDs.fillColor.push(region.color);
-                            // emptyDs.data.push(0);
-            
-                            chartData.labels.push(career.name);
-                        });
-            
-                        data.careerLegend = careerData.legends.career;
-            
-                        data.careerChart = {
-                            data:chartData,
-                            options:{
-                                showLabels: false, // : $scope.formatValue,
-                                //stacked: false,
-                                barHeight: 600,
-                                scaleLabel: function(obj){return $scope.formatValue(obj.value)}
-                            }
-                        };*/
-            
-                        ////////////////////////////////////////////////////
-                        //         Регионы проживания
-                        ////////////////////////////////////////////////////
-            
-                        var regionsData = data.region ? $scope.prepareChartData(data.region, {
-                            'region': $scope.parameters.region
-                            //'sport': $scope.parameters.sport
-                        }) : null;
-            
-                        //regionsData.legends.region.forEach()
-                        var allCount = regionsData.getCount();
-            
-                        regionsData.legends.region.forEach(function(region){
-                            region.selected = true;
-                            var count = regionsData.getCount({'region': region.id});
-                            region.data = {
-                                count: count,
-                                percent: count/allCount*100
-                            };
-                        });
-                        regionsData.legends.region.sort(function(a,b){return a.data.count - b.data.count; });
-            
-            
-                        var dataDs = { label:[], fillColor:[], data:[] };
-                        //var emptyDs = { label:[], fillColor:[], data:[] };
-                        var chartData = {labels:[],datasets:[dataDs]};//, emptyDs]};
-            
-                        regionsData.legends.region.forEach(function(region){
-                            //dataDs.label.push($scope.formatValue(region.data.count));//region.name);
-                            dataDs.label.push(region.name + ': ' + region.data.count.toLocaleString('en-US'));
-                            dataDs.fillColor.push('#4ac0b6');
-                            //var count = regionsData.getCount({'region': region.id});
-                            dataDs.data.push(region.data.count);
-            
-                            // emptyDs.label.push(region.name);
-                            // emptyDs.fillColor.push(region.color);
-                            // emptyDs.data.push(0);
-            
-                            chartData.labels.push(region.name);
-                        });
-            
-                        data.regionsLegend = regionsData.legends.region;
-            
-                        data.regionsChart = {
-                            data:chartData,
-                            options:{
-                                showLabels: false, // : $scope.formatValue,
-                                //stacked: false,
-                                barHeight: 600,
-                                scaleLabel: function(obj){return $scope.formatValue(obj.value)}
-                            }
-                        };
-            
-            
-                        ////////////////////////////////////////////////////
-                        //         Потребительское поведение
-                        ////////////////////////////////////////////////////
-            
-            
-            
-                        function findById(params, id){
-                            var result = null;
-                            params.lists.some(function(obj){
-                                if (obj.id == id){
-                                    result = obj;
-                                    return true;
-                                }
-                            });
-                            return result;
-                        }
-            
                         
-                        /*data.tvHomeChart = {
-                            text:"Телевидение",
-                            chartData: [],
-                            options: {
-                                percentageInnerCutout: 70
-                            }
-                        };
-                        data.tvHomeLegend = [];
-                        data.tvhome.data.forEach(function(item){
-                            var itemIndex = item.legend[0];
-                            var itemObj = findById($scope.parameters.tvhome, itemIndex);
-                            data.tvHomeChart.chartData.push({
-                                //label: itemObj && itemObj.name,
-                                label: (itemObj && itemObj.name) + ': ' + item.count.toLocaleString('en-US'),
-                                color: itemObj && itemObj.chartColor,
-                                value: item.count || 0
-                            });
-                            data.tvHomeLegend.push({
-                                //id: list.id,
-                                name: itemObj.name,
-                                color: itemObj.chartColor
-                            });
-                        });*/
-                       
-            
-                        data.electronicsChart = {
-                            text:"Владение устройствами",
-                            chartData: [],
-                            options: {
-                                percentageInnerCutout: 70
-                            }
-                        };
-                        data.electronicsLegend = [];
-                        data.electronics.data.forEach(function(item){
-                            var itemIndex = item.legend[0];
-                            var itemObj = findById($scope.parameters.electronics_exist, itemIndex);
-                            data.electronicsChart.chartData.push({
-                                //label: itemObj && itemObj.name,
-                                label: (itemObj && itemObj.name) + ': ' + item.count.toLocaleString('en-US') ,
-                                color: itemObj && itemObj.chartColor,
-                                //highlight: "#78acd9",
-                                value: item.count || 0
-                            });
-                            data.electronicsLegend.push({
-                                name: itemObj.name,
-                                color: itemObj.chartColor
-                            });
-                        });
-            
-                        /*var carPercent = Math.round(data.car);
-                        data.carChart = {
-                            text:"Владение автомобилем",
-                            chartData: [{
-                                //label: 'Владеют',
-                                label: 'Владеют: ' + carPercent + '%',
-                                legend: 'Владеют',
-                                color: "#2CA02C",
-                                value: carPercent
-                            },{
-                                //label: 'Не владеют',
-                                label: 'Не владеют: ' + (100-carPercent) + '%',
-                                legend: 'Не владеют',
-                                color: "#D62728",
-                                value: 100 - carPercent
-                            }],
-                            options: {
-                                percentageInnerCutout: 70
-                            }
-                        };
-                        data.carLegend = data.carChart.chartData.map(function(item){
-                            return {
-                                name: item.legend,
-                                color: item.color
-                            }
-                        });*/
-            
                         ////////////////////////////////////////////////////
                         //         Сила боления для каждого клуба
                         ////////////////////////////////////////////////////
@@ -711,6 +754,7 @@
                             }); // clubs
                         }
                     }
+                    
                     
                 } // end of controller function 
             ]

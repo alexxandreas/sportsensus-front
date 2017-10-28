@@ -1,0 +1,54 @@
+<div layout="column" layout-align="start start" 
+    class="vertical-bars" >
+    
+    <!-- строка с двумя столбцами. первый - названия, второй - график и значения -->
+    <!--<div layout="row" layout-align="start start"-->
+        <!--ng-class="bars-columns">-->
+        
+    <div layout="column" layout-align="start start"
+        class="bars-rows">
+        
+        <!-- верхние подписи + бары -->
+        <div layout="row" layout-align="start end"
+            class="bars-bars">
+            
+            <div ng-repeat="group in dataForRender.groups"
+                layout="column" layout-align="end center"
+                ng-style="group.style">
+                
+                <div ng-bind-html="group.topText | trustAsHtmlFltr"
+                    layout="row" layout-align="center center"
+                    class="vertical-bars-top-text"
+                    ng-class="topTextClass">
+                </div>
+                
+                <div layout="column" layout-align="end center"
+                    class="vertical-bars-group">
+                    <div ng-repeat="bar in group.bars"
+                        class="vertical-bars-bar"
+                        ng-style="bar.style">
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <!-- нижние подписи -->
+        <div layout="row" layout-align="start start"
+            class="bars-title">
+            <!--layout="row" layout-align="end center"-->
+            <div ng-repeat="group in dataForRender.groups"
+                
+                ng-bind-html="group.bottomText | trustAsHtmlFltr"
+                class="bars-bottom-text"
+                ng-class="bottomTextClass"
+                ng-style="group.style">
+            </div>
+            
+        </div>
+    
+    </div>
+    
+</div>
+
+

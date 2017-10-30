@@ -5,6 +5,7 @@
     angular
 	.module('SportsensusApp', [
 		'ngMaterial',
+		'ngSanitize',
 		'ngRoute',
 		'ngCookies',
 		'Views',

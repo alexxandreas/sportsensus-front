@@ -130,9 +130,28 @@
             		$scope.showResult = function(){
             		    if ($scope.audienceError)
             		        return;
-            		  
-            		    RouteSrv.navigate('infobox:expressAudience');
-        		        //$scope.setActivePage($scope.pages[$scope.checkButtonPage]);  
+            		        
+            		    var currentRouteKey = RouteSrv.getCurrentRoute().key;
+            		    if ([
+            		        'infobox:demography',
+            		        'infobox:consume',
+            		        'infobox:regions'
+            		        ].indexOf(currentRouteKey) >= 0 &&
+            		        ParamsSrv.isAudienceSelected()) {
+            		        RouteSrv.navigate('infobox:expressAudience');
+            		    } else if ([
+            		        'infobox:sport',
+            		        'infobox:interest',
+            		        'infobox:rooting',
+            		        'infobox:involve',
+            		        'infobox:image',
+            		        ].indexOf(currentRouteKey) >= 0 &&
+            		        ParamsSrv.isSportSelected()) {
+            		        RouteSrv.navigate('infobox:expressSport');
+        		        } else {
+        		            RouteSrv.navigate('infobox:result');
+        		        }
+            		    
             		}
                     
                     

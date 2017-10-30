@@ -39,6 +39,7 @@ var libJs = [
 	//'../libs/leaflet/dist/leaflet-src.js',
 	'../libs/angular/angular.js',
 	'../libs/angular-animate/angular-animate.js',
+	'../libs/angular-sanitize/angular-sanitize.min.js',
 	'../libs/angular-aria/angular-aria.js',
 	'../libs/angular-material/angular-material.js',
 	'../libs/angular-route/angular-route.js',

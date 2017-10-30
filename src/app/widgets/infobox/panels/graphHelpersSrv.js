@@ -160,27 +160,7 @@
 			data.data && data.data.forEach(function (item) {
 				item.legend.forEach(function (value, index) {
 					legends[index].values[value] = true;
-					
-					// if (legends[index].name == 'club') {
-					// 	if (legendsByName['sport']) {
-					// 		var sportId = item.legend[legendsByName['sport'].index];
-					// 	} else if (legendMapping.sportId != undefined) {
-					// 		var sportId = legendMapping.sportId;
-					// 	}
-					// 	if (sportId)
-					// 		legends[index].sports.push({clubId: value, sportId: sportId});
-					// }
-					
-					// if (legends[index].name == 'tournament') {
-					// 	if (legendsByName['sport']) {
-					// 		var sportId = item.legend[legendsByName['sport'].index];
-					// 	} else if (legendMapping.sportId != undefined) {
-					// 		var sportId = legendMapping.sportId;
-					// 	}
-					// 	if (sportId)
-					// 		legends[index].sports.push({tournamentId: value, sportId: sportId});
-					// }
-					
+				
 					var legendName = legends[index].name;
 					if (['club','tournament', 'player', 'playground'].indexOf(legendName) >= 0) {
 						if (legendsByName['sport']) {
@@ -212,74 +192,6 @@
 					prepareDefaultLegend(legend);
 				}
 				
-				// if (legend.name == 'club') {
-				// 	legendsO[legend.name] = [];
-				// 	legendMapping[legend.name].lists.filter(function (list) { // list - sport. Отфильтровываем спорты
-				// 		var id = list.id;
-				// 		return Object.keys(legend.sports).some(function (index) {
-				// 			return legend.sports[index].sportId == id;
-				// 		});
-				// 	}).forEach(function (sport) {
-				// 		sport.clubs.forEach(function (club) {
-				// 			if (Object.keys(legend.sports).some(function (index) {
-				// 					return legend.sports[index].sportId == sport.id && legend.sports[index].clubId == club.id;
-				// 				})) {
-				// 				legendsO[legend.name].push({
-				// 					id: club.id,
-				// 					name: club.name,
-				// 					color: club.chartColor,
-				// 					sport: {
-				// 						id: sport.id,
-				// 						name: sport.name,
-				// 						key: sport.key,
-				// 						color: sport.chartColor
-				// 					}
-				// 				})
-				// 			}
-				// 		});
-				// 		//}
-				// 	})
-				
-				// } else if (legend.name == 'tournament') {
-				// 	legendsO[legend.name] = [];
-				// 	legendMapping[legend.name].lists.filter(function (list) { // list - sport. Отфильтровываем спорты
-				// 		var id = list.id;
-				// 		return Object.keys(legend.sports).some(function (index) {
-				// 			return legend.sports[index].sportId == id;
-				// 		});
-				// 	}).forEach(function (sport) {
-				// 		sport.tournaments.forEach(function (tournament) {
-				// 			if (Object.keys(legend.sports).some(function (index) {
-				// 					return legend.sports[index].sportId == sport.id && legend.sports[index].tournamentId == tournament.id;
-				// 				})) {
-				// 				legendsO[legend.name].push({
-				// 					id: tournament.id,
-				// 					name: tournament.name,
-				// 					color: tournament.chartColor,
-				// 					sport: {
-				// 						id: sport.id,
-				// 						name: sport.name,
-				// 						key: sport.key,
-				// 						color: sport.chartColor
-				// 					}
-				// 				})
-				// 			}
-				// 		});
-				// 	})
-				// } else {
-				// 	if (!legendMapping[legend.name]) return;
-				// 	legendsO[legend.name] = legendMapping[legend.name].lists.filter(function (list) {
-				// 		var id = list.id;
-				// 		return legend.values[id];
-				// 	}).map(function (list) {
-				// 		return {
-				// 			id: list.id,
-				// 			name: list.name,
-				// 			key: list.key,
-				// 			color: list.chartColor
-				// 		}
-				// 	})
-				// }
 			});
 			
 			function prepareDefaultLegend(legend){
@@ -316,6 +228,7 @@
 								legendsO[legend.name].push({
 									id: item.id,
 									name: item.name,
+									shortName: item.shortName,
 									color: item.chartColor,
 									sport: {
 										id: sport.id,

@@ -8,11 +8,13 @@
         .directive('homeDir', homeDir);
 
     homeDir.$inject = [
-        '$rootScope'
+        '$rootScope',
+        '$mdDialog'
     ];
 
     function homeDir(
-        $rootScope
+        $rootScope,
+        $mdDialog
     )    {
         return {
             restrict: 'E',
@@ -104,25 +106,33 @@
                     ];
                     
                     $scope.register = function(){
-                        ApiSrv.register($scope.regData);
+                        $scope.showPreloader = true;
+                        // return;
+                        ApiSrv.register($scope.regData).then(function(){
+                            $mdDialog.show(
+                              $mdDialog.alert()
+                                .clickOutsideToClose(false)
+                                .title('Регистрация')
+                                .htmlContent('Благодарим за регистрацию! Вам на почту отправлено письмо<br>'+
+                                    'с данными для входа на сайт и ссылкой активации. В ближайшее время<br>'+
+                                    'с Вами свяжется наш менеджер. Если Вам по какой либо причине<br>'+
+                                    'не пришло наше сообщение – пожалуйста, напишите нам на <a href="mailto:sales@sportsensus.ru">sales@sportsensus.ru</a>')
+                                .ok('OK')
+                            );
+                        }, function(){
+                            $mdDialog.show(
+                              $mdDialog.alert()
+                                .clickOutsideToClose(false)
+                                .title('Ошибка')
+                                .htmlContent('Благодарим за попытку регистрации!<br>'+
+                                    'К сожалению, она закончилась неудачно. Пожалуйста, <br>'+
+                                    'попробуйте ещё раз, или напишите нам на <a href="mailto:sales@sportsensus.ru">sales@sportsensus.ru</a>')
+                                .ok('OK')
+                            );
+                        }).finally(function(){
+                            $scope.showPreloader = false;
+                        });
                     }
-                    
-    
-                    
-                    // $scope.companyTypeFiz = function(fiz) {
-                    //     if (arguments.length)
-                    //         return $scope.regData.legal_status  = fiz ? 0 : 1;
-                    //     else
-                    //         return $scope.regData.legal_status  == 0 ? true : false;
-                    // };
-
-                    // $scope.companyTypeYur = function(yur) {
-                    //     if (arguments.length)
-                    //         return $scope.regData.legal_status  = yur ? 1 : 0;
-                    //     else
-                    //         return $scope.regData.legal_status  == 0 ? false : true;
-                    // };
-
                     
                 }]
         };

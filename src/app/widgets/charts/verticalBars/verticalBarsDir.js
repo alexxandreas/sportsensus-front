@@ -52,10 +52,10 @@
                         // }
                         
                         $scope.maxBarHeight = $scope.maxBarHeight || 200;
-                        $scope.barWidth = $scope.barWidth || 17;
+                        $scope.barWidth = $scope.barWidth || 27;
                         // $scope.barWidth = $scope.barWidth || 35;
                         
-                        $scope.barsHorisontalGap = angular.isDefined($scope.barsHorisontalGap) ? $scope.barsHorisontalGap : 14;
+                        $scope.barsHorisontalGap = angular.isDefined($scope.barsHorisontalGap) ? $scope.barsHorisontalGap : 5;
                         $scope.barsVerticalGap = angular.isDefined($scope.barsVerticalGap) ? $scope.barsVerticalGap : 1;
                         
                         prepareData();

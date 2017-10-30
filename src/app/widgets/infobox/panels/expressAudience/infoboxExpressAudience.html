@@ -1,6 +1,7 @@
-<div class="express-audience"
+<div class="express-audience infobox-panel"
      layout="column" layout-align="start stretch"
      save-as-pdf-dir
+     
      preloader-dir>
 
     <infobox-tabs-dir></infobox-tabs-dir>
@@ -90,6 +91,7 @@
                     <div class="express-audience-vertical-bars">
                         <vertical-bars-dir 
                             data="interestBarsChart" 
+                            bars-horisontal-gap="30"
                             top-text-class="'text-2'"
                             bottom-text-class="'text-1 text-max-width-120'"
                         ></vertical-bars-dir>
@@ -102,36 +104,83 @@
         </div>
         
         <!-- Вторая строка с графиками -->
-        <div layout="column" layout-align="start start"
+        <div layout="column" layout-align="start stretch"
             class="express-audience-block">
             
             <div class="infobox-header-1">
-                Топ-{{}} видов спорта по вовлеченности
+                Топ-{{involveSportsCount}} видов спорта по вовлеченности
             </div>
             
             <!--Первая строка графиков-->
             <div layout="row" layout-align="start start">
                 <div flex="33">
-                    легенда
+                    <div class="express-audience-colored-legend">
+                        <colored-legend-dir items="involveSportsLegend"></colored-legend-dir>
+                    </div>
                 </div>
-                <div flex="33">
-                    1
+                <div flex="33" ng-show="involveSports[0]">
+                    <div class="infobox-header-1">
+                        {{involveSports[0].name}}
+                    </div>
+                    <div class="express-audience-vertical-bars">
+                        <vertical-bars-dir 
+                            data="involveSports[0]" 
+                            top-text-class="'text-1-bold'"
+                            bottom-text-class="'text-1 text-max-width-120'"
+                        ></vertical-bars-dir>
+                    </div>
                 </div>
-                <div flex="33">
-                    2
+                <div flex="33" ng-show="involveSports[1]">
+                    <div class="infobox-header-1">
+                        {{involveSports[1].name}}
+                    </div>
+                    <div class="express-audience-vertical-bars">
+                        <vertical-bars-dir 
+                            data="involveSports[1]" 
+                            top-text-class="'text-1-bold'"
+                            bottom-text-class="'text-1 text-max-width-120'"
+                        ></vertical-bars-dir>
+                    </div>
                 </div>
             </div>
             
             <!--Первая строка графиков-->
             <div layout="row" layout-align="start start">
-                <div flex="33">
-                    3
+                <div flex="33" ng-show="involveSports[2]">
+                    <div class="infobox-header-1">
+                        {{involveSports[2].name}}
+                    </div>
+                    <div class="express-audience-vertical-bars">
+                        <vertical-bars-dir 
+                            data="involveSports[2]" 
+                            top-text-class="'text-1-bold'"
+                            bottom-text-class="'text-1 text-max-width-120'"
+                        ></vertical-bars-dir>
+                    </div>
                 </div>
-                <div flex="33">
-                    4
+                <div flex="33" ng-show="involveSports[3]">
+                    <div class="infobox-header-1">
+                        {{involveSports[3].name}}
+                    </div>
+                    <div class="express-audience-vertical-bars">
+                        <vertical-bars-dir 
+                            data="involveSports[3]" 
+                            top-text-class="'text-1-bold'"
+                            bottom-text-class="'text-1 text-max-width-120'"
+                        ></vertical-bars-dir>
+                    </div>
                 </div>
-                <div flex="33">
-                    5
+                <div flex="33" ng-show="involveSports[4]">
+                    <div class="infobox-header-1">
+                        {{involveSports[4].name}}
+                    </div>
+                    <div class="express-audience-vertical-bars">
+                        <vertical-bars-dir 
+                            data="involveSports[4]" 
+                            top-text-class="'text-1-bold'"
+                            bottom-text-class="'text-1 text-max-width-120'"
+                        ></vertical-bars-dir>
+                    </div>
                 </div>
             </div>
             
@@ -305,119 +354,6 @@
         
     </div>
 
-
-
-    <div layout="row" layout-align="start start" layout-wrap style="margin-top: 8px;">
-        
-        <!--1. + топ-10 регионов. график - карта с легендой-->
-        <!-- TODO -->
-        <!--<div layout="column" layout-align="start start" style="margin: 10px;">-->
-        <!--    <div class="bar-chart-caption" layout="row" layout-align="center center" >Топ-10 регионов</div>-->
-            <!--<legend-dir legend="graphs.interest.legends.interest" columns-count="1" selectable="false"></legend-dir>-->
-            <!--<horisontal-bar-dir chart="graphs.interest.chartData2" ></horisontal-bar-dir>-->
-        <!--    <map-dir regions="" style="width:100%; margin-top: 30px;"-->
-        <!--             highlighted-color="'#bfebff'" selectable="false" selected-color="'#4ac0b6'"></map-dir>-->
-        <!--</div>-->
-        
-        <!-- распределение по типу боления. график - бублик -->
-        <!--<div layout="column" layout-align="start start" style="margin: 10px;">-->
-        <!--    <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.fanType.label}}</div>-->
-        <!--    <legend-dir legend="graphs.fanType.legends.fan_type" columns-count="1" selectable="false"></legend-dir>-->
-        <!--    <doughnut-dir chart="graphs.fanType.chart"></doughnut-dir>-->
-        <!--</div>-->
-        
-        <!-- топ-5 по интересу. график - вертикальный бар -->
-        <div layout="column" layout-align="start start" style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.interest.label}}</div>
-            <legend-dir legend="graphs.interest.legends.interest" columns-count="1" selectable="false"></legend-dir>
-            <!--<horisontal-bar-dir chart="graphs.interest.chartData2" ></horisontal-bar-dir>-->
-            <stacked-bar-dir chart="graphs.interest.chart" ></stacked-bar-dir>
-        </div>
-
-        <!-- топ-5 по вовлеченности. график - горизонтальный бар -->
-        <div layout="column" layout-align="start start" style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.involve.label}}</div>
-            <legend-dir legend="graphs.involve.legends.involve" columns-count="1" selectable="false"></legend-dir>
-            <horisontal-bar-dir chart="graphs.involve.chart" ></horisontal-bar-dir>
-        </div>
-
-        <!-- топ-5 подсказанного знания турниров (лиг). график - вертикальный бар-->
-        <div layout="column" layout-align="start start" style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.knownHelpTournament.label}}</div>
-            <!--<legend-dir legend="graphs.knownHelpTournament.legends.interest" columns-count="1" selectable="false"></legend-dir>-->
-            <!--<horisontal-bar-dir chart="graphs.knownHelpTournament.chart" ></horisontal-bar-dir>-->
-            <stacked-bar-dir chart="graphs.knownHelpTournament.chart" ></stacked-bar-dir>
-        </div>
-        
-        <!-- топ-5 спонтанного знания турниров (лиг). график - вертикальный бар-->
-        <div layout="column" layout-align="start start" style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.knownTournament.label}}</div>
-            <!--<legend-dir legend="graphs.knownTournament.legends.interest" columns-count="1" selectable="false"></legend-dir>-->
-            <stacked-bar-dir chart="graphs.knownTournament.chart" ></stacked-bar-dir>
-        </div>
-        
-        <!-- топ-5 подсказанного знания клубов. график - вертикальный бар-->
-        <div layout="column" layout-align="start start" style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.knownHelp.label}}</div>
-            <!--<legend-dir legend="graphs.involve.legends.involve" columns-count="1" selectable="false"></legend-dir>-->
-            <!--<horisontal-bar-dir chart="graphs.knownHelp.chart" ></horisontal-bar-dir>-->
-            <stacked-bar-dir chart="graphs.knownHelp.chart" ></stacked-bar-dir>
-        </div>
-        
-        <!-- топ-5 спонтанного знания клубов. график - вертикальный бар-->
-        <div layout="column" layout-align="start start" style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.known.label}}</div>
-            <!--<legend-dir legend="graphs.known.legends.known" columns-count="1" selectable="false"></legend-dir>-->
-            <!--<horisontal-bar-dir chart="graphs.known.chart" ></horisontal-bar-dir>-->
-            <stacked-bar-dir chart="graphs.known.chart" ></stacked-bar-dir>
-        </div>
-        
-        <!-- топ-5 подсказанного знания спортсменов. график - горизонтальный бар-->
-        <!--<div layout="column" layout-align="start start" style="margin: 10px;">-->
-        <!--    <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.knownHelpPlayer.label}}</div>-->
-            <!--<legend-dir legend="graphs.involve.legends.involve" columns-count="1" selectable="false"></legend-dir>-->
-        <!--    <horisontal-bar-dir chart="graphs.knownHelpPlayer.chart" ></horisontal-bar-dir>-->
-        <!--</div>-->
-        
-        <!-- топ-5 спонтанного знания спортсменов. график - горизонтальный бар-->
-        <div layout="column" layout-align="start start" style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.knownPlayer.label}}</div>
-            <!--<legend-dir legend="graphs.known.legends.known" columns-count="1" selectable="false"></legend-dir>-->
-            <horisontal-bar-dir chart="graphs.knownPlayer.chart" ></horisontal-bar-dir>
-        </div>
-        
-        <!-- топ-5 клубов по телесмотрению. график - вертикальный бар -->
-        <div layout="column" layout-align="start start" style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.watch.label}}</div>
-            <legend-dir legend="graphs.watch.legends.watch" columns-count="1" selectable="false"></legend-dir>
-            <!--<horisontal-bar-dir chart="graphs.watch.chart" ></horisontal-bar-dir>-->
-            <stacked-bar-dir chart="graphs.watch.chart" ></stacked-bar-dir>
-        </div>
-
-        <!--топ-5 по смотрению в WEB. график - вертикальный бар-->
-        <!--<div layout="column" layout-align="start start" style="margin: 10px;">-->
-        <!--    <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.watchWEB.label}}</div>-->
-        <!--    <legend-dir legend="graphs.watch.legends.watch" columns-count="1" selectable="false"></legend-dir>-->
-            <!--<horisontal-bar-dir chart="graphs.watchWEB.chart" ></horisontal-bar-dir>-->
-        <!--    <stacked-bar-dir chart="graphs.watchWEB.chart" ></stacked-bar-dir>-->
-        <!--</div>-->
-        
-        <!--топ-5 клубов по посещаемости. график - горизонтальный бар-->
-        <div layout="column" layout-align="start start" style="margin: 10px;">
-            <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.walk.label}}</div>
-            <legend-dir legend="graphs.walk.legends.walk" columns-count="1" selectable="false"></legend-dir>
-            <horisontal-bar-dir chart="graphs.walk.chart" ></horisontal-bar-dir>
-        </div>
-        
-        <!--топ-5 самых упоминаемых спонсоров. график - горизонтальный бар-->
-        <!--<div layout="column" layout-align="start start" style="margin: 10px;">-->
-        <!--    <div class="bar-chart-caption" layout="row" layout-align="center center" >{{graphs.knownSponsor.label}}</div>-->
-            <!--<legend-dir legend="graphs.known.legends.known" columns-count="1" selectable="false"></legend-dir>-->
-            <!--<horisontal-bar-dir chart="graphs.knownSponsor.chart" ></horisontal-bar-dir>-->
-        <!--    <stacked-bar-dir chart="graphs.knownSponsor.chart" ></stacked-bar-dir>-->
-        <!--</div>-->
-        
-    </div>
 
 
 </div>

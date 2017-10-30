@@ -101,18 +101,12 @@
                         },*/ {
                             'name': 'Зарегистрироваться',
                             visible: isNotLoggedIn,
-                            // selected: function(){},
                             onClick: function(){$scope.scrollTo('registration');}
                         },  {
                             'name': 'Войти',
                             visible: isNotLoggedIn,
-                            // onClick: function(){$scope.setPath('/login/');}
                             onClick: function(){RouteSrv.navigate('login');}
-                        },  /*{
-                            'name': 'Техническая поддержка',
-                            visible: function(){return !$scope.loggedIn;},
-                            onClick: function(){$scope.setPath('/infobox/');}
-                        },*/
+                        },  
                         {
                             'name': 'Получить информацию',
                             iconClass: 'header-infoblock-icon',
@@ -120,54 +114,41 @@
                             selected: function(){
                                 return $scope.currentRoute.key.startsWith('infobox');
                             },
-                            // onClick: function(){$scope.setPath('/infobox/');}
                             onClick: function(){RouteSrv.navigate('infobox');}
-                        },{
-                            'name': 'Проанализировать',
-                            // visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
-                            iconClass: 'header-analitycs-icon',
-                            visible: isLoggedIn,
-                            selected: function(){
-                                return $scope.currentRoute.key.startsWith('analytics');
-                            },
-                            // onClick: function(){$scope.setPath('/analytics/');}
-                            onClick: function(){RouteSrv.navigate('analytics');}
-                        },{
-                            'name': 'Спланировать',
-                            // visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
-                            iconClass: 'header-scheduler-icon',
-                            visible: isLoggedIn
-                            // visible: checkHasAccess('scheduler'),
-                        },/*{
-                            'name': 'Оценить',
-                            visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
-                        },*/{
-                            'name': 'Кейсы',
-                            // visible: function(){return $scope.loggedIn && !$scope.isAdmin;},
-                            iconClass: 'header-cases-icon',
-                            visible: isLoggedIn,
-                            selected: function(){
-                                return $scope.currentRoute.key.startsWith('cases');
-                            },
-                            // onClick: function(){$scope.setPath('/articles/');}
-                            onClick: function(){RouteSrv.navigate('cases');}
                         },
-                        
                         // {
-                        //     'name': 'Личный кабинет',
+                        //     'name': 'Проанализировать',
+                        //     iconClass: 'header-analitycs-icon',
                         //     visible: isLoggedIn,
-                        //     iconClass: 'header-account-icon',
-                        //     onClick: function(){$scope.setPath('/account/');}
+                        //     selected: function(){
+                        //         return $scope.currentRoute.key.startsWith('analytics');
+                        //     },
+                        //     onClick: function(){RouteSrv.navigate('analytics');}
                         // },
-            
-                        
+                        // {
+                        //     'name': 'Спланировать',
+                        //     iconClass: 'header-scheduler-icon',
+                        //     visible: isLoggedIn
+                        // },
+                        // {
+                        //     'name': 'Оценить',
+                        //     visible: function(){return $scope.loggedIn && !$scope.isAdmin;}
+                        // },
+                        // {
+                        //     'name': 'Кейсы',
+                        //     iconClass: 'header-cases-icon',
+                        //     visible: isLoggedIn,
+                        //     selected: function(){
+                        //         return $scope.currentRoute.key.startsWith('cases');
+                        //     },
+                        //     onClick: function(){RouteSrv.navigate('cases');}
+                        // },
                         {
                             'name': 'Панель администрирования',
                             visible: function(){return $scope.showAdmin;},
                             selected: function(){
                                 return $scope.currentRoute.key.startsWith('admin');
                             },
-                            // onClick: function(){$scope.setPath('/admin/');}
                             onClick: function(){RouteSrv.navigate('admin');}
                         }
                     ];

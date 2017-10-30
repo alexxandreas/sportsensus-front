@@ -16,9 +16,12 @@
             <div class="sport-header" layout="row" layout-align="start center">
                 <div class="sport-image" ng-style="{'background-color':sport.chartColor}"></div>
                 
-                <div class="infobox-header-1 sport-title" >
+                <div class="infobox-header-1 sport-title" 
+                    ng-click="sport.interested = !sport.interested"
+                    ng-class="{'selected': sport.interested}">
                     {{sport.name}}
                 </div>
+                
                 <div class="sport-arrow" ng-class="{'selected':sport.interested}" 
                     ng-click="sport.interested = !sport.interested"></div>
             </div>

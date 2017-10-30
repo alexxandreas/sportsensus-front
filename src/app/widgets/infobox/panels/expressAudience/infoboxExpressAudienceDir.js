@@ -73,19 +73,19 @@
                         prepareRegions($scope.getGraphData($scope.serverData, 'regions'));              // топ-10 регионов. график - карта с легендой
                         prepareFanTypeData($scope.getGraphData($scope.serverData, 'fan_type'));              // распределение по типу боления. график - бублик
                         prepareInterestData($scope.getGraphData($scope.serverData, 'interest'));             // топ-5 по интересу. график - бар
-                        // prepareKnownHelpTournamentData($scope.getGraphData($scope.serverData, 'tournaments_known_help'));       // топ-5 подсказанного знания турниров (лиг). график - бар
-                        // prepareKnownTournamentData($scope.getGraphData($scope.serverData, 'tournaments_known'));   // топ-5 спонтанного знания турниров (лиг). график - бар
+                        prepareInvolveData($scope.getGraphData($scope.serverData, 'involvment'));            // топ-5 по вовлеченности. график - бар.
+                        prepareKnownHelpTournamentData($scope.getGraphData($scope.serverData, 'tournaments_known_help'));       // топ-5 подсказанного знания турниров (лиг). график - бар
+                        prepareKnownTournamentData($scope.getGraphData($scope.serverData, 'tournaments_known'));   // топ-5 спонтанного знания турниров (лиг). график - бар
                         prepareKnownHelpClubData($scope.getGraphData($scope.serverData, 'clubs_known_help'));// топ-5 подсказанного знания клубов. график - бар
                         prepareKnownClubData($scope.getGraphData($scope.serverData, 'clubs_known'));         // топ-5 спонтанного знания клубов. график - бар
-                        // prepareWatchData($scope.getGraphData($scope.serverData, 'watch'));                   // топ-5 клубов по телесмотрению. график - бар
-                        
-                        // prepareWalkData($scope.getGraphData($scope.serverData, 'walk'));                     // топ-5 клубов по посещаемости. график - бар
+                        prepareWatchData($scope.getGraphData($scope.serverData, 'watch'));                   // топ-5 клубов по телесмотрению. график - бар
+                        prepareWalkData($scope.getGraphData($scope.serverData, 'walk'));                     // топ-5 клубов по посещаемости. график - бар
                         prepareKnownPlayerData($scope.getGraphData($scope.serverData, 'players_known'));       // топ-5 спонтанного знания спортсменов. график - бар
                         prepareKnownSponsors($scope.getGraphData($scope.serverData, 'sponsors_known'));      // топ-5 самых упоминаемых спонсоров. график - бар
                         
                         return;
                         
-                        prepareInvolveData($scope.getGraphData($scope.serverData, 'involvment'));            // топ-5 по вовлеченности. график - бар.
+                        
                         
                         prepareWatchWEBData($scope.getGraphData($scope.serverData, 'watch'));                // топ-5 по смотрению в WEB. график - бар
                         prepareKnownHelpPlayerData($scope.getGraphData($scope.serverData, 'clubs_known_help'));        // топ-5 подсказанного знания спортсменов. график - бар
@@ -177,7 +177,12 @@
                         
                         data.legends.sport.forEach(function(sport) {
                             //var count = data.getCount({'sport': sport.id, 'interest': interest.id});
-                            var count = data.getCount({'sport': sport.id});
+                            // var count = data.getCount({'sport': sport.id});
+                            // TODO костыль, убрать срочно!
+                            var count4 = data.getCount({'sport': sport.id, 'interest': 4}) || 0;
+                            var count5 = data.getCount({'sport': sport.id, 'interest': 5}) || 0;
+                            var count = count4 + count5;
+                            
                             items.push({
                                 bottomText: sport.name,
                                 topText: $scope.formatCount(count),
@@ -199,48 +204,99 @@
                     
                     
                     
-                    
-            
                     // топ-5 по вовлеченности. график - бар.
                     function prepareInvolveData(data){
-                        return; // АКТУАЛИЗИРОВАТЬ!!!
+                        //return; // АКТУАЛИЗИРОВАТЬ!!!
                         data = $scope.prepareChartData(data, {
                             'sport': $scope.parameters.sport,
                             'involve': $scope.parameters.involve
                         });
             
+                        var sports = [];
                         
-                        var datasets = data.legends.involve.map(function(){
-                            return { label:[], fillColor:[], data:[] }
-                        });
-                        var chartData = {labels:[],datasets:datasets};
+                        //var items = [];
+                        
                         data.legends.sport.forEach(function(sport) {
-                            data.legends.involve.forEach(function (involve, involveIndex) {
-                                var count = data.getCount({'sport': sport.id, 'interest': involve.id});
-                                var ds = datasets[involveIndex];
-                                //ds.label.push('');
-                                ds.label.push(involve.name + ': ' + count.toLocaleString('en-US'));
-                                ds.fillColor.push(involve.color);
-                                ds.data.push(count);
+                            //var count = data.getCount({'sport': sport.id, 'interest': interest.id});
+                            var count = data.getCount({'sport': sport.id});
+                            
+                            var sportsItem = {
+                                value: count,
+                                name: sport.name,
+                                items: []
+                            }
+                            sports.push(sportsItem);
+                            
+                            data.legends.involve.forEach(function(involve) {
+                                var count =  data.getCount({'sport': sport.id, 'involve': involve.id});
+                                if (count){
+                                    sportsItem.items.push({
+                                        //bottomText: sport.name,
+                                        topText: $scope.formatCount(count),
+                                        value: count,
+                                        color: involve.color
+                                    })
+                                }
                             });
-                            chartData.labels.push(sport.name);
+                            
                         });
+                        
+                        var involveSportsLegend = data.legends.involve.map(function(involve) {
+                            return {
+                                text: involve.name,
+                                color: involve.color
+                            }
+                        });
+                
+            
+                        //items.sort(function(a, b){ return b.value - a.value; });
+                        
+                        $scope.involveSportsCount = sports.length;
+                        $scope.involveSports = sports;
+                        
+                        $scope.involveSportsLegend = involveSportsLegend;
+                        
+                        
+                        // $scope.intetestCount = items.length;
+                        // $scope.interestItems = items;
+                        // $scope.interestBarsChart = {
+                        //     items: items
+                        // }
+                        
+                        
+                        // var datasets = data.legends.involve.map(function(){
+                        //     return { label:[], fillColor:[], data:[] }
+                        // });
+                        // var chartData = {labels:[],datasets:datasets};
+                        // data.legends.sport.forEach(function(sport) {
+                        //     data.legends.involve.forEach(function (involve, involveIndex) {
+                        //         var count = data.getCount({'sport': sport.id, 'interest': involve.id});
+                        //         var ds = datasets[involveIndex];
+                        //         //ds.label.push('');
+                        //         ds.label.push(involve.name + ': ' + count.toLocaleString('en-US'));
+                        //         ds.fillColor.push(involve.color);
+                        //         ds.data.push(count);
+                        //     });
+                        //     chartData.labels.push(sport.name);
+                        // });
                         
                     
-                        $scope.graphs.involve = {
-                            legends: data.legends,
-                            label: "Топ-" + data.legends.sport.length + PluralSrv([' вид',' вида',' видов'], data.legends.sport.length) + " спорта по вовлеченности",
-                            //charts: charts
-                            chart:{
-                                data:chartData,
-                                options:{
-                                    showLabels: false, // : $scope.formatValue,
-                                    stacked: true,
-                                    scaleLabel: function(obj){return $scope.formatValue(obj.value)}
-                                }
-                            }
-                        };
+                        // $scope.graphs.involve = {
+                        //     legends: data.legends,
+                        //     label: "Топ-" + data.legends.sport.length + PluralSrv([' вид',' вида',' видов'], data.legends.sport.length) + " спорта по вовлеченности",
+                        //     //charts: charts
+                        //     chart:{
+                        //         data:chartData,
+                        //         options:{
+                        //             showLabels: false, // : $scope.formatValue,
+                        //             stacked: true,
+                        //             scaleLabel: function(obj){return $scope.formatValue(obj.value)}
+                        //         }
+                        //     }
+                        // };
                     }
+            
+                    
                     
                     
                     // топ-5 подсказанного знания турниров (лиг). график - бар
@@ -321,6 +377,7 @@
                                 color: "#ff0000",
                                 value: count,
                                 leftText: $scope.formatCount(count),
+                                // rightText: club.shortName,
                                 rightText: club.name
                             });
                         });
@@ -349,6 +406,7 @@
                             items.push({
                                 color: "#00ff00",
                                 value: count,
+                                // leftText: club.shortName,
                                 leftText: club.name,
                                 rightText: $scope.formatCount(count)
                             });
@@ -382,6 +440,7 @@
                             items.push({
                                 color: "#FFFF00",
                                 value: count,
+                                // leftText: club.shortName,
                                 leftText: club.name,
                                 rightText: $scope.formatCount(count)
                             });
@@ -436,13 +495,14 @@
                     //         }
                     //     };
                     // }
+                    }
             
                     // топ-5 клубов по посещаемости. график - бар
                     function prepareWalkData(data){
                         data = $scope.prepareChartData(data, {
                             'sport': $scope.parameters.sport,
                             'club': $scope.parameters.sport,
-                            //'walk': $scope.parameters.walk
+                            'walk': $scope.parameters.walk
                         });
                         
                         var items = [];
@@ -452,6 +512,7 @@
                             items.push({
                                 color: "#FFFF00",
                                 value: count,
+                                // leftText: club.shortName,
                                 leftText: club.name,
                                 rightText: $scope.formatCount(count)
                             });
@@ -557,10 +618,6 @@
                         }
                         
                     }        
-            
-            
-            
-            
             
             
             

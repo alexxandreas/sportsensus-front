@@ -245,7 +245,13 @@
 
             
             parametersNames.forEach(function(type) {
-                angular.isFunction(parametersWatchers[type]) && parametersWatchers[type]();
+                //angular.isFunction(parametersWatchers[type]) && parametersWatchers[type]();
+                var oldWatchFunction = parametersWatchers[type]
+                if (angular.isFunction(oldWatchFunction)) {
+                    try { // почему-то в FF отписка от watch вызывает ошибку
+                        oldWatchFunction();
+                    } catch (err){}
+                }
                 
                 parameters[type] = getElement(translations, type);
                 applyOldParameters(oldParameters, parameters, type);
@@ -416,6 +422,10 @@
         function isAudienceSelected(){
             return !!selected['demography'] || !!selected['regions'] || !!selected['consume'];
         }
+        
+        function isSportSelected() {
+            return !!selected['sport'];
+        }
 
        
 
@@ -491,6 +501,8 @@
             getSelectedParams: getSelectedParams,
             getSelectedAudience: getSelectedAudience,
             isAudienceSelected: isAudienceSelected,
+            
+            isSportSelected:isSportSelected,
 
             clearSelection: clearSelection,
             selectAll: selectAll,

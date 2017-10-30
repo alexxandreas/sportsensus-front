@@ -49,117 +49,6 @@
                     
                     
                     
-                    $scope.testDonutData = {
-                        items: [{
-                            value: 100,
-                            valueText: '100 %',
-                            color: '#fc4a1a',
-                            text: 'text 100'
-                        },{
-                            value: 150,
-                            valueText: '150 %',
-                            color: '#4b78bf',
-                            text: 'text 150'
-                        },{
-                            value: 30,
-                            valueText: '30 %',
-                            color: '#ff9750',
-                            text: 'text 30'
-                        },{
-                            value: 56,
-                            valueText: '56 %',
-                            color: '#af9d94',
-                            text: 'text 56'
-                        }, {
-                            value: 83,
-                            valueText: '83 %',
-                            color: '#86cfe2',
-                            text: 'text 83'
-                        }]
-                    };
-                    
-                    
-                    $scope.testBarsData = {
-                        groups: [{ // одна группа блоков, расположенных в стек
-                            leftText: 'left1',
-                            rightText: '100%',
-                            bars: [{
-                                value: 100,
-                                color: '#fc4a1a',
-                                text: 'tooltip100'
-                            }]
-                            // tooltip: 'обший tooltip'
-                        },{ // одна группа блоков, расположенных в стек
-                            leftText: 'left2',
-                            rightText: '150%',
-                            bars: [{
-                                value: 150,
-                                color: '#4b78bf',
-                                text: 'tooltip150'
-                            }]
-                            // tooltip: 'обший tooltip'
-                        },{ // одна группа блоков, расположенных в стек
-                            leftText: 'left3',
-                            rightText: '30%',
-                            bars: [{
-                                value: 30,
-                                color: '#ff9750',
-                                text: 'tooltip30'
-                            }]
-                            // tooltip: 'обший tooltip'
-                        },{ // одна группа блоков, расположенных в стек
-                            leftText: 'left4',
-                            rightText: '56%',
-                            bars: [{
-                                value: 56,
-                                color: '#af9d94',
-                                text: 'tooltip56'
-                            }]
-                            // tooltip: 'обший tooltip'
-                        }
-                        ]
-                    };
-                    
-                    $scope.testRegionsData = {
-                        items: [{ 
-                            id: 15,
-                            selected: true, // для карты
-                            leftText: 'left1',
-                            rightText: '100%',
-                            value: 100,
-                            color: '#fc4a1a',
-                            text: 'tooltip100'
-                        },{ // одна группа блоков, расположенных в стек
-                            id: 18,
-                            selected: true, // для карты
-                            leftText: 'left2',
-                            rightText: '150%',
-                            value: 150,
-                            color: '#4b78bf',
-                            text: 'tooltip150'
-                        },{ // одна группа блоков, расположенных в стек
-                            id: 23,
-                            selected: true, // для карты
-                            leftText: 'left3',
-                            rightText: '30%',
-                            value: 30,
-                            color: '#ff9750',
-                            text: 'tooltip30'
-                        },{ // одна группа блоков, расположенных в стек
-                            id: 5,
-                            selected: true, // для карты
-                            leftText: 'left4',
-                            rightText: '56%',
-                            value: 56,
-                            color: '#af9d94',
-                            text: 'tooltip56'
-                        }]
-                    };
-                    
-                    
-                    
-                    
-                    
                     
                     
                     
@@ -231,7 +120,7 @@
                         $scope.summaryChildren = Math.round(data.avg_children*10)/10;
                         
                         // TODO не приходят данные с бекенда!
-                        $scope.summaryFamilysize = '';
+                        $scope.summaryFamilysize = Math.round(data.familysize*10)/10;
                         
                     }
                     
@@ -412,32 +301,32 @@
                     
                     //  посещение ТРЦ/кинотеатров/фитнеса. график - бар
                     function prepareVisit(data){
-                        data = {
-                            "data": [
-                                {
-                                    "count": 10,
-                                    "legend": [1]
-                                },
-                                {
-                                    "count": 20,
-                                    "legend": [2]
-                                },
-                                {
-                                    "count": 30,
-                                    "legend": [3]
-                                },
-                                {
-                                    "count": 40,
-                                    "legend": [4]
-                                }
-                            ],
-                            "legends": [
-                                {
-                                    "name": "time_week",
-                                    "is_audience": false
-                                }
-                            ]
-                        }
+                        // data = {
+                        //     "data": [
+                        //         {
+                        //             "count": 10,
+                        //             "legend": [1]
+                        //         },
+                        //         {
+                        //             "count": 20,
+                        //             "legend": [2]
+                        //         },
+                        //         {
+                        //             "count": 30,
+                        //             "legend": [3]
+                        //         },
+                        //         {
+                        //             "count": 40,
+                        //             "legend": [4]
+                        //         }
+                        //     ],
+                        //     "legends": [
+                        //         {
+                        //             "name": "time_week",
+                        //             "is_audience": false
+                        //         }
+                        //     ]
+                        // }
             
                         
                         data = $scope.prepareChartData(data, {
@@ -483,33 +372,33 @@
                     
                     
                     function prepareGasStation(data) { // gasoften
-                        data = {
-                            "data": [
-                                {
-                                    "count": 10,
-                                    "legend": [1]
-                                },
-                                {
-                                    "count": 20,
-                                    "legend": [2]
-                                },
-                                {
-                                    "count": 30,
-                                    "legend": [3]
-                                },
-                                {
-                                    "count": 40,
-                                    "legend": [4]
-                                }
-                            ],
-                            "legends": [
-                                {
-                                    "name": "gasoften",
-                                    "is_audience": false
-                                }
-                            ]
-                        }
-            
+                        // data = {
+                        //     "data": [
+                        //         {
+                        //             "count": 10,
+                        //             "legend": [1]
+                        //         },
+                        //         {
+                        //             "count": 20,
+                        //             "legend": [2]
+                        //         },
+                        //         {
+                        //             "count": 30,
+                        //             "legend": [3]
+                        //         },
+                        //         {
+                        //             "count": 40,
+                        //             "legend": [4]
+                        //         }
+                        //     ],
+                        //     "legends": [
+                        //         {
+                        //             "name": "gasoften",
+                        //             "is_audience": false
+                        //         }
+                        //     ]
+                        // }
+                        data.legends[0].name = 'gasoften';
                         
                         data = $scope.prepareChartData(data, {
                             'gasoften': $scope.parameters.gasoften
@@ -545,36 +434,36 @@
                     // топ-5 финансовых продуктов. график -  бар
                     function prepareServicesNow(data) {
                         
-                        data = {
-                            "data": [
-                                {
-                                    "count": 10,
-                                    "legend": [1]
-                                },
-                                {
-                                    "count": 20,
-                                    "legend": [2]
-                                },
-                                {
-                                    "count": 30,
-                                    "legend": [3]
-                                },
-                                {
-                                    "count": 40,
-                                    "legend": [4]
-                                },
-                                {
-                                    "count": 50,
-                                    "legend": [5]
-                                }
-                            ],
-                            "legends": [
-                                {
-                                    "name": "services_now",
-                                    "is_audience": false
-                                }
-                            ]
-                        }
+                        // data = {
+                        //     "data": [
+                        //         {
+                        //             "count": 10,
+                        //             "legend": [1]
+                        //         },
+                        //         {
+                        //             "count": 20,
+                        //             "legend": [2]
+                        //         },
+                        //         {
+                        //             "count": 30,
+                        //             "legend": [3]
+                        //         },
+                        //         {
+                        //             "count": 40,
+                        //             "legend": [4]
+                        //         },
+                        //         {
+                        //             "count": 50,
+                        //             "legend": [5]
+                        //         }
+                        //     ],
+                        //     "legends": [
+                        //         {
+                        //             "name": "services_now",
+                        //             "is_audience": false
+                        //         }
+                        //     ]
+                        //}
 
                         
                         data = $scope.prepareChartData(data, {

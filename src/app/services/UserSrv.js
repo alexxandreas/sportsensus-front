@@ -235,6 +235,9 @@
             //return true;
             var tariff = getTariff();
             
+            // TODO костыль, блокируем доступ для NoAccess тарифа
+            if (tariff.id == 38) return false; 
+            
             var access = tariff['access_' + type];
             return !!access || false;
            

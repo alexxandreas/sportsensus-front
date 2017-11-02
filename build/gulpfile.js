@@ -25,7 +25,10 @@ var statics = [
 	'../libs/ckeditor*/**/*', // ckeditor загружает свою статику сам - переносим всю папку в static
 	'../libs/tinymce*/**/*' // tinymce загружает свою статику сам - переносим всю папку в static
 ]; // статика
-var index = '../src/index.html';
+var index = [
+	'../src/index.html',
+	'../src/favicon.ico'
+	];
 var debugConfig = '../src/config_debug.js';
 var releaseConfig = '../src/config_release.js';
 //var index = ['../src/index.html', '../src/config.js']; // файлы, копируемые в dist напрямую

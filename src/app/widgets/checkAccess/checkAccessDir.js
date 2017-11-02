@@ -48,6 +48,8 @@
 					//         showAccessDenied();
 					//     })
 					// }
+						// showAccessDenied();
+						
 					
 					if (checkAccess($scope.type)){
 						showContent();

@@ -99,6 +99,7 @@
         
 
         var parametersNames = [
+            'audience',
             'demography',
             'gender',
             'age',

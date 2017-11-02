@@ -48,27 +48,51 @@
 		                
 		                ParamsSrv.getParams().then(function(params){
                 			$scope.parameters = params;
-                			$scope.audienceWatcher = $scope.$watch('parameters.demography', updateTags, true);
+                			$scope.audienceWatcher = $scope.$watch('parameters.audience', updateTags, true);
                 		});
 		            
 		            }
 		            
 		            function updateTags(){
-		                var demography = $scope.parameters.demography;
+		              //  var demography = ParamsSrv.getSelectedParams('demography');
+		              //  var consume = ParamsSrv.getSelectedParams('consume');
+		              //  var regions = ParamsSrv.getSelectedParams('regions');
+		                
+		                
+		              //  var demography = $scope.parameters.demography;
+		                var audience = $scope.parameters.audience;
                         var results = [];
                         // return;
-                        demography.lists.forEach(function(list){
+                        // demography.lists.forEach(function(list){
+                        //     var selected = list.lists.filter(function(sublist){
+                        //       return sublist.selected;
+                        //     })
+                            
+                        //     if (selected.length) {
+                        //         results.push({
+                        //             name: list.name,
+                        //             items: selected
+                        //         });
+                        //     }
+                        // });
+                        getSelectedRec(audience);
+                        
+                        function getSelectedRec(list){
+                            if (!list.lists) return;
                             var selected = list.lists.filter(function(sublist){
-                               return sublist.selected;
-                            })
+                               return sublist.selected && !sublist.lists;
+                            });
                             
                             if (selected.length) {
                                 results.push({
                                     name: list.name,
                                     items: selected
                                 });
-                            }
-                        });
+                            } 
+                            
+                            list.lists.forEach(getSelectedRec);
+                        }
+                        
             
                         $scope.audienceBlocks = results;
 		            }

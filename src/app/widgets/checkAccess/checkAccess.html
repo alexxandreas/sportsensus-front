@@ -2,9 +2,16 @@
     
     <!--<header-dir></header-dir>-->
     <!--<header-new-dir></header-new-dir>-->
+    <header-new-dir></header-new-dir>
+     
     
     <div ng-if="showAccessDenied" class="access-denied"
-        layout="column" layout-align="center center">Доступ к этому разделу сайта запрещён</div>
+        layout="column" layout-align="center center">
+        <!--Доступ к этому разделу сайта запрещён-->
+        Для доступа к данному разделу <br>
+        сайта обратитесь к Вашему <br>
+        менеджеру или напишите нам на <a href="mailto:sales@sportsensus.ru">sales@sportsensus.ru</a>
+    </div>
     
     <div ng-if="showContent">
         <div ng-transclude></div>    

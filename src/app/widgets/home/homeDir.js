@@ -87,16 +87,17 @@
                         $location.hash(old);
                     }
                     
-                    $scope.regData = {
-                        first_name:  '',
-                        last_name: '',
-                        company_name: '',
-                        phone: '',
-                        login: '',
-                        company_type: null, // 0 - спонсор, 1 - правообладатель, 2 - агенство
-                        legal_status: 0, // 0 - физ, 1 - юр
-                        lang: "ru"
-                    };
+                    // $scope.regData = {
+                    //     first_name:  '',
+                    //     last_name: '',
+                    //     company_name: '',
+                    //     phone: '',
+                    //     login: '',
+                    //     company_type: null, // 0 - спонсор, 1 - правообладатель, 2 - агенство
+                    //     legal_status: 0, // 0 - физ, 1 - юр
+                    //     lang: "ru"
+                    // };
+                    clearRegisterFields();
 
                     $scope.companyTypes = [
                         //{value: null, name: 'Тип компании', selected:true},
@@ -109,6 +110,7 @@
                         $scope.showPreloader = true;
                         // return;
                         ApiSrv.register($scope.regData).then(function(){
+                            clearRegisterFields();
                             $mdDialog.show(
                               $mdDialog.alert()
                                 .clickOutsideToClose(false)
@@ -119,6 +121,7 @@
                                     'не пришло наше сообщение – пожалуйста, напишите нам на <a href="mailto:sales@sportsensus.ru">sales@sportsensus.ru</a>')
                                 .ok('OK')
                             );
+                            
                         }, function(){
                             $mdDialog.show(
                               $mdDialog.alert()
@@ -132,6 +135,19 @@
                         }).finally(function(){
                             $scope.showPreloader = false;
                         });
+                    }
+                    
+                    function clearRegisterFields(){
+                        $scope.regData = {
+                            first_name:  '',
+                            last_name: '',
+                            company_name: '',
+                            phone: '',
+                            login: '',
+                            company_type: null, // 0 - спонсор, 1 - правообладатель, 2 - агенство
+                            legal_status: 0, // 0 - физ, 1 - юр
+                            lang: "ru"
+                        };
                     }
                     
                 }]

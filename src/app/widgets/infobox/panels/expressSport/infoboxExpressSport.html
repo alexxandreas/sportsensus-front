@@ -12,7 +12,14 @@
         layout="column" layout-align="start stretch"
         ng-repeat="(sportKey, sport) in sports" ng-if="sport">
          <express-sport-dir sport="sport" />
- 
+    </div>
+    
+    <div ng-if="getSportsCount() == 0"
+        style="
+            margin-top: 30px;
+            text-align: center;
+        ">
+        Не выбрано ни одного спорта
     </div>
 
     

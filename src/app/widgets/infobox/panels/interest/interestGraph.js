@@ -123,6 +123,9 @@
 
             var useRegions = $scope.interestData.legends.region && $scope.interestData.legends.region.length;
             
+            // TODO принудительно скрываем график с регионами. такое требование от заказчика
+            useRegions = false; 
+            
             if (useRegions){
                 $scope.interestData.legends.region.forEach(function(region){
                     region.selected = true;

@@ -42,7 +42,6 @@
             		
             		$scope.sports = {};
             		
-            		
             		// формируем список выбранных спортов
             		$scope.prepareSports = function () {
                         var sportLegend = graphHelpersSrv.getSportLegend({sport:$scope.parameters.sport, color:'#555555', clubs:true, selectAll:false});
@@ -59,6 +58,12 @@
                             }, true);
                         });
             		}
+            		
+            		$scope.getSportsCount = function(){
+            		    return Object.keys($scope.sports).length;
+            		}
+            		
+            		
                 }
             ]
         };

@@ -1,60 +1,38 @@
-<div class="header-new" layout="row" layout-align="start center">
+<div class="header-new" layout="row" layout-align="start center"
+    ng-class="theme ? 'header-new-theme-' + theme : ''">
     
-    <a href="/#!/">
+    <a href="/#!/" ng-if="logoItem.visible()">
         <div layout="row" layout-align="start center" ng-click="goHome()"
             class="header-new__logo" flex="none">
             <!--<img src="static/img/logo2.svg" alt="" class="header-logo-image"/>    -->
         </div>
     </a>
 
-    <!--<div layout="column" layout-align="start stretch" flex>-->
-    <!--    <div layout="row" layout-align="start center" flex>-->
+    <!-- меню -->
+    <div class="header-menu" layout="row" layout-align="start center" 
+        flex="none" >
         
-            <!-- меню -->
-            <div class="header-menu" layout="row" layout-align="start center" 
-                flex="none" >
-                
-                <div layout="row" layout-align="start center" 
-                        class="header-button" 
-                        ng-repeat="item in menu" ng-if="item.visible()" flex="none"
-                         ng-click="item.onClick && item.onClick()"
-                         ng-class="{'selected': item.selected && item.selected()}">
-                    <div class="header-button-content" layout="row" layout-align="start center">
-                        <div ng-if="item.iconClass" class="header-button-icon" ng-class="item.iconClass" flex="none"></div>
-                        <!--<div ng-if="headerOptions.headersVisible" flex="none">{{item.name}}</div>-->
-                        <div flex="none">{{item.name}}</div>
-                    </div>
-                </div>
+        <div layout="row" layout-align="start center" 
+                class="header-button" 
+                ng-repeat="item in menu" ng-if="item.visible()" flex="none"
+                 ng-click="item.onClick && item.onClick()"
+                 ng-class="{'selected': item.selected && item.selected()}">
+            <div class="header-button-content" layout="row" layout-align="start center">
+                <div ng-if="item.iconClass" class="header-button-icon" ng-class="item.iconClass" flex="none"></div>
+                <!--<div ng-if="headerOptions.headersVisible" flex="none">{{item.name}}</div>-->
+                <div flex="none">{{item.name}}</div>
             </div>
-        
-            <!--<div class="header-delimeter" flex></div>-->
-            <div flex></div>
+        </div>
+    </div>
+
+    <!--<div class="header-delimeter" flex></div>-->
+    <div flex></div>
             
-        <!--</div>-->
-        
-        <!--<div class="fake-menu" layout="row" layout-align="start center" flex>-->
-            <!-- фейковое меню -->
-        <!--    <div class="header-menu" layout="row" layout-align="start center" -->
-        <!--        flex="none" >-->
-                
-        <!--        <div layout="row" layout-align="start center" -->
-        <!--                class="header-button" -->
-        <!--                ng-repeat="item in menu" ng-if="item.visible()" flex="none"-->
-        <!--                 ng-class="{'selected': item.selected && item.selected()}">-->
-        <!--            <div class="header-button-content" layout="row" layout-align="start center" flex="none">-->
-        <!--                <div ng-if="item.iconClass" class="header-button-icon" ng-class="item.iconClass"></div>-->
-        <!--                <div flex="none">{{item.name}}</div>-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <!--    </div>-->
-        
-        <!--    <div class="header-delimeter" flex></div>-->
-        <!--</div>-->
-    <!--</div>-->
+       
     
     
     <!--таймер-->
-    <div class="header-timer" ng-if="timeoutStr"
+    <div class="header-timer" ng-if="menuTimeoutItem.visible()"
         layout="row" layout-align="start center" flex="none">
         <div class="">{{timeoutStr}}</div>
         <div class="header-timer-suffix" ng-if="timeoutStrSuffix">{{timeoutStrSuffix}}</div>
@@ -70,10 +48,20 @@
         </div>
     </div>
     
+    <div class="header-button header-enter-button" layout="row" layout-align="start center"
+        ng-if="menuEnterItem.visible()" flex="none"
+        ng-click="menuEnterItem.onClick && menuEnterItem.onClick()">
+        <div class="header-button-content" layout="row" layout-align="start center">
+            <div ng-if="menuEnterItem.iconClass" class="header-button-icon" ng-class="menuEnterItem.iconClass" flex="none"></div>
+            <div class="header-enter-button-text">{{menuEnterItem.name}}</div>
+        </div>
+    </div>
+    
     <!--Кнопка Выход-->
     <div class="header-button header-exit-button" 
         layout="row" layout-align="start center" flex="none"
-        ng-click="logout()">
+        ng-click="logout()"
+        ng-style="{'visibility': menuExitButton.visible() ? 'visible' : 'hidden'}">
         <div class="header-button-content" layout="row" layout-align="start center">
             <div class="header-button-icon header-exit-icon" flex="none"></div>
         </div>

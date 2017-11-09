@@ -24,25 +24,13 @@
     )    {
         return {
             restrict: 'E',
+            replace: true,
             scope: {
+                theme: '@'
             },
             templateUrl: '/views/widgets/headerNew/headerNew.html',
             link: function ($scope, $el, attrs) {
-                // $scope.delimeter = $el[0].querySelector('.header-delimeter');
-    
-                // function onResize() {
-                //     $scope.$apply($scope.updateHeadersVisibility);
-                // }
                 
-                // $el.ready($scope.updateHeadersVisibility);
-                // $interval($scope.updateHeadersVisibility, 1000);
-                
-                // function cleanUp() {
-                //     angular.element($window).off('resize', onResize);
-                // }
-    
-                // angular.element($window).on('resize', onResize);
-                // $scope.$on('$destroy', cleanUp);
             },
 
             controller: [
@@ -93,6 +81,12 @@
                     }
                     
                     
+                    $scope.logoItem = {
+                        visible: function(){
+                            return !$scope.currentRoute.key.startsWith('root');
+                        }
+                    };
+                    
                     
                     $scope.menu = [/*{
                             'name': 'О проекте',
@@ -100,17 +94,31 @@
                             onClick: function(){$scope.scrollTo('about');}
                         },*/ {
                             'name': 'Зарегистрироваться',
-                            visible: isNotLoggedIn,
+                            visible: function(){
+                                return isNotLoggedIn() && !$scope.currentRoute.key.startsWith('root');
+                            },
                             onClick: function(){$scope.scrollTo('registration');}
                         },  {
                             'name': 'Войти',
-                            visible: isNotLoggedIn,
+                            visible: function(){
+                                return isNotLoggedIn() && !$scope.currentRoute.key.startsWith('root');
+                            },
                             onClick: function(){RouteSrv.navigate('login');}
-                        },  
+                        }, 
+                        // {
+                        //     'name': 'Войти',
+                        //     visible: function(){
+                        //         return !isNotLoggedIn() && $scope.currentRoute.key.startsWith('root');
+                        //     },
+                        //     onClick: function(){RouteSrv.navigate('infobox');}
+                        // }, 
+                        
                         {
                             'name': 'Получить информацию',
                             iconClass: 'header-infoblock-icon',
-                            visible: isLoggedIn,
+                            visible: function(){
+                                return isLoggedIn() && !$scope.currentRoute.key.startsWith('root');
+                            },
                             selected: function(){
                                 return $scope.currentRoute.key.startsWith('infobox');
                             },
@@ -153,13 +161,40 @@
                         }
                     ];
                     
+                    $scope.menuTimeoutItem = {
+                        visible: function(){
+                            return isLoggedIn() && !!$scope.timeoutStr;
+                        }
+                    };
+                    
+                    $scope.menuEnterItem = {
+                        'name': 'Войти',
+                        iconClass: 'header-enter-icon',
+                        visible: function(){
+                            return $scope.currentRoute.key.startsWith('root');
+                        },
+                        onClick: function(){
+                            if (isLoggedIn()) {
+                                RouteSrv.navigate('infobox');
+                            } else {
+                                RouteSrv.navigate('login');
+                            }
+                        }
+                    }
+                    
                     $scope.menuUserItem = {
                         'name': 'Личный кабинет',
-                            visible: isLoggedIn,
-                            iconClass: 'header-account-icon',
-                            // onClick: function(){$scope.setPath('/account/');}
-                            onClick: function(){RouteSrv.navigate('account');}
+                        visible: function(){
+                            return isLoggedIn() && !$scope.currentRoute.key.startsWith('root');
+                        },
+                        iconClass: 'header-account-icon',
+                        // onClick: function(){$scope.setPath('/account/');}
+                        onClick: function(){RouteSrv.navigate('account');}
                     };
+                    
+                    $scope.menuExitButton = {
+                        visible: isLoggedIn
+                    }
                     
                     // $scope.menuExitItem = {
                     //     'name': 'Личный кабинет',

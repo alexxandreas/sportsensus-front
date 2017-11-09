@@ -45,7 +45,7 @@
                         name: 'Демография',
                         key: 'infobox:demography'
                     },{
-                        name: 'Поведение',
+                        name: 'Потребление',
                         key: 'infobox:consume'
                     },{
                         name: 'География',

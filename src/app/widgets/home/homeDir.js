@@ -72,7 +72,7 @@
                         ]
                     }];
                     
-                    $scope.enterPath = RouteSrv.getPath('login');
+                    // $scope.enterPath = RouteSrv.getPath('login');
                     
                     $scope.scrollToRegistration = function(type){
                         $scope.scrollTo('registration'); 
@@ -87,16 +87,6 @@
                         $location.hash(old);
                     }
                     
-                    // $scope.regData = {
-                    //     first_name:  '',
-                    //     last_name: '',
-                    //     company_name: '',
-                    //     phone: '',
-                    //     login: '',
-                    //     company_type: null, // 0 - спонсор, 1 - правообладатель, 2 - агенство
-                    //     legal_status: 0, // 0 - физ, 1 - юр
-                    //     lang: "ru"
-                    // };
                     clearRegisterFields();
 
                     $scope.companyTypes = [
@@ -149,6 +139,9 @@
                             lang: "ru"
                         };
                     }
+                    
+                    
+                    
                     
                 }]
         };

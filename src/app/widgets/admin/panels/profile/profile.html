@@ -1,36 +1,36 @@
 <div layout="row" flex class="admin-panel admin-profile">
     <!--<header-dir></header-dir> -->
-    
+
     <admin-menu-dir></admin-menu-dir>
-    
+
 	<md-content class="md-padding" layout="column" flex preloader-dir="showPreloader">
 
         <div layout="row" layout-align="start center">
-            
+
             <div class="md-display-1">Параметры пользователя</hdiv>
-                
+
             </div>
             <div flex></div>
       		<!--<md-button class="md-raised md-warn" ng-click="removeArticle(selectedArticle)">-->
       		<!--    Удалить-->
       	     <!--   </md-button>-->
-            
+
             <!--<md-button class="md-raised md-primary" ng-disabled="!profile.dirty" ng-click="saveProfile()">-->
             <!--    Сохранить-->
             <!--</md-button>-->
-            
+
             <md-button class="md-raised md-primary" ng-click="sendMail()">
                 Написать письмо
             </md-button>
         </div>
-    
+
         <div class="md-display-2">{{profile.login}}</div>
-    
+
     	<!--<div layout="column">-->
     	<!--    <p class="md-title">-->
      <!--           Права доступа-->
      <!--       </p>-->
-          
+
     	<!--    <div layout="row">-->
      <!--   	    <md-input-container class="md-block acl-checkbox">-->
      <!--               <md-checkbox name="demo_role" ng-model="profile.demo_role" ng-change="profile.dirty = true;">-->
@@ -53,16 +53,16 @@
      <!--               </md-checkbox>-->
      <!--            </md-input-container>-->
     	<!--    </div>-->
-    	    
+
     	    <p class="md-title" style="margin-bottom:30px;">
                 Тарифный план
             </p>
-    	    
+
     	    <div layout="row" layout-align="start center">
                 <md-input-container flex>
                     <md-select ng-model="profile.tariffId" ng-change="onTariffChanged();"
                         placeholder="Выберите тариф для пользователя">
-                        <md-option ng-repeat="tariff in tariffs" ng-value="{{tariff.id}}">
+                        <md-option ng-repeat="tariff in tariffs" ng-value="'{{tariff.id}}'">
                             <b>{{tariff.name}}</b>&nbsp;{{tariff.description}}
                         </md-option>
                     </md-select>
@@ -71,19 +71,19 @@
                     Обновить тариф
                 </md-button>
             </div>
-            
-            
+
+
             <p class="md-title" style="margin-bottom:30px;">
                 Информация о пользователе
             </p>
-    	    
+
             <md-input-container ng-repeat="field in fieldsMap">
                 <label>{{field.title}}</label>
                 <input ng-model="field.value" ng-model-options="{ getterSetter: true }">
             </md-input-container>
-            
+
         </div>
-        
+
     </md-content>
-    
+
 </div>

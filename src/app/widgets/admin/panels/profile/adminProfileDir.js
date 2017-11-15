@@ -19,7 +19,7 @@
 			scope: {
 				type: '@'
 			},
-			templateUrl: '/views/widgets/admin/panels/profile/profile.html', 
+			templateUrl: '/views/widgets/admin/panels/profile/profile.html',
 			link: function ($scope, $el, attrs) {
 				//$scope.init();
 			},
@@ -46,19 +46,20 @@
 					ApiSrv,
 					AdminProfilesSrv,
 					TariffsSrv
-				) { 
-	
-                    $scope.userId = Number.parseInt($routeParams.userId);
-                
+				) {
+
+                    // $scope.userId = Number.parseInt($routeParams.userId);
+                    $scope.userId = $routeParams.userId;
+
                     $scope.showPreloader = true;
-                    
+
                     $q.all({
                     	profile: AdminProfilesSrv.getProfile($scope.userId),
                     	tariffs: TariffsSrv.getTariffs()
                     }).then(function(result){
                     	$scope.profile = result.profile;
                     	$scope.tariffs = result.tariffs;
-                    	
+
                     	if ($scope.profile.tariff){
                     		var tariff =  TariffsSrv.getTariff($scope.profile.tariff.id);
                     		$scope.profile.tariffId = tariff ? tariff.id : null;
@@ -76,9 +77,9 @@
                             $location.path('/admin/profiles/');
                         });
                     });
-                    
-                   
-	                
+
+
+
 	                $scope.fieldsMap = [
 	                    {field: "login", title: "Логин"},
                         {field: "first_name", title: "Имя"},
@@ -100,7 +101,7 @@
                         {field: "corr_account", title: "Корреспондентский счет"},
                         {field: "bic", title: "БИК"}
 	                ];
-	                
+
 	                angular.forEach($scope.fieldsMap, function(field){
 	                    field.value = function(){
 	                        if (!$scope.profile) return undefined;
@@ -108,14 +109,14 @@
 	                        return field.values ? field.values[val] : val;
 	                    }
 	                });
-	
-				
+
+
 
 					$scope.onTariffChanged = function(){
 						$scope.profile.dirty = true;
 						$scope.profile.setTariff = true;
 					};
-					
+
 					// $scope.saveProfile = function(){
 					// 	$scope.showPreloader = true;
 					// 	var acl = {
@@ -128,7 +129,7 @@
 					// 		var tariffId = $scope.profile.tariffId;
 					// 		acl.tariff_id = tariffId;
 					// 	}
-						
+
 					// 	ApiSrv.addRole($scope.profile.user_id, acl).then(function(acl){
 					// 		$scope.showPreloader = false;
 					// 		$scope.profile.admin_role = acl.admin;
@@ -139,14 +140,14 @@
 					// 		showSaveSuccess();
 					// 	}, showSaveError);
 					// };
-					
-				
+
+
 					$scope.updateTafiff = function(){
 						$scope.showPreloader = true;
 						var acl = {
 							tariff_id: $scope.profile.tariffId
 						}
-						
+
 						ApiSrv.addRole($scope.profile.user_id, acl).then(function(){
 							$scope.showPreloader = false;
 							showSaveSuccess();
@@ -155,25 +156,25 @@
 							showSaveError();
 						});
 					}
-					
+
 					function showSaveSuccess(){
 						$mdDialog.show($mdDialog.alert()
 							.title('Сохранение данных')
 							.textContent('Изменения успешно сохранены')
 							.ok('OK'));
 					}
-					
+
 					function showSaveError(){
 						$mdDialog.show($mdDialog.alert()
 							.title('Ошибка')
 							.textContent('Невозможно применить изменения')
 							.ok('OK'));
 					}
-					
+
 					$scope.sendMail = function(){
 						$location.path('/admin/sendMail/' + $scope.profile.user_id);
 					}
-					
+
 				}]
 		};
 	}

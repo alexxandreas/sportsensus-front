@@ -35,9 +35,8 @@
             <div class="menu-delimeter" flex></div>
         </div>
         
-        <div class="audience" layout="column" layout-align="start stretch" flex="none">
-            <div class="audience-block" ng-repeat="block in audienceBlocks"
-                layout="column" layout-align="start stretch">
+        <div class="audience" layout="column" layout-align="start stretch" flex>
+            <div class="audience-block" ng-repeat="block in audienceBlocks">
                 <div class="audience-items">
                     <div class="audience-item" ng-repeat="item in block.items"
                         ng-click="deselectItem(item)">
@@ -48,7 +47,7 @@
             </div>
         </div>
         
-        <div flex></div>
+        <!--<div flex></div>-->
         
         <div style="height: 20px;" flex="none"></div>
         

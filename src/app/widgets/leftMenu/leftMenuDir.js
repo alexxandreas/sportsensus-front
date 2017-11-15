@@ -103,6 +103,8 @@
                    
                     $scope.clearAudience = function(){
                         ParamsSrv.clearSelection('demography');
+                        ParamsSrv.clearSelection('consume');
+                        ParamsSrv.clearSelection('regions');
                     }
                                 
                     $scope.selectRadar = function(radarId){

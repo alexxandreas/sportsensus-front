@@ -36,7 +36,7 @@
             
             <!-- regions --> 
             <div layout="column" layout-align="start start"
-                class="express-audience-regions" flex="50">
+                class="express-audience-regions" flex="50" ng-show="regionsItems">
                 
                 <div class="infobox-header-1">
                     Топ-{{regionsCount}} регинонов проживания
@@ -61,7 +61,7 @@
                 
                 <!-- fan_type --> 
                 <div layout="column" layout-align="start start"
-                    class="express-audience-fan-type">
+                    class="express-audience-fan-type" ng-show="fanTypeItems">
                     
                     <div class="infobox-header-1">
                         Тип боления
@@ -82,7 +82,7 @@
                 
                 <!-- interest -->
                 <div layout="column" layout-align="start start"
-                    class="express-audience-interest">
+                    class="express-audience-interest" ng-show="interestItems">
                     
                     <div class="infobox-header-1">
                         Топ-{{intetestCount}} видов спорта по интересу
@@ -105,7 +105,7 @@
         
         <!-- Вторая строка с графиками -->
         <div layout="column" layout-align="start stretch"
-            class="express-audience-block">
+            class="express-audience-block" ng-show="involveSports.length">
             
             <div class="infobox-header-1">
                 Топ-{{involveSportsCount}} видов спорта по вовлеченности
@@ -191,7 +191,8 @@
         <div layout="column" layout-align="start stretch"
             class="express-audience-block">
             
-            <div class="express-audience-centered-block" layout="column" layout-align="start center">
+            <div class="express-audience-centered-block" layout="column" layout-align="start center"
+                ng-show="tournamentKnownItems && tournamentHelpItems">
                 
                 <div class="centered-block-header infobox-header-3">
                     Топ-{{tournamentKnownHelpCount}} знания<br>турниров (лиг)
@@ -226,7 +227,8 @@
             </div>
             
             
-            <div class="express-audience-centered-block" layout="column" layout-align="start center">
+            <div class="express-audience-centered-block" layout="column" layout-align="start center"
+                ng-show="clubHelpItems && clubKnownItems">
                 
                 <div class="centered-block-header infobox-header-3">
                     Топ-{{clubKnownHelpCount}} знания<br>клубов
@@ -274,7 +276,8 @@
                 <!--    class="express-audience-clubs-watch" flex="50">-->
                     
                     <div layout="column" layout-align="start start" 
-                        class="express-audience-clubs-watch" flex="50">
+                        class="express-audience-clubs-watch" flex="50"
+                        ng-show="clubWatchItems">
                         <div layout="row" layout-align="start center">
                             <div class="express-audience-small-icon clubs-watch-icon"></div>
                             <div class="infobox-header-3">Топ-{{clubWatchCount}} клубов по<br>телесмотрению</div>
@@ -291,7 +294,8 @@
                 <!--</div> -->
                 
                 <div layout="column" layout-align="start start"
-                    class="express-audience-clubs-walk" flex="50">
+                    class="express-audience-clubs-walk" flex="50"
+                    ng-show="clubWalkItems">
                     
                     <div layout="row" layout-align="start center">
                         <div class="express-audience-small-icon clubs-walk-icon"></div>
@@ -315,7 +319,9 @@
                 <!--    class="express-audience-players-known" flex="50">-->
                     
                     <div layout="column" layout-align="start start" 
-                        class="express-audience-players-known" flex="50">
+                        class="express-audience-players-known" flex="50"
+                        ng-show="playerKnownItems">
+                        
                         <div layout="row" layout-align="start center">
                             <div class="express-audience-small-icon players-known-icon"></div>
                             <div class="infobox-header-3">Топ-{{playerKnownCount}} подсказанного<br>знания спортсменов</div>
@@ -332,7 +338,8 @@
                 <!--</div>-->
                 
                 <div layout="column" layout-align="start start"
-                    class="express-audience-sponsors" flex="50">
+                    class="express-audience-sponsors" flex="50"
+                    ng-show="sponsorKnownItems">
                     
                     <div layout="row" layout-align="start center">
                         <div class="express-audience-small-icon sponsors-icon"></div>

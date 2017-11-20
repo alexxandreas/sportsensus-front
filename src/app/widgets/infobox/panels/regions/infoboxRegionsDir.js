@@ -96,7 +96,10 @@
                         angular.forEach(blocks, function(block){
                             currentColumn.push(block);
                             currentCount += block.regions.length;
-                            if (currentCount > regionsCount / 2 && $scope.columns.length == 1) {
+                            
+                            // if (currentCount > regionsCount / 2 && $scope.columns.length == 1) {
+                            if ((currentCount > regionsCount / 3 && $scope.columns.length == 1) || 
+                                (currentCount > regionsCount / 3 * 2 && $scope.columns.length == 2)){
                                 currentColumn = [];
                                 $scope.columns.push(currentColumn);
                             }

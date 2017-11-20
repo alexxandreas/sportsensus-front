@@ -103,6 +103,12 @@
             
                     // Регионы проживания
                     function prepareRegions(data) {
+                        if (!data){
+                            $scope.regionsItems = null;
+                            $scope.regionsMapChart = null;
+                            return;
+                        }
+                        
                         var data = $scope.prepareChartData(data, {
                             'region': $scope.parameters.region
                         });
@@ -141,6 +147,12 @@
             
                     // распределение по типу боления. график - бублик
                     function prepareFanTypeData(data) {
+                        if (!data){
+                            $scope.fanTypeItems = null;
+                            $scope.fanTypeDonutChart = null;
+                            return;
+                        }
+                        
                         data = $scope.prepareChartData(data, {
                             'fan_type': $scope.parameters.fan_type
                         });
@@ -168,6 +180,12 @@
             
                     // топ-5 по интересу. график - бар
                     function prepareInterestData(data){
+                        if (!data){
+                            $scope.interestItems = null;
+                            $scope.interestBarsChart = null;
+                            return;
+                        }
+                        
                         data = $scope.prepareChartData(data, {
                             'sport': $scope.parameters.sport,
                             'interest': $scope.parameters.interest
@@ -206,7 +224,12 @@
                     
                     // топ-5 по вовлеченности. график - бар.
                     function prepareInvolveData(data){
-                        //return; // АКТУАЛИЗИРОВАТЬ!!!
+                        if (!data){
+                            $scope.involveSports = null;
+                            return;
+                        }
+                        
+                        
                         data = $scope.prepareChartData(data, {
                             'sport': $scope.parameters.sport,
                             'involve': $scope.parameters.involve
@@ -302,6 +325,13 @@
                     // топ-5 подсказанного знания турниров (лиг). график - бар
                     // TODO сейчас используются данные по знанию клубов
                     function prepareKnownHelpTournamentData(data) {
+                        if (!data){
+                            $scope.tournamentHelpCount = 0;
+                            $scope.tournamentHelpItems = null;
+                            $scope.tournamentHelpBarsChart = null;
+                            return;
+                        }
+                        
                         
                         data = $scope.prepareChartData(data, {
                             'sport': $scope.parameters.sport,
@@ -313,7 +343,7 @@
                         data.legends.tournament.forEach(function (tournament, tournamentIndex) {
                             var count = data.getCount({'sport': tournament.sport.id, 'tournament': tournament.id});
                             items.push({
-                                color: "#ff0000",
+                                color: "#fc4a1a",
                                 value: count,
                                 leftText: $scope.formatCount(count),
                                 rightText: tournament.name
@@ -333,6 +363,13 @@
                     // топ-5 спонтанного знания турниров (лиг). график - бар
                     // TODO сейчас используются данные по знанию клубов
                     function prepareKnownTournamentData(data) {
+                        if (!data){
+                            $scope.tournamentKnownCount = 0;
+                            $scope.tournamentKnownItems = null;
+                            $scope.tournamentKnownBarsChart = null;
+                            return;
+                        }
+                        
                         data = $scope.prepareChartData(data, {
                             'sport': $scope.parameters.sport,
                             'tournament': $scope.parameters.sport
@@ -343,7 +380,7 @@
                         data.legends.tournament.forEach(function (tournament, tournamentIndex) {
                             var count = data.getCount({'sport': tournament.sport.id, 'tournament': tournament.id});
                             items.push({
-                                color: "#00ff00",
+                                color: "#4ac0b6",
                                 value: count,
                                 leftText: tournament.name,
                                 rightText: $scope.formatCount(count)
@@ -363,6 +400,13 @@
                     
                     // топ-5 подсказанного знания клубов. график - бар
                     function prepareKnownHelpClubData(data){
+                        if (!data){
+                            $scope.clubHelpCount = 0;
+                            $scope.clubHelpItems = null;
+                            $scope.clubHelpBarsChart = null;
+                            return;
+                        }
+                        
                         data = $scope.prepareChartData(data, {
                             'sport': $scope.parameters.sport,
                             'club': $scope.parameters.sport
@@ -374,7 +418,7 @@
                         data.legends.club.forEach(function (club, clubIndex) {
                             var count = data.getCount({'sport': club.sport.id, 'club': club.id});
                             items.push({
-                                color: "#ff0000",
+                                color: "#fc4a1a",
                                 value: count,
                                 leftText: $scope.formatCount(count),
                                 // rightText: club.shortName,
@@ -385,7 +429,6 @@
                         
                         $scope.clubHelpCount = items.length;
                         $scope.clubKnownHelpCount = Math.max($scope.clubHelpCount, $scope.clubKnownCount) || 0;
-                        // $scope.clubKnownHelpCount = 22;
                         $scope.clubHelpItems = items;
                         $scope.clubHelpBarsChart = {
                             items: items
@@ -394,6 +437,13 @@
                     
                     // топ-5 спонтанного знания клубов. график - бар
                     function prepareKnownClubData(data){
+                        if (!data){
+                            $scope.clubKnownCount = 0;
+                            $scope.clubKnownItems = null;
+                            $scope.clubKnownBarsChart = null;
+                            return;
+                        }
+                        
                         data = $scope.prepareChartData(data, {
                             'sport': $scope.parameters.sport,
                             'club': $scope.parameters.sport
@@ -404,7 +454,7 @@
                         data.legends.club.forEach(function (club, clubIndex) {
                             var count = data.getCount({'sport': club.sport.id, 'club': club.id});
                             items.push({
-                                color: "#00ff00",
+                                color: "#4ac0b6",
                                 value: count,
                                 // leftText: club.shortName,
                                 leftText: club.name,
@@ -416,7 +466,6 @@
                         
                         $scope.clubKnownCount = items.length;
                         $scope.clubKnownHelpCount = Math.max($scope.clubHelpCount, $scope.clubKnownCount) || 0;
-                        // $scope.clubKnownHelpCount = 11;
                         $scope.clubKnownItems = items;
                         $scope.clubKnownBarsChart = {
                             items: items
@@ -427,6 +476,13 @@
             
                     // топ-5 клубов по телесмотрению. график - бар
                     function prepareWatchData(data){
+                        if (!data){
+                            $scope.clubWatchCount = 0;
+                            $scope.clubWatchItems = null;
+                            $scope.clubWatchBarsChart = null;
+                            return;   
+                        }
+                        
                         data = $scope.prepareChartData(data, {
                             'sport': $scope.parameters.sport,
                             'club': $scope.parameters.sport,
@@ -438,7 +494,7 @@
                         data.legends.club.forEach(function (club, clubIndex) {
                             var count = data.getCount({'sport': club.sport.id, 'club': club.id});
                             items.push({
-                                color: "#FFFF00",
+                                color: "#ffc85a",
                                 value: count,
                                 // leftText: club.shortName,
                                 leftText: club.name,
@@ -499,6 +555,13 @@
             
                     // топ-5 клубов по посещаемости. график - бар
                     function prepareWalkData(data){
+                        if (!data){
+                            $scope.clubWalkCount = 0;
+                            $scope.clubWalkItems = null;
+                            $scope.clubWalkBarsChart = null;
+                            return;   
+                        }
+                        
                         data = $scope.prepareChartData(data, {
                             'sport': $scope.parameters.sport,
                             'club': $scope.parameters.sport,
@@ -510,7 +573,7 @@
                         data.legends.club.forEach(function (club, clubIndex) {
                             var count = data.getCount({'sport': club.sport.id, 'club': club.id});
                             items.push({
-                                color: "#FFFF00",
+                                color: "#ffc85a",
                                 value: count,
                                 // leftText: club.shortName,
                                 leftText: club.name,
@@ -531,6 +594,13 @@
                     // топ-5 спонтанное знания спортсменов. график - бар
                     // TODO сейчас используются данные по знанию клубов
                     function prepareKnownPlayerData(data) {
+                        if (!data){
+                            $scope.playerKnownCount = 0;
+                            $scope.playerKnownItems = null;
+                            $scope.playerKnownBarsChart = null;
+                            return;   
+                        }
+                        
                         data = $scope.prepareChartData(data, {
                             'sport': $scope.parameters.sport,
                             'player': $scope.parameters.sport
@@ -542,7 +612,7 @@
                         data.legends.player.forEach(function (player, index) {
                             var count = data.getCount({'sport': player.sport.id, 'club': player.id});
                             items.push({
-                                color: "#FFFF00",
+                                color: "#ffc85a",
                                 value: count,
                                 leftText: player.name,
                                 rightText: $scope.formatCount(count)
@@ -592,6 +662,12 @@
                             ]
                         }
                         
+                        if (!data || !$scope.parameters.sponsor){
+                            $scope.sponsorKnownCount = 0;
+                            $scope.sponsorKnownItems = null;
+                            $scope.sponsorKnownBarsChart = null;
+                            return;   
+                        }
                         
                         data = $scope.prepareChartData(data, {
                             'sponsor': $scope.parameters.sponsor
@@ -602,7 +678,7 @@
                         data.legends.sponsor.forEach(function(sponsor, index) {
                             var count = data.getCount({'sponsor': sponsor.id});
                             items.push({
-                                color: "#FFFF00",
+                                color: "#ffc85a",
                                 value: count,
                                 leftText: sponsor.name,
                                 rightText: $scope.formatCount(count)
@@ -652,10 +728,7 @@
                                 }
                             }
                         };
-                    }
-                    
-
-                    
+                    } 
                 }
             ]
         };

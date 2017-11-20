@@ -49,7 +49,7 @@
                         
                         $scope.size = 450; //angular.isDefined($scope.size) ? $scope.size : 450;
                         $scope.percentageInnerCutout = angular.isDefined($scope.percentageInnerCutout) ? $scope.percentageInnerCutout : 75;
-                        $scope.segmentsGap = angular.isDefined($scope.segmentsGap) ? $scope.percentageInnerCutout : 0.04;
+                        $scope.segmentsGap = angular.isDefined($scope.segmentsGap) ? $scope.segmentsGap : 0.04;
                         
                         prepareData();
                     });

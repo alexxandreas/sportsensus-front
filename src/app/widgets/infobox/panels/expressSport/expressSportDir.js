@@ -58,19 +58,19 @@
 		            // данные перезапрашиваются каждый раз при изменении радара
             		$scope.setParams = function(params){
                         requestData();
-                        //updateCaption();
+                        updateCaption();
             		}
             		
             		$scope.setGraphsMode = function(graphMode){
                         prepareSportData();
                     }
                     
-                    // function updateCaption(){
-                    //     $scope.caption = ParamsSrv.getSelectedSportCaption(true);
-                    //     $scope.clubNames = $scope.sport.clubs
-                    //         ? $scope.sport.clubs.filter(function(club){return club.selected;}).map(function(club){return club.name; }).join(', ')
-                    //         : null
-                    // }
+                    function updateCaption(){
+                        $scope.caption = ParamsSrv.getSelectedSportCaption(true);
+                        $scope.clubNames = $scope.sport.clubs
+                            ? $scope.sport.clubs.filter(function(club){return club.selected;}).map(function(club){return club.name; }).join(', ')
+                            : null
+                    }
         
                     
                     

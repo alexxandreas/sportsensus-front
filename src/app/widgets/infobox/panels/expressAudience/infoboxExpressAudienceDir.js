@@ -343,7 +343,7 @@
                         data.legends.tournament.forEach(function (tournament, tournamentIndex) {
                             var count = data.getCount({'sport': tournament.sport.id, 'tournament': tournament.id});
                             items.push({
-                                color: "#ff0000",
+                                color: "#fc4a1a",
                                 value: count,
                                 leftText: $scope.formatCount(count),
                                 rightText: tournament.name
@@ -380,7 +380,7 @@
                         data.legends.tournament.forEach(function (tournament, tournamentIndex) {
                             var count = data.getCount({'sport': tournament.sport.id, 'tournament': tournament.id});
                             items.push({
-                                color: "#00ff00",
+                                color: "#4ac0b6",
                                 value: count,
                                 leftText: tournament.name,
                                 rightText: $scope.formatCount(count)
@@ -418,7 +418,7 @@
                         data.legends.club.forEach(function (club, clubIndex) {
                             var count = data.getCount({'sport': club.sport.id, 'club': club.id});
                             items.push({
-                                color: "#ff0000",
+                                color: "#fc4a1a",
                                 value: count,
                                 leftText: $scope.formatCount(count),
                                 // rightText: club.shortName,
@@ -454,7 +454,7 @@
                         data.legends.club.forEach(function (club, clubIndex) {
                             var count = data.getCount({'sport': club.sport.id, 'club': club.id});
                             items.push({
-                                color: "#00ff00",
+                                color: "#4ac0b6",
                                 value: count,
                                 // leftText: club.shortName,
                                 leftText: club.name,
@@ -494,7 +494,7 @@
                         data.legends.club.forEach(function (club, clubIndex) {
                             var count = data.getCount({'sport': club.sport.id, 'club': club.id});
                             items.push({
-                                color: "#FFFF00",
+                                color: "#ffc85a",
                                 value: count,
                                 // leftText: club.shortName,
                                 leftText: club.name,
@@ -573,7 +573,7 @@
                         data.legends.club.forEach(function (club, clubIndex) {
                             var count = data.getCount({'sport': club.sport.id, 'club': club.id});
                             items.push({
-                                color: "#FFFF00",
+                                color: "#ffc85a",
                                 value: count,
                                 // leftText: club.shortName,
                                 leftText: club.name,
@@ -612,7 +612,7 @@
                         data.legends.player.forEach(function (player, index) {
                             var count = data.getCount({'sport': player.sport.id, 'club': player.id});
                             items.push({
-                                color: "#FFFF00",
+                                color: "#ffc85a",
                                 value: count,
                                 leftText: player.name,
                                 rightText: $scope.formatCount(count)
@@ -678,7 +678,7 @@
                         data.legends.sponsor.forEach(function(sponsor, index) {
                             var count = data.getCount({'sponsor': sponsor.id});
                             items.push({
-                                color: "#FFFF00",
+                                color: "#ffc85a",
                                 value: count,
                                 leftText: sponsor.name,
                                 rightText: $scope.formatCount(count)
@@ -729,9 +729,6 @@
                             }
                         };
                     }
-                    
-
-                    
                 }
             ]
         };

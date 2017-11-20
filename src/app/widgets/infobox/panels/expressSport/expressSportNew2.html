@@ -12,11 +12,7 @@
     <!--</div>-->
 
 
-    <!--ng-bind-html="caption | trustAsHtmlFltr"-->
-    <!--<h2 class="infobox-panel-header2" ng-show="caption"-->
-    <!--    layout="row" layout-align="start center"-->
-    <!--    ng-bind-html="'Профиль спорта: ' + sport.name + (clubNames ? '&lt;br&gt;Клубы: ' + clubNames : '')  | trustAsHtmlFltr">-->
-    <!--</h2>-->
+    
 
 
     <!--<div layout="column" layout-align="start stretch"-->
@@ -24,6 +20,12 @@
 
     <div layout="column" layout-align="start stretch"
         class="infobox-express-sport-content">
+        
+        <!--ng-bind-html="caption | trustAsHtmlFltr"-->
+        <h2 class="infobox-header-2" ng-show="caption"
+            layout="row" layout-align="start center"
+            ng-bind-html="'Профиль спорта: ' + sport.name + (clubNames ? '&lt;br&gt;Клубы: ' + clubNames : '')  | trustAsHtmlFltr">
+        </h2>
 
         <!-- Первая строка с графиками -->
         <div layout="row" layout-align="start start"

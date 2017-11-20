@@ -145,47 +145,6 @@
             $scope.updateGraph();
 
 
-            /*
-
-            var involves = {};
-            $scope.parameters.involve.lists.forEach(function (list) {
-                involves[list.id] = {
-                    id: list.id,
-                    name: list.name,
-                    count: 0
-                }
-            });
-
-            var sports = {};
-            $scope.parameters.sport.lists.forEach(function (list) {
-                sports[list.id] = angular.merge({
-                    data: angular.merge({}, involves)
-                }, list);
-            });
-
-
-            var legendIndexes = {};
-            data.legends.forEach(function(item, index){
-                legendIndexes[item.name] = index;
-            });
-
-            var maxValue = 0;
-            data.data.forEach(function (item) {
-                var sportId = item.legend[legendIndexes['sport']];
-                var involveId = item.legend[legendIndexes['involve']];
-                sports[sportId].data[involveId].count += item.count;
-                maxValue = Math.max(maxValue, sports[sportId].data[involveId].count);
-            }, this);
-            var multiplier = maxValue > 1000*1000 ? 1000*1000 : maxValue > 1000 ? 1000 : 1;
-
-
-            $scope.chartsData = {
-                multiplier: multiplier,
-                maxValue: maxValue,
-                sports: sports
-            };
-        */
-
         };
 
         $scope.updateGraph = function () {
@@ -199,13 +158,7 @@
                 return item.selected;
             });
 
-            // var watches = $scope.watchLegend.filter(function(item) {
-            //     return item.selected;
-            // });
-			//
-            // var walks = $scope.walkLegend.filter(function(item) {
-            //     return item.selected;
-            // });
+          
 
             //$scope.watchCharts = [];
             //$scope.walkCharts = [];
@@ -241,16 +194,20 @@
                     sport.clubs.forEach(function (club) {
                         if (!club.selected) return;
 
-                        var count = $scope.chartsData.rooting.getCount({
-                                'sport': sport.id,
-                                'club': club.id,
-                                'rooting': rooting.id
-                            }) || 0;
+                        // if (walkWatchItems){
+                        //     var count = $scope.chartsData[rooting.key].getCount({'sport': sport.id, 'club': club.id}) || 0;
+                        // } else {
+                            var count = $scope.chartsData.rooting.getCount({
+                                    'sport': sport.id,
+                                    'club': club.id,
+                                    'rooting': rooting.id
+                                }) || 0;
+                        //}
                         dataDs.label.push(club.name + ' (' + sport.name + '): ' + count.toLocaleString('en-US'));
                         dataDs.fillColor.push(rooting.color);
                         dataDs.data.push(count);
                         chartData.labels.push(club.name + ' (' + sport.name + ')');
-
+                        
                         if (walkWatchItems){
                             var clubData = {name: club.name};
                             clubData.chart = {

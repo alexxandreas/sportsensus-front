@@ -75,7 +75,7 @@
                 return ApiSrv.getTranslations().then(function(translations){
                     prepareParams(translations);
                     
-                    AudienceCountSrv.getCount();
+                    AudienceCountSrv.getCount(getSelectedAudience());
                     return parameters;
                 });
             });
@@ -257,6 +257,7 @@
                 parameters[type] = getElement(translations, type);
                 applyOldParameters(oldParameters, parameters, type);
                 
+                selected[type] = getSelectedParamsRec(parameters[type]);
                 parametersWatchers[type] = $rootScope.$watch(function(){return parameters[type]; }, function(newValue, oldValue){
                     selected[type] = getSelectedParamsRec(newValue);
 

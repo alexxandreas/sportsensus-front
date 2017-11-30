@@ -86,7 +86,7 @@
                         {field: "last_name", title: "Фамилия"},
                         {field: "company_name", title: "Название компании"},
                         {field: "phone", title: "Телефон"},
-                        {field: "company_type", title: "Тип компании", values:{ 0: "Спонсор", 1: "Правообладатель", 2: "Агенство"}},
+                        {field: "company_type", title: "Тип компании", values:{ 0: "Спонсор", 1: "Правообладатель", 2: "Агентство"}},
                         {field: "legal_status", title: "Юридический статус", values:{ 0: "Физическое лицо", 1: "Юридическое лицо"}},
                         {field: "city_address", title: "Город"},
                         {field: "street_address", title: "Улица"},

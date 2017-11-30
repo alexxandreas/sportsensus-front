@@ -45,7 +45,7 @@
                         'Измеряйте<br>эффективность',
                         'Формируйте или верифицируйте<br>спонсорские предложения<br>в режиме реального времени'
                     ];
-                    
+
                     $scope.forWho = [{
                         title: 'Правообладатель',
                         type: 1,
@@ -63,7 +63,7 @@
                             'Формирование<br>эффективного<br>спонсорского пакета'
                         ]
                     },{
-                        title: 'Агенство',
+                        title: 'Агентство',
                         type: 2,
                         items: [
                             'Профессиональная<br>аналитика спонсорских<br>пакетов',
@@ -71,14 +71,14 @@
                             'Помощь в планировании<br>активационных кампаний'
                         ]
                     }];
-                    
+
                     // $scope.enterPath = RouteSrv.getPath('login');
-                    
+
                     $scope.scrollToRegistration = function(type){
-                        $scope.scrollTo('registration'); 
+                        $scope.scrollTo('registration');
                         $scope.regData.company_type = type;
                     }
-                    
+
                     $scope.scrollTo = function(id) {
                         var old = $location.hash();
                         $location.hash(id);
@@ -86,16 +86,16 @@
                         //reset to old to keep any additional routing logic from kicking in
                         $location.hash(old);
                     }
-                    
+
                     clearRegisterFields();
 
                     $scope.companyTypes = [
                         //{value: null, name: 'Тип компании', selected:true},
                         {value: 0, name: 'Спонсор'},
                         {value: 1, name: 'Правообладатель'},
-                        {value: 2, name: 'Агенство'}
+                        {value: 2, name: 'Агентство'}
                     ];
-                    
+
                     $scope.register = function(){
                         $scope.showPreloader = true;
                         // return;
@@ -111,7 +111,7 @@
                                     'не пришло наше сообщение – пожалуйста, напишите нам на <a href="mailto:sales@sportsensus.ru">sales@sportsensus.ru</a>')
                                 .ok('OK')
                             );
-                            
+
                         }, function(){
                             $mdDialog.show(
                               $mdDialog.alert()
@@ -126,7 +126,7 @@
                             $scope.showPreloader = false;
                         });
                     }
-                    
+
                     function clearRegisterFields(){
                         $scope.regData = {
                             first_name:  '',
@@ -134,15 +134,15 @@
                             company_name: '',
                             phone: '',
                             login: '',
-                            company_type: null, // 0 - спонсор, 1 - правообладатель, 2 - агенство
+                            company_type: null, // 0 - спонсор, 1 - правообладатель, 2 - агентство
                             legal_status: 0, // 0 - физ, 1 - юр
                             lang: "ru"
                         };
                     }
-                    
-                    
-                    
-                    
+
+
+
+
                 }]
         };
     }

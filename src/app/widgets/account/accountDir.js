@@ -122,7 +122,7 @@
 							items: [
 								{value: 0, name: 'Спонсор'},
 								{value: 1, name: 'Правообладатель'},
-								{value: 2, name: 'Агенство'}
+								{value: 2, name: 'Агентство'}
 							]
 						}
 					};
@@ -153,27 +153,27 @@
 					};
 
 
-					
+
 					var tariff =  UserSrv.getTariff();
-		
+
 					$scope.tariffParams = [
 						{title: 'Тариф', value: tariff.name},
 						{title: 'Описание', value: tariff.description},
-						
+
 						//{title: 'Продолжительность подписки', value: TimeSrv.secondsToDateTime(tariff.duration), visible:!!tariff.duration},
 						{
-							title: 'Количество сессий', 
-							value: tariff.sessions_count ? tariff.sessions_count.toString() + ' (Осталось ' + tariff.remaining_sessions + ')' : null, 
+							title: 'Количество сессий',
+							value: tariff.sessions_count ? tariff.sessions_count.toString() + ' (Осталось ' + tariff.remaining_sessions + ')' : null,
 							visible:!!tariff.sessions_count
-							
+
 						}, {
 							id: 'session_duration',
-							title: 'Длительность одной сессии', 
+							title: 'Длительность одной сессии',
 							value: '',
 							visible: !!tariff.session_duration
 						},
 						{title: 'Ограниченный доступ к данным', value: 'Да', visible: tariff.limit_access},
-						
+
 						{title: 'Доступ к инфоблоку', value: 'Да', visible: tariff.access_infobox},
 						{title: 'Доступ к блоку правообладателя', value: 'Да', visible: tariff.access_rightholder},
 						{title: 'Доступ к блоку спонсона', value: 'Да', visible: tariff.access_sponsor},
@@ -182,29 +182,29 @@
 						{title: 'Доступ к административной панели', value: 'Да', visible: tariff.access_admin},
 						{title: 'Доступ к обновлению данных', value: 'Да', visible: tariff.access_data_update},
 						{title: 'Доступ к обновлению главной страницы', value: 'Да', visible: tariff.access_homepage_update},
-						
+
 
 
 					]
-					
+
 					function updateTariffParams(){
 						var tariff = UserSrv.getTariff();
-						
+
 						var sessionDurationParam = $scope.tariffParams.find(function(param) { return param.id === 'session_duration'});
 						if (tariff.session_duration && tariff.realRemainingTime){
-						sessionDurationParam.value = TimeSrv.secondsToDateTime(tariff.session_duration) + 
-							' (Осталось ' + 
+						sessionDurationParam.value = TimeSrv.secondsToDateTime(tariff.session_duration) +
+							' (Осталось ' +
 							TimeSrv.secondsToDateTime(tariff.realRemainingTime) +
 							')'
 						} else {
 							sessionDurationParam.value = null;
 						}
 					}
-					
+
 					var updateTariffParamsInterval = $interval(updateTariffParams, 1000);
                     updateTariffParams();
 
-				
+
 					getProfile();
 
 					function getProfile(){
@@ -221,14 +221,14 @@
 
 					$scope.saveProfile = function(){
 						ApiSrv.editProfile($scope.profile).then(function(){
-							$scope.originalProfile = angular.extend({}, $scope.profile);	
+							$scope.originalProfile = angular.extend({}, $scope.profile);
 						}, function(){
 							$mdDialog.show($mdDialog.alert()
 								.title('Ошибка сохранения')
 								.textContent('Невозможно сохранить изменения')
 								.ok('OK'));
 						});
-						
+
 					};
 
 					$scope._newPassword = null;
@@ -237,7 +237,7 @@
 							$scope._newPassword = pass;
 						return $scope._newPassword;
 					};
-					
+
 					$scope.savePassword = function(){
 						ApiSrv.changePassword($scope.newPassword()).then(function(){
 							$scope.newPassword(null);
@@ -249,7 +249,7 @@
 						})
 
 					}
-					
+
 					$scope.$on("$destroy", function() {
                         if (updateTariffParamsInterval) {
                             $interval.cancel(updateTariffParamsInterval);
